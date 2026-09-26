@@ -578,6 +578,7 @@ struct RootWorkbenchView: View {
         TabView {
             AgentWorkbenchView(model: agent).tabItem { Label("Agent 工作台", systemImage: "bubble.left.and.bubble.right") }
             WorkbenchView(model: lab).tabItem { Label("回放与更新实验", systemImage: "waveform.path") }
+            HarnessScenarioView().tabItem { Label("场景实验", systemImage: "slider.horizontal.3") }
         }.frame(minWidth: 1020, minHeight: 790)
     }
 }

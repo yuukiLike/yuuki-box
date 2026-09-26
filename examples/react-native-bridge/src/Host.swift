@@ -70,14 +70,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldDelegate,
     private let stack = NSStackView()
     private let scroll = NSScrollView()
     private let document = FlippedView()
-    private let metrics = NSTextField(labelWithString: "正在启动 Node renderer…")
+    private let metrics = NSTextField(wrappingLabelWithString: "正在启动 Node renderer…")
     private var views: [String: NSView] = [:]
+    private var nodes: [String: [String: Any]] = [:]
+    private var parents: [String: NSStackView] = [:]
     private var rendererProcess: Process?
     private var input: FileHandle?
     private var output: FileHandle?
     private var buffer = Data()
     private var frames = 0
     private var totalBytes = 0
+    private var metricRun = ""
+    private var controlsUpdated = 0
+    private var controlsCreated = 0
+    private var controlsRemoved = 0
+    private var applyTotal = 0.0
     private let resources = Bundle.main.resourceURL!
     private lazy var capabilities = NativeCapabilities(resources: resources)
     private lazy var runtime = AgentRuntimeClient(resources: resources, route: "react-native")
@@ -181,19 +188,44 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldDelegate,
                 } else { capabilities.handle(command) }
                 continue
             }
-            guard message["type"] as? String == "render", let tree = message["tree"] as? [[String: Any]], let root = tree.first else { continue }
-            applyChildren(root["children"] as? [[String: Any]] ?? [], to: stack)
+            let type = message["type"] as? String ?? ""
+            guard type == "render" || type == "render.patch" else { continue }
+            let bridge = message["bridge"] as? [String: Any] ?? [:]
+            let run = bridge["run"] as? String ?? "app"
+            if metricRun != run {
+                metricRun = run; frames = 0; totalBytes = 0; controlsUpdated = 0; controlsCreated = 0; controlsRemoved = 0; applyTotal = 0
+            }
+            let updatedBefore = controlsUpdated
+            if type == "render", let tree = message["tree"] as? [[String: Any]], let root = tree.first {
+                applyChildren(root["children"] as? [[String: Any]] ?? [], to: stack)
+            } else if type == "render.patch", let changes = message["changes"] as? [[String: Any]] {
+                for change in changes {
+                    guard let id = change["id"] as? String, let props = change["props"] as? [String: Any], var node = nodes[id], let parent = parents[id] else { continue }
+                    node["props"] = props
+                    // A property patch never replays descendants from an old
+                    // snapshot; each changed stable ID is applied independently.
+                    applyChildren([node], to: parent, recurse: false)
+                }
+            }
             resizeDocument()
-            frames += 1; totalBytes += line.count
-            metrics.stringValue = String(format: "React commits %d · 本次 JSON %.1f KB · 累计 %.1f MB · 解码+更新 %.2f ms（非帧率）", frames, Double(line.count) / 1024, Double(totalBytes) / 1_048_576, (CFAbsoluteTimeGetCurrent() - started) * 1000)
+            frames += 1; totalBytes += line.count + 1
+            let applyMs = (CFAbsoluteTimeGetCurrent() - started) * 1000
+            applyTotal += applyMs
+            let responder = window.firstResponder as? NSTextView
+            let focusID = responder?.identifier?.rawValue ?? (responder?.delegate as? NSView)?.identifier?.rawValue ?? "非文本控件"
+            let selection = responder.map { "\($0.selectedRange().location):\($0.selectedRange().length)" } ?? "—"
+            metrics.stringValue = String(format: "%@ · React提交 %d / 发包 %d / 背压合并 %d · 实际 JSON %.1f KB，本轮 %.1f KB\n编码+diff累计 %.2f ms · 解码/应用本次 %.2f ms，累计 %.2f ms · 控件应用 %d（累计 %d）/创建 %d/移除 %d\n最近应用时焦点 %@ · 实际选区 %@ · 以上均是代理指标，不是 FPS", type, bridge["commits"] as? Int ?? 0, frames, bridge["coalesced"] as? Int ?? 0, Double(line.count + 1) / 1024, Double(totalBytes) / 1024, bridge["encodeTotal"] as? Double ?? 0, applyMs, applyTotal, controlsUpdated - updatedBefore, controlsUpdated, controlsCreated, controlsRemoved, focusID, selection)
         }
     }
 
     // Deliberately small vocabulary. AppKit views are retained by ID so typing
     // keeps first responder across React commits. List rows use NSTableView reuse.
-    private func applyChildren(_ nodes: [[String: Any]], to parent: NSStackView) {
-        for node in nodes {
+    private func applyChildren(_ children: [[String: Any]], to parent: NSStackView, recurse: Bool = true) {
+        for node in children {
             guard let type = node["type"] as? String, let props = node["props"] as? [String: Any], let id = props["id"] as? String else { continue }
+            nodes[id] = node
+            parents[id] = parent
+            controlsUpdated += 1
             let view: NSView
             if let existing = views[id] { view = existing }
             else {
@@ -224,6 +256,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldDelegate,
                 default: continue
                 }
                 view.identifier = NSUserInterfaceItemIdentifier(id)
+                controlsCreated += 1
                 view.translatesAutoresizingMaskIntoConstraints = false
                 views[id] = view
                 parent.addArrangedSubview(view)
@@ -254,7 +287,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldDelegate,
             } else if let label = view as? NSTextField { label.stringValue = props["text"] as? String ?? "" }
             else if let panel = view as? TextPanel { panel.text.isEditable = type == "Editor" && (props["enabled"] as? Bool ?? true); panel.update(props["value"] as? String ?? "") }
             else if let list = view as? ListView { list.update(props["items"] as? [[String: Any]] ?? []) }
-            else if let row = view as? NSStackView { applyChildren(node["children"] as? [[String: Any]] ?? [], to: row) }
+            else if let row = view as? NSStackView, recurse {
+                // N3's naive path actually destroys and reconstructs native
+                // form controls. Model text is preserved; focus/selection loss
+                // comes from AppKit object lifetime, not simulated dropped keys.
+                if props["recreate"] as? Bool == true { removeChildren(from: row) }
+                applyChildren(node["children"] as? [[String: Any]] ?? [], to: row)
+            }
+        }
+    }
+
+    private func removeChildren(from parent: NSStackView) {
+        for child in parent.arrangedSubviews {
+            if let nested = child as? NSStackView { removeChildren(from: nested) }
+            if let id = child.identifier?.rawValue { views.removeValue(forKey: id); nodes.removeValue(forKey: id); parents.removeValue(forKey: id) }
+            parent.removeArrangedSubview(child)
+            child.removeFromSuperview()
+            controlsRemoved += 1
         }
     }
 

@@ -16,5 +16,10 @@ contextBridge.exposeInMainWorld('yuuki', {
   cancelSpeech: () => ipcRenderer.invoke('speech-cancel'),
   onStream: callback => subscribe('stream-event', callback),
   onSpeech: callback => subscribe('speech-event', callback),
-  onAgent: callback => subscribe('agent-event', callback)
+  onAgent: callback => subscribe('agent-event', callback),
+  startScene: options => ipcRenderer.invoke('scene-start', options),
+  acknowledgeScene: options => ipcRenderer.invoke('scene-ack', options),
+  stopScene: runId => ipcRenderer.invoke('scene-stop', runId),
+  pingScene: () => ipcRenderer.invoke('scene-ping'),
+  onScene: callback => subscribe('scene-event', callback)
 });

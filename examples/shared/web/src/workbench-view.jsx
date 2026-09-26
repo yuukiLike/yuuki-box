@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createModel, visibleRows } from './model.mjs';
 import { createAgentModel } from './agent-model.mjs';
 
-let root, model, agent, send, title, subtitle, CustomReplay;
+let root, model, agent, send, title, subtitle, CustomReplay, Scenes;
 function receive(message) {
   agent.receive(message);
   if (message.type === 'bootstrap' && !model) {
@@ -91,9 +91,9 @@ function App() {
   const work = useSyncExternalStore(agent.subscribe, agent.getSnapshot);
   return <main>
     <header><div className="eyebrow">APPLE AGENT WORKBENCH</div><h1>{title}</h1><p>{subtitle}</p></header>
-    <nav className="commands" aria-label="工作台模式">{[['agent', 'Agent 工作台'], ['settings', '设置'], ['replay', '回放与更新']].map(([id, title]) => <button key={id} className={work.mode === id ? 'primary' : ''} disabled={work.mode === id} onClick={() => agent.setMode(id)}>{title}</button>)}</nav>
+    <nav className="commands" aria-label="工作台模式">{[['agent', 'Agent 工作台'], ['settings', '设置'], ['replay', '回放与更新'], ...(Scenes ? [['scenes', '场景实验']] : [])].map(([id, title]) => <button key={id} className={work.mode === id ? 'primary' : ''} disabled={work.mode === id} onClick={() => agent.setMode(id)}>{title}</button>)}</nav>
     <div className="notice" role="status">{work.notice}</div>
-    {work.mode === 'agent' ? <Workbench work={work} /> : work.mode === 'settings' ? <Settings work={work} /> : CustomReplay ? <CustomReplay /> : <Replay />}
+    {work.mode === 'agent' ? <Workbench work={work} /> : work.mode === 'settings' ? <Settings work={work} /> : work.mode === 'scenes' && Scenes ? <Scenes /> : CustomReplay ? <CustomReplay /> : <Replay />}
   </main>;
 }
 export function mountWorkbench(transport) {
@@ -101,6 +101,7 @@ export function mountWorkbench(transport) {
   title = transport.title;
   subtitle = transport.subtitle;
   CustomReplay = transport.Replay || null;
+  Scenes = transport.Scenes || null;
   root = createRoot(document.getElementById('root'));
   agent = createAgentModel(send);
   transport.subscribe(receive);

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { mountWorkbench } from '../shared/web/src/workbench-view.jsx';
 import '../react-webview/src/style.css';
 import './style.css';
+import { ElectronScenes } from './scenes.jsx';
 
 const ROW_HEIGHT = 54;
 const VIEW_HEIGHT = 378;
@@ -64,6 +65,7 @@ mountWorkbench({
   title: 'Electron + React',
   subtitle: 'Chromium / ReactDOM · preload IPC · 独立 Swift Agent runtime',
   Replay,
+  Scenes: ElectronScenes,
   subscribe(callback) {
     receive = callback;
     window.yuuki.onAgent(event => receive({ type: 'agent.event', event }));

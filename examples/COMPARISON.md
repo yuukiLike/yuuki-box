@@ -2,6 +2,8 @@
 
 日期：2026-09-26。五个应用已经接入相同的 Swift Agent runtime 与 Apple/Whisper helper；最新整套 `.app` 已完成顺序构建、打包与本地签名。没有运行界面、模型 API、语音或性能测试，因此不提供“最快”“最低内存”或识别成功率排名。
 
+新增的[十五个 Harness 场景实验](../docs/learning/harness-scenario-lab.md)把下述成本落实成可切换的朴素/优化路径。场景包含真实执行计数、可编辑探针、停止/清理及代价说明，分别位于五个应用的「场景实验」。实验与原 Agent/回放实现分离：局部场景的优化不意味着原 Agent 页已经完成同样优化。
+
 ## 1. 相同业务，五种真实 UI
 
 | 路线 | 界面更新 | Agent 能力路径 | 源码已能说明的代价 |
@@ -32,7 +34,7 @@ runtime 使用 DeepSeek Chat Completions / SSE，默认 `deepseek-flash`、关�
 
 GPUI 用 `uniform_list`，原生桥用 `NSTableView`，WebView/Electron 用固定高度的可见行窗口。可见行复用减少控件数量，但不消除数组、筛选、复制、JSON 或文本布局成本。长期对话与固定行高回放也是不同负载；当前 ReactDOM 对话区还没有分页虚拟化。
 
-React 原生桥每次提交仍发送完整 UI 树；隐藏回放页不传 10k 列表，但不断增长的对话仍会增加数据量。背压时只保留最新待发送快照，不能免除提交和序列化。界面的 JSON 大小、解码/更新耗时不等于 FPS 或端到端输入延迟。
+React 原生桥的基础 Agent 路径使用完整 UI 树；隐藏回放页不传 10k 列表，但不断增长的对话仍会增加数据量。新 N1 场景专门对照完整树与真实属性 patch，N2 对照发布批次，N3 对照原生对象复用。背压保留最新快照与字段 patch 是不同优化。界面的 JSON 大小、解码/更新耗时不等于 FPS 或端到端输入延迟。
 
 WKWebView 和 Electron 共享 `workbench-view.jsx`，但桥和 Lab timer 不同：WK 回放 timer 在 Web 内容进程，Electron 在 Node main 生成事件再逐条 IPC；原生桥通过 Node 的 UI 树回到 AppKit。不能因为共用 JSX 就假定成本相同。
 

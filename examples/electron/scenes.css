@@ -1,0 +1,25 @@
+.electron-scenes { padding: 4px 0 24px; }
+.electron-scenes h2 { margin-top: 0; }
+.electron-scenes h3 { font-size: 18px; }
+.scene-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 14px 0; }
+.scene-controls label { display: grid; gap: 5px; font-size: 12px; }
+.scene-controls select { min-width: 165px; width: auto; }
+.scene-explanation { border-left: 3px solid #87b4a5; padding: 2px 16px; background: #17232b; border-radius: 0 8px 8px 0; }
+.scene-explanation p, .scene-note { font-size: 12px; line-height: 1.65; }
+.scene-note { color: #abb8c8; }
+.scene-probe { display: grid; gap: 7px; margin: 16px 0; font-size: 12px; }
+.scene-probe input { width: 100%; }
+.scene-metrics { display: flex; flex-wrap: wrap; gap: 8px; font-variant-numeric: tabular-nums; margin: 10px 0; }
+.scene-metrics span { border: 1px solid #354456; border-radius: 7px; padding: 7px 10px; font-size: 12px; }
+.scene-output { height: 180px; overflow: auto; padding: 12px; background: #111924; border-radius: 8px; font-size: 11px; }
+.scene-result { background: #192932; border: 1px solid #365247; padding: 12px; border-radius: 8px; font-size: 12px; }
+.scene-result pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.scene-comparison { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 12px; }
+.scene-comparison td, .scene-comparison th { text-align: left; border-bottom: 1px solid #354456; padding: 10px; line-height: 1.6; }
+.scene-timeline { height: 448px; overflow: auto; border: 1px solid #354456; border-radius: 8px; contain: layout paint; background: #101821; }
+.scene-card { height: 112px; box-sizing: border-box; padding: 10px 14px; border-bottom: 1px solid #303d4a; overflow: hidden; }
+.scene-card header, .scene-card footer { display: flex; gap: 18px; padding: 0; background: transparent; border: 0; margin: 0; }
+.scene-card header { font-size: 12px; justify-content: flex-start; }
+.scene-card footer { font-size: 10px; color: #8ea6a4; margin-top: 6px; }
+.scene-card p { margin: 7px 0; font-size: 12px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.scene-card code { font-size: 11px; color: #c4bfa9; }

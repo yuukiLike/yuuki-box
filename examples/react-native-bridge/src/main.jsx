@@ -1,34 +1,26 @@
-import React, { useMemo, useSyncExternalStore } from 'react';
+import React, { useEffect, useMemo, useSyncExternalStore } from 'react';
 import Reconciler from 'react-reconciler';
 import fs from 'node:fs';
 import readline from 'node:readline';
 import { createModel, visibleRows } from '../../shared/web/src/model.mjs';
 import { createAgentModel, transcriptText } from '../../shared/web/src/agent-model.mjs';
+import { createNativeScenes, nativeSceneDescriptions } from './scene-model.mjs';
+import { createBridgeTransport } from './bridge-transport.mjs';
 
 // This is a real React host renderer. React calls this host config when it commits
 // host nodes; the Swift process receives its serializable tree over JSONL.
 const container = { children: [] };
 const send = (message) => process.stdout.write(JSON.stringify(message) + '\n');
-let transportBusy = false;
-let pendingRender = null;
-function writeRender(payload) {
-  if (transportBusy) { pendingRender = payload; return; }
-  transportBusy = !process.stdout.write(payload + '\n');
-  if (transportBusy) process.stdout.once('drain', () => {
-    transportBusy = false;
-    if (pendingRender !== null) { const latest = pendingRender; pendingRender = null; writeRender(latest); }
-  });
-}
+const bridge = createBridgeTransport();
 function serializable(node) {
   const props = Object.fromEntries(Object.entries(node.props).filter(([key, value]) => key !== 'children' && typeof value !== 'function'));
   return { type: node.type, props, children: node.children.map(serializable) };
 }
 function commitTree() {
-  const started = performance.now();
   const tree = container.children.map(serializable);
-  const payload = JSON.stringify({ type: 'render', tree });
-  writeRender(payload);
-  process.stderr.write(`commit bytes=${Buffer.byteLength(payload)} serialize_ms=${(performance.now() - started).toFixed(2)}\n`);
+  const scene = scenes.getSnapshot();
+  const active = agent.getSnapshot().mode === 'scenes';
+  bridge.commit(tree, { patch: active && scene.scene === 'snapshot' && scene.variant === 'optimized', run: active ? `${scene.scene}/${scene.variant}/${scene.run}` : 'app' });
 }
 const host = {
   now: Date.now, isPrimaryRenderer: true, supportsMutation: true, supportsPersistence: false, supportsHydration: false,
@@ -58,10 +50,13 @@ if (!fixturePath) throw new Error('Expected path to events.json');
 const nativeCommand = (command) => send({ type: 'native', command });
 const model = createModel(JSON.parse(fs.readFileSync(fixturePath, 'utf8')), nativeCommand);
 const agent = createAgentModel(nativeCommand);
+const scenes = createNativeScenes();
 
 function App() {
   const state = useSyncExternalStore(model.subscribe, model.getSnapshot);
   const work = useSyncExternalStore(agent.subscribe, agent.getSnapshot);
+  const lab = useSyncExternalStore(scenes.subscribe, scenes.getSnapshot);
+  useEffect(() => { if (work.mode !== 'scenes') scenes.stop(); }, [work.mode]);
   const runtime = work.runtime;
   const busy = Boolean(runtime?.busy || work.submitting);
   const connected = Boolean(runtime);
@@ -79,8 +74,39 @@ function App() {
       <Button id="mode-agent" title="Agent 工作台" enabled={work.mode !== 'agent'} onPress={() => agent.setMode('agent')} />
       <Button id="mode-settings" title="设置" enabled={work.mode !== 'settings'} onPress={() => agent.setMode('settings')} />
       <Button id="mode-replay" title="回放与更新" enabled={work.mode !== 'replay'} onPress={() => agent.setMode('replay')} />
+      <Button id="mode-scenes" title="场景实验" enabled={work.mode !== 'scenes'} onPress={() => agent.setMode('scenes')} />
     </Row>
     <Text id="notice" text={work.notice} />
+    <Column id="scene-pane" hidden={work.mode !== 'scenes'}>
+      <Text id="scene-heading" text="Harness 场景实验 · 原生桥 · 无模型 / 文件 / 麦克风调用" />
+      <Select id="scene-select" value={lab.scene} options={[{ id: 'snapshot', label: 'N1 · 全树快照 / 节点属性 patch' }, { id: 'progress', label: 'N2 · 多工具进度逐条 / 合批' }, { id: 'identity', label: 'N3 · 动态表单重建 / 原生控件复用' }]} onChange={(value) => scenes.choose(value)} />
+      <Select id="scene-variant" value={lab.variant} options={[{ id: 'naive', label: '朴素路径' }, { id: 'optimized', label: '优化路径' }]} onChange={(value) => scenes.choose(lab.scene, value)} />
+      <Text id="scene-description" text={nativeSceneDescriptions[lab.scene]} />
+      <Row id="scene-actions">
+        <Button id="scene-run" title="运行相同输入" enabled={!lab.running} onPress={() => scenes.start()} />
+        <Button id="scene-stop" title="停止并保留最后状态" enabled={lab.running} onPress={() => scenes.stop()} />
+        <Button id="scene-reset" title="重置" onPress={() => scenes.reset()} />
+      </Row>
+      <Text id="scene-counts" text={`收到事件 ${lab.received} · 模型发布 ${lab.publications} · 状态 ${lab.running ? 'running' : lab.terminal || 'idle'} · 下方宿主指标来自实际包与控件操作，不是 FPS`} />
+      <Text id="scene-probe-label" text="工作期间继续输入，观察响应；此探针位于审批表单之外" />
+      <Field id="scene-probe" value={lab.probe} placeholder="输入响应探针" onChange={(value) => scenes.set('probe', value)} />
+      <Column id="scene-snapshot" hidden={lab.scene !== 'snapshot'}>
+        <List id="scene-static-history" items={work.mode === 'scenes' && lab.scene === 'snapshot' ? scenes.history : []} />
+        <Transcript id="scene-token-output" value={lab.text} height={100} />
+      </Column>
+      <Column id="scene-tools" hidden={lab.scene !== 'progress'}>
+        <List id="scene-progress-list" items={lab.tools} />
+      </Column>
+      <Column id="scene-identity" hidden={lab.scene !== 'identity'}>
+        <Text id="scene-identity-progress" text={`工具状态：${lab.progress}/60。运行中点击下面文本框并选择内容，观察真实焦点/选区变化。`} />
+        <Column id="scene-approval-form" recreate={work.mode === 'scenes' && lab.scene === 'identity' && lab.variant === 'naive'}>
+          <Text id="scene-note-label" text="待创建笔记的标题（只模拟表单，不写文件）" />
+          <Field id="scene-note" value={lab.note} onChange={(value) => scenes.set('note', value)} />
+          <Select id="scene-decision" value={lab.decision} options={[{ id: 'review', label: '待审阅' }, { id: 'allow', label: '允许（仅演示）' }, { id: 'deny', label: '拒绝（仅演示）' }]} onChange={(value) => scenes.set('decision', value)} />
+        </Column>
+        <Text id="scene-draft-state" text={`模型保存的标题：${lab.note} · 选择：${lab.decision}。没有故意删除输入；差异来自真实控件生命周期。`} />
+      </Column>
+    </Column>
     <Column id="agent-pane" hidden={work.mode !== 'agent'}>
       <Row id="session-actions">
         <Button id="session-new" title="新建会话" enabled={connected && !busy} onPress={() => agent.newSession()} />
@@ -172,7 +198,7 @@ input.on('line', (line) => {
       if (node?.type === 'Button' && node.props.enabled !== false) node.props.onPress?.();
       if (['Input', 'Field', 'Select', 'Editor'].includes(node?.type) && node.props.enabled !== false && typeof message.value === 'string') node.props.onChange?.(message.value.slice(0, 32000));
     } else if (message.type === 'native.event') { model.receive(message.event); agent.receive(message.event); }
-    else if (message.type === 'shutdown') { model.dispose(); process.exit(0); }
+    else if (message.type === 'shutdown') { model.dispose(); scenes.dispose(); process.exit(0); }
   } catch (error) { process.stderr.write(`Input rejected: ${error.message}\n`); }
 });
-input.on('close', () => { model.dispose(); process.exit(0); });
+input.on('close', () => { model.dispose(); scenes.dispose(); process.exit(0); });

@@ -38,6 +38,7 @@ if [[ "$route" == "react-native-bridge" ]]; then
 else
   mkdir -p "$app/Contents/Resources/web"
   cp "$examples_dir/$route/build/assets/index.html" "$examples_dir/$route/build/assets/app.js" "$examples_dir/$route/build/assets/style.css" "$app/Contents/Resources/web/"
+  cp "$examples_dir/$route/build/assets/lab-worker.js" "$app/Contents/Resources/web/lab-worker.js"
 fi
 cat > "$app/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

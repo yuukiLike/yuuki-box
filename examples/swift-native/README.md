@@ -1,6 +1,6 @@
 # SwiftUI + AppKit Agent 工作台
 
-这个示例现在包含两个独立入口：**Agent 工作台**调用真实本地 Harness；**回放与更新实验**保留相同负载的 UI 路线比较。SwiftUI 管理界面，AppKit 管理窗口和文件选择，两个本地 helper 分别管理模型/工具循环与语音。
+这个示例现在包含三个独立入口：**Agent 工作台**调用真实本地 Harness；**回放与更新实验**保留各路线共有的固定负载；**场景实验**提供三组可以切换“朴素 / 优化”的真实实现。SwiftUI 管理界面，AppKit 管理窗口和文件选择，两个本地 helper 分别管理模型/工具循环与语音。
 
 ## 构建与打开
 
@@ -72,12 +72,71 @@ YUUKI_UPDATE_URL=https://your-domain.example/update.json \
 
 fixture 值固定映射，不接受任意路径，未知值报错。非空 `YUUKI_UPDATE_URL` 优先于 fixture，只接受 HTTPS；超时 10 秒，清单接收后限制 64 KiB，数字版本比较与发布地址校验仍在界面代码中。下载、签名校验、替换、重启和失败恢复没有实现；独立分发后续可实际接入 [Sparkle](https://sparkle-project.org/documentation/)。
 
+## 三个 Harness 场景：亲手对照实现
+
+打开“场景实验”，选择一个场景、负载和实现模式，点击“运行 / 重跑”。上方**响应探针**始终可以输入；运行中持续打字、移动光标，再去阅读对应内容，能观察真实调度与界面更新对输入的影响。探针和搜索查询在切换、停止、重置时保留。这里没有假延时、空转循环、模型请求、麦克风或真实工作区读写；日志路径是确定生成的内存数据。
+
+建议用同一负载先完成朴素模式，再切换优化模式重跑。每个场景保留两种模式各自**最近的完整结果**，包含输入规模、输出规模、工作计数、函数处理用时和 FNV-1a 指纹。只有输入条件相同才显示指纹对照；未完成的运行不覆盖完整结果。摘要是非密码学辅助检查，不证明像素、时序或所有交互都等价。
+
+| 场景 | 朴素路径 | 优化路径 | 轻 / 中（默认）/ 重 |
+|---|---|---|---|
+| 长会话流式排版 | 每个块重新 Markdown 解析全部历史，再发布当前消息 | 历史一次解析、稳定 revision 隔离；独立当前消息每 6 块发布 | 400 / 1,500 / 3,000 条历史；均为 180 块、名义间隔 30 ms |
+| 工作区日志检索 | 每次查询在 MainActor 重新归一化全部数据，再过滤/计分/排序 | 后台建立可复用索引；detached 查询 + 取消 + generation 检查 | 3,000 / 12,000 / 24,000 条日志；查询前 96 字符、最多 8 词；显示前 100 条 |
+| 工具控制台追加 | 每次更新拼出全部字符串，用 `setAttributedString` 替换全部存储 | 加载一次旧输出，再用 `NSTextStorage.append` 追加所有遗漏批次 | 600 / 2,400 / 4,800 条旧行；均追加 160 批 × 4 行，名义间隔 25 ms |
+
+定时器只模拟同一数据源的到达节奏，负载来自实际解析、归一化、排序和文本存储工作。主线程繁忙时到达回调可能延后；本例不把名义间隔当实际 FPS，也不通过固定睡眠让某个模式看起来慢。负载有上限，当前设备上差异是否明显仍需你主动体验。
+
+### 场景 1：长会话继续输出，历史无需再解析
+
+Harness 中，旧 assistant / tool 消息可能已经稳定，只有当前消息还在流入。本例两种模式调用同一个 Markdown 格式化函数。朴素模式每个块重新处理全部历史；优化模式保持不可变格式化历史，以 `CachedConversationHistory` 的 revision 明确隔离，并让 `ActiveConversationText` 单独发布当前文本。
+
+你可以在历史区域滚动、选择文字，同时在探针编辑下一条指令。屏幕计数包括实际接收块数、累计解析历史行数、当前消息发布次数以及格式化段用时。初始历史生成/解析计入累计处理；它不是完整帧或键盘到显示的测量。最终指纹覆盖格式化后的历史纯文本与当前消息纯文本，正文长度按 UTF-16 计；Markdown 样式本身不在这个摘要中。
+
+优化代价是缓存失效规则和中间更新频率：每 6 块发布意味着名义上最多约 180 ms 的批量窗口，停止时会发布尾批。不能把少显示中间状态说成没有取舍；两边的最终文本与全部历史都保留。
+
+源码入口：[ScenarioLabs.swift](Sources/ScenarioLabs.swift) 的 `ConversationScenario.receiveNextChunk`、`reformatAllHistoryAndActive`、`publishOnlyActive`、`CachedConversationHistory` 和 `ActiveConversationPanel`。
+
+### 场景 2：每个按键都搜索同一工作区
+
+点击运行后修改查询，例如 `error`、`agent cancel`、`approval` 或 `cafe`。两条路径都使用大小写/重音/全角归一化，要求所有词匹配，以相同分数与稳定 ID 排序。空查询也有确定结果。数据只生成一次；这里不访问磁盘。
+
+朴素实现把全数据归一化和排序都放在 MainActor 的输入回调。优化实现只构建一次索引，然后让 `Task.detached` 承担查询；每 64 条检查一次取消，排序结束再次检查，发布前再核对运行 ID 和查询 generation。索引尚未完成时可以继续修改查询，完成后采用最新输入。停止会禁用后续自动查询，直到再次点击运行。
+
+计数包括累计归一化行数、扫描行数、实际发起/发布的查询次数、取消请求和确实丢弃的完成结果。最近查询处理时间：朴素包含重新归一化与排序，优化只包含已建索引上的匹配排序；界面另列累计建索引时间，不能把它当免费。指纹覆盖总匹配数和实际显示的前 100 条结果（ID、分数、路径、正文）；对照输入包含数据规模与查询。
+
+优化代价是额外内存、索引失效、协作式取消和过期结果处理。取消不等于立即中止任意一条底层字符串操作，任务仍需到达检查点；generation 守卫负责防止它覆盖更新输入的结果。
+
+源码入口：[SearchScenario.swift](Sources/SearchScenario.swift) 的 `WorkspaceSearchAlgorithm.buildIndex` / `rank` / `score`、`SearchScenario.normalizeAndRankOnMainActor` 与 `rankCachedIndexInBackground`。
+
+### 场景 3：大段工具输出的全量替换与原生增量修改
+
+两种模式使用**同一个 NSTextView**，相同字体、TextKit 设置和选区/滚动恢复逻辑。运行时向上阅读并选中旧输出，再去探针输入。只有原本在底部且没有选区时才跟随新增内容，不人为给朴素模式添加丢失选区或跳到底部的缺陷。
+
+差别发生在文本存储：朴素模式重新构造全字符串并替换；优化模式根据已应用游标追加所有尚未应用的块。如果 SwiftUI 合并更新，它也会追加所有遗漏块，而不是丢数据。旧行和全部 640 条新增行都保留；这段视图不把输出截短来制造速度差异。
+
+屏幕显示实际文本存储写入次数、累计交给存储的 UTF-16 字符数、当前文档字符数，以及同步构造/修改/滚动恢复区间的用时。追加次数不一定等于输入批次数，因为视图更新可以合并。最终指纹直接读取最终 `NSTextStorage.string`，只在完成时计算，并排除在存储操作计时之外。
+
+优化代价是已应用游标、generation、reset 处理，以及 SwiftUI ↔ AppKit 文本容器和滚动桥接。它是工具日志视图，不是 ANSI/PTY 终端模拟器；现有 Agent/语音/回放入口保持独立。
+
+源码入口：[ConsoleScenario.swift](Sources/ConsoleScenario.swift) 的 `ConsoleFeed`、`ConsoleScenario.start`、`IncrementalConsoleText.updateNSView`。该函数中的两个分支分别调用 `setAttributedString` 与 `append`，共享选区/滚动恢复，不隐藏到抽象层之后。
+
+### 如何解释屏幕上的数字
+
+这些是你运行时才产生的真实计数和函数区间墙钟时间；不是预置成绩、帧率、CPU 时间或端到端输入延迟。指纹计算不混入处理计时。比较时保持同一负载、查询和交互顺序；索引准备、批量发布等待和额外内存也要一起考虑。最近完整结果会跨模式切换保留，方便直接阅读，无需另建复杂报告。
+
+停止、重置、切换场景/模式/负载、离开场景页都会取消计时器或后台任务，并用运行身份阻止旧结果落入新场景。重置清空当前数据和计数，但保留输入与两种模式的最近完整对照。没有把本轮未执行的界面实验写成已通过：**这次只编译，未运行这些负载或采集数值。**
+
+平台参考：[Apple NSTextStorage](https://developer.apple.com/documentation/appkit/nstextstorage)、[NSTextView selectedRanges](https://developer.apple.com/documentation/appkit/nstextview/selectedranges)。
+
 ## 按调用路径读代码
 
 | 文件 | 主要职责 |
 |---|---|
 | [Sources/AgentWorkbench.swift](Sources/AgentWorkbench.swift) | Runtime JSONL 客户端、状态模型、会话与设置 UI、审批、导出、Apple/Whisper 交互 |
 | [Sources/main.swift](Sources/main.swift) | 回放实验、更新检查、AppKit 应用与窗口生命周期 |
+| [Sources/ScenarioLabs.swift](Sources/ScenarioLabs.swift) | 场景控制、保留的输入探针、对照摘要、长会话全量重排与独立流式更新 |
+| [Sources/SearchScenario.swift](Sources/SearchScenario.swift) | 同一检索算法的主线程重复计算与缓存/后台/取消路径 |
+| [Sources/ConsoleScenario.swift](Sources/ConsoleScenario.swift) | 同一原生文本视图的全量替换与增量追加路径 |
 | [../shared/runtime/PROTOCOL.md](../shared/runtime/PROTOCOL.md) | UI 与真实 Harness 的命令/事件边界 |
 | [../shared/native/Sources/WhisperSession.swift](../shared/native/Sources/WhisperSession.swift) | 录音、音频规范化、CLI 推理、取消与文件清理 |
 
@@ -98,7 +157,7 @@ Swift 示例也使用共享 helper 子进程，使各 UI 路线采用相同的�
 
 ## 当前证据范围
 
-本次实现的 Swift Agent UI 已通过直接 `swiftc` 编译；最终 `.app` 由统一构建流程生成并复制新版 Runtime/语音 helper。Apple + Whisper helper 也已编译。按用户指示没有运行 UI、测试、网络模型调用、真实录音、CLI 转写、性能测量或完整更新安装，因此不把编译结果描述为端到端验收。
+本次实现的 Swift Agent UI 与三个场景对照已通过直接 `swiftc` 编译；最终 `.app` 由统一构建流程生成并复制新版 Runtime/语音 helper。Apple + Whisper helper 也已编译。按用户指示没有运行 UI、测试、场景负载、网络模型调用、真实录音、CLI 转写、性能测量或完整更新安装，因此不把编译结果描述为端到端验收。
 
 原 `--self-test` 入口保留旧的 fixture/版本检查，未覆盖新 Agent/Whisper 路径，本轮没有运行。没有虚构速度、识别准确率、Token 消耗或工具执行结果。
 

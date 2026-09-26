@@ -1,10 +1,12 @@
 # Yuuki Box：Apple 生态 Agent 工作台调研与起步
 
-更新日期：2026-09-26。当前阶段：架构调研与五条技术路线的 MVP 已落地，DeepSeek Agent、持久会话与 Whisper 扩展已完成五路线统一构建和打包；真实 API/语音运行与性能实验尚未执行。
+更新日期：2026-09-26。当前阶段：架构调研与五条技术路线的 MVP 已落地，DeepSeek Agent、持久会话与 Whisper 扩展，以及新增的十五个 Harness 场景实验，已完成五路线构建和打包；真实 API/语音运行与性能实验尚未执行。
 
 这组文档服务于一个具体目标：先在 Mac 上做出自己的 Agent 工作台，掌握模型调用与工具执行循环，并让输入、滚动、切换和取消保持及时响应。随后再把同一套任务能力带到 Mac mini、MacBook Air、iPad 和 iPhone。
 
 ## 阅读入口
+
+想先看当前选型结论，读[根 README：五路线选择与推荐架构](../README.md)。它给出 SwiftUI/AppKit 默认主线、GPUI 与 Web 路线的适用条件，并用 2026-09-26 核实的一手资料说明哪些证据会改变推荐。
 
 | 文档 | 内容 | 什么时候读 |
 |---|---|---|
@@ -13,6 +15,7 @@
 | [Deep：简单、组合、复杂性](deep/2026-09-26-simplicity-composition-complexity/README.md) | Raycast、Warp、Zed、Grok Build 的组合单位、契约与成本；Yuuki 的实际变化链 | 想理解优秀产品如何保持简单，以及抽象在哪里失效时 |
 | [Mac 本地 Harness 架构提案](architecture/mac-local-harness.md) | 模型循环、工具、事件、权限、进程、持久化与恢复 | 准备确定实现边界时 |
 | [渲染性能学习与实验](learning/rendering-performance.md) | 一帧的工作、增量更新、长列表、流式文本、测量方法 | 想理解“跟手”从何而来时 |
+| [十五个 Harness 场景实验](learning/harness-scenario-lab.md) | 五条路线各三个真实对照，朴素/优化路径、操作方法与维护代价 | 想亲手感受负载和优化的差异时 |
 | [第一轮 Mac 闭环开发计划](plan/first-mac-loop.md) | 环境现状、第一项任务、里程碑、验收与停止调研条件 | 准备直接开始开发时 |
 | [五条路线的可运行示例](../examples/README.md) | Swift、GPUI、React 原生桥、WKWebView、Electron 的源码和应用包 | 想马上接触技术、修改代码时 |
 | [实现中的优点与代价](../examples/COMPARISON.md) | 渲染、桥接、语音、更新与构建的具体成本 | 对照亲手体验，形成自己的判断时 |

@@ -44,6 +44,33 @@ Whisper 设置来自 runtime 确认的配置，不能通过一次 speech IPC 任
 
 对话使用完整纯文本消息；长期聊天还没有分页虚拟化。原回放页保留 54px 行高虚拟列表、1k/10k 历史、50ms/条、单次 200 条、上限 10,200，计时发生在 Electron main，不能被误写为 WebView 的本地 JS timer。离开回放页会停止其回放。
 
+## 新增：三个 Harness 场景实验
+
+进入「场景实验」，选择朴素 / 优化、规模，点击运行。所有输入都在本地生成，不需要 API Key、网络、麦克风或工作目录。切换场景或实现会清理旧任务；两种实现的相同规模结果保留在对照表。先从最小规模开始，再自行放大。
+
+| 场景 | 朴素路径 | 优化路径 | 规模与实际指标 |
+|---|---|---|---|
+| E1 多工具 IPC | 一条事件一条 IPC、一次状态发布 | 每 200 条打包，一次发布 | 2k / 10k / 30k 事件；发送数据消息数、JSON UTF-8 字节、收到的条数/指纹、状态发布次数、耗时 |
+| E2 工具产物索引 | main 同步生成、JSON 解析、归一化、去重、排序和摘要 | `worker_threads` 执行完全相同函数，只回传摘要 | 20k / 80k / 200k 条；产物字节、词项数量、指纹、计算耗时、含启动的总耗时、控制 IPC RTT |
+| E3 长卡片时间线 | 全历史 React/DOM，滚动时全量协调 | 固定 112px 行高，视口与缓冲区，memo 稳定卡片 | 1k / 3k / 6k 卡片；实际挂载卡片和 DOM 节点、逻辑过滤结果、首次提交耗时 |
+
+E1 两个路径都有相同的 200 条确认窗口，确认后才继续；只展示最近 20 条，但所有事件都会累计计数和指纹，不丢 `complete` 终态。30 秒无确认报告错误并释放任务。JSON 字节不等于操作系统实际传输字节；确认 IPC 不包含在数据消息指标中，状态发布次数也不是 React commit 数。E1/E3 指纹覆盖按序排列的完整记录，以 32 位非密码学滚动计算观察变化；它仍可能碰撞，不是等价证明。这个实验不负责把全量事件持久化。
+
+E2 的特别之处是**控制面响应**：renderer 输入可能仍然响应，发往 main 的取消却会排队。控制探针每 150ms 尝试发送一次，最多一个未完成请求；界面显示最大 RTT 和样本数。很短的任务可能没有样本。main 计算时收到的取消只能等计算结束处理，界面会报告「任务已结束」，不会假装成功取消。Worker 可终止，但它有启动成本、独立内存与生命周期责任；取消与完成都等待线程实际退出，退出中的 Worker 仍占据工作槽，新任务不会与它重叠。总耗时包含 Worker 启动和退出，计算耗时另列。两侧调用同一个 `indexArtifact`，没有额外忙等或人为 sleep；该方法符合 Electron 对 CPU 密集工作避免阻塞 main 的建议。[Electron 性能说明](https://www.electronjs.org/docs/latest/tutorial/performance)、[Node Worker API](https://nodejs.org/api/worker_threads.html)
+
+E3 的收益来自挂载范围缩小，并不证明 Chromium 在所有负载下最快。固定高度截断、跨未挂载行的选择/查找、动态 Markdown 测量是明确代价。提交耗时从点击开始，包含生成输入和 React DOM 提交，不包含后续 GPU 绘制。最重的同步提交不能中途取消，完成后用「清空场景」卸载。所有指标都是用户实际点击后产生；本轮没有运行这些实验。
+
+源码阅读顺序：
+
+1. [scenes.jsx](scenes.jsx)：场景 UI、真实输入探针、计数、结果对照；`RemoteScene` 与 `Timeline`。
+2. [scene-controller.cjs](scene-controller.cjs)：main 任务所有权、窗口确认、取消与 Worker 生命周期。
+3. [scene-work.cjs](scene-work.cjs)：两种路径完全共用的产物索引函数；[scene-worker.cjs](scene-worker.cjs) 是 Worker 的独立入口。
+   [scene-fingerprint.cjs](scene-fingerprint.cjs) 是 main 与 renderer 共同使用的完整记录指纹函数。
+4. [preload.cjs](preload.cjs) 与 [main.cjs](main.cjs)：固定能力方法与原有 sender 校验。没有为实验开放 Node 或通用 IPC。
+5. [build.mjs](build.mjs)：Worker 文件必须显式进入 `.app`；构建只解析 CJS 语法并编译 renderer，不执行场景。
+
+维护练习可以从 E1 新增一种 `approval_required` 终态开始：修改事件源、接收显示与终态策略，然后沿上面路径核对，不要只给 React 加一个标签。另一个练习是把 E3 卡片展开为可变高度：它会让固定高度窗口的局限变成真实需要解决的代码问题。五条路线的对照设计见[场景实验手册](../../docs/learning/harness-scenario-lab.md)。
+
 更新页可选 available/current/invalid，仅检查包内清单，验证 HTTPS URL 和版本，不下载安装。完整 autoUpdater、正式签名、公证、回滚和分发仍未实现；本地 ad-hoc 包不能替代这些能力。
 
 本轮只实现和编译源码，不运行测试、computer-use、GUI、模型 API 请求、模型下载或语音权限。最终总构建结果见[examples 入口](../README.md)，尚无网络兼容性、真实会话、TCC、性能或 Whisper 推理实测。

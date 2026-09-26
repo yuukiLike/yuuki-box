@@ -46,3 +46,14 @@ textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
 .settings { max-width: 760px; }
 .settings label { display: block; font-size: 12px; color: #a6b3c1; margin: 14px 0; }
 .settings input, .settings select { display: block; margin-top: 6px; }
+.lab-scene { margin-top: 20px; }
+.lab-scene label { display: block; font-size: 12px; margin: 12px 0; color: #b3c1cd; }
+.lab-scene label input, .lab-scene label select { display: block; margin-top: 6px; }
+.lab-metrics { font: 11px/1.7 ui-monospace, monospace; padding: 12px; background: #192923; color: #c4dbd2; border-radius: 7px; overflow-wrap: anywhere; }
+.lab-log-viewport { height: 360px; overflow: auto; border: 1px solid #303949; border-radius: 8px; contain: strict; }
+.lab-log-card { height: 36px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 8px 12px; border-bottom: 1px solid #283342; font: 11px ui-monospace, monospace; }
+.lab-transcript { height: 360px; overflow: auto; border: 1px solid #303949; border-radius: 8px; padding: 12px; }
+.lab-transcript article { border-bottom: 1px solid #303949; padding: 12px 0; font-size: 12px; white-space: pre-wrap; }
+.lab-transcript h3 { font-size: 14px; }
+.lab-transcript pre { height: auto; }
+.lab-search-result { height: 270px; }

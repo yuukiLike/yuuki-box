@@ -12,7 +12,7 @@ export function createAgentModel(send) {
   return {
     getSnapshot: () => state,
     subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
-    setMode(mode) { if (['agent', 'settings', 'replay'].includes(mode)) publish({ mode }); },
+    setMode(mode) { if (['agent', 'settings', 'replay', 'scenes'].includes(mode)) publish({ mode }); },
     setDraft(draft) { publish({ draft: String(draft).slice(0, 32000) }); },
     setAudioFile(audioFile) { publish({ audioFile: String(audioFile).slice(0, 4096) }); },
     setSetting(key, value) { if (!Object.hasOwn(defaultSettings, key)) return; settingsDirty = true; publish({ settings: { ...state.settings, [key]: value } }); },

@@ -43,3 +43,9 @@ Whisper 麦克风模式点击「停止录音并转写」后继续进行本地推
 React / ReactDOM 18.3.1、react-reconciler 0.29.2 是配对的 renderer API；esbuild 0.28.2。Electron 打包时明确把 React/ReactDOM 指向它自己的单一安装，避免跨目录共享组件意外打入两套 React。
 
 构建脚本共用 assets 和 helper 目录，应按顺序运行。本轮只编译源码；最终 `.app` 由总构建统一打包。没有运行测试、computer-use、GUI、模型 API 请求、模型下载、真实语音或权限弹窗。源码与编译结果不能替代实际会话、TCC、网络兼容性和性能验证。
+
+## 路线专属场景插槽
+
+`mountWorkbench({ Scenes: Component, ... })` 可选择提供独立场景组件；提供时出现「场景实验」导航，mode 为 `scenes`。未提供时原有 Agent/设置/回放入口不变。WKWebView 和 Electron 可以分别传入自己的实验，不把不同 transport 或线程模型揉成同一实现；原生桥则由自己的 reconciler UI 实现场景。
+
+WK 的 Worker 源码由本目录 build.mjs 预先编译，再作为固定源码字符串打入 Web bundle，并保留本地 `lab-worker.js` 资源。只为该路线的本地 Blob Worker 增加 CSP `worker-src blob:`；不开放网页网络连接或任意代码入口。实验具体预设、实现函数和未测量边界见各路线 README。

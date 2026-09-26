@@ -6,6 +6,8 @@
 
 原来的固定事件回放保留在独立 Lab/回放区域，便于观察界面负载；它与真实 Agent 任务分开。详细基础见 [AI 与语音架构](../docs/architecture/ai-and-speech-foundation.md) 和 [Agent runtime](shared/runtime/README.md)。
 
+新增「场景实验」：**每条路线三个 Harness 场景，共十五个，每个都能切换朴素 / 优化实际实现。** 覆盖历史重复解析、长列表、主线程计算、桥接流量、原生控件身份、取消和控制响应。它们使用有界的本地数据，不需要 key 或模型；指标在你主动运行后产生。操作与源码阅读见[完整场景手册](../docs/learning/harness-scenario-lab.md)，具体负载和计量边界见各路线 README。场景实现针对不同架构边界，不能直接用跨路线的毫秒排框架名次。
+
 ## 选一条开始
 
 | 路线与说明 | 实际界面路径 | 构建命令（仓库根目录） |
@@ -62,7 +64,7 @@ Lab/回放区域保留同一份固定 fixture：1,000 / 10,000 条历史、全�
 
 ## 当前证据范围
 
-**2026-09-26，最新 Agent/Whisper 扩展已经完成五路线顺序构建、打包与 ad-hoc 签名，`bash examples/build-all.sh` 退出码为 0。** 上表四个固定路径均已更新；Electron 最新包是 `YuukiElectron-20260926T015705710Z.app`，`latest-path.txt` 已指向它。更早的 Electron 时间戳包仍保留，可能包含旧功能。
+**2026-09-26，包含十五个 Harness 场景的五路线顺序构建、打包与 ad-hoc 签名已经完成，`bash examples/build-all.sh` 退出码为 0。** Electron 最后收紧 Worker 退出/取消生命周期后，另执行 `node build.mjs` 成功重新打包。上表四个固定路径均已更新；Electron 最新包是 `YuukiElectron-20260926T033130241Z.app`，`latest-path.txt` 已指向它。更早的 Electron 时间戳包仍保留，可能包含旧功能。
 
 按用户要求，本轮没有运行测试、computer-use、GUI、真实 API 请求、工作区任务、模型下载、录音或系统授权；也没有测 FPS、内存、启动或 Whisper 推理。早期 helper 的无权限检查不代表本次 Agent/Whisper 路径已通过验证。编译成功与完整交互通过是不同证据。
 

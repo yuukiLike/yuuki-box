@@ -13,7 +13,7 @@ cp "$examples_dir/shared/fixtures/events.json" "$examples_dir/shared/fixtures/up
 ditto "$examples_dir/shared/native/build/NativeCapabilities.app" "$app/Contents/Helpers/NativeCapabilities.app"
 ditto "$examples_dir/shared/runtime/build/AgentRuntime.app" "$app/Contents/Resources/AgentRuntime.app"
 xcrun swiftc -swift-version 5 -O -target "$(uname -m)-apple-macos14.0" \
-  "$script_dir/Sources/main.swift" "$script_dir/Sources/AgentWorkbench.swift" -o "$app/Contents/MacOS/yuuki-swift-native" \
+  "$script_dir"/Sources/*.swift -o "$app/Contents/MacOS/yuuki-swift-native" \
   -framework SwiftUI -framework AppKit
 codesign --force --sign - "$app"
 echo "$app"

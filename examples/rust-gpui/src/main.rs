@@ -1,6 +1,7 @@
 mod input;
 mod model;
 mod process;
+mod scenarios;
 mod workbench;
 
 use gpui::{
@@ -342,7 +343,8 @@ impl Render for AgentBox {
 }
 
 struct Shell {
-    agent_mode: bool,
+    page: u8,
+    scenarios: Entity<scenarios::Scenarios>,
     workbench: Entity<workbench::Workbench>,
     replay: Entity<AgentBox>,
 }
@@ -361,32 +363,49 @@ impl Render for Shell {
                     .gap_2()
                     .p_3()
                     .child(
-                        button("mode-agent", "Agent 工作台", self.agent_mode).on_click(
-                            cx.listener(|this, _, _, cx| {
-                                this.agent_mode = true;
+                        button("mode-agent", "Agent 工作台", self.page == 0).on_click(cx.listener(
+                            |this, _, _, cx| {
+                                this.page = 0;
+                                this.scenarios
+                                    .update(cx, |scenarios, cx| scenarios.stop(cx));
                                 this.replay.update(cx, |replay, cx| {
                                     replay.streaming = false;
                                     replay.ticker = None;
                                     cx.notify();
                                 });
                                 cx.notify();
-                            }),
-                        ),
+                            },
+                        )),
                     )
                     .child(
-                        button("mode-replay", "渲染 / 更新实验", !self.agent_mode).on_click(
+                        button("mode-replay", "渲染 / 更新实验", self.page == 1).on_click(
                             cx.listener(|this, _, _, cx| {
-                                this.agent_mode = false;
+                                this.page = 1;
+                                this.scenarios
+                                    .update(cx, |scenarios, cx| scenarios.stop(cx));
                                 cx.notify();
                             }),
                         ),
                     )
+                    .child(
+                        button("mode-scenarios", "场景实验", self.page == 2).on_click(cx.listener(
+                            |this, _, _, cx| {
+                                this.page = 2;
+                                this.replay.update(cx, |replay, cx| {
+                                    replay.streaming = false;
+                                    replay.ticker = None;
+                                    cx.notify();
+                                });
+                                cx.notify();
+                            },
+                        )),
+                    )
                     .child(div().text_sm().child("Rust + GPUI · 本地 Agent Runtime")),
             )
-            .child(div().flex_1().min_h_0().child(if self.agent_mode {
-                self.workbench.clone().into_any_element()
-            } else {
-                self.replay.clone().into_any_element()
+            .child(div().flex_1().min_h_0().child(match self.page {
+                0 => self.workbench.clone().into_any_element(),
+                1 => self.replay.clone().into_any_element(),
+                _ => self.scenarios.clone().into_any_element(),
             }))
     }
 }
@@ -417,8 +436,10 @@ fn main() {
                     .detach();
                     AgentBox::new()
                 });
+                let scenarios = cx.new(scenarios::Scenarios::new);
                 cx.new(|_| Shell {
-                    agent_mode: true,
+                    page: 0,
+                    scenarios,
                     workbench,
                     replay,
                 })

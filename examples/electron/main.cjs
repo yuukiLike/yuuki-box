@@ -5,6 +5,7 @@ const { join } = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { spawn } = require('node:child_process');
 const { RuntimeClient } = require('./runtime-client.cjs');
+const { SceneController } = require('./scene-controller.cjs');
 
 const version = '0.1.0';
 const resources = app.isPackaged ? process.resourcesPath : join(__dirname, '..', 'shared');
@@ -16,10 +17,13 @@ let window;
 let timer;
 let generation = 0;
 let speech;
+let sceneQuitPending = false;
+let sceneQuitReady = false;
 const runtimeExecutable = app.isPackaged
   ? join(resources, 'AgentRuntime.app', 'Contents', 'MacOS', 'agent-runtime')
   : join(resources, 'runtime', 'build', 'AgentRuntime.app', 'Contents', 'MacOS', 'agent-runtime');
 const runtime = new RuntimeClient(runtimeExecutable, event => send('agent-event', event));
+const scenes = new SceneController(event => send('scene-event', event));
 
 function send(channel, value) {
   if (window && !window.isDestroyed()) window.webContents.send(channel, value);
@@ -175,6 +179,10 @@ app.whenReady().then(() => {
   register('speech-start', options => startSpeech(options));
   register('speech-stop', () => { stopSpeech(); return { stopping: true }; });
   register('speech-cancel', () => { cancelSpeech(); return { cancelling: true }; });
+  register('scene-start', options => scenes.start(options));
+  register('scene-ack', options => scenes.acknowledge(options));
+  register('scene-stop', runId => scenes.stop(runId));
+  register('scene-ping', () => ({ received: true }));
   window = new BrowserWindow({
     width: 1100, height: 780, minWidth: 850, minHeight: 620, title: 'Yuuki Lab · Electron',
     backgroundColor: '#f4f3ef',
@@ -182,13 +190,23 @@ app.whenReady().then(() => {
   });
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', (event, url) => { if (url !== documentURL) event.preventDefault(); });
-  window.on('closed', () => { ++generation; stopStream(); cancelSpeech(); runtime.shutdown(); window = undefined; });
+  window.on('closed', () => { ++generation; stopStream(); cancelSpeech(); void scenes.close().catch(error => console.error('Scene shutdown:', error.message)); runtime.shutdown(); window = undefined; });
   window.loadURL(documentURL).catch(error => { console.error(error); app.quit(); });
 });
 
-app.on('before-quit', () => {
+app.on('before-quit', event => {
+  if (sceneQuitReady) return;
   ++generation;
   stopStream();
+  const waitForWorker = Boolean(scenes.active?.worker) || sceneQuitPending;
+  const shutdown = scenes.close();
+  if (waitForWorker) {
+    event.preventDefault();
+    if (!sceneQuitPending) {
+      sceneQuitPending = true;
+      shutdown.then(() => { sceneQuitReady = true; app.quit(); }, error => { console.error('Scene shutdown:', error.message); sceneQuitReady = true; app.quit(); });
+    } else void shutdown.catch(error => console.error('Scene shutdown:', error.message));
+  } else void shutdown.catch(error => console.error('Scene shutdown:', error.message));
   // The native helper also watches stdin EOF; SIGTERM gives explicit cleanup on quit.
   if (speech) { speech.stdin.end('cancel\n'); speech.kill('SIGTERM'); }
   runtime.shutdown();
