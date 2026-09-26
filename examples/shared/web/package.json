@@ -1,0 +1,8 @@
+{
+  "name": "yuuki-comparison-react",
+  "private": true,
+  "type": "module",
+  "scripts": {"build": "node build.mjs"},
+  "dependencies": {"react": "18.3.1", "react-dom": "18.3.1", "react-reconciler": "0.29.2"},
+  "devDependencies": {"esbuild": "0.28.2"}
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "version": "0.2.0",
+  "notes": "本地更新清单实验：验证格式、比较版本、显示说明；不会下载或安装软件。",
+  "url": "https://example.com/yuuki-box/0.2.0"
+}

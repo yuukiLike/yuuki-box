@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-09-26T02:00:09.344056+00:00",
+  "scope": "Documentation research only; no application, model, speech, benchmark or renderer execution.",
+  "method": "Static Markdown inline-link existence and line-bound checks; paired fenced blocks; SHA-256 from source bytes. Website citations were read through official sources and delegated research, not an automated all-URL availability test.",
+  "versions": {
+    "zed": "7ea077c78b865d17854cee812bb775dbe64a925a",
+    "warp": "5af88f49f84e70025f9c19e13f6b9ae64b624627",
+    "grok_build": "f0e3be1100ef5252488e3be8bb0e91cf68d8c305",
+    "pi_prior_head": "e0d142ba56ced0c1d76eba8ab2a96c07959ad4e6",
+    "pi_note": "Prior investigation included staged changes; no new PI snapshot.",
+    "yuuki_note": "No Git metadata; files changed concurrently. Fingerprints record content present at capture, not a full reconstructible snapshot."
+  },
+  "document_checks": [
+    {
+      "path": "docs/deep/2026-09-26-simplicity-composition-complexity/01-framework.md",
+      "sha256": "8e6508aa7b92a96dba090e2ccee61c05530a8ddf10570769b3e96706ed2d225c",
+      "lines": 88,
+      "local_links": 12,
+      "web_links": 4,
+      "code_fences": 0
+    },
+    {
+      "path": "docs/deep/2026-09-26-simplicity-composition-complexity/02-raycast-warp.md",
+      "sha256": "edb868425b7f8225b7ead4a85973dd06f2fb42b080070ec26d93e09874069a7e",
+      "lines": 100,
+      "local_links": 6,
+      "web_links": 24,
+      "code_fences": 2
+    },
+    {
+      "path": "docs/deep/2026-09-26-simplicity-composition-complexity/03-zed-grok.md",
+      "sha256": "0d2006ca74b33c9ddc76bdbeb652215619ed5f6f55a874d4861f85cef28ad2bb",
+      "lines": 110,
+      "local_links": 20,
+      "web_links": 21,
+      "code_fences": 2
+    },
+    {
+      "path": "docs/deep/2026-09-26-simplicity-composition-complexity/04-yuuki.md",
+      "sha256": "9be353f523d988004e375163cb42522d68f0aaf3d51fedd08fb99861d37f4b20",
+      "lines": 91,
+      "local_links": 45,
+      "web_links": 0,
+      "code_fences": 2
+    },
+    {
+      "path": "docs/deep/2026-09-26-simplicity-composition-complexity/README.md",
+      "sha256": "999ef192fb9e8b58f96954e594dc309de2ada92adf17b7c5db66e94842b913c7",
+      "lines": 62,
+      "local_links": 8,
+      "web_links": 3,
+      "code_fences": 0
+    }
+  ],
+  "navigation_document_checks": [
+    {
+      "path": "docs/README.md",
+      "sha256": "a83610c0db8de430df4723377d7bbf9c8f63facebc4564c0f41e9576e782083b",
+      "lines": 83,
+      "local_links": 13,
+      "web_links": 7,
+      "code_fences": 0
+    },
+    {
+      "path": "docs/research/zed-raycast-warp.md",
+      "sha256": "8cf67cf6bd2659d8e833a1a1a7a4c830ce46dd97a86c84f973aa1faa325b2b93",
+      "lines": 346,
+      "local_links": 12,
+      "web_links": 57,
+      "code_fences": 6
+    },
+    {
+      "path": "docs/deep/2026-09-26-zed-pi-rust/README.md",
+      "sha256": "58f2b40d5266939a77ad5202f85d1c25f2b12cd8c84984eb78f08a83567285ba",
+      "lines": 73,
+      "local_links": 8,
+      "web_links": 3,
+      "code_fences": 2
+    }
+  ],
+  "summary": {
+    "new_markdown_documents": 5,
+    "new_document_local_links": 91,
+    "new_document_web_links": 52,
+    "new_document_unique_web_urls": 48,
+    "new_document_unique_local_reference_files": 32,
+    "errors": []
+  },
+  "local_references_from_new_documents": [
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/README.md",
+      "bytes": 8702,
+      "lines": 83,
+      "sha256": "a83610c0db8de430df4723377d7bbf9c8f63facebc4564c0f41e9576e782083b"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/architecture/ai-and-speech-foundation.md",
+      "bytes": 7536,
+      "lines": 87,
+      "sha256": "6fefe65c1791ba880f174bb1656f630dc41639c2de9a2738f86d45253919185e"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-simplicity-composition-complexity/01-framework.md",
+      "bytes": 9068,
+      "lines": 88,
+      "sha256": "8e6508aa7b92a96dba090e2ccee61c05530a8ddf10570769b3e96706ed2d225c"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-simplicity-composition-complexity/02-raycast-warp.md",
+      "bytes": 13065,
+      "lines": 100,
+      "sha256": "edb868425b7f8225b7ead4a85973dd06f2fb42b080070ec26d93e09874069a7e"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-simplicity-composition-complexity/03-zed-grok.md",
+      "bytes": 14778,
+      "lines": 110,
+      "sha256": "0d2006ca74b33c9ddc76bdbeb652215619ed5f6f55a874d4861f85cef28ad2bb"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-simplicity-composition-complexity/04-yuuki.md",
+      "bytes": 15294,
+      "lines": 91,
+      "sha256": "9be353f523d988004e375163cb42522d68f0aaf3d51fedd08fb99861d37f4b20"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-simplicity-composition-complexity/README.md",
+      "bytes": 7089,
+      "lines": 62,
+      "sha256": "999ef192fb9e8b58f96954e594dc309de2ada92adf17b7c5db66e94842b913c7"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-zed-pi-rust/02-zed-architecture.md",
+      "bytes": 26122,
+      "lines": 255,
+      "sha256": "8ac9a8f9508f163b8f171e7b7af70ade16de13e855887e4eb8b0ebcb433a5535"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-zed-pi-rust/03-pi-desktop.md",
+      "bytes": 20799,
+      "lines": 126,
+      "sha256": "07fd2f9a826a0376b4aff5927a4ce07070aaf252154c5f6b567d2521199d955a"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-zed-pi-rust/04-yuuki-box.md",
+      "bytes": 8791,
+      "lines": 85,
+      "sha256": "1e42f19827b6ebd64eb9da4639fa24b741c9c5a173f4506a653433361021ccd6"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/deep/2026-09-26-zed-pi-rust/README.md",
+      "bytes": 7199,
+      "lines": 73,
+      "sha256": "58f2b40d5266939a77ad5202f85d1c25f2b12cd8c84984eb78f08a83567285ba"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/docs/research/zed-raycast-warp.md",
+      "bytes": 26452,
+      "lines": 346,
+      "sha256": "8cf67cf6bd2659d8e833a1a1a7a4c830ce46dd97a86c84f973aa1faa325b2b93"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/COMPARISON.md",
+      "bytes": 9730,
+      "lines": 92,
+      "sha256": "83df5b584acada65fdf305cfde947c5ca2345729b0879cd7ed89398d32a01cf8"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/react-native-bridge/README.md",
+      "bytes": 4426,
+      "lines": 63,
+      "sha256": "080c8615dae1385c8ae17429dee9dc5bcf77632d666f91c2cb04f0f18ae66401"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/Host.swift",
+      "bytes": 16949,
+      "lines": 299,
+      "sha256": "501c28f72aed02bd3ad727e0c76d5133d97b38b585aceda9725157b954104f8d"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/main.jsx",
+      "bytes": 12640,
+      "lines": 178,
+      "sha256": "1de6b3fa33da6d4ebcc16fdc08218c153fc4e454ea55daadbee4302ff2ee8ae9"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/native/README.md",
+      "bytes": 11640,
+      "lines": 154,
+      "sha256": "ed10f5f862e2e98cb8dfb43e6a27889b114b38dc7b672297b7802b997818f912"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/native/Sources/WhisperSession.swift",
+      "bytes": 19563,
+      "lines": 351,
+      "sha256": "8f89d1fdbf50cc3dbe70f4eb3cf6d6104b765a9172aa47d14b7f23f7613ab15b"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/runtime/PROTOCOL.md",
+      "bytes": 3376,
+      "lines": 33,
+      "sha256": "b6292a07c965005a21a502213c2746a2d6b061662b8a32e468bf09a3bc45be90"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/runtime/README.md",
+      "bytes": 8222,
+      "lines": 105,
+      "sha256": "d3f3756a117d8482f20a8ab0169529d0f6050750ee323599094e58ad911942bf"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift",
+      "bytes": 40033,
+      "lines": 576,
+      "sha256": "6e81fae94efc35394a4e883bf67321f57c5f7a59e061e4f0c519597980f95c55"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/web/NativeHostSupport.swift",
+      "bytes": 8363,
+      "lines": 164,
+      "sha256": "d1aa0bfdf292e7394011b2051cb75c54bde8dbddd5b8e8937ea9cb97682c6647"
+    },
+    {
+      "path": "/Users/chp/explore/yuuki-box/examples/shared/web/src/agent-model.mjs",
+      "bytes": 5875,
+      "lines": 61,
+      "sha256": "94e842cde76d0880455f78e625ada6ffb92e3c9505704a52d38c5f63e7024944"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/agent/Cargo.toml",
+      "bytes": 3528,
+      "lines": 121,
+      "sha256": "37256f196127ccd4c0f6056eee7ab2bfbee85918fb5bfdeda982e6e29a7d5a1f"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/agent/src/thread.rs",
+      "bytes": 358258,
+      "lines": 9243,
+      "sha256": "7162584f386d5016469013237f0673dad5c79ba5223b8403db4d781c171f8481"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/editor/src/display_map.rs",
+      "bytes": 171967,
+      "lines": 4579,
+      "sha256": "3734f303b67159266c63a6fec47cb644bbf2e80b2a1650cf744964ce3c2c8da2"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/editor/src/editor.rs",
+      "bytes": 483083,
+      "lines": 13130,
+      "sha256": "5684c7dfc1c9de1c51488f87c5851199d55a5ea89e725ac6cb84127b6525e6ab"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/editor/src/items.rs",
+      "bytes": 126975,
+      "lines": 3502,
+      "sha256": "2bb309b8eae5c9912be93a3a4a76b9987c72b67f5d86cafe007bd483a8e3ccf4"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/language/src/buffer.rs",
+      "bytes": 232228,
+      "lines": 6315,
+      "sha256": "4ca485d8acf366349c53bfd697c14cba2744e22b4a590ebae35de647053e1e69"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/multi_buffer/src/multi_buffer.rs",
+      "bytes": 312784,
+      "lines": 8486,
+      "sha256": "602d1f1ef128604db02c61b8b19723284c368ec23a4cb2286b8a38bed32ebe42"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/sum_tree/src/sum_tree.rs",
+      "bytes": 66871,
+      "lines": 1903,
+      "sha256": "3db2a92a6910773bdbd2bff316ff3de1f487109e737f833e7543d47e5ab8a240"
+    },
+    {
+      "path": "/Users/chp/explore/zed/crates/workspace/src/workspace.rs",
+      "bytes": 764188,
+      "lines": 20237,
+      "sha256": "3224efec4ddc1241cc1bf37dbfde5166b7e1029408b1ea3c114046a743450e6e"
+    }
+  ],
+  "grok_selected_source_files": [
+    {
+      "bytes": 19063,
+      "lines": 480,
+      "sha256": "4aa6cbe261b1fde5b10468de841af85c47184f285996d4ef2ea7f628d09a6510",
+      "repository_path": "Cargo.toml",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/Cargo.toml"
+    },
+    {
+      "bytes": 5757,
+      "lines": 140,
+      "sha256": "322066de9f5bc136295bd0ae4f1752cef3d8dcb1a8f9d88044609e7b6d7abcf7",
+      "repository_path": "README.md",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/README.md"
+    },
+    {
+      "bytes": 1024,
+      "lines": 20,
+      "sha256": "3508bdb09f13a6637d894b5a1810e92be23e2eb71e0a114af0f772305a19a882",
+      "repository_path": "crates/codegen/xai-agent-lifecycle/src/lib.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-agent-lifecycle/src/lib.rs"
+    },
+    {
+      "bytes": 9482,
+      "lines": 291,
+      "sha256": "01248a360a5e4c221f44526c677bbfe5b76d20e1dbc064861a00e2d7cad7b10f",
+      "repository_path": "crates/codegen/xai-grok-agent/README.md",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/README.md"
+    },
+    {
+      "bytes": 8526,
+      "lines": 218,
+      "sha256": "e3842d923cff6f30a3f7318795480b1766690d25183d5ccb94d579231d76829f",
+      "repository_path": "crates/codegen/xai-grok-agent/src/agent.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/src/agent.rs"
+    },
+    {
+      "bytes": 130355,
+      "lines": 3154,
+      "sha256": "f5d5c95fcd179d2bd74e4f6f7ed2c0f7c4d2d7f4ff479f92047c99c9fd71736c",
+      "repository_path": "crates/codegen/xai-grok-agent/src/builder.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/src/builder.rs"
+    },
+    {
+      "bytes": 882,
+      "lines": 29,
+      "sha256": "5f7ebdce3faef8f334f1af1a4cac2184118ddfde15a7689601f4b848d69a02c3",
+      "repository_path": "crates/codegen/xai-grok-agent/src/lib.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/src/lib.rs"
+    },
+    {
+      "bytes": 4034,
+      "lines": 66,
+      "sha256": "44c07f07c08c2204171bcbf220848214ae5e3534b283d95947106d17d90eb362",
+      "repository_path": "crates/codegen/xai-grok-pager/README.md",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-pager/README.md"
+    },
+    {
+      "bytes": 255137,
+      "lines": 5702,
+      "sha256": "0f6ec23ef127879efd2af8e866a64dc38a7fb8927e71501545249cd51591e350",
+      "repository_path": "crates/codegen/xai-grok-pager/src/app/effects/mod.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-pager/src/app/effects/mod.rs"
+    },
+    {
+      "bytes": 2488,
+      "lines": 77,
+      "sha256": "245e972f05910ab93949e74d4aa7f9c153c4f89f175031e99c056437a2e6977a",
+      "repository_path": "crates/codegen/xai-grok-pager-bin/src/agent_command.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-pager-bin/src/agent_command.rs"
+    },
+    {
+      "bytes": 49195,
+      "lines": 1042,
+      "sha256": "5dc376aa9cc0405f393331d8c8d877ead17aff64f5a4ceca69ba4a8cb555d5cf",
+      "repository_path": "crates/codegen/xai-grok-shell/src/session/acp_session_impl/cancel.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-shell/src/session/acp_session_impl/cancel.rs"
+    },
+    {
+      "bytes": 39133,
+      "lines": 1031,
+      "sha256": "a68452cd3c1c6b343ab6a1eca4814f144cbcc0a9aa9dd97ccda1f96dffa9d4f9",
+      "repository_path": "crates/codegen/xai-grok-tools/src/bridge.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-tools/src/bridge.rs"
+    },
+    {
+      "bytes": 223810,
+      "lines": 5255,
+      "sha256": "fab25cc928bf62c2368779f4b26046d25689f63b1503196d6183dea7fa218f93",
+      "repository_path": "crates/codegen/xai-grok-tools/src/registry/types.rs",
+      "source": "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-tools/src/registry/types.rs"
+    }
+  ],
+  "web_urls_from_new_documents": [
+    "https://developers.raycast.com/ai/follow-best-practices-for-ai-extensions",
+    "https://developers.raycast.com/ai/learn-core-concepts-of-ai-extensions",
+    "https://developers.raycast.com/api-reference/command",
+    "https://developers.raycast.com/api-reference/tool",
+    "https://developers.raycast.com/api-reference/user-interface/action-panel",
+    "https://developers.raycast.com/api-reference/user-interface/list",
+    "https://developers.raycast.com/examples/todo-list",
+    "https://docs.warp.dev/code/code-review",
+    "https://docs.warp.dev/terminal/blocks/block-basics",
+    "https://docs.x.ai/build/cli/headless-scripting",
+    "https://docs.x.ai/build/features/hooks",
+    "https://docs.x.ai/build/features/mcp-servers",
+    "https://docs.x.ai/build/features/permissions",
+    "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+    "https://docs.x.ai/build/features/subagents",
+    "https://docs.x.ai/build/overview",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/FAQ.md#L63",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/app/assets/bundled/bootstrap/zsh_body.sh#L254",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/app/src/terminal/model/blocks.rs#L79",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/crates/warp_terminal/src/model/ansi/dcs_hooks.rs#L692",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/crates/warp_terminal/src/model/grid/flat_storage/mod.rs",
+    "https://github.com/warpdotdev/warp/blob/5af88f49f84e70025f9c19e13f6b9ae64b624627/crates/warp_terminal/src/model/grid/grid_storage.rs",
+    "https://github.com/warpdotdev/warp/commit/5af88f49f84e70025f9c19e13f6b9ae64b624627",
+    "https://github.com/warpdotdev/warp/tree/5af88f49f84e70025f9c19e13f6b9ae64b624627",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-agent-lifecycle/src/lib.rs#L1",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/README.md",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-agent/src/agent.rs#L12",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-pager/README.md",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-shell/src/session/acp_session_impl/cancel.rs#L250",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-tools/src/bridge.rs#L213",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-tools/src/registry/types.rs#L1630",
+    "https://github.com/xai-org/grok-build/blob/f0e3be1100ef5252488e3be8bb0e91cf68d8c305/crates/codegen/xai-grok-tools/src/registry/types.rs#L186",
+    "https://github.com/xai-org/grok-build/commit/f0e3be1100ef5252488e3be8bb0e91cf68d8c305",
+    "https://github.com/xai-org/grok-build/tree/f0e3be1100ef5252488e3be8bb0e91cf68d8c305",
+    "https://github.com/zed-industries/zed/tree/7ea077c78b865d17854cee812bb775dbe64a925a",
+    "https://www.cs.lafayette.edu/~gexia/cs301/resources/parnas.html",
+    "https://www.cs.unc.edu/techreports/86-020.pdf",
+    "https://www.infoq.com/presentations/Simple-Made-Easy/",
+    "https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast",
+    "https://www.raycast.com/blog/how-raycast-api-extensions-work",
+    "https://www.raycast.com/changelog/macos/2-0",
+    "https://www.raycast.com/changelog/macos/2-5",
+    "https://www.warp.dev/blog/block-model-behind-warps-agentic-development-environment",
+    "https://www.warp.dev/blog/bring-your-own-inference-to-warp",
+    "https://www.warp.dev/blog/open-infrastructure-for-building-a-software-factory",
+    "https://www.warp.dev/blog/universal-agent-support-level-up-coding-agent-warp",
+    "https://x.ai/news/grok-build-for-everyone",
+    "https://x.ai/news/grok-build-open-source"
+  ]
+}

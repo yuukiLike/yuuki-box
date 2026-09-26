@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "kind": "tool",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 2,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 3,
+    "kind": "message",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 4,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 5,
+    "kind": "tool",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 6,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 7,
+    "kind": "message",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 8,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 9,
+    "kind": "tool",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 10,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 11,
+    "kind": "message",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 12,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 13,
+    "kind": "tool",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 14,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 15,
+    "kind": "message",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 16,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 17,
+    "kind": "tool",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 18,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 19,
+    "kind": "message",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 20,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 21,
+    "kind": "tool",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 22,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 23,
+    "kind": "message",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 24,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 25,
+    "kind": "tool",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 26,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 27,
+    "kind": "message",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 28,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 29,
+    "kind": "tool",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 30,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 31,
+    "kind": "message",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 32,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 33,
+    "kind": "tool",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 34,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 35,
+    "kind": "message",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 36,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 37,
+    "kind": "tool",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 38,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 39,
+    "kind": "message",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 40,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 41,
+    "kind": "tool",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 42,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 43,
+    "kind": "message",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 44,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 45,
+    "kind": "tool",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 46,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 47,
+    "kind": "message",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 48,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 49,
+    "kind": "tool",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 50,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 51,
+    "kind": "message",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 52,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 53,
+    "kind": "tool",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 54,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 55,
+    "kind": "message",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 56,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 57,
+    "kind": "tool",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 58,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 59,
+    "kind": "message",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 60,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 61,
+    "kind": "tool",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 62,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 63,
+    "kind": "message",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 64,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 65,
+    "kind": "tool",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 66,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 67,
+    "kind": "message",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 68,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 69,
+    "kind": "tool",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 70,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 71,
+    "kind": "message",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 72,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 73,
+    "kind": "tool",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 74,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 75,
+    "kind": "message",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 76,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 77,
+    "kind": "tool",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 78,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 79,
+    "kind": "message",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 80,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 81,
+    "kind": "tool",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 82,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 83,
+    "kind": "message",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 84,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 85,
+    "kind": "tool",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 86,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 87,
+    "kind": "message",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 88,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 89,
+    "kind": "tool",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 90,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  },
+  {
+    "id": 91,
+    "kind": "message",
+    "text": "读取工作目录，建立任务上下文。"
+  },
+  {
+    "id": 92,
+    "kind": "message",
+    "text": "检查工具调用结果与退出状态。"
+  },
+  {
+    "id": 93,
+    "kind": "tool",
+    "text": "流式追加一条消息，保持历史内容稳定。"
+  },
+  {
+    "id": 94,
+    "kind": "message",
+    "text": "用户向上滚动时保持阅读位置。"
+  },
+  {
+    "id": 95,
+    "kind": "message",
+    "text": "记录任务事件，准备下一次模型请求。"
+  },
+  {
+    "id": 96,
+    "kind": "message",
+    "text": "验证取消信号并清理当前任务。"
+  },
+  {
+    "id": 97,
+    "kind": "tool",
+    "text": "A fixed workload makes renderer comparisons repeatable."
+  },
+  {
+    "id": 98,
+    "kind": "message",
+    "text": "测试中文、English、emoji ✨ 与代码片段。"
+  },
+  {
+    "id": 99,
+    "kind": "message",
+    "text": "工具输出有界保存，界面只更新可见范围。"
+  },
+  {
+    "id": 100,
+    "kind": "message",
+    "text": "完成一轮检查，等待下一项操作。"
+  }
+]

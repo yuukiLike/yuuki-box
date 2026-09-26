@@ -1,0 +1,4 @@
+.electron-replay .viewport { height: 378px; overflow: auto; border: 1px solid #303949; border-radius: 8px; background: #171d27; }
+.electron-replay .replay-row { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 14px; padding: 0 12px; border-bottom: 1px solid #283342; font-size: 12px; }
+.electron-replay .row-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.electron-replay select { width: 220px; }
