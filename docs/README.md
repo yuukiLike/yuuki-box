@@ -21,6 +21,7 @@
 | [实现中的优点与代价](../examples/COMPARISON.md) | 渲染、桥接、语音、更新与构建的具体成本 | 对照亲手体验，形成自己的判断时 |
 | [五条路线的统一评估工具提案](architecture/technology-assessment.md) | 性能采集、架构边界、开发成本与统一报告 | 想系统比较这五种实现时 |
 | [AI 与语音基础](architecture/ai-and-speech-foundation.md) | DeepSeek、工具循环、Keychain、Whisper 模型接入与相关框架 | 准备给 MVP 配置真实 AI 与语音时 |
+| [给 Yuuki 装上耳朵和嘴巴](tts/README.md) | 三个免费语音工具的下载方式，每个两个基础用法 | 想先听见自己的 AI 开口说话时 |
 
 可以直接从最感兴趣的一份示例开始，再随实现回查调研和架构文档。不要求读完所有外部来源，也不要求先完成 Swift 路线才接触 GPUI。
 
