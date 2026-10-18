@@ -1,0 +1,62 @@
+---
+import { formatBytes, kvBytes } from '../lib/lab-models.mjs';
+const defaults = { sequences: 1, layers: 32, tokens: 4096, kvHeads: 8, headDim: 128, bytesPerElement: 2 };
+---
+
+<kv-calculator class="lab-panel">
+  <form>
+    <div class="control-grid">
+      <label>上下文 token 数<input name="tokens" type="number" min="1" max="131072" value="4096" required /></label>
+      <label>同时保存的序列<input name="sequences" type="number" min="1" max="64" value="1" required /></label>
+      <label>模型层数<input name="layers" type="number" min="1" max="128" value="32" required /></label>
+      <label>K/V 头数<select name="kvHeads"><option>1</option><option>4</option><option selected>8</option><option>16</option><option>32</option></select></label>
+      <label>每头维度<select name="headDim"><option>64</option><option selected>128</option><option>256</option></select></label>
+      <label>每元素字节数<select name="bytesPerElement"><option value="1">1 字节</option><option value="2" selected>2 字节</option><option value="4">4 字节</option></select></label>
+    </div>
+    <div class="lab-result" aria-live="polite">
+      <span class="eyebrow">K 和 V 的有效数据总量</span>
+      <output class="big-number">{formatBytes(kvBytes(defaults))}</output>
+      <p data-breakdown>每个 token、每条序列 128 KiB × 4,096 个 token × 1 条序列</p>
+    </div>
+    <p class="lab-note">按完整、未共享的常规 MHA/GQA K/V 计算。模型权重、分配预留和量化元数据需另算。</p>
+    <button class="lab-button secondary" type="reset">恢复示例参数</button>
+  </form>
+  <noscript>启用 JavaScript 后可修改参数；默认示例的结果为 512 MiB。</noscript>
+</kv-calculator>
+
+<script>
+  import { formatBytes, kvBytes } from '../lib/lab-models.mjs';
+  class KvCalculator extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
+      const form = this.querySelector('form');
+      const output = this.querySelector('output');
+      const breakdown = this.querySelector('[data-breakdown]');
+      if (!form || !output || !breakdown) return;
+      const update = () => {
+        if (!form.checkValidity()) {
+          output.value = '请检查参数';
+          breakdown.textContent = '每项需为输入框所示范围内的正整数。';
+          return;
+        }
+        const data = new FormData(form);
+        const parameters = {
+          sequences: Number(data.get('sequences')),
+          layers: Number(data.get('layers')),
+          tokens: Number(data.get('tokens')),
+          kvHeads: Number(data.get('kvHeads')),
+          headDim: Number(data.get('headDim')),
+          bytesPerElement: Number(data.get('bytesPerElement')),
+        };
+        output.value = formatBytes(kvBytes(parameters));
+        const perToken = kvBytes({ ...parameters, sequences: 1, tokens: 1 });
+        breakdown.textContent = `每个 token、每条序列 ${formatBytes(perToken)} × ${parameters.tokens.toLocaleString()} 个 token × ${parameters.sequences} 条序列`;
+      };
+      form.addEventListener('input', update);
+      form.addEventListener('submit', (event) => event.preventDefault());
+      form.addEventListener('reset', () => queueMicrotask(update));
+    }
+  }
+  customElements.define('kv-calculator', KvCalculator);
+</script>

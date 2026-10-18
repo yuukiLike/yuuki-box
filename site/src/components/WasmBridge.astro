@@ -1,0 +1,52 @@
+<wasm-bridge class="lab-panel">
+  <p data-status role="status">正在准备本页的微型 Wasm 模块。</p>
+  <form>
+    <fieldset disabled>
+      <legend>把两个整数传过 JavaScript 与 Wasm 的边界</legend>
+      <div class="control-grid">
+        <label>整数 A<input type="number" name="a" min="-2147483648" max="2147483647" value="21" required /></label>
+        <label>整数 B<input type="number" name="b" min="-2147483648" max="2147483647" value="21" required /></label>
+      </div>
+      <button class="lab-button" type="submit">调用 Wasm add</button>
+    </fieldset>
+    <div class="lab-result" aria-live="polite">
+      <span class="eyebrow">Wasm 返回的 i32 结果</span>
+      <output class="big-number">—</output>
+    </div>
+  </form>
+  <p class="lab-note">模块直接随页面加载，不下载模型。i32 加法超出范围时按 32 位整数回绕。</p>
+  <noscript>需要 JavaScript 才能实例化并调用 Wasm；文档和源代码可直接阅读。</noscript>
+</wasm-bridge>
+
+<script>
+  import { createAdder } from '../../../docs/wasm/labs/wasm-add.mjs';
+  class WasmBridge extends HTMLElement {
+    async connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
+      const status = this.querySelector('[data-status]');
+      const form = this.querySelector('form');
+      const fieldset = this.querySelector('fieldset');
+      const output = this.querySelector('output');
+      if (!status || !form || !fieldset || !output) return;
+      if (typeof WebAssembly === 'undefined') {
+        status.textContent = '当前环境没有 WebAssembly 支持，可继续阅读下方的调用过程。';
+        return;
+      }
+      try {
+        const add = await createAdder();
+        status.textContent = '模块已实例化。修改参数，再点击调用。';
+        fieldset.disabled = false;
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+          const data = new FormData(form);
+          output.value = String(add(Number(data.get('a')), Number(data.get('b'))));
+        });
+      } catch (error) {
+        status.textContent = `模块未能初始化：${error instanceof Error ? error.message : String(error)}`;
+      }
+    }
+  }
+  customElements.define('wasm-bridge', WasmBridge);
+</script>

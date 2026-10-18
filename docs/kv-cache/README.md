@@ -6,6 +6,8 @@
 
 ## 阅读顺序
 
+如果想先从 key、Map 和内存开始，先读[前端基础](../frontend-foundations/README.md)，再读[为什么 KV 会这么大](00-why-so-large.md)。也可以在[浏览器容量实验](../../site/src/pages/labs/kv-memory.astro)中改一个参数再往下读。
+
 | 章节 | 从前端的哪个问题开始 | 读完能解释什么 |
 | --- | --- | --- |
 | [从 useMemo 到前缀复用](01-from-frontend.md) | 消息列表追加一项，为什么还会重算整份派生数据 | 缓存结果、缓存依赖与增量计算的区别 |

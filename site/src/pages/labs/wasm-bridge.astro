@@ -1,0 +1,12 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import WasmBridge from '../../components/WasmBridge.astro';
+---
+<StarlightPage frontmatter={{ title: 'JavaScript 调用 Wasm', description: '实例化一个微型 WebAssembly 模块，观察数值类型与调用边界。', tableOfContents: false, editUrl: false, prev: false, next: false }}>
+  <p>这里调用的是真正的 WebAssembly 模块，导出一个 <code>i32.add</code>。界面与事件处理仍由 JavaScript 完成。</p>
+  <WasmBridge />
+  <h2>沿着这三个步骤读</h2>
+  <ol><li>页面取得模块字节，并交给 <code>WebAssembly.instantiate</code>。</li><li>JavaScript 从实例的 <code>exports</code> 取得 <code>add</code>。</li><li>传入两个整数，接收模块返回的数值并更新界面。</li></ol>
+  <p>可以试试 <code>2147483647 + 1</code>。结果说明跨边界时需要明确类型，而不仅仅是替换一次函数调用。这个微型模块用来观察调用过程；它的开销结构不能代表模型推理性能。</p>
+  <p><a href="/source/wasm/labs/wasm-add.mjs">查看模块字节与完整代码</a> · <a href="/wasm/">回到 Wasm 学习入口 →</a></p>
+</StarlightPage>

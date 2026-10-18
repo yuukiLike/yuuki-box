@@ -1,0 +1,51 @@
+---
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+interface Props {
+  entries?: StarlightRouteData['sidebar'];
+  depth?: number;
+  prefix?: string;
+}
+
+const {
+  entries = Astro.locals.starlightRoute.sidebar.filter((entry) => entry.type === 'group'),
+  depth = 0,
+  prefix = 'directory',
+} = Astro.props;
+
+function countLinks(items: StarlightRouteData['sidebar']): number {
+  return items.reduce((total, entry) => total + (entry.type === 'link' ? 1 : countLinks(entry.entries)), 0);
+}
+
+const Heading = `h${Math.min(depth + 2, 6)}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+---
+
+{depth === 0 && <div class="directory-summary">
+  <p>从前端的数据与缓存出发，逐步读到 KV Cache、Wasm 与浏览器 AI。</p>
+  <span class="directory-total">{entries.length} 个专题<span aria-hidden="true"> / </span>{countLinks(entries)} 项内容</span>
+</div>}
+
+<ul class:list={['document-directory', { 'directory-sections': depth === 0 }]}>
+  {entries.map((entry, index) => <li
+    class:list={{ 'directory-section': depth === 0, 'directory-group': depth > 0 && entry.type === 'group' }}
+    style={depth === 0 ? `--section-order: ${index}` : undefined}
+  >
+    {entry.type === 'link' ? (
+      <a class="directory-link" href={entry.href}>
+        <span class="directory-link-title">{entry.label}</span>
+        <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
+      </a>
+    ) : (
+      <>
+        <div class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>
+          {depth === 0 && <span class="directory-folder" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" /><path d="M3 10h18" /></svg>
+          </span>}
+          <Heading id={`${prefix}-${index + 1}`}>{entry.label}</Heading>
+          {depth === 0 && <span class="directory-count" aria-label={`${countLinks(entry.entries)} 项内容`}>{String(countLinks(entry.entries)).padStart(2, '0')}</span>}
+        </div>
+        <Astro.self entries={entry.entries} depth={depth + 1} prefix={`${prefix}-${index + 1}`} />
+      </>
+    )}
+  </li>)}
+</ul>

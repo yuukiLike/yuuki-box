@@ -1,0 +1,12 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import KvCalculator from '../../components/KvCalculator.astro';
+---
+<StarlightPage frontmatter={{ title: 'KV 内存计算器', description: '改变 token 数、层数与 K/V 头数，观察缓存数据量如何变化。', tableOfContents: false, editUrl: false, prev: false, next: false }}>
+  <p>先预测：只把上下文从 4096 改成 8192，其他参数保持不变，结果会怎样？</p>
+  <KvCalculator />
+  <h2>沿着乘法找原因</h2>
+  <p><code>2 × 序列数 × 层数 × token 数 × K/V 头数 × 每头维度 × 每元素字节数</code></p>
+  <p>这里的 2 表示 K 与 V 两份数据。这个计算假设每条序列独立保存完整 K/V；共享前缀、滑动窗口和压缩状态需要按实际实现另算。</p>
+  <p><a href="/kv-cache/00-why-so-large/">接着读 为什么 KV 会这么大 →</a></p>
+</StarlightPage>

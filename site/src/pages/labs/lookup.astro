@@ -1,0 +1,12 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import LookupLab from '../../components/LookupLab.astro';
+---
+<StarlightPage frontmatter={{ title: '数组与 Map 查找', description: '观察逐项查找与预先建立索引的不同成本。', tableOfContents: false, editUrl: false, prev: false, next: false }}>
+  <p>消息 ID 按 1 到 N 排列。先找最后一条，再找第一条，看看数组路径发生了什么变化。</p>
+  <LookupLab />
+  <h2>比较时把构建成本一起算进去</h2>
+  <p>Map 路径先为全部消息建立索引，再调用一次 <code>get</code>。表里的 1 指 API 调用次数，内部的哈希或树查找仍然需要工作。若只查询一次，建立索引的成本也可能占主要部分。</p>
+  <p>Map 中保存的是同一批消息对象的引用；索引结构本身仍会占用额外内存。这个实验展示计算路径，不据此给出真实耗时排名。</p>
+  <p><a href="/frontend-foundations/keys-and-maps/">接着读 key、Map 和对象身份 →</a></p>
+</StarlightPage>

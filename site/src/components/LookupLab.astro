@@ -1,0 +1,49 @@
+<lookup-lab class="lab-panel">
+  <form>
+    <div class="control-grid">
+      <label>消息数量<input type="number" name="count" min="1" max="10000" value="1000" required /></label>
+      <label>查找哪个 ID<input type="number" name="target" min="1" max="1000" value="1000" required /></label>
+    </div>
+    <div class="comparison-grid" aria-live="polite">
+      <div><span class="eyebrow">数组 find 的条件判断次数</span><output data-comparisons class="big-number">1,000</output></div>
+      <div><span class="eyebrow">Map.get 的 API 调用次数</span><span class="big-number">1</span></div>
+    </div>
+    <p data-result role="status">两条路径找到同一个消息对象。</p>
+    <p class="lab-note" data-index>另外构建了 1,000 项索引。Map 的内部操作次数由引擎实现决定，这里没有测量耗时。</p>
+  </form>
+  <noscript>启用 JavaScript 后可改变消息数量与目标 ID。</noscript>
+</lookup-lab>
+
+<script>
+  import { compareLookup } from '../lib/lab-models.mjs';
+  class LookupLab extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
+      const form = this.querySelector('form');
+      const target = this.querySelector<HTMLInputElement>('[name="target"]');
+      const comparisons = this.querySelector('output');
+      const result = this.querySelector('[data-result]');
+      const index = this.querySelector('[data-index]');
+      if (!form || !target || !comparisons || !result || !index) return;
+      const update = () => {
+        const data = new FormData(form);
+        const count = Number(data.get('count'));
+        target.max = String(count);
+        if (!form.checkValidity()) {
+          comparisons.value = '—';
+          result.textContent = '消息数量需在 1 到 10000，目标 ID 需位于这批数据中。';
+          return;
+        }
+        const found = compareLookup(count, Number(data.get('target')));
+        comparisons.value = found.comparisons.toLocaleString();
+        result.textContent = found.sameResult ? `两条路径找到同一个对象：${found.name}。` : '查找结果不一致。';
+        index.textContent = `另外构建了 ${found.indexEntries.toLocaleString()} 项索引。Map 的内部操作次数由引擎实现决定，这里没有测量耗时。`;
+      };
+      form.addEventListener('input', update);
+      form.addEventListener('submit', (event) => event.preventDefault());
+      update();
+    }
+  }
+  customElements.define('lookup-lab', LookupLab);
+</script>
