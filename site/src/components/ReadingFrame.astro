@@ -1,0 +1,64 @@
+---
+const { entry, toc } = Astro.locals.starlightRoute;
+const isDirectory = entry.id === '' || entry.id === 'index';
+---
+
+<div class:list={['reading-frame', { 'with-toc': Boolean(toc), 'directory-frame': isDirectory }]}>
+  <div class="main-pane"><slot /></div>
+  {toc && <aside class="reading-toc print:hidden">
+    <slot name="right-sidebar" />
+  </aside>}
+</div>
+
+<style>
+  .reading-frame { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .main-pane {
+    min-width: 0;
+    width: 100%;
+    max-width: calc(var(--sl-content-width) + 2 * var(--sl-content-pad-x));
+    isolation: isolate;
+  }
+  .reading-toc { display: none; }
+
+  @media screen and (min-width: 50rem) {
+    .reading-frame {
+      width: 100%;
+      max-width: calc(var(--sl-content-width) + 2 * var(--sl-content-pad-x));
+      margin-inline: auto;
+    }
+    .directory-frame { --sl-content-width: 64rem; }
+    .main-pane { max-width: none; }
+  }
+
+  @media screen and (min-width: 72rem) {
+    .with-toc {
+      /* Let the article shrink before the two columns can overflow the viewport. */
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      max-width: calc(var(--sl-content-width) + 2 * var(--sl-content-pad-x) + 15rem);
+    }
+    .reading-toc {
+      display: block;
+      position: sticky;
+      top: calc(var(--sl-nav-height) + 2rem);
+      min-width: 0;
+      max-height: calc(100dvh - var(--sl-nav-height) - 4rem);
+      overflow-y: auto;
+      margin-top: 2rem;
+      padding: .25rem 1rem .5rem;
+      border-inline-start: 1px solid var(--yuuki-border);
+      scrollbar-width: thin;
+    }
+    .reading-toc :global(h2) { margin-bottom: .65rem; color: var(--sl-color-gray-2); font-size: .75rem; font-weight: 600; }
+    .reading-toc :global(a) {
+      display: block;
+      padding-block: .35rem;
+      color: var(--sl-color-gray-3);
+      font-size: .8125rem;
+      line-height: 1.7;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .reading-toc :global(a:hover), .reading-toc :global(a[aria-current='true']) { color: var(--sl-color-accent); }
+    .reading-toc :global(a[aria-current='true']) { font-weight: 500; }
+  }
+</style>

@@ -10,7 +10,7 @@
 
 ```bash
 pnpm --dir site install
-pnpm --dir site dev
+pnpm docs:dev
 ```
 
 终端会打印实际预览地址，默认是 `http://127.0.0.1:4321/`。生产构建后的全文搜索可以用 preview 查看：
@@ -29,6 +29,8 @@ pnpm --dir site check
 pnpm --dir site test
 pnpm --dir site build
 ```
+
+正式构建会刷新 Markdown 渲染缓存，并检查页面引用的静态资源是否存在，避免旧缓存保留已失效的代码块样式路径，导致代码高亮和复制按钮丢失。
 
 ## 内容维护
 

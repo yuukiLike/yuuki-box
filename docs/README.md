@@ -6,7 +6,7 @@
 
 ## 阅读入口
 
-现在可以通过 [Astro 学习地图](../site/src/pages/index.astro)一起浏览这些资料。在仓库根目录执行 `pnpm --dir site install`、`pnpm --dir site dev`，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
+现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm --dir site install`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
 
 想先看当前选型结论，读[根 README：五路线选择与推荐架构](../README.md)。它给出 SwiftUI/AppKit 默认主线、GPUI 与 Web 路线的适用条件，并用 2026-09-26 核实的一手资料说明哪些证据会改变推荐。
 

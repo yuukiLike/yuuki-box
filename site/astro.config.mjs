@@ -10,12 +10,17 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Yuuki 学习手记',
-      logo: { src: './public/favicon.svg', alt: '' },
+      credits: false,
       disable404Route: true,
       description: '从前端的 key、Map 与渲染出发，理解缓存、KV Cache、WebAssembly 和 AI 应用。',
       locales: { root: { label: '简体中文', lang: 'zh-CN' } },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/yuukiLike/yuuki-box' }],
       customCss: ['./src/styles/custom.css'],
+      components: {
+        Header: './src/components/ContentHeader.astro',
+        TwoColumnContent: './src/components/ReadingFrame.astro',
+        PageSidebar: '@astrojs/starlight/components/TableOfContents.astro',
+      },
       markdown: { processedDirs: ['../docs'] },
       expressiveCode: { themes: ['github-dark', 'github-light'], styleOverrides: { borderRadius: '0.6rem' } },
       sidebar: [
@@ -72,7 +77,13 @@ export default defineConfig({
             { slug: 'guide', label: '原文档导航与项目状态' },
             // 外部 glob 的 filePath 相对 site 根目录；自动目录需使用同一前缀。
             { label: '研究资料', items: [{ autogenerate: { directory: '../docs/research' } }] },
-            { label: '设计深读', items: [{ autogenerate: { directory: '../docs/deep' } }] },
+            {
+              label: '设计深读',
+              items: [
+                { label: '简单、组合与复杂性', items: [{ autogenerate: { directory: '../docs/deep/2026-09-26-simplicity-composition-complexity' } }] },
+                { label: 'Zed、Rust 与 PI-Desktop', items: [{ autogenerate: { directory: '../docs/deep/2026-09-26-zed-pi-rust' } }] },
+              ],
+            },
             { slug: 'architecture/technology-assessment', label: '技术评估工具提案' },
             { label: '实施计划', items: [{ autogenerate: { directory: '../docs/plan' } }] },
           ],

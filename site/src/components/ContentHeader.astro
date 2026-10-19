@@ -1,0 +1,158 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro';
+import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
+import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+const { entry, sidebar, siteTitleHref, toc } = Astro.locals.starlightRoute;
+const isDirectory = entry.id === '' || entry.id === 'index';
+
+function isCurrent(item: StarlightRouteData['sidebar'][number]): boolean {
+  return item.type === 'link' ? item.isCurrent : item.entries.some(isCurrent);
+}
+
+const sections = sidebar.filter((item) => item.type === 'group');
+const sectionIndex = sections.findIndex(isCurrent);
+const section = sections[sectionIndex];
+---
+
+<div class:list={['content-tools', { 'with-page-menu': Boolean(toc) }]}>
+  <a class="site-signature" href={siteTitleHref} aria-label="Yuuki 学习手记，返回文档目录" aria-current={isDirectory ? 'page' : undefined}>
+    <span class="site-wordmark" lang="en">
+      Yuuki
+      <svg class="signature-stroke" aria-hidden="true" viewBox="0 0 80 8" fill="none">
+        <path d="M3 5.5C22 1.5 49 1 76 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </span>
+    <span class="site-caption">学习手记</span>
+  </a>
+  <nav class="content-path" aria-label="当前位置">
+    <a class="directory-return" href={siteTitleHref} aria-current={isDirectory ? 'page' : undefined}>目录</a>
+    {section && <>
+      <span class="path-separator" aria-hidden="true">/</span>
+      <a class="current-section" href={`${siteTitleHref}#directory-${sectionIndex + 1}`} title={section.label}>{section.label}</a>
+    </>}
+  </nav>
+  <div class="content-search"><Search /></div>
+  {toc && <div class="content-page-menu"><MobileTableOfContents /></div>}
+  <div class="content-preferences">
+    <SocialIcons />
+    <ThemeSelect />
+  </div>
+</div>
+
+<style>
+  .content-tools {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    height: 100%;
+  }
+  .site-signature {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    flex-shrink: 0;
+    width: fit-content;
+    margin-inline-end: auto;
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+  .site-wordmark {
+    position: relative;
+    padding-inline-end: .1rem;
+    font: italic 600 1.5rem/1 'Iowan Old Style', 'Baskerville', 'Palatino Linotype', Georgia, serif;
+    letter-spacing: -.055em;
+  }
+  .signature-stroke {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -.3rem;
+    width: 100%;
+    height: .4rem;
+    color: var(--sl-color-accent);
+  }
+  .site-caption {
+    color: var(--sl-color-gray-3);
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    white-space: nowrap;
+  }
+  .site-signature:hover .site-wordmark { color: var(--sl-color-accent-high); }
+  .content-search { min-width: 0; }
+  .content-search :global(button[data-open-modal]) {
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: .35rem;
+    font-size: 1.1rem;
+  }
+  .content-path {
+    display: none;
+    align-items: center;
+    gap: .65rem;
+    min-width: 0;
+    font-size: .8rem;
+    line-height: 1.4;
+  }
+  .content-path a { color: var(--sl-color-gray-2); text-decoration: none; }
+  .content-path a:hover { color: var(--sl-color-accent); }
+  .directory-return { flex-shrink: 0; }
+  .path-separator { color: var(--sl-color-gray-4); }
+  .current-section {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .content-preferences { display: none; }
+  .content-page-menu :global(nav) {
+    position: relative;
+    inset: auto;
+    border: 0;
+    background: transparent;
+  }
+  .content-page-menu :global(summary) { height: 2rem; padding: 0; border: 0; font-size: .75rem; }
+  .content-page-menu :global(.toggle) { gap: .35rem; padding: .45rem .5rem; border-radius: .35rem; }
+  .content-page-menu :global(.display-current) { display: none; }
+  .content-page-menu :global(.dropdown) {
+    position: fixed;
+    top: calc(var(--sl-nav-height) + .25rem);
+    inset-inline-end: var(--sl-nav-pad-x);
+    width: min(22rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - var(--sl-nav-height) - 1rem);
+    margin-top: 0;
+  }
+  @media (min-width: 50rem) {
+    .content-tools {
+      display: grid;
+      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) auto;
+      gap: 1.25rem;
+    }
+    .with-page-menu {
+      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) auto auto;
+    }
+    .site-wordmark { font-size: 1.75rem; }
+    .site-caption { font-size: .75rem; }
+    .content-search { width: 100%; max-width: 20rem; margin-inline-start: auto; }
+    .content-search :global(button[data-open-modal]) {
+      justify-content: flex-start;
+      width: 100%;
+      padding-inline: .75rem .5rem;
+      font-size: .8125rem;
+    }
+    .content-preferences { display: flex; align-items: center; gap: 1rem; font-size: .8rem; }
+  }
+  @media (min-width: 72rem) {
+    .content-tools, .with-page-menu {
+      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) 18rem auto;
+    }
+    .content-path { display: flex; }
+    .content-page-menu { display: none; }
+  }
+  @media (max-width: 23.5rem) {
+    .site-caption { display: none; }
+  }
+</style>

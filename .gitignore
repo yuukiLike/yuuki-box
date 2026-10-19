@@ -1,6 +1,9 @@
 # Local macOS metadata
 .DS_Store
 
+# Root command launcher
+/node_modules/
+
 # Local environment settings and credentials
 .env
 .env.*
