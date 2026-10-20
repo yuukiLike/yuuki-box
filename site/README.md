@@ -9,7 +9,7 @@
 在仓库根目录执行：
 
 ```bash
-pnpm --dir site install
+pnpm i
 pnpm docs:dev
 ```
 

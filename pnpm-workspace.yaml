@@ -1,0 +1,9 @@
+packages:
+  - site
+
+# Keep the site's existing lockfile and pinned dependency tree.
+sharedWorkspaceLockfile: false
+
+allowBuilds:
+  esbuild: true
+  sharp: true
