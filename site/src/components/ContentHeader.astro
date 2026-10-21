@@ -3,6 +3,7 @@ import Search from '@astrojs/starlight/components/Search.astro';
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
+import DisplayMode from './DisplayMode.astro';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
 const { entry, sidebar, siteTitleHref, toc } = Astro.locals.starlightRoute;
@@ -34,7 +35,10 @@ const section = sections[sectionIndex];
       <a class="current-section" href={`${siteTitleHref}#directory-${sectionIndex + 1}`} title={section.label}>{section.label}</a>
     </>}
   </nav>
-  <div class="content-search"><Search /></div>
+  <div class="content-actions">
+    <div class="content-search"><Search /></div>
+    <DisplayMode />
+  </div>
   {toc && <div class="content-page-menu"><MobileTableOfContents /></div>}
   <div class="content-preferences">
     <SocialIcons />
@@ -81,6 +85,7 @@ const section = sections[sectionIndex];
     white-space: nowrap;
   }
   .site-signature:hover .site-wordmark { color: var(--sl-color-accent-high); }
+  .content-actions { display: flex; align-items: center; gap: .5rem; min-width: 0; }
   .content-search { min-width: 0; }
   .content-search :global(button[data-open-modal]) {
     justify-content: center;
@@ -128,15 +133,16 @@ const section = sections[sectionIndex];
   @media (min-width: 50rem) {
     .content-tools {
       display: grid;
-      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) auto;
+      grid-template-columns: var(--yuuki-brand-width, calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x))) minmax(0, 1fr) auto;
       gap: 1.25rem;
     }
     .with-page-menu {
-      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) auto auto;
+      grid-template-columns: var(--yuuki-brand-width, calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x))) minmax(0, 1fr) auto auto;
     }
     .site-wordmark { font-size: 1.75rem; }
     .site-caption { font-size: .75rem; }
-    .content-search { width: 100%; max-width: 20rem; margin-inline-start: auto; }
+    .content-actions { width: 100%; max-width: 27rem; margin-inline-start: auto; }
+    .content-search { flex: 1; }
     .content-search :global(button[data-open-modal]) {
       justify-content: flex-start;
       width: 100%;
@@ -147,10 +153,14 @@ const section = sections[sectionIndex];
   }
   @media (min-width: 72rem) {
     .content-tools, .with-page-menu {
-      grid-template-columns: calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x)) minmax(0, 1fr) 18rem auto;
+      grid-template-columns: var(--yuuki-brand-width, calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x))) minmax(0, 1fr) 24rem auto;
     }
     .content-path { display: flex; }
     .content-page-menu { display: none; }
+    :global(html[data-display-mode='lightweight']) .with-page-menu {
+      grid-template-columns: auto minmax(0, 1fr) 24rem auto auto;
+    }
+    :global(html[data-display-mode='lightweight']) .content-page-menu { display: block; }
   }
   @media (max-width: 23.5rem) {
     .site-caption { display: none; }

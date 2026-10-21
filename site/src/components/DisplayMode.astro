@@ -1,0 +1,76 @@
+<script is:inline>
+  // Read the preference before the directory and article are painted.
+  (() => {
+    let mode = 'lightweight';
+    try {
+      if (localStorage.getItem('yuuki-display-mode') === 'full') mode = 'full';
+    } catch {
+      // Storage is optional; the switch still works for this page.
+    }
+    document.documentElement.dataset.displayMode = mode;
+  })();
+</script>
+
+<button class="display-mode-toggle" type="button" aria-pressed="false" hidden>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 4c0 9-4 14-10 14a6 6 0 0 1-6-6C4 6 11 4 20 4Z" />
+    <path d="m4 21 10-11" />
+  </svg>
+  <span>轻量模式</span>
+</button>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.display-mode-toggle');
+
+  if (toggle) {
+    function renderMode(button: HTMLButtonElement) {
+      const lightweight = document.documentElement.dataset.displayMode === 'lightweight';
+      button.setAttribute('aria-pressed', String(lightweight));
+      button.title = lightweight ? '已开启轻量模式，点击显示完整目录与侧栏' : '开启轻量模式，收起章节与侧栏';
+      document.querySelectorAll<HTMLDetailsElement>('.directory-chapters').forEach((chapters) => {
+        chapters.open = !lightweight;
+      });
+    }
+
+    renderMode(toggle);
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      // Close the mobile menu so its focus trap is released before hiding navigation.
+      document.querySelector<HTMLElement>('#starlight__sidebar:popover-open')?.hidePopover();
+      const mode = document.documentElement.dataset.displayMode === 'lightweight' ? 'full' : 'lightweight';
+      document.documentElement.dataset.displayMode = mode;
+      try {
+        localStorage.setItem('yuuki-display-mode', mode);
+      } catch {
+        // A blocked storage area must not prevent changing the current view.
+      }
+      renderMode(toggle);
+    });
+  }
+</script>
+
+<style>
+  .display-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    flex-shrink: 0;
+    min-height: 2rem;
+    padding: .3rem .55rem;
+    border: 1px solid var(--yuuki-border);
+    border-radius: .5rem;
+    color: var(--sl-color-gray-2);
+    background: transparent;
+    font: 500 .75rem/1.4 var(--sl-font);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .display-mode-toggle[hidden] { display: none; }
+  .display-mode-toggle[aria-pressed='true'] {
+    color: var(--sl-color-accent-high);
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent-low);
+  }
+  .display-mode-toggle:hover { background: var(--yuuki-hover); }
+</style>

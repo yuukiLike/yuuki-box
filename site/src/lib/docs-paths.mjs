@@ -29,6 +29,9 @@ export function resolveDocumentLink(target, sourceFile) {
   const fromDocs = posix(relative(docsRoot, absolute));
 
   if (fromRepo.startsWith('../')) return null;
+  if (fromRepo.startsWith('site/public/')) {
+    return '/' + fromRepo.slice('site/public/'.length).split('/').map(encodeURIComponent).join('/') + suffix;
+  }
   if (!fromDocs.startsWith('../') && /\.(md|mdx)$/i.test(filename) && existsSync(absolute)) {
     return documentUrl(fromDocs) + suffix;
   }
@@ -52,6 +55,11 @@ export default function repositoryMarkdown() {
     if (firstHeading >= 0) tree.children.splice(firstHeading, 1);
 
     function visit(node) {
+      if (node.type === 'image' && node.url) {
+        const rewritten = resolveDocumentLink(node.url, sourceFile);
+        // Public assets have a stable site URL; leave other images to Astro's asset pipeline.
+        if (rewritten?.startsWith('/')) node.url = rewritten;
+      }
       if ((node.type === 'link' || node.type === 'definition') && node.url) {
         const rewritten = resolveDocumentLink(node.url, sourceFile);
         if (rewritten === null) {

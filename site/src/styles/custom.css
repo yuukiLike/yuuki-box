@@ -197,6 +197,45 @@ footer .meta:empty { display: none; }
 }
 .directory-link:is(:hover, :focus-visible) .directory-link-arrow { opacity: 1; }
 
+/* Native disclosure keeps every chapter reachable, including without JavaScript. */
+.directory-home .directory-intro { margin: 0 0 1.5rem; color: var(--yuuki-muted); font-size: .875rem; }
+.directory-home .directory-chapters { margin: .2rem 0 0; padding: 0; border: 0; background: none; }
+.directory-home .directory-chapters > summary {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  width: fit-content;
+  margin: .15rem 0 .25rem;
+  padding: .3rem .35rem;
+  border-radius: .35rem;
+  color: var(--yuuki-muted);
+  font-size: .75rem;
+  font-weight: 400;
+  cursor: pointer;
+  list-style: none;
+}
+.directory-home .directory-chapters > summary::before { display: none; }
+.directory-chapters > summary::-webkit-details-marker { display: none; }
+.directory-home .directory-chapters > summary:hover { color: var(--sl-color-accent-high); background: var(--yuuki-hover); }
+.directory-chapters[open] > summary svg { transform: rotate(90deg); }
+.directory-chapters[open] > summary .chapters-closed,
+.directory-chapters:not([open]) > summary .chapters-open,
+.directory-section:has(> .directory-chapters[open]) > .directory-preview { display: none; }
+.lightweight-only { display: none; }
+html[data-display-mode='lightweight'] .lightweight-only { display: inline; }
+html[data-display-mode='lightweight'] .full-only { display: none; }
+
+/* A quiet reading view, with the complete directory and search one click away. */
+html[data-display-mode='lightweight'] { --yuuki-brand-width: auto; }
+html[data-display-mode='lightweight'] .sidebar,
+html[data-display-mode='lightweight'] .reading-toc { display: none; }
+html[data-display-mode='lightweight'] .page > .header { padding-inline-end: var(--sl-nav-pad-x); }
+html[data-display-mode='lightweight'] .main-frame { padding-inline-start: 0; }
+html[data-display-mode='lightweight'] .reading-frame.with-toc {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: calc(var(--sl-content-width) + 2 * var(--sl-content-pad-x));
+}
+
 /* Lab controls have the same focus, hover and pressed feedback as navigation. */
 .lab-panel {
   display: block;

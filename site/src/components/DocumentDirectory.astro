@@ -14,22 +14,46 @@ const {
 } = Astro.props;
 
 const Heading = `h${Math.min(depth + 2, 6)}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+function firstLink(items: StarlightRouteData['sidebar']): Extract<StarlightRouteData['sidebar'][number], { type: 'link' }> | undefined {
+  for (const item of items) {
+    if (item.type === 'link') return item;
+    const link = firstLink(item.entries);
+    if (link) return link;
+  }
+}
 ---
 
 <ul class:list={['document-directory', { 'directory-sections': depth === 0 }]}>
-  {entries.map((entry, index) => <li
-    class:list={{ 'directory-section': depth === 0, 'directory-group': depth > 0 && entry.type === 'group' }}
-  >
-    {entry.type === 'link' ? (
-      <a class="directory-link" href={entry.href}>
-        <span class="directory-link-title">{entry.label}</span>
-        <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
-      </a>
-    ) : (
-      <>
-        <Heading id={`${prefix}-${index + 1}`} class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>{entry.label}</Heading>
-        <Astro.self entries={entry.entries} depth={depth + 1} prefix={`${prefix}-${index + 1}`} />
-      </>
-    )}
-  </li>)}
+  {entries.map((entry, index) => {
+    const preview = entry.type === 'group' && depth === 0 ? firstLink(entry.entries) : undefined;
+    return <li class:list={{ 'directory-section': depth === 0, 'directory-group': depth > 0 && entry.type === 'group' }}>
+      {entry.type === 'link' ? (
+        <a class="directory-link" href={entry.href}>
+          <span class="directory-link-title">{entry.label}</span>
+          <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
+        </a>
+      ) : (
+        <>
+          <Heading id={`${prefix}-${index + 1}`} class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>{entry.label}</Heading>
+          {depth === 0 ? (
+            <>
+              {preview && <a class="directory-link directory-preview" href={preview.href}>
+                <span class="directory-link-title">{preview.label}</span>
+                <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
+              </a>}
+              <details class="directory-chapters">
+                <summary>
+                  <span class="chapters-closed">展开章节</span>
+                  <span class="chapters-open">收起章节</span>
+                  <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 3 5 5-5 5" /></svg>
+                </summary>
+                <Astro.self entries={entry.entries} depth={depth + 1} prefix={`${prefix}-${index + 1}`} />
+              </details>
+            </>
+          ) : <Astro.self entries={entry.entries} depth={depth + 1} prefix={`${prefix}-${index + 1}`} />}
+        </>
+      )}
+    </li>;
+  })}
 </ul>

@@ -15,6 +15,7 @@
 | [前端的数据结构与缓存](frontend-foundations/README.md) | key、Map、WeakMap、缓存身份、容量与数据保留 | 从熟悉的前端问题开始时 |
 | [Wasm 与浏览器 AI](wasm/README.md) | JavaScript 调用边界、Worker、数据搬运与推理后端 | 想新开一条 AI 与前端交织的学习线时 |
 | [AI 与前端的交织点](learning/ai-frontend-intersections.md) | 缓存、Wasm、流式渲染、语音、检索与任务生命周期 | 想一起比较下一步探索方向时 |
+| [🍀 让 Issue 慢慢长成 PR](issue-garden/README.md) | 只读扫描、定时修复、独立 review，以及五个人机协作新方向与思维导图 | 想让 AI 参与开发，再选择自己的小实验时 |
 | [Zed、Raycast、Warp 架构调研](research/zed-raycast-warp.md) | 已公开实现、版本变化、源码入口、性能与扩展边界 | 先理解三款产品各自解决的问题 |
 | [Deep：Zed、Rust 与 PI-Desktop](deep/2026-09-26-zed-pi-rust/README.md) | Rust 动机、crate 分工、真实调用链、混合架构与可复查清单 | 深入理解 Rust 如何与 UI、Agent、平台能力搭配 |
 | [Deep：简单、组合、复杂性](deep/2026-09-26-simplicity-composition-complexity/README.md) | Raycast、Warp、Zed、Grok Build 的组合单位、契约与成本；Yuuki 的实际变化链 | 想理解优秀产品如何保持简单，以及抽象在哪里失效时 |

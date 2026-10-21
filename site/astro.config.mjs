@@ -72,6 +72,17 @@ export default defineConfig({
           ],
         },
         {
+          label: '🍀 Issue 的夜班',
+          items: [
+            { slug: 'issue-garden', label: '让 Issue 慢慢长成 PR' },
+            { slug: 'issue-garden/01-first-scan', label: '先替我看一眼 Issue' },
+            { slug: 'issue-garden/02-first-repair', label: '陪 AI 修一个小问题' },
+            { slug: 'issue-garden/03-night-shift', label: '把流程交给夜班' },
+            { slug: 'issue-garden/04-ideas-map', label: '人机协作的构想地图' },
+            { slug: 'issue-garden/05-five-new-directions', label: '五个新方向，挑一个玩' },
+          ],
+        },
+        {
           label: '项目与既有研究',
           items: [
             { slug: 'guide', label: '原文档导航与项目状态' },
