@@ -6,6 +6,8 @@
 
 核对日期：2026-10-21。新增方向的代表方案公开于 2025—2026 年，其中包含 2026-09-29 的近期产品更新；这些日期代表所引用实现或更新的公开节点，不代表某种思想第一次诞生。
 
+2026-10-22 补充：[已有落地的 AI 开发实践](../ai-practices/README.md)单独收录 CodeRabbit 和另外五项有实际使用记录的方案，可以从这里找到构想对应的证据与小实验。
+
 ## 先看整张图
 
 [![思维导图：你的两个设想是 Issue 夜班和独立 AI review；新增五个方向是运行数据驱动任务、目标驱动实验、数字孪生、规格驱动开发、空闲时间整理知识](../../site/public/diagrams/issue-garden-map.svg)](../../site/public/diagrams/issue-garden-map.svg)
@@ -48,6 +50,8 @@ SVG 与这份 Mermaid 表达同一层级，SVG 用于直接阅读，源码保留
 这条路线已有产品对应：GitHub 支持把 Issue 分配给 Copilot cloud agent，由它处理并产出 PR。[GitHub 官方说明](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
 
 ## 你的设想二：另一个 AI 来做 review
+
+这个方向已有直接对应的工具 **CodeRabbit**。Nuxt 的 [PR #36124](https://github.com/nuxt/nuxt/pull/36124)有它的公开审查记录；功能、团队案例与最小体验整理在[CodeRabbit 自动审查 PR](../ai-practices/01-coderabbit-review.md)。
 
 ```text
 AI A 创建或更新 PR
