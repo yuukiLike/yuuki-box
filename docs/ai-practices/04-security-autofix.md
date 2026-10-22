@@ -6,7 +6,7 @@
 
 ## 为什么收录
 
-**真实 PR 使用数据。** GitHub 在正式发布文章中报告：对于启用了 Advanced Security 的仓库中、PR 新增的 CodeQL 告警，使用 Autofix 提交修复的耗时中位数为 28 分钟，手动修复为约 1.5 小时。这是产品方对使用过程的观察，不能当作任何项目都能获得三倍提速的保证。[数据与统计范围](https://github.blog/news-insights/product-news/secure-code-more-than-three-times-faster-with-copilot-autofix/)
+**真实 PR 使用数据。** GitHub 根据 2024 年 5—7 月公测期间的客户使用数据报告：在启用 Advanced Security 的仓库中，针对 PR 新增的 CodeQL 告警，使用 Autofix 提交修复的耗时中位数为 28 分钟，手动修复约为 1.5 小时。这是产品方的观察数据，不能直接预测其他项目的提速幅度。[数据与统计范围](https://github.blog/news-insights/product-news/secure-code-more-than-three-times-faster-with-copilot-autofix/)
 
 ## 一次流程
 
@@ -15,7 +15,7 @@ CodeQL 扫描 → 告警与相关代码 → AI 解释并建议补丁
            → 修复 PR → 重跑扫描与行为测试 → 人验收
 ```
 
-相比普通 review，这条流程有一个明确的起点：扫描器已经报告了具体问题。告警被消除后，还要检查补丁是否保留合法输入和原有业务行为。官方也要求开发者审阅与验证 AI 建议。[当前能力与局限](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)
+这条流程从扫描器报告的具体问题开始。告警消失后，还要确认合法输入能正常处理，原有业务行为得到保留。官方也要求开发者审阅与验证 AI 建议。[当前能力与局限](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)
 
 ## 只处理一条已有告警
 

@@ -83,15 +83,15 @@ export default defineConfig({
           ],
         },
         {
-          label: '🍀 已有落地的 AI 开发实践',
+          label: '🍀 已落地的 AI 开发实践',
           items: [
-            { slug: 'ai-practices', label: '六种实践，先看一个' },
+            { slug: 'ai-practices', label: '按问题选择实践' },
             { slug: 'ai-practices/01-coderabbit-review', label: 'CodeRabbit 自动审查 PR' },
             { slug: 'ai-practices/02-issue-to-pr', label: '从 Issue 到 PR' },
             { slug: 'ai-practices/03-error-to-fix', label: '从错误现场到修复' },
             { slug: 'ai-practices/04-security-autofix', label: '修复安全告警' },
             { slug: 'ai-practices/05-test-generation', label: '筛选有用测试' },
-            { slug: 'ai-practices/06-code-migration', label: '执行有界版本迁移' },
+            { slug: 'ai-practices/06-code-migration', label: '限定范围的版本迁移' },
             { slug: 'ai-practices/your-workflow', label: '你的工作流：减少验收与返工' },
           ],
         },

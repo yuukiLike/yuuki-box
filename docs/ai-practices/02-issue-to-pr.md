@@ -1,14 +1,14 @@
 # 🍀 GitHub Copilot 从 Issue 到 PR
 
-**把一个描述清楚的小任务交给 Agent，收到一份可以审查的改动。** GitHub Copilot cloud agent 支持从 Issue 启动工作，并通过 PR 继续反馈与修改。核对时官方列出的条件包括付费 Copilot 计划，以及仓库未禁用该能力。[当前使用文档](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
+**把一个描述清楚的小任务交给 AI，收到一份可以审查的改动。** GitHub Copilot cloud agent 支持从 Issue 启动工作，并通过 PR 继续反馈与修改。使用条件包括付费 Copilot 计划，以及仓库未禁用该能力。[当前使用文档](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
 
 资料核对：2026-10-22；下述工程案例发布于 2025-08-28，次日更新，当时产品称 coding agent。
 
 ## 为什么收录
 
-**团队实际部署。** GitHub Secret Protection 团队把新增凭据校验器的背景、接口资料和示例组织成 Issue，再分配给 Copilot。生成的 PR 经过自动测试、人工审查，最终由工程师部署；团队报告在几周内增加了近 90 种 token 类型的支持。[工程团队原文](https://github.blog/ai-and-ml/github-copilot/how-we-accelerated-secret-protection-engineering-with-copilot/)
+**团队实际部署。** GitHub Secret Protection 团队把新增凭据校验器的背景、接口资料和示例写进 Issue，再分配给 Copilot。生成的 PR 经过自动测试、人工审查，最终由工程师部署；团队报告在几周内增加了近 90 种访问令牌（token）类型的支持。[工程团队原文](https://github.blog/ai-and-ml/github-copilot/how-we-accelerated-secret-protection-engineering-with-copilot/)
 
-原文也记载 Agent 会漏读链接中的细节，团队通过补充说明和观察运行结果修正错误。案例支持的是有既有框架、相似任务与人工验收的委派流程，不能推成任意 Issue 都能自动完成。
+原文也记载 Agent 会漏读链接中的细节，团队通过补充说明和检查运行结果修正错误。这项实践依赖现有框架、相似任务与人工验收，不能据此认为任意 Issue 都能自动完成。
 
 ## 一次流程
 
@@ -25,6 +25,6 @@
 
 验收时打开修复后的链接，再检查附近链接是否仍正常。保留 Issue、最终 diff 和实际访问结果。
 
-**停止点：一份自己能解释并验证的 PR。** 如果 Agent 无法运行某项检查，让它明确留下缺口，再由你完成该项验收。
+**停止点：一份自己能解释并验证的 PR。** Agent 无法运行某项检查时，应写明原因和影响，并继续完成能独立完成的验证。确实需要你参与的部分，再给出具体操作和判断标准。
 
 返回[实践目录](README.md)。

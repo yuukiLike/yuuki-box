@@ -1,6 +1,6 @@
 # Yuuki Box：Apple 生态 Agent 工作台调研与起步
 
-架构与示例状态记录日期：2026-09-26。当前阶段：架构调研与五条技术路线的 MVP 已落地，DeepSeek Agent、持久会话与 Whisper 扩展，以及新增的十五个 Harness 场景实验，已完成五路线构建和打包；真实 API/语音运行与性能实验尚未执行。
+架构与示例状态记录于 2026-09-26：五条技术路线的 MVP，以及 DeepSeek Agent、持久会话、Whisper 扩展和十五个 Harness 场景实验，已完成实现、构建和打包；当时尚未执行真实 API、语音运行与性能实验。
 
 这组文档服务于一个具体目标：先在 Mac 上做出自己的 Agent 工作台，掌握模型调用与工具执行循环，并让输入、滚动、切换和取消保持及时响应。随后再把同一套任务能力带到 Mac mini、MacBook Air、iPad 和 iPhone。
 
@@ -15,8 +15,8 @@
 | [前端的数据结构与缓存](frontend-foundations/README.md) | key、Map、WeakMap、缓存身份、容量与数据保留 | 从熟悉的前端问题开始时 |
 | [Wasm 与浏览器 AI](wasm/README.md) | JavaScript 调用边界、Worker、数据搬运与推理后端 | 想新开一条 AI 与前端交织的学习线时 |
 | [AI 与前端的交织点](learning/ai-frontend-intersections.md) | 缓存、Wasm、流式渲染、语音、检索与任务生命周期 | 想一起比较下一步探索方向时 |
-| [🍀 让 Issue 慢慢长成 PR](issue-garden/README.md) | 只读扫描、定时修复、独立 review，以及五个人机协作新方向与思维导图 | 想让 AI 参与开发，再选择自己的小实验时 |
-| [🍀 已有落地的 AI 开发实践](ai-practices/README.md) | CodeRabbit，以及 Issue 委派、故障诊断、安全修复、测试增强、版本迁移的真实案例 | 想从已有证据选择一项可尝试的实践时 |
+| [🍀 让 Issue 慢慢长成 PR](issue-garden/README.md) | 只读扫描、定时修复、独立审查，以及五个人机协作新方向与思维导图 | 想让 AI 参与开发，再选择自己的小实验时 |
+| [🍀 已落地的 AI 开发实践](ai-practices/README.md) | CodeRabbit 等六项实践的案例来源、流程和小实验 | 想从实际案例中选择一项做法时 |
 | [🍀 你的工作流：减少验收与返工](ai-practices/your-workflow.md) | 当前工作方式、五项业界实践与按项目适配的一个小实验 | 想减少重复操作和同一问题的多轮修正时 |
 | [Zed、Raycast、Warp 架构调研](research/zed-raycast-warp.md) | 已公开实现、版本变化、源码入口、性能与扩展边界 | 先理解三款产品各自解决的问题 |
 | [Deep：Zed、Rust 与 PI-Desktop](deep/2026-09-26-zed-pi-rust/README.md) | Rust 动机、crate 分工、真实调用链、混合架构与可复查清单 | 深入理解 Rust 如何与 UI、Agent、平台能力搭配 |
