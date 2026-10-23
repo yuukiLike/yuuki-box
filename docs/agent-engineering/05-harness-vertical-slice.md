@@ -1,10 +1,12 @@
-# Harness：先跑通一条可恢复的闭环
+# Harness：按下取消，再故意让它崩一次
+
+Agent 正在输出，你按下取消；它等着审批，你关掉进程；重新打开以后，它还记不记得刚才那次写入有没有发生？这一篇把这些瞬间摆到台面上，亲手走一遍。
 
 **在加 MCP 和 Skills 之前，先让一次 Run 能被取消、崩溃、重启和解释。** 功能可以后加，状态机和恢复语义一旦写错，后面每加一个工具都会放大问题。
 
 状态：实现建议。状态名沿用 [Mac 本地 Harness](../architecture/mac-local-harness.md) 的提案，当前 runtime 已实现部分工具与审批，但未完成本文的全部恢复验收。资料核对：2026-10-23。
 
-## 为什么要垂直切片
+## 最值得拆穿的「能跑了」
 
 按功能开发很容易得到“聊天能跑、工具能调、取消按钮也在”的假象。真正的问题是：
 
@@ -62,7 +64,7 @@ fake model: "调用 list_files"
 - 执行 intent 先于副作用；结果事件后于副作用尝试。
 - 取消是请求，不是撤销证明；已经发生的写入、请求或计费仍要记录。
 
-## 第一次实验
+## 小挑战：让六种结局各发生一次
 
 1. 用 fake model 和内存 Store 跑通成功路径，确认事件顺序。
 2. 在流式输出中触发取消，检查是否还有 delta。
@@ -91,4 +93,4 @@ fake model: "调用 list_files"
 - 当前工具与取消行为：[runtime 说明](../../examples/shared/runtime/README.md)
 - 目标状态机与事件语义：[Mac 本地 Harness](../architecture/mac-local-harness.md) 第 6、7、9 节
 
-返回[上一篇](04-skills-validation.md) · [总览](README.md) · 下一篇[Harness：上下文与运行报告](06-context-and-report.md)。
+返回[总览](README.md) · 下一篇[Harness：上下文与运行报告](06-context-and-report.md)。

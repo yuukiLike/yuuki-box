@@ -1,4 +1,6 @@
-# MCP：先把外部工具接成 ToolSource
+# MCP：接上第一个外部工具
+
+现在的 Agent 会读文件了，接下来想让它用上外部工具。先接一个本地 server，让它读出 README，再在调用中途故意断开连接。成功时会用，出错时也知道发生了什么，这次接入才完整。
 
 **让 MCP 只负责发现与调用工具；权限、审批、事件和恢复仍由现有 Harness 负责。** 换一个 MCP server 不应该绕过你已经写好的工作区校验和审批流程。
 
@@ -61,7 +63,7 @@ initialize
 
 第一版只支持文本结果。遇到图片、资源引用或不认识的 content 类型时，保存原始 JSON 到 artifact，并向模型返回“暂不支持该类型”，不要猜内容。
 
-## 第一次实验
+## 小挑战：读完 README，再拔掉连接
 
 接一个本地 stdio server，只暴露两个只读工具，例如列目录和读文本。用现有 JSONL 协议跑一次：
 
@@ -97,4 +99,4 @@ initialize
 - 协议与命令：[`examples/shared/runtime/PROTOCOL.md`](../../examples/shared/runtime/PROTOCOL.md)
 - Run/ToolCall 状态与事件建议：[Mac 本地 Harness](../architecture/mac-local-harness.md) 第 6、7、9、10 节
 
-返回[总览](README.md) · 下一篇[MCP：清单与默认拒绝](02-mcp-policy.md)。
+返回[上一篇：故障演练](07-scenario-regression.md) · [总览](README.md) · 下一篇[MCP：清单与默认拒绝](02-mcp-policy.md)。

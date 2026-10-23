@@ -1,4 +1,6 @@
-# Skills：用脚本验收，用渐进加载控制上下文
+# Skills：给「做完了」出一道验收题
+
+Skill 写好了，AI 也说“链接都检查过了”。现在悄悄放进一个坏链接，看看它的检查到底能不能抓住。让一个故意出错的样本被准确指出来，这一刻比一句“已完成”踏实得多。
 
 **让模型解释结果，让脚本判断结果。** 自然语言步骤能指导模型，但不能证明输出正确；确定性的检查必须由代码完成。
 
@@ -84,7 +86,7 @@ tests/fixtures/docs-restructure/
 
 `load_skill` 的结果是上下文，不是权限。skill 里写“直接删除旧文件”，仍然要经过 Harness 的删除工具和审批。
 
-## 第一次实验
+## 小挑战：把坏样本藏进新会话
 
 1. 给一个真实 skill 加上 `scripts/validate` 和一个坏 fixture。
 2. 在新会话里只凭 `SKILL.md` 完成任务。
@@ -107,4 +109,4 @@ tests/fixtures/docs-restructure/
 - **脚本也会过时。** 命令、路径和依赖变化后，负例可能失效；把校验脚本和 skill 一起版本化。
 - **不要把真实凭据放进 fixture。** 用占位符和临时目录。
 
-返回[上一篇](03-skills-structure.md) · [总览](README.md) · 下一篇[Harness：可恢复闭环](05-harness-vertical-slice.md)。
+返回[上一篇](03-skills-structure.md) · [总览](README.md) · 深入[Mac 本地 Harness 完整设计](../architecture/mac-local-harness.md)。

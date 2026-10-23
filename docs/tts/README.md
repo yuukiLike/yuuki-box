@@ -1,6 +1,8 @@
 # 给 Yuuki 装上耳朵和嘴巴
 
-**每个工具：一种安装方式，两个基础用法。今天先选 edge-tts 就够了。**
+终端里的文字可以变成一句招呼，你说的话也可以落进草稿。先让 Yuuki 开口，再教它听懂录音，最后找出哪些片段真的有人说话，三块能力就能逐个摸清。
+
+**每个工具给一种安装方式、两个基础用法。第一轮先选 edge-tts，听见声音再往下玩。**
 
 | 工具 / 源码 | 做什么 | 费用与联网 |
 |---|---|---|
@@ -28,7 +30,7 @@ cd ~/voice-lab
 source .venv/bin/activate
 ```
 
-**1. edge-tts：让它开口**
+## 第一站 · edge-tts：先听见一句话
 
 下载安装：
 
@@ -51,7 +53,7 @@ edge-tts --voice zh-CN-XiaoxiaoNeural --file article.txt --write-media article.m
 
 得到 `article.mp3` 和 `article.srt`。[官方用法](https://github.com/rany2/edge-tts#usage)
 
-**2. whisper.cpp：听懂你说什么**
+## 第二站 · whisper.cpp：把声音接回文字
 
 下载安装工具和多语言 `base` 模型（约 142 MiB，支持中文）：
 
@@ -84,7 +86,7 @@ whisper-cli -m ggml-base.bin -f audio.wav -l zh -osrt -of subtitles
 
 得到 `subtitles.srt`。音频留在本机。[官方入门](https://github.com/ggml-org/whisper.cpp#quick-start)、[CLI 参数](https://github.com/ggml-org/whisper.cpp/blob/master/examples/cli/cli.cpp)
 
-**3. silero-vad：找出哪几秒有人说话**
+## 第三站 · silero-vad：在录音里找出人声
 
 下载安装库和随包模型；`soundfile` 用来读写音频：
 
@@ -121,5 +123,9 @@ PY
 ```
 
 VAD 只检测人声；文字内容交给 Whisper。保留的人声片段里仍可能有背景噪声。[官方用法](https://github.com/snakers4/silero-vad#fast-start)、[音频读写说明](https://python-soundfile.readthedocs.io/en/latest/)
+
+## 串起来玩一次
+
+拿第一站生成的 `hello.mp3`，在第二站转回文字，对照它有没有听对；再用第三站打印人声起止时间。三份产物摆在一起：声音、转写、人声区间，你就能具体说清一条语音交互要经过哪些环节。想接进工作台，再读[模型与语音基础](../architecture/ai-and-speech-foundation.md)。
 
 资料核对：2026-10-14。已检查本机 Python/pip 和示例语法；安装、模型下载及实际语音效果尚未执行验证。

@@ -12,7 +12,7 @@ export default defineConfig({
       title: 'Yuuki 学习手记',
       credits: false,
       disable404Route: true,
-      description: '从 AI 实践、前端的 key 与渲染出发，理解缓存、KV Cache、WebAssembly 和 AI 应用。',
+      description: '让 AI 接手开发，亲手搭 Agent，玩懂缓存、渲染、WebAssembly 和语音。挑一个好奇的问题，动手做出结果。',
       locales: { root: { label: '简体中文', lang: 'zh-CN' } },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/yuukiLike/yuuki-box' }],
       customCss: ['./src/styles/custom.css'],
@@ -26,98 +26,128 @@ export default defineConfig({
       sidebar: [
         { label: '文档目录', link: '/' },
         {
-          label: '🍀 Issue 的夜班',
+          label: '让 AI 接手开发',
           items: [
-            { slug: 'issue-garden', label: '让 Issue 慢慢长成 PR' },
-            { slug: 'issue-garden/01-first-scan', label: '先替我看一眼 Issue' },
-            { slug: 'issue-garden/02-first-repair', label: '陪 AI 修一个小问题' },
-            { slug: 'issue-garden/03-night-shift', label: '把流程交给夜班' },
+            { slug: 'ai-practices', label: '挑一件真活：六种开发实践' },
+            { slug: 'ai-practices/your-workflow', label: '少盯几轮：改造你的工作流' },
+            {
+              label: '接任务、追故障、做迁移',
+              items: [
+                { slug: 'ai-practices/02-issue-to-pr', label: '交出一张 Issue，接回一份 PR' },
+                { slug: 'ai-practices/03-error-to-fix', label: '带着错误现场去破案' },
+                { slug: 'ai-practices/06-code-migration', label: '给升级划条线，再让 AI 动手' },
+              ],
+            },
+            {
+              label: '审 PR、补测试、修漏洞',
+              items: [
+                { slug: 'ai-practices/01-coderabbit-review', label: '请 CodeRabbit 来挑一次刺' },
+                { slug: 'ai-practices/05-test-generation', label: '写一条真能抓住 bug 的测试' },
+                { slug: 'ai-practices/04-security-autofix', label: '追着一条安全告警修到底' },
+              ],
+            },
+            {
+              label: '跟做：把 Issue 交给夜班',
+              items: [
+                { slug: 'issue-garden', label: '白天记 Issue，夜里长出 PR' },
+                { slug: 'issue-garden/01-first-scan', label: '第一班：让 Issue 自己来报到' },
+                { slug: 'issue-garden/02-first-repair', label: '搭一次班，修掉一个小问题' },
+                { slug: 'issue-garden/03-night-shift', label: '交班：让流程接着跑' },
+              ],
+            },
           ],
         },
         {
-          label: '🍀 已落地的 AI 开发实践',
+          label: '亲手搭 Agent',
           items: [
-            { slug: 'ai-practices', label: '按问题选择实践' },
-            { slug: 'ai-practices/01-coderabbit-review', label: 'CodeRabbit 自动审查 PR' },
-            { slug: 'ai-practices/02-issue-to-pr', label: '从 Issue 到 PR' },
-            { slug: 'ai-practices/03-error-to-fix', label: '从错误现场到修复' },
-            { slug: 'ai-practices/04-security-autofix', label: '修复安全告警' },
-            { slug: 'ai-practices/05-test-generation', label: '筛选有用测试' },
-            { slug: 'ai-practices/06-code-migration', label: '限定范围的版本迁移' },
-            { slug: 'ai-practices/your-workflow', label: '你的工作流：减少验收与返工' },
+            { slug: 'agent-engineering', label: '从会聊天，到能把活干完' },
+            {
+              label: '先管稳运行 · Harness',
+              items: [
+                { slug: 'agent-engineering/05-harness-vertical-slice', label: '按下取消，然后故意让它崩一次' },
+                { slug: 'agent-engineering/06-context-and-report', label: '查清这次慢在哪、贵在哪' },
+                { slug: 'agent-engineering/07-scenario-regression', label: '把故障搬进自己的演练场' },
+              ],
+            },
+            {
+              label: '再接外部工具 · MCP',
+              items: [
+                { slug: 'agent-engineering/01-mcp-tool-source', label: '接上第一个外部工具' },
+                { slug: 'agent-engineering/02-mcp-policy', label: '给工具发一张有限的通行证' },
+              ],
+            },
+            {
+              label: '教它复用流程 · Skills',
+              items: [
+                { slug: 'agent-engineering/03-skills-structure', label: '这件事，下次不用从头教' },
+                { slug: 'agent-engineering/04-skills-validation', label: '给「做完了」出一道验收题' },
+              ],
+            },
+            { slug: 'architecture/mac-local-harness', label: '完整设计：Mac 本地 Harness' },
           ],
         },
         {
-          label: '🍀 Agent 工程实践',
+          label: '前端 × AI 实验室',
           items: [
-            { slug: 'agent-engineering', label: '总览：MCP、Skills 与 Harness' },
-            { slug: 'agent-engineering/01-mcp-tool-source', label: 'MCP：接成工具源' },
-            { slug: 'agent-engineering/02-mcp-policy', label: 'MCP：清单与默认拒绝' },
-            { slug: 'agent-engineering/03-skills-structure', label: 'Skills：结构与触发' },
-            { slug: 'agent-engineering/04-skills-validation', label: 'Skills：校验与渐进加载' },
-            { slug: 'agent-engineering/05-harness-vertical-slice', label: 'Harness：可恢复闭环' },
-            { slug: 'agent-engineering/06-context-and-report', label: 'Harness：上下文与运行报告' },
-            { slug: 'agent-engineering/07-scenario-regression', label: 'Harness：场景回归' },
+            { slug: 'learning/ai-frontend-intersections', label: '挑个问题，开一场小实验' },
+            {
+              label: '查找与缓存：少做重复功',
+              items: [
+                { slug: 'frontend-foundations', label: '从一万条消息里找出那一条' },
+                { slug: 'frontend-foundations/keys-and-maps', label: 'key、Object、Map 与 WeakMap' },
+                { slug: 'frontend-foundations/cache-cost', label: '缓存省下了什么，又留下了什么' },
+                { label: '动手：数组与 Map 查找', link: '/labs/lookup/' },
+              ],
+            },
+            {
+              label: '模型缓存：从 useMemo 走到 KV',
+              items: [
+                { slug: 'kv-cache', label: '动手拆开 KV Cache' },
+                { slug: 'kv-cache/00-why-so-large', label: '为什么 KV 会这么大' },
+                { slug: 'kv-cache/01-from-frontend', label: '从 useMemo 到前缀复用' },
+                { slug: 'kv-cache/02-attention-and-kv', label: 'Attention、Prefill 与 Decode' },
+                { slug: 'kv-cache/03-prefix-cache-and-yuuki', label: '请求前缀与 DeepSeek' },
+                { label: '动手：KV 内存计算器', link: '/labs/kv-memory/' },
+              ],
+            },
+            {
+              label: '浏览器计算：Wasm 与 Worker',
+              items: [
+                { slug: 'wasm', label: '让 JavaScript 请来一位 Wasm 外援' },
+                { slug: 'wasm/workers-and-memory', label: 'Worker、内存与数据搬运' },
+                { slug: 'wasm/browser-ai', label: 'Wasm、WebGPU 与模型运行时' },
+                { label: '动手：JavaScript 调用 Wasm', link: '/labs/wasm-bridge/' },
+              ],
+            },
+            {
+              label: '界面响应：追踪每次更新',
+              items: [
+                { slug: 'learning/rendering-performance', label: '抓住让界面卡住的那一步' },
+                { slug: 'learning/harness-scenario-lab', label: '五条路线，十五次性能拆招' },
+              ],
+            },
           ],
         },
         {
-          label: '🍀 AI 实践构想',
+          label: '让 Yuuki 听见和开口',
           items: [
-            { slug: 'ai-ideas', label: '头脑风暴与探索方向' },
-            { slug: 'ai-ideas/01-ideas-map', label: '人机协作的构想地图' },
-            { slug: 'ai-ideas/02-five-new-directions', label: '五个新方向，挑一个玩' },
+            { slug: 'tts', label: '给 Yuuki 装上耳朵和嘴巴' },
+            { slug: 'tts/让-Yuuki-开口说第一句话', label: '第一句话，就从这里开始' },
+            { slug: 'architecture/ai-and-speech-foundation', label: '把模型、转写与语音接起来' },
           ],
         },
         {
-          label: '01 前端的数据与缓存',
+          label: '试试下一种 AI 玩法',
           items: [
-            { slug: 'frontend-foundations', label: '从熟悉的问题开始' },
-            { slug: 'frontend-foundations/keys-and-maps', label: 'key、Object、Map 与 WeakMap' },
-            { slug: 'frontend-foundations/cache-cost', label: '缓存为什么也有成本' },
+            { slug: 'ai-ideas', label: '给下一个好点子找块试验田' },
+            { slug: 'ai-ideas/01-ideas-map', label: '摊开人机协作的构想地图' },
+            { slug: 'ai-ideas/02-five-new-directions', label: '五个方向，挑一个开玩' },
           ],
         },
         {
-          label: '02 从缓存走到 KV',
+          label: '读架构，选路线',
           items: [
-            { slug: 'kv-cache/00-why-so-large', label: '为什么 KV 会这么大' },
-            { slug: 'kv-cache/01-from-frontend', label: '从 useMemo 到前缀复用' },
-            { slug: 'kv-cache/02-attention-and-kv', label: 'Attention、Prefill 与 Decode' },
-            { slug: 'kv-cache/03-prefix-cache-and-yuuki', label: '请求前缀与 DeepSeek' },
-            { slug: 'kv-cache', label: '专题与命令行实验' },
-          ],
-        },
-        {
-          label: '03 Wasm 与浏览器 AI',
-          items: [
-            { slug: 'wasm', label: 'Wasm 在哪一层' },
-            { slug: 'wasm/workers-and-memory', label: 'Worker、内存与数据搬运' },
-            { slug: 'wasm/browser-ai', label: 'Wasm、WebGPU 与模型运行时' },
-            { slug: 'learning/ai-frontend-intersections', label: '还可以探索哪些交织点' },
-          ],
-        },
-        {
-          label: '浏览器实验',
-          items: [
-            { label: '数组与 Map 查找', link: '/labs/lookup/' },
-            { label: 'KV 内存计算器', link: '/labs/kv-memory/' },
-            { label: 'JavaScript 调用 Wasm', link: '/labs/wasm-bridge/' },
-          ],
-        },
-        {
-          label: '04 渲染、语音与 Agent',
-          items: [
-            { slug: 'learning/rendering-performance', label: '渲染与性能' },
-            { slug: 'learning/harness-scenario-lab', label: '十五个 Harness 场景' },
-            { slug: 'tts', label: '语音工具入门' },
-            { slug: 'tts/让-Yuuki-开口说第一句话', label: '第一次发声' },
-            { slug: 'architecture/ai-and-speech-foundation', label: '模型与语音基础' },
-            { slug: 'architecture/mac-local-harness', label: 'Agent 运行时' },
-          ],
-        },
-        {
-          label: '项目与既有研究',
-          items: [
-            { slug: 'guide', label: '原文档导航与项目状态' },
+            { slug: 'guide', label: '全站路线与项目状态' },
             // 外部 glob 的 filePath 相对 site 根目录；自动目录需使用同一前缀。
             { label: '研究资料', items: [{ autogenerate: { directory: '../docs/research' } }] },
             {

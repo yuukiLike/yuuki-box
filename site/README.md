@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，包含 AI 实践与构想、前端数据结构、KV Cache、WebAssembly，以及已有的渲染、语音与 Agent 研究。
+以 Astro 与 Starlight 浏览仓库的学习资料，按想做成的事组织为六条路线：让 AI 接手开发、亲手搭 Agent、前端 × AI 实验室、让 Yuuki 听见和开口、试试下一种 AI 玩法、读架构选路线。
 
 ## 本地运行
 
@@ -39,6 +39,7 @@ pnpm --dir site build
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。
 - `astro.config.mjs` 管理阅读顺序，首页与侧栏使用同一份目录；浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
+- 导航按任务分类：开发实践下分任务交付、质量检查与 Issue 夜班；Agent 下按 Harness、MCP、Skills 的建设顺序组织；前端实验下分查找与缓存、模型缓存、浏览器计算、界面响应。三个浏览器实验各自放回对应专题。
 - `README.md` 对应 `/guide/`，子目录的 `README.md` 对应该目录；其他 Markdown 文件名保留在路由中。
 
 浏览器实验只运行本地数据、容量公式和微型 Wasm 模块，不下载 AI 模型。历史文档保留原来的验证范围。
@@ -47,4 +48,4 @@ pnpm --dir site build
 
 默认开启轻量模式：首页先展示每个专题的一个入口，章节按需展开；阅读页收起侧栏与右侧大纲，保留搜索、返回目录和页内目录入口。顶栏的「轻量模式」按钮可以切回完整展示，选择保存在当前浏览器中；浏览器禁用存储时，本页仍可切换。
 
-不运行 JavaScript 时，章节仍可通过原生折叠控件展开。🍀「Issue 的夜班」教程从只读扫描开始，正文放在 `docs/issue-garden/`；有公开落地记录的实践放在 `docs/ai-practices/`，MCP、Skills 与 Harness 的实现清单放在 `docs/agent-engineering/`，尚在头脑风暴阶段的构想放在 `docs/ai-ideas/`。工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。
+不运行 JavaScript 时，章节仍可通过原生折叠控件展开。导航分类与源码路径分别维护：Issue 夜班教程位于 `docs/issue-garden/`，有公开使用记录的案例位于 `docs/ai-practices/`，Agent 工程实验位于 `docs/agent-engineering/`，头脑风暴构想位于 `docs/ai-ideas/`。正文保留各自的证据与验证状态；工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。
