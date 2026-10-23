@@ -35,16 +35,16 @@ test('repository code links preserve line numbers and other local checkouts rema
 });
 
 test('public diagram images and their full-size links share a local URL while other images keep their source', () => {
-  const document = resolve(docsRoot, 'issue-garden/04-ideas-map.md');
-  const target = '../../site/public/diagrams/issue-garden-map.svg';
-  assert.equal(resolveDocumentLink(target, document), '/diagrams/issue-garden-map.svg');
+  const document = resolve(docsRoot, 'ai-ideas/01-ideas-map.md');
+  const target = '../../site/public/diagrams/ai-ideas-map.svg';
+  assert.equal(resolveDocumentLink(target, document), '/diagrams/ai-ideas-map.svg');
   const tree = { type: 'root', children: [
     { type: 'image', url: target, alt: '两项已有设想与五个新方向' },
     { type: 'image', url: 'local-image.png', alt: '交给 Astro 处理的图片' },
     { type: 'image', url: 'https://example.com/image.png', alt: '远程图片' },
   ] };
   repositoryMarkdown()(tree, { path: document });
-  assert.equal(tree.children[0].url, '/diagrams/issue-garden-map.svg');
+  assert.equal(tree.children[0].url, '/diagrams/ai-ideas-map.svg');
   assert.equal(tree.children[0].alt, '两项已有设想与五个新方向');
   assert.equal(tree.children[1].url, 'local-image.png');
   assert.equal(tree.children[2].url, 'https://example.com/image.png');

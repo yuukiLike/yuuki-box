@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，包含前端数据结构、KV Cache、WebAssembly，以及已有的渲染、语音与 Agent 研究。
+以 Astro 与 Starlight 浏览仓库的学习资料，包含 AI 实践与构想、前端数据结构、KV Cache、WebAssembly，以及已有的渲染、语音与 Agent 研究。
 
 ## 本地运行
 
@@ -47,4 +47,4 @@ pnpm --dir site build
 
 默认开启轻量模式：首页先展示每个专题的一个入口，章节按需展开；阅读页收起侧栏与右侧大纲，保留搜索、返回目录和页内目录入口。顶栏的「轻量模式」按钮可以切回完整展示，选择保存在当前浏览器中；浏览器禁用存储时，本页仍可切换。
 
-不运行 JavaScript 时，章节仍可通过原生折叠控件展开。🍀「Issue 的夜班」教程从只读扫描开始，正文放在 `docs/issue-garden/`；工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。
+不运行 JavaScript 时，章节仍可通过原生折叠控件展开。🍀「Issue 的夜班」教程从只读扫描开始，正文放在 `docs/issue-garden/`；有公开落地记录的实践放在 `docs/ai-practices/`，尚在头脑风暴阶段的构想放在 `docs/ai-ideas/`。工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。

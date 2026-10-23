@@ -12,7 +12,7 @@ export default defineConfig({
       title: 'Yuuki 学习手记',
       credits: false,
       disable404Route: true,
-      description: '从前端的 key、Map 与渲染出发，理解缓存、KV Cache、WebAssembly 和 AI 应用。',
+      description: '从 AI 实践、前端的 key 与渲染出发，理解缓存、KV Cache、WebAssembly 和 AI 应用。',
       locales: { root: { label: '简体中文', lang: 'zh-CN' } },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/yuukiLike/yuuki-box' }],
       customCss: ['./src/styles/custom.css'],
@@ -25,6 +25,36 @@ export default defineConfig({
       expressiveCode: { themes: ['github-dark', 'github-light'], styleOverrides: { borderRadius: '0.6rem' } },
       sidebar: [
         { label: '文档目录', link: '/' },
+        {
+          label: '🍀 Issue 的夜班',
+          items: [
+            { slug: 'issue-garden', label: '让 Issue 慢慢长成 PR' },
+            { slug: 'issue-garden/01-first-scan', label: '先替我看一眼 Issue' },
+            { slug: 'issue-garden/02-first-repair', label: '陪 AI 修一个小问题' },
+            { slug: 'issue-garden/03-night-shift', label: '把流程交给夜班' },
+          ],
+        },
+        {
+          label: '🍀 已落地的 AI 开发实践',
+          items: [
+            { slug: 'ai-practices', label: '按问题选择实践' },
+            { slug: 'ai-practices/01-coderabbit-review', label: 'CodeRabbit 自动审查 PR' },
+            { slug: 'ai-practices/02-issue-to-pr', label: '从 Issue 到 PR' },
+            { slug: 'ai-practices/03-error-to-fix', label: '从错误现场到修复' },
+            { slug: 'ai-practices/04-security-autofix', label: '修复安全告警' },
+            { slug: 'ai-practices/05-test-generation', label: '筛选有用测试' },
+            { slug: 'ai-practices/06-code-migration', label: '限定范围的版本迁移' },
+            { slug: 'ai-practices/your-workflow', label: '你的工作流：减少验收与返工' },
+          ],
+        },
+        {
+          label: '🍀 AI 实践构想',
+          items: [
+            { slug: 'ai-ideas', label: '头脑风暴与探索方向' },
+            { slug: 'ai-ideas/01-ideas-map', label: '人机协作的构想地图' },
+            { slug: 'ai-ideas/02-five-new-directions', label: '五个新方向，挑一个玩' },
+          ],
+        },
         {
           label: '01 前端的数据与缓存',
           items: [
@@ -69,30 +99,6 @@ export default defineConfig({
             { slug: 'tts/让-Yuuki-开口说第一句话', label: '第一次发声' },
             { slug: 'architecture/ai-and-speech-foundation', label: '模型与语音基础' },
             { slug: 'architecture/mac-local-harness', label: 'Agent 运行时' },
-          ],
-        },
-        {
-          label: '🍀 Issue 的夜班',
-          items: [
-            { slug: 'issue-garden', label: '让 Issue 慢慢长成 PR' },
-            { slug: 'issue-garden/01-first-scan', label: '先替我看一眼 Issue' },
-            { slug: 'issue-garden/02-first-repair', label: '陪 AI 修一个小问题' },
-            { slug: 'issue-garden/03-night-shift', label: '把流程交给夜班' },
-            { slug: 'issue-garden/04-ideas-map', label: '人机协作的构想地图' },
-            { slug: 'issue-garden/05-five-new-directions', label: '五个新方向，挑一个玩' },
-          ],
-        },
-        {
-          label: '🍀 已落地的 AI 开发实践',
-          items: [
-            { slug: 'ai-practices', label: '按问题选择实践' },
-            { slug: 'ai-practices/01-coderabbit-review', label: 'CodeRabbit 自动审查 PR' },
-            { slug: 'ai-practices/02-issue-to-pr', label: '从 Issue 到 PR' },
-            { slug: 'ai-practices/03-error-to-fix', label: '从错误现场到修复' },
-            { slug: 'ai-practices/04-security-autofix', label: '修复安全告警' },
-            { slug: 'ai-practices/05-test-generation', label: '筛选有用测试' },
-            { slug: 'ai-practices/06-code-migration', label: '限定范围的版本迁移' },
-            { slug: 'ai-practices/your-workflow', label: '你的工作流：减少验收与返工' },
           ],
         },
         {

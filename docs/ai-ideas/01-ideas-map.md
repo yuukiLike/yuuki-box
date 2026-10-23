@@ -2,7 +2,7 @@
 
 **这是一张可以挑选的地图。今天只看一个感兴趣的方向就够了。**
 
-这里收录你提出的两个设想、上一轮讨论的配套环节，以及新探索的五个方向。共同目标是：人表达意图，AI 交付改动与可检查的证据，人保留最终判断。
+这里收录你提出的两个设想、上一轮讨论的配套环节，以及新探索的五个方向。这些内容仍处于构想与教学阶段，没有落地记录；已经有公开案例的做法另见[已落地的 AI 开发实践](../ai-practices/README.md)。共同目标是：人表达意图，AI 交付改动与可检查的证据，人保留最终判断。
 
 核对日期：2026-10-21。新增方向的代表方案公开于 2025—2026 年，其中包含 2026-09-29 的近期产品更新；这些日期代表所引用实现或更新的公开节点，不代表某种思想第一次诞生。
 
@@ -10,9 +10,9 @@
 
 ## 先看整张图
 
-[![思维导图：你的两个设想是 Issue 夜班和独立 AI 审查；新增五个方向是运行数据驱动任务、目标驱动实验、数字孪生、规格驱动开发、空闲时间整理知识](../../site/public/diagrams/issue-garden-map.svg)](../../site/public/diagrams/issue-garden-map.svg)
+[![思维导图：你的两个设想是 Issue 夜班和独立 AI 审查；新增五个方向是运行数据驱动任务、目标驱动实验、数字孪生、规格驱动开发、空闲时间整理知识](../../site/public/diagrams/ai-ideas-map.svg)](../../site/public/diagrams/ai-ideas-map.svg)
 
-点击图片可打开 SVG 原图放大。新增方向的来源、时间和小实验见[五个新方向，挑一个玩](05-five-new-directions.md)。
+点击图片可打开 SVG 原图放大。新增方向的来源、时间和小实验见[五个新方向，挑一个玩](02-five-new-directions.md)。
 
 <details>
 <summary>展开可编辑的 Mermaid 源码</summary>
@@ -45,7 +45,7 @@ SVG 与这份 Mermaid 表达同一层级，SVG 用于直接阅读，源码保留
   → 草稿 PR 与验收摘要
 ```
 
-首版建议一次只领一个问题，已有 PR 的任务跳过。完整学习路径从[先替我看一眼 Issue](01-first-scan.md)开始，调度与权限分工见[把流程交给夜班](03-night-shift.md)。
+首版建议一次只领一个问题，已有 PR 的任务跳过。完整学习路径从[先替我看一眼 Issue](../issue-garden/01-first-scan.md)开始，调度与权限分工见[把流程交给夜班](../issue-garden/03-night-shift.md)。
 
 这条路线已有产品对应：GitHub 支持把 Issue 分配给 Copilot cloud agent，由它处理并产出 PR。[GitHub 官方说明](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
 
@@ -99,6 +99,6 @@ AI 审查也会漏报或误报，结论仍需通过具体检查验证。[GitHub 
 
 先用自己的少量任务观察三件事：发现了多少经你确认的问题、你花了多少验收时间、合并后有多少返工。记录任务类型、模型和代码版本，保留不成功的案例。
 
-**当前最小下一步：从[工作流分析中的小实验](../ai-practices/your-workflow.md#下一次只试一件事)开始，让 AI 先复现问题，再交付修复后的检查结果。** 想体验新的协作方式，再从上面的独立审查或[五个探索方向](05-five-new-directions.md)中挑一个。
+**当前最小下一步：从[工作流分析中的小实验](../ai-practices/your-workflow.md#下一次只试一件事)开始，让 AI 先复现问题，再交付修复后的检查结果。** 想体验新的协作方式，再从上面的独立审查或[五个探索方向](02-five-new-directions.md)中挑一个。
 
 本文是构想与教学资料。图的层级和 SVG 结构经过本地检查；远端 Agent、自动审查和上述协作流程尚未在本仓库启用。

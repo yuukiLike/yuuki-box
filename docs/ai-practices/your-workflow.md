@@ -127,4 +127,4 @@ AI 根据现有上下文填写；只有缺少会改变复现或预期的关键�
 
 CodeRabbit 可以作为后续审查入口。眼下优先把原问题的复现和交付证据做好；[从 Issue 到 PR](02-issue-to-pr.md)、[线上故障诊断](03-error-to-fix.md)等方案，等出现对应需求时再尝试。
 
-返回[已有实践目录](README.md)或[构想地图](../issue-garden/04-ideas-map.md)。
+返回[已有实践目录](README.md)或[构想地图](../ai-ideas/01-ideas-map.md)。
