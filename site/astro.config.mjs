@@ -48,6 +48,19 @@ export default defineConfig({
           ],
         },
         {
+          label: '🍀 Agent 工程实践',
+          items: [
+            { slug: 'agent-engineering', label: '总览：MCP、Skills 与 Harness' },
+            { slug: 'agent-engineering/01-mcp-tool-source', label: 'MCP：接成工具源' },
+            { slug: 'agent-engineering/02-mcp-policy', label: 'MCP：清单与默认拒绝' },
+            { slug: 'agent-engineering/03-skills-structure', label: 'Skills：结构与触发' },
+            { slug: 'agent-engineering/04-skills-validation', label: 'Skills：校验与渐进加载' },
+            { slug: 'agent-engineering/05-harness-vertical-slice', label: 'Harness：可恢复闭环' },
+            { slug: 'agent-engineering/06-context-and-report', label: 'Harness：上下文与运行报告' },
+            { slug: 'agent-engineering/07-scenario-regression', label: 'Harness：场景回归' },
+          ],
+        },
+        {
           label: '🍀 AI 实践构想',
           items: [
             { slug: 'ai-ideas', label: '头脑风暴与探索方向' },

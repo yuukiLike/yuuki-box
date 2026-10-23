@@ -135,4 +135,6 @@ E3 有 1k / 3k / 6k 张卡片，112 px 固定高度。优化只挂载视口与�
 
 当前最值得形成的判断是：**哪一条路线让你更容易找到多余工作、收紧更新范围，并保持修改后的功能正确。** 这是你可以通过代码与操作积累的认识，无需先选定 Swift 或 Rust，也无需把语言喜好包装成测量结论。
 
+控制面的取消、断连与恢复场景，见 [Harness：场景回归测试控制面](../agent-engineering/07-scenario-regression.md)。这些测试验证 Run/ToolCall 状态机，不替代上面的 UI 负载实验。
+
 返回 [文档入口](../README.md) · [examples](../../examples/README.md) · [五路线收益与代价](../../examples/COMPARISON.md)。

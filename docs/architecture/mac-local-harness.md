@@ -8,7 +8,7 @@
 开始本次文档工作时，当前目录没有应用源码、Swift package 或已有实现；文中类型、协议、路径和状态均为提案。
 Swift、SwiftUI/AppKit、独立 Runner 与 SQLite 是基于当前目标的建议，不是用户已经确认的选型。用户随后确认五条技术路线并行实验，Rust/GPUI 可以直接开始；见 [examples](../../examples/README.md)。本篇使用 Swift 说明候选方案，状态、取消、持久化和进程边界也适用于 Rust 实现。
 
-阅读入口：[文档导航](../README.md) · [产品实现调研](../research/zed-raycast-warp.md) · [渲染性能学习](../learning/rendering-performance.md) · [第一阶段计划](../plan/first-mac-loop.md)。
+阅读入口：[文档导航](../README.md) · [产品实现调研](../research/zed-raycast-warp.md) · [渲染性能学习](../learning/rendering-performance.md) · [第一阶段计划](../plan/first-mac-loop.md) · [Agent 工程实践](../agent-engineering/README.md)。
 
 ## 1. 已确认目标与当前范围
 

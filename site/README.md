@@ -47,4 +47,4 @@ pnpm --dir site build
 
 默认开启轻量模式：首页先展示每个专题的一个入口，章节按需展开；阅读页收起侧栏与右侧大纲，保留搜索、返回目录和页内目录入口。顶栏的「轻量模式」按钮可以切回完整展示，选择保存在当前浏览器中；浏览器禁用存储时，本页仍可切换。
 
-不运行 JavaScript 时，章节仍可通过原生折叠控件展开。🍀「Issue 的夜班」教程从只读扫描开始，正文放在 `docs/issue-garden/`；有公开落地记录的实践放在 `docs/ai-practices/`，尚在头脑风暴阶段的构想放在 `docs/ai-ideas/`。工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。
+不运行 JavaScript 时，章节仍可通过原生折叠控件展开。🍀「Issue 的夜班」教程从只读扫描开始，正文放在 `docs/issue-garden/`；有公开落地记录的实践放在 `docs/ai-practices/`，MCP、Skills 与 Harness 的实现清单放在 `docs/agent-engineering/`，尚在头脑风暴阶段的构想放在 `docs/ai-ideas/`。工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。

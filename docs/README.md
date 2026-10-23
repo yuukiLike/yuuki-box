@@ -8,7 +8,7 @@
 
 现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
 
-想让 AI 参与开发时，先看三个 🍀 章节：可跟做的 Issue 夜班、有公开案例的已落地实践，以及仍在头脑风暴的实践构想。
+想让 AI 参与开发时，先看四个 🍀 章节：可跟做的 Issue 夜班、有公开案例的已落地实践、面向自己 Agent 的工程实践，以及仍在头脑风暴的实践构想。
 
 想先看当前选型结论，读[根 README：五路线选择与推荐架构](../README.md)。它给出 SwiftUI/AppKit 默认主线、GPUI 与 Web 路线的适用条件，并用 2026-09-26 核实的一手资料说明哪些证据会改变推荐。
 
@@ -17,6 +17,7 @@
 | [🍀 让 Issue 慢慢长成 PR](issue-garden/README.md) | 只读扫描、定时修复与验收分工 | 想让 AI 参与开发，先跑通一条路线时 |
 | [🍀 已落地的 AI 开发实践](ai-practices/README.md) | CodeRabbit 等六项实践的案例来源、流程和小实验 | 想从实际案例中选择一项做法时 |
 | [🍀 你的工作流：减少验收与返工](ai-practices/your-workflow.md) | 当前工作方式、五项业界实践与按项目适配的一个小实验 | 想减少重复操作和同一问题的多轮修正时 |
+| [🍀 Agent 工程实践：MCP、Skills 与 Harness](agent-engineering/README.md) | MCP 工具源、Skill 结构、Harness 闭环、上下文与场景回归 | 想把这些能力接进自己的 Agent 工作台时 |
 | [🍀 AI 实践构想](ai-ideas/README.md) | 两个已有设想、五个探索方向与思维导图 | 想参与头脑风暴或寻找小实验时 |
 | [前端的数据结构与缓存](frontend-foundations/README.md) | key、Map、WeakMap、缓存身份、容量与数据保留 | 从熟悉的前端问题开始时 |
 | [Wasm 与浏览器 AI](wasm/README.md) | JavaScript 调用边界、Worker、数据搬运与推理后端 | 想新开一条 AI 与前端交织的学习线时 |
