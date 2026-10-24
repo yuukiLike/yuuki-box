@@ -4,6 +4,8 @@
 
 上一节把“哪些派生结果可以继续使用”归结为依赖关系。现在把这个问题放进模型：在固定模型、相同位置和因果可见范围下，为什么追加一个 token 后，历史位置的 K/V 仍然有效？
 
+**这一站分三小步：先把向量看成数组，再看 Q/K/V 分工，最后看为什么旧 K/V 可以保留。** 公式和完整实验数据都在选读区。
+
 ## 先把模型里的数据看成数组
 
 先把分词后的 token 看成整数 ID，模型把 ID 转成数值向量，再逐层处理。本节用 `A B C D` 表示给定的 token；实验直接提供这些符号的向量，方便用 JavaScript 数组观察。
@@ -17,7 +19,40 @@
 
 权重是计算规则，KV 是这次输入产生的中间结果。换一段输入，沿用相同权重仍会得到不同的状态。
 
+可以先把「层」想成一个处理阶段：上一阶段交出一组数字，下一阶段继续变换。真实模型的每层远比下面的例子复杂，但数据仍然是数字在流动。
+
 ## Q K V 各自参与哪一步
+
+先看图，暂时只记分工：**Q 是这次怎么读，K 参与决定读取权重，V 是最后被组合的数字内容。**
+
+[![当前隐藏向量分别产生 Q/K/V；Q 与可见 K 计算分数，再把分数变成权重，对 V 加权组合](../../site/public/diagrams/kv-cache/06-qkv.svg)](../../site/public/diagrams/kv-cache/06-qkv.svg)
+
+图中的「权重」可以先理解成配比：例如 25% 取第一组 V，75% 取第二组 V。这个配比由当前 Q 和可见的 K 计算得到，会随当前位置变化。
+
+这里有两个容易撞名的词：**模型权重**是训练得到的参数，推理时通常固定；**注意力权重**是这次算出的配比，会随输入变化。就像一段函数的规则固定，每次调用得到的结果仍然可以不同。
+
+**这里的 K/V 不能按 JavaScript `Map.get(key)` 来理解。** Attention 会计算与多个可见 K 的分数，再组合对应的 V；它不是找一个完全相同的业务键。
+
+<details>
+<summary>选读：用几个数字和 JavaScript 算一次分数</summary>
+
+「点积」就是对应项相乘，再加起来：
+
+```js
+const q = [1, 2];
+const k = [2, 1];
+const score = q.reduce((sum, value, i) => sum + value * k[i], 0);
+// 1 * 2 + 2 * 1 = 4
+```
+
+每个可见 K 都会得到一个这样的分数。真实 Attention 还会缩放分数，并用 softmax 把它们变成非负、总和为 1 的权重。例如权重为 `[0.25, 0.75]`，V 为 `[10, 0]` 和 `[0, 20]`，加权结果就是 `[2.5, 15]`。
+
+这是运算示意，不代表这几个数字拥有固定的语言含义。
+
+</details>
+
+<details>
+<summary>选读：投影、伪代码和单头公式</summary>
 
 在一个 Attention 头里，当前隐藏向量经过三组线性投影，得到 Query、Key 和 Value。新位置用 Q 与可见位置的 K 做点积并缩放，再经 softmax 得到权重，对 V 加权求和。[Attention Is All You Need 第 3.2 节](https://arxiv.org/html/1706.03762v7#S3.SS2)
 
@@ -40,9 +75,18 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 
 这里 `d` 是 Q/K 的向量维度。因果约束通过只保留允许读取的 K/V，或在 softmax 前屏蔽不可见位置来实现。
 
+</details>
+
 ## 因果约束让旧位置保持有效
 
-因果 Attention 的可见范围如下：
+**因果**在这里表示：计算一个位置时，只能读取自己和前面的位置。**mask** 就是把不允许读取的位置挡住。
+
+[![因果可见矩阵：A 只看 A，B 看 A/B，C 看 A/B/C，D 看 A/B/C/D；未来位置被遮挡](../../site/public/diagrams/kv-cache/07-causal-mask.svg)](../../site/public/diagrams/kv-cache/07-causal-mask.svg)
+
+先只看 A 那一行：末尾加了 D，A 仍然看不见 D。所以 A 不需要因为新增的未来内容改变旧计算。这个关系在每一层成立，历史 K/V 才能被复用。
+
+<details>
+<summary>选读：把图中的可见范围列成表</summary>
 
 | 正在计算的位置 | 可以读取的位置 |
 | --- | --- |
@@ -50,6 +94,8 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 | B | A B |
 | C | A B C |
 | D | A B C D |
+
+</details>
 
 追加 D 后，A/B/C 在每一层仍然只能读取原来的前缀。因此在模型、位置和计算配置保持一致的推理中，它们的表示与 K/V 可以继续使用。这个性质逐层成立，是缓存的依据。[Hugging Face 缓存原理](https://huggingface.co/docs/transformers/en/cache_explanation)
 
@@ -59,6 +105,13 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 
 Prefill 处理已有输入并填充缓存，Decode 消费新产生的 token 继续计算。实际推理实现会为这两个阶段采用不同的计算路径。[TensorRT-LLM 的上下文与生成阶段](https://nvidia.github.io/TensorRT-LLM/advanced/gpt-attention.html#context-and-generation-phases)
 
+先把两个新词翻成动作：**Prefill 是先处理已有输入；Decode 是之后一步步继续生成。** 一段输入中已有的位置可以并行处理，后续生成的 token 则逐步送回模型。
+
+[![Prefill 处理 ABC 并选出 D；下一步送入 D 才把 D 的 K/V 加入缓存，再选出 E；随后同样处理 E](../../site/public/diagrams/kv-cache/08-prefill-decode.svg)](../../site/public/diagrams/kv-cache/08-prefill-decode.svg)
+
+<details>
+<summary>选读：用一张表核对输入长度与缓存长度</summary>
+
 下面假设没有命中的跨请求前缀，使用普通的一次预测一个 token 的生成循环：
 
 | 阶段 | 这次送入模型的 token | 计算完成后的 KV | 根据输出选出下一个 token |
@@ -67,9 +120,13 @@ Prefill 处理已有输入并填充缓存，Decode 消费新产生的 token 继�
 | 第一次 Decode | D | A B C D 的 K/V | E |
 | 第二次 Decode | E | A B C D E 的 K/V | F |
 
+</details>
+
 **选出了 D，和已经计算了 D 的 K/V，是两个时刻。** D 在下一次作为模型输入被处理时，才加入缓存。理解这个顺序，有助于阅读生成循环中的输入长度和缓存长度。
 
 新位置 D 需要自己的 Q/K/V。历史 K/V 被复用，D 的 Q 仍需与当前可见的全部 K 计算注意力，再组合 V。历史 Q 属于此前位置的查询，下一位置读取上下文时使用的是它自己的 Q，因此常规 KV 缓存保留的是 K/V。[Hugging Face 缓存更新过程](https://huggingface.co/docs/transformers/en/cache_explanation#attention-matrices)
+
+**第一停点：旧 K/V 可以留下，新位置仍要用新的 Q 读它们。** 能指着上面的图说出这句话，就已经完成本篇的核心部分。
 
 ## 用 JavaScript 比较两条计算路径
 
@@ -78,6 +135,11 @@ Prefill 处理已有输入并填充缓存，Decode 消费新产生的 token 继�
 ```bash
 node docs/kv-cache/labs/attention-cache.mjs
 ```
+
+先只看「处理新 token D」一行：新算的 K/V 从 8 组变成 2 组；QK 点积仍有 8 次。**这里省下了历史位置的重复计算，读取历史状态的工作仍然存在。**
+
+<details>
+<summary>选读：实验范围、函数入口和完整计数</summary>
 
 实验采用固定的二维向量、两层单头 Attention、残差和简单位置输入。它对给定的 token 流计算隐藏向量；完整模型中的分词、训练、归一化、MLP 和词表采样不在这个小模型里。
 
@@ -100,6 +162,13 @@ node docs/kv-cache/labs/attention-cache.mjs
 第二行值得停下来推一次：两层各产生一组新的 K/V，所以是 2 组；D 的 Q 在每层各读取 4 个 K，所以仍有 8 次点积。缓存省去了历史位置的重复处理，读取已有上下文仍然需要工作。
 
 第三行先把每层缓存截到共同前缀 A，再处理 X/C/D。实验还确认，同一位置的 C 在前缀改变后，第二层 K 确实改变了。只按当前 token ID 保存和查找深层 K/V，会丢失这种上下文依赖。
+
+</details>
+
+**第二停点：知道缓存路径和从头计算的结果一致，同时能指出省了什么。** 下一次想看应用，直接去[DeepSeek 请求](03-prefix-cache-and-yuuki.md)；对内存好奇，再读[容量图解](00-why-so-large.md)。
+
+<details>
+<summary>选读：常规 KV 的内存公式，读容量图解后再看</summary>
 
 ## 估算常规 KV 缓存的内存
 
@@ -134,3 +203,5 @@ GQA 让一组 Query 头共享 K/V 头，因此估算时使用 `H_kv`，不能直
 3. 更长的历史为什么仍然昂贵？缓存数据变多，当前查询需要读取和组合的历史状态也更多。
 
 接下来把一次生成内部的复用扩展到不同请求：[前缀缓存与 Yuuki](03-prefix-cache-and-yuuki.md)。
+
+</details>

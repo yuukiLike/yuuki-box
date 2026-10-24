@@ -124,6 +124,7 @@ bash examples/open.sh gpui
 |---|---|
 | [examples](examples/README.md) | 五条路线、构建命令、应用位置、模型和语音配置 |
 | [十五个 Harness 场景](docs/learning/harness-scenario-lab.md) | 具体负载、操作方法、计量边界与维护练习 |
+| [KV Cache、DeepSeek Harness 与 Pi](docs/kv-cache/README.md) | 缓存原理、源码应用、关联知识与分阶段研究路线 |
 | [五路线实现对照](examples/COMPARISON.md) | 共享能力与各路线当前代价 |
 | [Zed / Raycast / Warp 调研](docs/research/zed-raycast-warp.md) | 实现事实、源码入口与扩展边界 |
 | [Zed / Rust 深入研究](docs/deep/2026-09-26-zed-pi-rust/README.md) | crate、调用链、平台后端与混合架构 |

@@ -4,6 +4,8 @@
 
 最直接的原因是：**模型为许多位置、许多层和许多 K/V 头保存数值向量。** 单个数值可以很小，重复的维度会把总量乘大。
 
+**这一站只看空间怎样一层层乘大。** 如果 Q/K/V 还陌生，先去[图解 Attention](02-attention-and-kv.md)，理解后再回来。这里不要求先背总公式。
+
 ## 先想一份前端的派生数据
 
 一条消息的原文可能很短，但解析树、排版结果或图片解码后的像素，可以比原始输入大。输入大小和中间结果大小，取决于它们各自的表示。
@@ -13,6 +15,17 @@
 ## 从一个位置算到整段上下文
 
 取一个假设的常规 GQA 配置：32 层，每层 8 个 K/V 头，每头 128 个数，每个数 2 字节，保存完整历史。
+
+先把「头」理解成同一层里的一组 Attention 计算；保存 K/V 的头越多，需要留的数字就越多。下面每个框只比上一个框多乘一个因素。
+
+[![假设配置中，一组 K/V 为 512 B，乘 8 个头为 4 KiB，乘 32 层为每位置 128 KiB，再乘 4096 个位置为 512 MiB](../../site/public/diagrams/kv-cache/09-memory-stack.svg)](../../site/public/diagrams/kv-cache/09-memory-stack.svg)
+
+图里使用二进制单位：`1 KiB = 1024 B`，`1 MiB = 1024 KiB`。B 是字节。「每个数 2 字节」是这个假设配置的精度选择，不能直接套到 JavaScript 普通数组上。
+
+**先停一下：只把保存的位置翻倍，其他条件不变，KV 有效数据也翻倍。** 能解释这一点，就抓住了本篇的核心。
+
+<details>
+<summary>选读：逐项核对图中的字节数</summary>
 
 | 保存范围 | 如何计算 | 有效数据量 |
 | --- | --- | --- |
@@ -24,6 +37,8 @@
 | 四条独立序列，各 4096 个位置 | `512 MiB × 4` | 2 GiB |
 
 这是对假设张量形状的元素计数，排除了共享、分配预留、模型权重与其他工作内存。常规 K/V 可按每层 `[序列数, K/V 头数, 已缓存长度, 每头维度]` 理解。[Hugging Face 缓存存储结构](https://huggingface.co/docs/transformers/en/cache_explanation#cache-storage-implementation)
+
+</details>
 
 打开[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro)，每次只改一个参数。先把 token 数翻倍，再把 K/V 头数减半，观察两个变化是否抵消。
 
@@ -45,6 +60,11 @@
 
 常规完整注意力的新 Query 仍需读取历史 K/V。历史越长，保留与读取的工作也越多。具体过程接着读[因果 Attention 与 KV Cache](02-attention-and-kv.md)。
 
+**这一站完成了：缓存拿空间换取少做重复工作，容量要按具体布局估算。** 下次从[DeepSeek 的请求前缀](03-prefix-cache-and-yuuki.md)继续。
+
+<details>
+<summary>选读：先认识减少空间的方向，暂不要求选择方案</summary>
+
 ## 能从哪些乘数开始减少
 
 | 方向 | 改变哪一部分 | 需要理解的条件 |
@@ -58,3 +78,5 @@
 GQA 的 K/V 头共享机制见[原始论文](https://arxiv.org/abs/2305.13245)，缓存精度、窗口和卸载的取舍见[Transformers 缓存策略](https://huggingface.co/docs/transformers/en/kv_cache)，跨请求复用接着看[前缀缓存与 Yuuki](03-prefix-cache-and-yuuki.md)。
 
 先掌握容量由什么组成，再进入优化。这样遇到一个方案时，就能具体判断它是在减少有效数据、减少重复状态，还是改善分配与搬运。
+
+</details>

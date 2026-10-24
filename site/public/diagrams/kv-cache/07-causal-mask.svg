@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="538" viewBox="0 0 520 538" role="img" aria-labelledby="title desc">
+<title id="title">只能看见自己和前面的位置</title>
+<desc id="desc">四乘四因果可见矩阵中，A 只看 A，B 看 A/B，C 看 A/B/C，D 看全部四个位置。追加 D 不改变历史位置的可见范围。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="538" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">只能看见自己和前面的位置</text>
+<text x="148" y="92" class="small" text-anchor="start">列：可以读取谁的 K/V</text><text x="177" y="132" class="bold" text-anchor="middle">A</text><text x="96" y="184" class="bold" text-anchor="middle">A</text><rect x="144" y="150" width="62" height="54" rx="8" class="reuse"/><text x="175" y="187" class="" text-anchor="middle">✓</text><rect x="216" y="150" width="62" height="54" rx="8" class="blocked"/><text x="247" y="187" class="" text-anchor="middle">×</text><rect x="288" y="150" width="62" height="54" rx="8" class="blocked"/><text x="319" y="187" class="" text-anchor="middle">×</text><rect x="360" y="150" width="62" height="54" rx="8" class="blocked"/><text x="391" y="187" class="" text-anchor="middle">×</text><text x="249" y="132" class="bold" text-anchor="middle">B</text><text x="96" y="250" class="bold" text-anchor="middle">B</text><rect x="144" y="216" width="62" height="54" rx="8" class="reuse"/><text x="175" y="253" class="" text-anchor="middle">✓</text><rect x="216" y="216" width="62" height="54" rx="8" class="reuse"/><text x="247" y="253" class="" text-anchor="middle">✓</text><rect x="288" y="216" width="62" height="54" rx="8" class="blocked"/><text x="319" y="253" class="" text-anchor="middle">×</text><rect x="360" y="216" width="62" height="54" rx="8" class="blocked"/><text x="391" y="253" class="" text-anchor="middle">×</text><text x="321" y="132" class="bold" text-anchor="middle">C</text><text x="96" y="316" class="bold" text-anchor="middle">C</text><rect x="144" y="282" width="62" height="54" rx="8" class="reuse"/><text x="175" y="319" class="" text-anchor="middle">✓</text><rect x="216" y="282" width="62" height="54" rx="8" class="reuse"/><text x="247" y="319" class="" text-anchor="middle">✓</text><rect x="288" y="282" width="62" height="54" rx="8" class="reuse"/><text x="319" y="319" class="" text-anchor="middle">✓</text><rect x="360" y="282" width="62" height="54" rx="8" class="blocked"/><text x="391" y="319" class="" text-anchor="middle">×</text><text x="393" y="132" class="bold" text-anchor="middle">D</text><text x="96" y="382" class="bold" text-anchor="middle">D</text><rect x="144" y="348" width="62" height="54" rx="8" class="reuse"/><text x="175" y="385" class="" text-anchor="middle">✓</text><rect x="216" y="348" width="62" height="54" rx="8" class="reuse"/><text x="247" y="385" class="" text-anchor="middle">✓</text><rect x="288" y="348" width="62" height="54" rx="8" class="reuse"/><text x="319" y="385" class="" text-anchor="middle">✓</text><rect x="360" y="348" width="62" height="54" rx="8" class="reuse"/><text x="391" y="385" class="" text-anchor="middle">✓</text><text x="28" y="466" class="small" text-anchor="start">行 A 不会因为追加 D 而看到 D。</text><text x="28" y="503" class="small" text-anchor="start">相同模型与位置下，旧状态可以保留。</text>
+</svg>

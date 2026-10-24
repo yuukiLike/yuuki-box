@@ -1,8 +1,22 @@
 # 从前缀复用回到 Yuuki
 
-[专题入口](README.md) · [上一篇 因果 Attention 与 KV Cache](02-attention-and-kv.md)
+[专题入口](README.md) · [上一篇 因果 Attention 与 KV Cache](02-attention-and-kv.md) · [下一篇 DeepSeek Harness](04-deepseek-harness.md)
 
 你已经知道生成新 token 时怎样复用历史 K/V。Agent 还有另一种重复：每轮调用都把 system、历史对话和工具结果发给模型。理解跨请求前缀复用，可以把模型内部原理连接到前端开发者实际组织的请求。
+
+**这一站只看：两次请求前面相同的部分，服务端有没有重新计算。** 先用前端数组圈出相同内容，再看接口报告。
+
+## 先用数组找到不变的部分
+
+```js
+const stable = ['整体规则', '固定资料'];
+const requestA = [...stable, '问题 Q'];
+const requestB = [...stable, '问题 R'];
+```
+
+这是消息内容的简写，实际请求还需要角色等字段。两次请求都带着规则和资料，只在末尾换了问题。应用仍会发送所需内容；服务端可以尝试复用前部已经算过的状态。
+
+先记住这个分工：**客户端负责把正确内容发过去，服务端负责判断哪些计算能复用。** JavaScript 数组里看起来相同，仍需按供应商的分词、模板和缓存规则判断。
 
 ## 两种复用发生在不同范围
 
@@ -54,7 +68,13 @@ const messages = [
 
 ## DeepSeek 的规则要看已持久化的前缀单元
 
-截至 2026-10-18，DeepSeek 官方说明上下文缓存默认启用。后续请求需要完整匹配已经持久化的前缀单元，才具备对应命中的条件。单元可以在请求边界、公共前缀发现后或长序列的固定间隔处形成。[DeepSeek 上下文缓存](https://api-docs.deepseek.com/guides/kv_cache/)
+**持久化**在这里指把算好的前缀状态写入可复用的缓存。**命中**指这次真的用到了对应缓存；有共同前缀只是条件之一。
+
+[![假设只持久化了 P+Q，P+R 不能直接套用它；系统可以把共同的 P 单独持久化，之后 P+S 才可能命中 P](../../site/public/diagrams/kv-cache/10-prefix-persistence.svg)](../../site/public/diagrams/kv-cache/10-prefix-persistence.svg)
+
+先只跟着 P 走：资料虽然一直相同，也要先有一个当前可用的 P 缓存单元。这张图不承诺第几次一定命中。
+
+截至 2026-10-24，DeepSeek 官方说明上下文缓存默认启用。后续请求需要完整匹配已经持久化的前缀单元，才具备对应命中的条件。单元可以在请求边界、公共前缀发现后或长序列的固定间隔处形成。[DeepSeek 上下文缓存](https://api-docs.deepseek.com/guides/kv_cache/)
 
 假设服务端当前只持久化了 `P + Q`。新请求 `P + R` 虽然与它共享 P，却不能直接复用完整的 `P + Q` 单元；系统可以在发现公共前缀后持久化 P，之后的请求才可能复用 P。官方文档中的这个边界，说明相同前缀与已具备命中条件需要分别考虑。
 
@@ -66,6 +86,50 @@ const messages = [
 | `usage.prompt_cache_miss_tokens` | 输入中未命中缓存的 token 数 |
 
 缓存属于尽力提供；持久化与清理都影响命中。命中前缀后，新的输出仍然通过推理生成。[DeepSeek 命中统计与补充说明](https://api-docs.deepseek.com/guides/kv_cache/)
+
+## 先核对用量口径，再算命中率
+
+**usage** 是接口返回的用量统计。把它想成响应里的一张计数单，先只看「全部输入」和「命中了多少」。
+
+[![假设全部输入 10000，其中缓存命中 8000、未命中 2000；Pi 分为 cacheRead 8000 和 input 2000，再加输出 100，总量为 10100](../../site/public/diagrams/kv-cache/11-usage-buckets.svg)](../../site/public/diagrams/kv-cache/11-usage-buckets.svg)
+
+图中绿色与橙色加起来，才是全部输入。缓存命中减少了重复工作，没有把这批输入从上下文里删除。
+
+下面是一份**用于算账的假设响应**，不是本仓库的实测结果：
+
+```json
+{
+  "prompt_tokens": 10000,
+  "prompt_cache_hit_tokens": 8000,
+  "prompt_cache_miss_tokens": 2000,
+  "completion_tokens": 100,
+  "total_tokens": 10100
+}
+```
+
+DeepSeek Chat Completions 的 `prompt_tokens` 已包含命中部分，等于 `hit + miss`。因此这里的命中率是 80%，总输入仍为 10,000；不能再把 8,000 加到 `prompt_tokens` 上。当前接口还可通过 `prompt_tokens_details.cached_tokens` 报告同一批命中 token，两者也不能相加。[DeepSeek 响应字段](https://api-docs.deepseek.com/api/create-chat-completion/)
+
+在这个口径下，输入费用可以写成 `(hit × 命中输入单价 + miss × 未命中输入单价) / 1,000,000`，单价单位为每百万 token。实验当天从[官方价格页](https://api-docs.deepseek.com/quick_start/pricing)取对应模型的价格，输出费用另计。缓存复用改变计算和计费路径，并没有把上下文长度压缩为 2,000。
+
+Pi 和 DeepSeek Harness 的内部字段采用分桶计数，`input` / `inputTokens` 表示未缓存输入，缓存读取另列。对照上述例子，Pi 会得到 `input=2000`、`cacheRead=8000`。转换过程见[Pi 源码篇](05-pi.md)。另外，`miss` 表示未命中，不能直接改名为 `cacheWrite`；是否写入、是否报告写入，是另一个问题。
+
+**这一站完成了：能读出 10,000 个输入中，8,000 个命中。** 可以先停下；下次看 [Harness 怎样组织这些请求](04-deepseek-harness.md)。下面保留实际研究时要查的细节。
+
+<details>
+<summary>选读：SSE 流式响应在哪里取 usage</summary>
+
+### 流式响应在哪里取 usage
+
+**SSE** 是服务端持续向客户端发送事件的一种方式。一个 chunk 是这条流中的一段数据，不保证刚好对应一个 token。
+
+当前 DeepSeek 文档说明：`[DONE]` 前的最后一个完成 chunk 携带整次请求的用量，它仍有一个 `choices` 元素，不另发专门的空 `choices` 用量包。`include_usage: true` 还会让此前 chunk 带上值为 `null` 的 `usage`。解析时检查有效用量对象，不要只处理 `choices: []`。[DeepSeek 流式选项](https://api-docs.deepseek.com/api/create-chat-completion/)
+
+中断可能发生在最终用量到达之前；这种请求的用量应保留为未知。若使用 thinking 模式，还应分别记录首次 reasoning、首次回答文本的时刻，避免把推理阶段的输出误当成最终回答已经出现。
+
+</details>
+
+<details>
+<summary>选读：回到 Yuuki 源码，找到请求与观测入口</summary>
 
 ## 在 Yuuki 源码里读一次请求
 
@@ -96,7 +160,27 @@ const messages = [
 
 当前运行时会合并文本增量再发布给 UI。网络接收、运行时发布、界面显示是不同时间点；另外，一段 SSE 文本也可能包含多个 token。沿源码的 `publish` 和 `delta` 分支阅读，再回到[流式输出的渲染说明](../learning/rendering-performance.md)，可以把这几个阶段连起来。
 
-一个后续接入练习是：固定模型与公共上下文，先完成一次请求并等待缓存构建，再追加不同问题；同时记录命中字段、输入长度、输出长度和首段文本等待时间。再只改变前部一处内容，看命中如何变化。重复观察并保留未命中情况，才能判断缓存是否解释了等待时间的变化。
+</details>
+
+<details>
+<summary>准备动手时再展开：一次只改一个因素的 API 实验</summary>
+
+## 准备一次有对照的 API 实验
+
+这是后续研究步骤，本文没有发起付费请求。先用同一模型、端点、账号和配置，准备一份固定资料 P，以及三个短问题 Q/R/S。
+
+| 请求 | 只改变什么 | 想检验什么 |
+| --- | --- | --- |
+| `P + Q` | 首次提交 | 建立基线；不要假定服务端一定是冷缓存 |
+| `P + Q` | 输入保持相同 | 已持久化的完整前缀是否被复用 |
+| `P + R`，随后 `P + S` | 只改末尾问题 | 发现共同前缀 P，与之后真正命中 P 的区别 |
+| `P′ + S` | 修改 P 开头一处内容 | 前部变化怎样影响后面的复用 |
+
+每次等请求完成并留出缓存构建时间；官方说明构建需要数秒，不能把紧接着的未命中直接归为 Harness 错误。用多组短请求重复观察，保留所有命中与未命中结果。[DeepSeek 缓存生命周期](https://api-docs.deepseek.com/guides/kv_cache/)
+
+记录模型 ID、请求顺序、间隔、输入/输出长度、原始 usage、首段文本等待时间和结束状态。第一次对照先固定工具定义，暂不同时改变摘要、模型或工具清单。想研究工具循环时，再加入一次完整的 `assistant tool_call → tool result` 往返。
+
+**验收先看缓存字段，再看延迟分布。** 单次变快可能来自网络或排队；单次未命中也不能证明前缀不可复用。输出文字变化则不能证明缓存失效，因为输出仍然重新生成。
 
 ## 后续深入的方向
 
@@ -107,3 +191,7 @@ const messages = [
 | 多个请求怎样标识和复用共同前缀 | 分块、父前缀身份和缓存生命周期 | [vLLM 前缀缓存设计](https://docs.vllm.ai/en/latest/design/prefix_caching/) |
 
 第一轮先完成一次解释：从“前端派生结果依赖什么”，讲到“因果 Attention 的旧 K/V 为什么有效”，最后在 Yuuki 中指出谁组织请求、谁持有推理状态、谁报告缓存命中。
+
+接着阅读[DeepSeek Harness 怎样保住请求前缀](04-deepseek-harness.md)，看真实工程怎样处理动态提示、工具顺序和缓存统计。
+
+</details>

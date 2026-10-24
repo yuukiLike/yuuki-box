@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="550" viewBox="0 0 520 550" role="img" aria-labelledby="title desc">
+<title id="title">选出一个 token，再处理它</title>
+<desc id="desc">普通自回归生成中，Prefill 处理 ABC 并选出 D。下一步把 D 作为输入，才产生 D 的 K/V 并选出 E。相同过程继续。未包含推测解码等其他实现。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="550" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">选出一个 token，再处理它</text>
+<rect x="28" y="78" width="464" height="126" rx="12" class="panel"/><text x="48" y="110" class="bold" text-anchor="start">1  Prefill：先处理已有输入</text><text x="48" y="148" class="small" text-anchor="start">送入 A B C → KV 留下 A B C</text><text x="48" y="184" class="small" text-anchor="start">据此选出 D；D 还没有进入 KV</text><path class="arrow" d="M260 211 L260 233"/><rect x="28" y="240" width="464" height="126" rx="12" class="new"/><text x="48" y="272" class="bold" text-anchor="start">2  Decode：把 D 送回模型</text><text x="48" y="310" class="small" text-anchor="start">复用 A B C，新增 D 的 K/V</text><text x="48" y="346" class="small" text-anchor="start">KV 现在是 A B C D，再选出 E</text><path class="arrow" d="M260 373 L260 395"/><rect x="28" y="402" width="464" height="126" rx="12" class="reuse"/><text x="48" y="434" class="bold" text-anchor="start">3  Decode：再处理 E</text><text x="48" y="472" class="small" text-anchor="start">复用 A B C D，新增 E 的 K/V</text><text x="48" y="508" class="small" text-anchor="start">KV 继续增长，再选下一个 token</text>
+</svg>

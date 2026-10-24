@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="530" viewBox="0 0 520 530" role="img" aria-labelledby="title desc">
+<title id="title">有效文字相同，顺序仍然很重要</title>
+<desc id="desc">对于支持历史内 system 更新的路由，原有 S0、对话、S1、对话顺序，在有效 system 文本仍是 S1 时可以保留。把 S1 移到开头会改变请求前缀。仅是简化的消息顺序图。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="530" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">有效文字相同，顺序仍然很重要</text>
+<text x="28" y="90" class="small" text-anchor="start">支持历史内 system 更新的路由</text><text x="28" y="135" class="bold" text-anchor="start">原来的顺序</text><rect x="28" y="156" width="92" height="48" rx="12" class="panel"/><text x="74.0" y="189" class="" text-anchor="middle">S0</text><rect x="132" y="156" width="92" height="48" rx="12" class="panel"/><text x="178.0" y="189" class="" text-anchor="middle">对话</text><rect x="236" y="156" width="92" height="48" rx="12" class="panel"/><text x="282.0" y="189" class="" text-anchor="middle">S1</text><rect x="340" y="156" width="92" height="48" rx="12" class="panel"/><text x="386.0" y="189" class="" text-anchor="middle">对话</text><text x="28" y="256" class="bold" text-anchor="start">内容没变：保留原位</text><rect x="28" y="278" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="311" class="" text-anchor="middle">S0</text><rect x="132" y="278" width="92" height="48" rx="12" class="reuse"/><text x="178.0" y="311" class="" text-anchor="middle">对话</text><rect x="236" y="278" width="92" height="48" rx="12" class="reuse"/><text x="282.0" y="311" class="" text-anchor="middle">S1</text><rect x="340" y="278" width="92" height="48" rx="12" class="reuse"/><text x="386.0" y="311" class="" text-anchor="middle">对话</text><text x="28" y="378" class="bold" text-anchor="start">搬回开头：前缀会改变</text><rect x="28" y="400" width="92" height="48" rx="12" class="change"/><text x="74.0" y="433" class="" text-anchor="middle">S1</text><rect x="132" y="400" width="92" height="48" rx="12" class="panel"/><text x="178.0" y="433" class="" text-anchor="middle">对话</text><rect x="236" y="400" width="92" height="48" rx="12" class="panel"/><text x="282.0" y="433" class="" text-anchor="middle">…</text><text x="28" y="495" class="small" text-anchor="start">S0 / S1 代表不同版本的 system。</text>
+</svg>

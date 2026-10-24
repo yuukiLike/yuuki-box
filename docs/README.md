@@ -33,6 +33,8 @@
 
 从[数据结构与缓存](frontend-foundations/README.md)走到 [KV Cache](kv-cache/README.md)，从 [Wasm 与 Worker](wasm/README.md)走到浏览器计算，再用[渲染学习路线](learning/rendering-performance.md)和[十五个场景](learning/harness-scenario-lab.md)追踪界面卡在哪里。
 
+准备研究模型缓存，可以沿 [KV 专题](kv-cache/README.md)读原理，再对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 与 [Pi](kv-cache/05-pi.md) 的请求装配、缓存用量和预热；[知识地图](kv-cache/06-study-map.md)给出关联概念与三轮研究停点。
+
 三个浏览器实验就在对应专题旁：[数组与 Map](../site/src/pages/labs/lookup.astro)、[KV 内存计算器](../site/src/pages/labs/kv-memory.astro)、[JavaScript 调用 Wasm](../site/src/pages/labs/wasm-bridge.astro)。先玩一个，再回来找解释。
 
 ### 让 Yuuki 听见和开口

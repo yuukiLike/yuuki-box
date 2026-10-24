@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="530" viewBox="0 0 520 530" role="img" aria-labelledby="title desc">
+<title id="title">Q、K、V 各参与哪一步</title>
+<desc id="desc">同一隐藏向量通过不同投影得到 Q、K、V。当前 Q 与可见 K 计算分数，分数转成权重后对 V 加权组合。它不是业务数据库中的键值查找。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="530" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">Q、K、V 各参与哪一步</text>
+<rect x="28" y="76" width="464" height="74" rx="12" class="panel"/><text x="48" y="107" class="bold" text-anchor="start">当前这一层的隐藏向量 h</text><text x="48" y="135" class="small" text-anchor="start">可以先把向量看成一个数字数组</text><path class="arrow" d="M260 155 L98 190"/><rect x="28" y="200" width="140" height="82" rx="12" class="new"/><text x="98" y="232" class="bold" text-anchor="middle">Q</text><text x="98" y="263" class="small" text-anchor="middle">当前查询</text><path class="arrow" d="M260 155 L260 190"/><rect x="190" y="200" width="140" height="82" rx="12" class="reuse"/><text x="260" y="232" class="bold" text-anchor="middle">K</text><text x="260" y="263" class="small" text-anchor="middle">匹配依据</text><path class="arrow" d="M260 155 L422 190"/><rect x="352" y="200" width="140" height="82" rx="12" class="reuse"/><text x="422" y="232" class="bold" text-anchor="middle">V</text><text x="422" y="263" class="small" text-anchor="middle">组合的内容</text><rect x="28" y="316" width="464" height="74" rx="12" class="new"/><text x="48" y="347" class="bold" text-anchor="start">Q 与可见的 K 计算分数</text><text x="48" y="375" class="small" text-anchor="start">是数字点积，不是文字完全匹配</text><path class="arrow" d="M260 396 L260 414"/><rect x="28" y="426" width="464" height="74" rx="12" class="reuse"/><text x="48" y="457" class="bold" text-anchor="start">分数变成权重，再组合 V</text><text x="48" y="485" class="small" text-anchor="start">输出一个融合了上下文的数字向量</text>
+</svg>

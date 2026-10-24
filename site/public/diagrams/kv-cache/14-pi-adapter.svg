@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="570" viewBox="0 0 520 570" role="img" aria-labelledby="title desc">
+<title id="title">把接口响应翻译成应用的统计</title>
+<desc id="desc">沿 dsh 的 Pi 适配路径，DeepSeek 原始 usage 进入 Pi parseChunkUsage，再由 dsh mapUsage 转换为 Harness 字段。这个过程转换消息用量，没有传递推理 KV 张量。两仓库快照分别核对。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="570" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">把接口响应翻译成应用的统计</text>
+<rect x="28" y="76" width="464" height="90" rx="12" class="panel"/><text x="48" y="107" class="bold" text-anchor="start">DeepSeek 响应里的 usage</text><text x="48" y="135" class="small" text-anchor="start">prompt = 10,000；hit = 8,000</text><path class="arrow" d="M260 174 L260 204"/><rect x="28" y="216" width="464" height="90" rx="12" class="new"/><text x="48" y="247" class="bold" text-anchor="start">Pi：parseChunkUsage</text><text x="48" y="275" class="small" text-anchor="start">input = 2,000；cacheRead = 8,000</text><path class="arrow" d="M260 314 L260 344"/><rect x="28" y="356" width="464" height="90" rx="12" class="reuse"/><text x="48" y="387" class="bold" text-anchor="start">dsh：mapUsage</text><text x="48" y="415" class="small" text-anchor="start">inputTokens / cacheReadTokens</text><text x="28" y="495" class="small" text-anchor="start">模型服务 → 统一模型层 → Harness</text><text x="28" y="535" class="small" text-anchor="start">转换字段名称与口径，不搬运 KV 张量。</text>
+</svg>

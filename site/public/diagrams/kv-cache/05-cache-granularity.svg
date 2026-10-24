@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="550" viewBox="0 0 520 550" role="img" aria-labelledby="title desc">
+<title id="title">缓存的单位，决定省下哪一步</title>
+<desc id="desc">依赖 messages 的 useMemo 在新数组到来时重新调用计算。计算函数可以自行保存前缀状态，进而复用前三项，只计算第四项。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="550" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">缓存的单位，决定省下哪一步</text>
+<rect x="28" y="76" width="464" height="92" rx="12" class="panel"/><text x="48" y="107" class="bold" text-anchor="start">useMemo 缓存整个返回值</text><text x="48" y="135" class="small" text-anchor="start">[messages] 变化 → 重新调用计算</text><rect x="28" y="198" width="92" height="48" rx="12" class="change"/><text x="74.0" y="231" class="" text-anchor="middle">算 1</text><rect x="132" y="198" width="92" height="48" rx="12" class="change"/><text x="178.0" y="231" class="" text-anchor="middle">算 2</text><rect x="236" y="198" width="92" height="48" rx="12" class="change"/><text x="282.0" y="231" class="" text-anchor="middle">算 3</text><rect x="340" y="198" width="92" height="48" rx="12" class="change"/><text x="386.0" y="231" class="" text-anchor="middle">算 4</text><text x="28" y="286" class="bold" text-anchor="start">如果计算自己实现了前缀复用</text><rect x="28" y="308" width="464" height="88" rx="12" class="reuse"/><text x="48" y="339" class="bold" text-anchor="start">先找仍然相同的前缀</text><text x="48" y="367" class="small" text-anchor="start">旧状态保留 → 只推算新增的位置</text><rect x="28" y="422" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="455" class="" text-anchor="middle">用 1</text><rect x="132" y="422" width="92" height="48" rx="12" class="reuse"/><text x="178.0" y="455" class="" text-anchor="middle">用 2</text><rect x="236" y="422" width="92" height="48" rx="12" class="reuse"/><text x="282.0" y="455" class="" text-anchor="middle">用 3</text><rect x="340" y="422" width="92" height="48" rx="12" class="new"/><text x="386.0" y="455" class="" text-anchor="middle">算 4</text><text x="28" y="514" class="small" text-anchor="start">缓存整个数组，与复用数组内部是两层。</text>
+</svg>

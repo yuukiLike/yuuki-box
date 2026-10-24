@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="620" viewBox="0 0 520 620" role="img" aria-labelledby="title desc">
+<title id="title">原始输入没变，结果也可能变</title>
+<desc id="desc">累计和从 3、5、2 得到 3、8、10。追加 4 时复用旧结果，只算 14。把第二项改为 8 后，后缀输入即使相同，累计结果也变为 11、13、17。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="620" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">原始输入没变，结果也可能变</text>
+<text x="28" y="88" class="small" text-anchor="start">先有 3、5、2：累计到当前位置</text><rect x="28" y="106" width="92" height="48" rx="12" class="panel"/><text x="74.0" y="139" class="" text-anchor="middle">3</text><rect x="132" y="106" width="92" height="48" rx="12" class="panel"/><text x="178.0" y="139" class="" text-anchor="middle">5</text><rect x="236" y="106" width="92" height="48" rx="12" class="panel"/><text x="282.0" y="139" class="" text-anchor="middle">2</text><rect x="28" y="168" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="201" class="" text-anchor="middle">3</text><rect x="132" y="168" width="92" height="48" rx="12" class="reuse"/><text x="178.0" y="201" class="" text-anchor="middle">8</text><rect x="236" y="168" width="92" height="48" rx="12" class="reuse"/><text x="282.0" y="201" class="" text-anchor="middle">10</text><text x="28" y="253" class="small" text-anchor="start">末尾加 4：旧结果保留，只算 14</text><rect x="28" y="271" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="304" class="" text-anchor="middle">3</text><rect x="132" y="271" width="92" height="48" rx="12" class="reuse"/><text x="178.0" y="304" class="" text-anchor="middle">5</text><rect x="236" y="271" width="92" height="48" rx="12" class="reuse"/><text x="282.0" y="304" class="" text-anchor="middle">2</text><rect x="340" y="271" width="92" height="48" rx="12" class="new"/><text x="386.0" y="304" class="" text-anchor="middle">4</text><rect x="28" y="333" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="366" class="" text-anchor="middle">3</text><rect x="132" y="333" width="92" height="48" rx="12" class="reuse"/><text x="178.0" y="366" class="" text-anchor="middle">8</text><rect x="236" y="333" width="92" height="48" rx="12" class="reuse"/><text x="282.0" y="366" class="" text-anchor="middle">10</text><rect x="340" y="333" width="92" height="48" rx="12" class="new"/><text x="386.0" y="366" class="" text-anchor="middle">14</text><text x="28" y="418" class="small" text-anchor="start">把 5 改为 8：从这里重算后缀</text><rect x="28" y="436" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="469" class="" text-anchor="middle">3</text><rect x="132" y="436" width="92" height="48" rx="12" class="change"/><text x="178.0" y="469" class="" text-anchor="middle">8</text><rect x="236" y="436" width="92" height="48" rx="12" class="panel"/><text x="282.0" y="469" class="" text-anchor="middle">2</text><rect x="340" y="436" width="92" height="48" rx="12" class="panel"/><text x="386.0" y="469" class="" text-anchor="middle">4</text><rect x="28" y="498" width="92" height="48" rx="12" class="reuse"/><text x="74.0" y="531" class="" text-anchor="middle">3</text><rect x="132" y="498" width="92" height="48" rx="12" class="change"/><text x="178.0" y="531" class="" text-anchor="middle">11</text><rect x="236" y="498" width="92" height="48" rx="12" class="change"/><text x="282.0" y="531" class="" text-anchor="middle">13</text><rect x="340" y="498" width="92" height="48" rx="12" class="change"/><text x="386.0" y="531" class="" text-anchor="middle">17</text><text x="28" y="586" class="small" text-anchor="start">绿色＝保留；蓝色＝新增；橙色＝重算</text>
+</svg>

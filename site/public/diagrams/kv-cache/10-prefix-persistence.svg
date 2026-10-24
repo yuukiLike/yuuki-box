@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="555" viewBox="0 0 520 555" role="img" aria-labelledby="title desc">
+<title id="title">相同前缀，也要有可用的缓存单元</title>
+<desc id="desc">简化说明 DeepSeek 的持久化前缀单元。仅存在 P+Q 单元时，P+R 无法完整匹配它。系统可以发现并持久化 P，之后 P+S 才可能命中 P。实际命中尽力提供。</desc>
+<style>
+  .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
+  .reuse{fill:#e6f4ed;stroke:#488365}.new{fill:#eaf1ff;stroke:#5779ba}
+  .change{fill:#fff1dc;stroke:#ab742c}.blocked{fill:#eef0f4;stroke:#c6cdd7}
+  rect{stroke-width:1.5}text{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;fill:#21314b;font-size:24px}
+  .title{font-size:27px;font-weight:650}.small{font-size:21px}.bold{font-weight:650}
+  .arrow{fill:none;stroke:#71809a;stroke-width:2;marker-end:url(#arrow)}
+  .line{fill:none;stroke:#71809a;stroke-width:2}
+  @media(prefers-color-scheme:dark){
+    .canvas{fill:#151e2b}.panel{fill:#222e40;stroke:#52617a}
+    .reuse{fill:#1d3d32;stroke:#70b28e}.new{fill:#263958;stroke:#83a7e4}
+    .change{fill:#493724;stroke:#c9a366}.blocked{fill:#293141;stroke:#566174}
+    text{fill:#edf2fa}.arrow,.line{stroke:#9aa9c0}
+  }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
+<rect class="canvas" x="0" y="0" width="520" height="555" rx="16"/>
+<text x="28" y="43" class="title" text-anchor="start">相同前缀，也要有可用的缓存单元</text>
+<rect x="28" y="76" width="464" height="74" rx="12" class="panel"/><text x="48" y="107" class="bold" text-anchor="start">假设：当前只持久化了 P + Q</text><text x="48" y="135" class="small" text-anchor="start">P 是公共资料；Q、R、S 是不同问题</text><path class="arrow" d="M260 156 L260 180"/><rect x="28" y="190" width="464" height="90" rx="12" class="change"/><text x="48" y="221" class="bold" text-anchor="start">新请求 P + R</text><text x="48" y="249" class="small" text-anchor="start">与完整单元 P + Q 不同，不能直接套用</text><text x="28" y="325" class="small" text-anchor="start">系统可发现 P 并把 P 单独持久化。</text><path class="arrow" d="M260 346 L260 372"/><rect x="28" y="384" width="464" height="90" rx="12" class="reuse"/><text x="48" y="415" class="bold" text-anchor="start">之后再请求 P + S</text><text x="48" y="443" class="small" text-anchor="start">若 P 单元可用，就有机会命中 P</text><text x="28" y="520" class="small" text-anchor="start">有共同前缀 ≠ 当下已有可命中的单元。</text>
+</svg>
