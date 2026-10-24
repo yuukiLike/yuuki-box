@@ -3,6 +3,8 @@
   "private": true,
   "packageManager": "pnpm@11.14.0",
   "scripts": {
-    "docs:dev": "pnpm --dir site dev"
+    "docs:dev": "pnpm --dir site dev",
+    "docs:build": "pnpm --dir site build",
+    "docs:deploy": "pnpm --dir site run deploy"
   }
 }

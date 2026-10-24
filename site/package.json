@@ -9,6 +9,7 @@
     "dev": "astro dev --host 127.0.0.1",
     "check": "astro check",
     "build": "astro build --force && node scripts/verify-build.mjs",
+    "deploy": "pnpm build && wrangler pages deploy dist",
     "preview": "astro preview --host 127.0.0.1",
     "test": "node --test tests/*.test.mjs"
   },
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "@types/node": "^24.0.0",
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "wrangler": "4.152.0"
   }
 }

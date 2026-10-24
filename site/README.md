@@ -10,17 +10,49 @@
 
 ```bash
 pnpm i
+pnpm --dir site i
 pnpm docs:dev
 ```
 
 终端会打印实际预览地址，默认是 `http://127.0.0.1:4321/`。生产构建后的全文搜索可以用 preview 查看：
 
 ```bash
-pnpm --dir site build
+pnpm docs:build
 pnpm --dir site preview
 ```
 
 当前 Astro 的 preview 会管理后台预览进程。查看状态用 `pnpm --dir site exec astro preview status`，停止用 `pnpm --dir site exec astro preview stop`。
+
+## 部署到 Cloudflare Pages
+
+在仓库根目录执行，首次使用先登录 Cloudflare：
+
+```bash
+pnpm --dir site exec wrangler login
+pnpm docs:deploy
+```
+
+首次部署按提示选择或创建 Pages 项目。`docs:deploy` 会先构建文档并校验静态资源，成功后通过 `wrangler pages deploy dist` 上传 `site/dist/`；构建或校验失败时停止，不会发起上传。这是 Cloudflare Pages 的 [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/) 方式。
+
+也可以显式指定项目和分支：
+
+```bash
+pnpm docs:deploy --project-name your-pages-project --branch main
+```
+
+将 `your-pages-project` 替换为实际的 Pages 项目名。分支应与 Pages 项目的生产分支一致；其他分支会创建预览部署。不传 `--branch` 时，Wrangler 使用当前 Git 分支。
+
+如果通过 Pages 控制台连接 Git 仓库自动部署，使用以下[构建配置](https://developers.cloudflare.com/pages/configuration/build-configuration/)：
+
+| 设置 | 值 |
+| --- | --- |
+| 根目录 | `site` |
+| 构建命令 | `pnpm build` |
+| 构建输出目录 | `dist` |
+| 环境变量 `NODE_VERSION` | `24.18.0` |
+| 环境变量 `PNPM_VERSION` | `11.14.0` |
+
+Pages 会在 `site/` 自动安装依赖，再执行构建命令。Node.js 与 pnpm 的版本通过 Pages [构建环境变量](https://developers.cloudflare.com/pages/configuration/build-image/) 设置。
 
 ## 验证
 
