@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1130" viewBox="0 0 800 1130" role="img" aria-labelledby="title desc">
+<title id="title">工具列表与调用入口，都要检查</title>
+<desc id="desc">第一道检查筛选服务端发现的工具，只把允许的列目录与读文件加入模型工具表，新增删除工具留待审查。第二道检查覆盖每次调用，包括直接构造的请求；只有工具、参数和授权全部通过才发出调用，否则拒绝。结果接收有上限，外部文字不会更改权限，服务进程权限另由系统约束。</desc>
+<rect width="800" height="1130" rx="18" fill="#ffffff"/>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">工具列表与调用入口，都要检查</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">设计练习 · 展示清单、执行准入、结果限额。</text>
+<rect x="24" y="119" width="752" height="278" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
+<text x="44" y="154" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">01  发现后：筛选模型可见工具</text>
+<rect x="44" y="181" width="276" height="180" rx="12" fill="#ffffff" stroke="#cad5e3" stroke-width="1.5"/>
+<text x="64" y="216" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#20324d" text-anchor="start">服务端提供</text>
+<text x="64" y="248" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="start">list_directory</text>
+<text x="64" y="277" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="start">read_file</text>
+<text x="64" y="306" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#993f37" text-anchor="start">delete_file  ← 新增</text>
+<polyline points="330,260 437,260" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="430.0,255.45 437,260 430.0,264.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="384" y="239" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#52657c" text-anchor="middle">允许清单</text>
+<rect x="448" y="181" width="304" height="132" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="468" y="216" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#275b40" text-anchor="start">模型可见</text>
+<text x="468" y="248" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#275b40" text-anchor="start">list_directory</text>
+<text x="468" y="277" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#275b40" text-anchor="start">read_file</text>
+<text x="448" y="348" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#993f37" text-anchor="start">新增工具留待明确审查</text>
+<text x="32" y="438" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">02  调用前：再次核对执行资格</text>
+<rect x="200" y="465" width="400" height="72" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="220" y="500" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">每一次调用请求</text>
+<polyline points="400,537 400,575" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="404.55,568.0 400,575 395.45,568.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="400,581 578,650 400,719 222,650" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.8"/>
+<text x="400" y="642" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#20324d" text-anchor="middle">工具、参数、授权</text>
+<text x="400" y="675" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#20324d" text-anchor="middle">全部通过？</text>
+<text x="32" y="585" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">直接构造的请求</text>
+<text x="32" y="612" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">也必须走此检查</text>
+<polyline points="136,624 136,650 214,650" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="207.0,645.45 214,650 207.0,654.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="578,650 688,650 688,721" fill="none" stroke="#993f37" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="692.55,714.0 688,721 683.45,714.0" fill="none" stroke="#993f37" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="614" y="634" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#993f37" text-anchor="start">否</text>
+<rect x="592" y="727" width="176" height="96" rx="12" fill="#fff0ee" stroke="#d3948d" stroke-width="1.5"/>
+<text x="612" y="762" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#993f37" text-anchor="start">拒绝</text>
+<text x="612" y="794" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#993f37" text-anchor="start">不发出调用</text>
+<polyline points="400,719 400,771" fill="none" stroke="#275b40" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="404.55,764.0 400,771 395.45,764.0" fill="none" stroke="#275b40" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="418" y="751" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#275b40" text-anchor="start">是</text>
+<rect x="230" y="778" width="340" height="72" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="250" y="813" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">发出 tools/call</text>
+<polyline points="400,850 400,890" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="404.55,883.0 400,890 395.45,883.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="180" y="896" width="440" height="98" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="200" y="931" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">接收时执行硬上限</text>
+<text x="200" y="963" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">受限保存 → 有界结果 → 交回模型</text>
+<rect x="32" y="1026" width="736" height="78" rx="12" fill="#fff6e4" stroke="#d9b66a" stroke-width="1.5"/>
+<text x="52" y="1061" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#76551d" text-anchor="start">外部文字不会自行改变允许清单</text>
+<text x="52" y="1093" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#76551d" text-anchor="start">进程能访问什么，还要由运行它的系统环境约束。</text>
+</svg>

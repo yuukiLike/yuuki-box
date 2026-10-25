@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="870" viewBox="0 0 800 870" role="img" aria-labelledby="title desc">
+<title id="title">GitHub：一份断言，对照三个版本</title>
+<desc id="desc">同一个 regression.mts 测试分别运行在 baseline、candidate 和显式揭示后的 reference。固定案例预期旧版本目标断言失败，候选通过，官方参考通过。判定还要求当前代码与检查回执匹配。基线和候选各检查过一次即可揭示，候选失败也可以。</desc>
+<rect width="800" height="870" rx="18" fill="#ffffff"/>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">GitHub：一份断言，对照三个版本</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">你来做：跑演示 → 读报告 → 补断言 → 再核对。</text>
+<rect x="140" y="124" width="520" height="94" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="160" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">同一份 regression.mts</text>
+<text x="160" y="191" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">比较时，测试指纹必须一致</text>
+<polyline points="400,218 400,245 144,245 144,276" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="148.55,269.0 144,276 139.45,269.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="400,218 400,245 400,245 400,276" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="404.55,269.0 400,276 395.45,269.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="400,218 400,245 656,245 656,276" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="660.55,269.0 656,276 651.45,269.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="32" y="282" width="224" height="180" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
+<text x="52" y="317" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">baseline</text>
+<text x="52" y="349" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="start">固定的旧版本</text>
+<rect x="46" y="378" width="196" height="65" rx="8" fill="#fff0ee" stroke="#d3948d" stroke-width="1.5"/>
+<text x="144" y="406" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="600" fill="#993f37" text-anchor="middle">目标断言失败</text>
+<text x="144" y="433" font-family="'SFMono-Regular', Consolas, monospace" font-size="18" font-weight="400" fill="#993f37" text-anchor="middle">assertion_failed</text>
+<rect x="288" y="282" width="224" height="180" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
+<text x="308" y="317" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">candidate</text>
+<text x="308" y="349" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="start">自己的修改</text>
+<rect x="302" y="378" width="196" height="65" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="400" y="406" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="600" fill="#275b40" text-anchor="middle">断言通过</text>
+<text x="400" y="433" font-family="'SFMono-Regular', Consolas, monospace" font-size="18" font-weight="400" fill="#275b40" text-anchor="middle">passed</text>
+<rect x="544" y="282" width="224" height="180" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
+<text x="564" y="317" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">reference</text>
+<text x="564" y="349" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="start">揭示后的官方版本</text>
+<rect x="558" y="378" width="196" height="65" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="656" y="406" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="600" fill="#275b40" text-anchor="middle">断言通过</text>
+<text x="656" y="433" font-family="'SFMono-Regular', Consolas, monospace" font-size="18" font-weight="400" fill="#275b40" text-anchor="middle">passed</text>
+<text x="32" y="498" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">揭示条件：基线与候选各检查过一次；候选失败也能揭示。</text>
+<rect x="32" y="530" width="736" height="92" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="52" y="565" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">基线失败 + 当前候选通过</text>
+<text x="52" y="597" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#275b40" text-anchor="start">同一测试、当前源码与回执匹配 → candidate_verified</text>
+<rect x="32" y="641" width="736" height="92" rx="12" fill="#f2eefb" stroke="#b7a7d3" stroke-width="1.5"/>
+<text x="52" y="676" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#665086" text-anchor="start">再用同一测试对照官方版本</text>
+<text x="52" y="708" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#665086" text-anchor="start">参考也通过且匹配当前代码 → reference_checked</text>
+<rect x="32" y="758" width="736" height="86" rx="12" fill="#fff6e4" stroke="#d9b66a" stroke-width="1.5"/>
+<text x="52" y="793" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#76551d" text-anchor="start">测试或源码变了 → 重新检查</text>
+<text x="52" y="825" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#76551d" text-anchor="start">旧的 passed 只证明当时使用的代码与断言。</text>
+</svg>

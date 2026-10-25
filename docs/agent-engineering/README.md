@@ -23,8 +23,8 @@
 | 干到一半，取消、崩溃、再重启 | [Harness：把一次运行管到底](05-harness-vertical-slice.md) | Run/ToolCall 状态机 | 六个状态场景的终态与事件证据 |
 | 聊到第 100 轮，查清慢在哪、贵在哪 | [Harness：上下文与运行报告](06-context-and-report.md) | 事件已持久化 | 有界上下文与能解释开销的报告 |
 | 亲手制造断连、超时和迟到结果 | [Harness：故障演练场](07-scenario-regression.md) | fake model 与 fake server | 可在 CI 重复执行的场景 |
-| 让外部工具第一次进入自己的循环 | [MCP：接成工具源](01-mcp-tool-source.md) | runtime 已有工具与审批 | 一次成功调用、一次拒绝、一次断连处理 |
-| 新工具想进场，先检查通行证 | [MCP：清单与结果限额](02-mcp-policy.md) | 工具源可发现工具 | 未授权工具被拒；超大结果有界 |
+| 让外部工具第一次进入自己的循环 | [MCP：把外部工具接进 Harness](01-mcp-tool-source.md) | runtime 已有工具与审批 | 一次成功调用、一次拒绝、一次断连处理 |
+| 决定哪些外部调用可以执行 | [MCP：调用策略与结果限额](02-mcp-policy.md) | 工具源可发现工具 | 列表和调用入口都检查；未授权请求拒绝；结果有界 |
 | 把反复解释的任务教一遍、存下来 | [Skills：结构与触发](03-skills-structure.md) | 一个稳定重复的任务 | 三次任务的触发与返工对照 |
 | 换个会话，检查它是否真的学会 | [Skills：校验与渐进加载](04-skills-validation.md) | 一个可执行检查命令 | 新会话跑通；坏 fixture 被抓住 |
 

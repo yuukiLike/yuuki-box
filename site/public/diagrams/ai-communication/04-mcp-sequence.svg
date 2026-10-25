@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="890" viewBox="0 0 760 890" role="img" aria-labelledby="title desc">
+<title id="title">MCP：一次调用怎样走到文件</title>
+<desc id="desc">极简示例的主要调用时序。初始化后，客户端 tools/list 发现工具；tools/call 调用 save_checkpoint，服务端写入文件后返回 saved。关闭旧服务，再启动并初始化新服务；客户端调用 resume，新服务读取同一目录的文件并返回原文。图中省略请求ID等字段。</desc>
+<rect width="760" height="890" rx="18" fill="#ffffff"/>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP：一次调用怎样走到文件</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">从上到下读：实线是请求，虚线是返回。</text>
+<rect x="19" y="115" width="182" height="76" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="110" y="146" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="middle">客户端</text>
+<text x="110" y="176" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#275b40" text-anchor="middle">demo / client</text>
+<polyline points="110,191 110,801" fill="none" stroke="#8193ac" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<rect x="299" y="115" width="182" height="76" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="390" y="146" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="middle">服务进程</text>
+<text x="390" y="176" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#2e5185" text-anchor="middle">server.ts</text>
+<polyline points="390,191 390,801" fill="none" stroke="#8193ac" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<rect x="559" y="115" width="182" height="76" rx="12" fill="#f2eefb" stroke="#b7a7d3" stroke-width="1.5"/>
+<text x="650" y="146" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#665086" text-anchor="middle">磁盘文件</text>
+<text x="650" y="176" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#665086" text-anchor="middle">同一目录</text>
+<polyline points="650,191 650,801" fill="none" stroke="#8193ac" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<text x="32" y="222" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#52657c" text-anchor="start">每次连接先由 SDK 完成初始化</text>
+<polyline points="110,266 390,266" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="383.0,261.45 390,266 383.0,270.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="256" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">tools/list</text>
+<polyline points="390,315 110,315" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<polyline points="117.0,319.55 110,315 117.0,310.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="305" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">工具名 + 输入规则</text>
+<polyline points="110,382 390,382" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="383.0,377.45 390,382 383.0,386.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="372" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="400" fill="#20324d" text-anchor="middle">tools/call · save_checkpoint</text>
+<polyline points="390,425 650,425" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="643.0,420.45 650,425 643.0,429.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="520.0" y="415" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#20324d" text-anchor="middle">writeFile + rename</text>
+<polyline points="650,468 390,468" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<polyline points="397.0,472.55 390,468 397.0,463.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="520.0" y="458" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">写入完成</text>
+<polyline points="390,512 110,512" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<polyline points="117.0,516.55 110,512 117.0,507.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="502" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">saved: true</text>
+<rect x="24" y="540" width="712" height="70" rx="12" fill="#fff6e4" stroke="#d9b66a" stroke-width="1.5"/>
+<text x="44" y="569" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#76551d" text-anchor="start">关闭旧服务 → 启动新服务 → 重新初始化</text>
+<text x="44" y="596" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#76551d" text-anchor="start">文件仍保留在磁盘上；两次进程使用同一目录。</text>
+<polyline points="110,654 390,654" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="383.0,649.45 390,654 383.0,658.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="644" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#20324d" text-anchor="middle">tools/call · resume</text>
+<polyline points="390,699 650,699" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="643.0,694.45 650,699 643.0,703.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="520.0" y="689" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">readFile</text>
+<polyline points="650,744 390,744" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<polyline points="397.0,748.55 390,744 397.0,739.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="520.0" y="734" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#20324d" text-anchor="middle">Markdown 原文</text>
+<polyline points="390,789 110,789" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
+<polyline points="117.0,793.55 110,789 117.0,784.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="250.0" y="779" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#20324d" text-anchor="middle">found: true + note</text>
+<rect x="24" y="822" width="712" height="48" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="44" y="857" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="600" fill="#275b40" text-anchor="start">你来找：listTools → callTool → writeFile / readFile</text>
+</svg>

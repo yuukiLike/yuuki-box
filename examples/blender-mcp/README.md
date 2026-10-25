@@ -12,4 +12,4 @@ pnpm --dir examples/blender-mcp demo
 
 演示保留 `.artifacts/` 中的 `.blend`、PNG 与 STL，终端打印实际路径。日常 MCP 输出默认放在 `~/.yuuki/blender/`；`YUUKI_BLENDER_DIR` 可指定其他绝对路径，`BLENDER_BIN` 可指定 Blender 可执行文件。客户端直接启动编译后的 `dist/src/stdio.js`，保留整个目录和 `worker.py`。
 
-教程与接入方式：[第二个 MCP 做一个能拿在手里的模型](../../docs/ai-from-scaling/05-blender-mcp.md)。几何检查通过后仍需在切片软件核对尺寸、壁厚和支撑；本例没有发送打印任务。
+教程与接入方式：[第二个 MCP：让参数变成模型](../../docs/ai-from-scaling/05-blender-mcp.md)。对照俯视与剖面图修改尺寸，再核对输出。几何检查通过后仍需在切片软件核对尺寸、壁厚和支撑；本例没有发送打印任务。

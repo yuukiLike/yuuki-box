@@ -8,9 +8,15 @@
 
 完成开场后进入[第一小时 从缩放定律理解模型](01-understand-models.md)，先回答一个问题：缩放曲线上不断下降的误差，到底是什么误差？
 
-想先做第二个真实工具，可以转到 [Blender MCP：做一个能拿在手里的模型](05-blender-mcp.md)。它沿用 TS 工程，把参数交给本机 Blender，保留可编辑模型、预览图与 STL；这一篇独立于下面的四小时主线。
+想先操作一个真实软件，可以转到 [Blender MCP：让参数变成模型](05-blender-mcp.md)。对着俯视与剖面图改两处尺寸，核对新生成的模型、预览与 STL；这一篇独立于下面的四小时主线。
 
-想把 GitHub 当作 AI 实验场，可以做 [GitHub 实验员：重走一次真实修复](06-github-lab-mcp.md)。从公开 Issue 与旧版本出发，写出能抓住 bug 的断言，尝试修复，再打开官方补丁对照；同样独立于四小时主线。
+想验证一次修改是否有效，可以做 [GitHub MCP：证明一次修复有效](06-github-lab-mcp.md)。用同一份断言对照旧代码、候选与官方修复，再补一条检查，核对新回执；同样独立于四小时主线。
+
+## MCP 练习怎么选
+
+[![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
+
+想看清请求如何往返，读[发现与调用](../ai-communication/04-mcp.md)；准备接入自己的 Agent 时，再做[工具源](../agent-engineering/01-mcp-tool-source.md)和[调用策略](../agent-engineering/02-mcp-policy.md)两篇实现练习。后两篇的接口与状态是待实现方案，正文标出了需要自己补上的部分。
 
 ## 先做 MCP 再进入四小时主线
 

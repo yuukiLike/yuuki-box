@@ -84,4 +84,4 @@ Fake model 不应复制生产逻辑。它只负责产生确定的输入，让 Ha
 - 当前协议：[PROTOCOL.md](../../examples/shared/runtime/PROTOCOL.md)
 - UI 场景实验的计量与维护练习：[十五个 Harness 场景](../learning/harness-scenario-lab.md)
 
-返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[MCP：接上第一个外部工具](01-mcp-tool-source.md)。
+返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[MCP：把外部工具接进 Harness](01-mcp-tool-source.md)。

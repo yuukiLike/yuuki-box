@@ -2,7 +2,7 @@
 
 用 TypeScript、官方 MCP SDK、Octokit 与 Zod，把开源修复变成可以验证、复盘的实验。搜索项目，寻找已合并的小型修复，先读旧代码和原始 Issue，写回归断言，尝试修复，最后打开官方补丁做对照。
 
-完整跟做：[GitHub：把一次真实修复变成实验](../../docs/ai-from-scaling/06-github-lab-mcp.md)。
+完整跟做：[GitHub MCP：证明一次修复有效](../../docs/ai-from-scaling/06-github-lab-mcp.md)。对照三版本结果图，补一条断言，再核对测试与源码指纹。
 
 ## 跑一次真实实验
 

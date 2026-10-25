@@ -34,8 +34,8 @@ export default defineConfig({
             { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
             { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
             { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
-            { slug: 'ai-from-scaling/05-blender-mcp', label: '第二个 MCP：Blender 建模' },
-            { slug: 'ai-from-scaling/06-github-lab-mcp', label: 'GitHub：重走一次真实修复' },
+            { slug: 'ai-from-scaling/05-blender-mcp', label: 'Blender：让参数变成模型' },
+            { slug: 'ai-from-scaling/06-github-lab-mcp', label: 'GitHub：证明一次修复有效' },
           ],
         },
         {
@@ -85,8 +85,8 @@ export default defineConfig({
             {
               label: '再接外部工具 · MCP',
               items: [
-                { slug: 'agent-engineering/01-mcp-tool-source', label: '接上第一个外部工具' },
-                { slug: 'agent-engineering/02-mcp-policy', label: '给工具发一张有限的通行证' },
+                { slug: 'agent-engineering/01-mcp-tool-source', label: '把外部工具接进 Harness' },
+                { slug: 'agent-engineering/02-mcp-policy', label: '决定哪些工具可以执行' },
               ],
             },
             {
@@ -110,7 +110,7 @@ export default defineConfig({
                 { slug: 'ai-communication/01-rpc', label: '1 · 请另一个程序读笔记' },
                 { slug: 'ai-communication/02-json-rpc', label: '2 · 让回答找到对应请求' },
                 { slug: 'ai-communication/03-sse', label: '3 · 一边接收，一边显示' },
-                { slug: 'ai-communication/04-mcp', label: '4 · 让应用调用工具' },
+                { slug: 'ai-communication/04-mcp', label: '4 · 看清 MCP 的发现与调用' },
                 { slug: 'ai-communication/05-failure', label: '5 · 停止等待后，对方还在做吗' },
                 { slug: 'ai-communication/06-yuuki', label: '6 · 回到自己的代码' },
               ],
