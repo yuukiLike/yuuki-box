@@ -8,6 +8,8 @@
 
 独立的 TypeScript MCP 实验：[项目接续记录](../docs/ai-from-scaling/00-minimal-mcp.md)、[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
 
+[音乐空间 MCP](music-space-mcp/README.md) 对应课程末章的两个选修案例：可环绕观察并导出 GLB 的 MIDI 声部之结与分层光之剧场，可交互、保存配置并导出带声音的 MP4。
+
 新增「场景实验」：**每条路线三个 Harness 场景，共十五个，每个都能切换朴素 / 优化实际实现。** 覆盖历史重复解析、长列表、主线程计算、桥接流量、原生控件身份、取消和控制响应。它们使用有界的本地数据，不需要 key 或模型；指标在你主动运行后产生。操作与源码阅读见[完整场景手册](../docs/learning/harness-scenario-lab.md)，具体负载和计量边界见各路线 README。场景实现针对不同架构边界，不能直接用跨路线的毫秒排框架名次。
 
 ## 选一条开始

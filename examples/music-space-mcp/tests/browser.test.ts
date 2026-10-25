@@ -1,0 +1,88 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { promisify } from 'node:util';
+import { execFile } from 'node:child_process';
+import test from 'node:test';
+import { startPreview } from '../src/http.js';
+import { launchBrowser, exportClip } from '../src/render.js';
+import { decodeOwnWav, ffmpeg } from '../src/media.js';
+import { fixture } from './helpers.js';
+
+test('浏览器验证小节定位、独听、真实音频输出、深度调整与配置下载', async t => {
+  const f = await fixture(t);
+  const score = await f.store.create(f.music.assetId, 'score', { title: '浏览器声部实验' });
+  const audio = await f.store.import(join(f.store.root, 'assets', f.music.assetId, 'track-1.wav'));
+  const photo = await f.store.create(audio.assetId, 'photo', { title: '浏览器剧场实验', imagePath: fileURLToPath(new URL('../../assets/theatre.png', import.meta.url)),
+    layers: [{ path: fileURLToPath(new URL('../../assets/proscenium.png', import.meta.url)), depth: 2.4 },
+      { path: fileURLToPath(new URL('../../assets/silk.png', import.meta.url)), depth: 5 }] });
+  const preview = await startPreview(f.store); t.after(() => preview.close());
+  const browser = await launchBrowser(); t.after(() => browser.close());
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(`${preview.origin}/?scene=${score.sceneId}&backend=webgl`);
+  await page.waitForFunction(() => !!window.musicSpace);
+  await page.getByRole('button', { name: '第 8 小节', exact: true }).click();
+  await page.waitForFunction(() => document.getElementById('bar-label')?.textContent === '第 8 小节');
+  assert.equal((await f.store.scene(score.sceneId)).transport.position, f.music.bars[7]?.time);
+  await page.getByRole('button', { name: '独听 Counterline', exact: true }).click();
+  await page.waitForFunction(() => window.musicSpace.snapshot().audibleTrackIds.join() === 'track-2');
+  await page.locator('#play').click();
+  await page.waitForFunction(() => window.musicSpace.snapshot().audioState === 'running' && window.musicSpace.snapshot().meter > 0.001);
+  const originalAzimuth = (await f.store.scene(score.sceneId)).camera.azimuth;
+  const box = await page.locator('#stage canvas').boundingBox(); assert.ok(box);
+  await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5);
+  await page.mouse.down(); await page.mouse.move(box.x + box.width * 0.6, box.y + box.height * 0.5, { steps: 5 }); await page.mouse.up();
+  await page.waitForFunction(() => document.getElementById('message')?.textContent === '调整已保存。');
+  assert.notEqual((await f.store.scene(score.sceneId)).camera.azimuth, originalAzimuth);
+  assert.equal((await page.evaluate(() => window.musicSpace.snapshot())).audioState, 'running');
+  await page.locator('#play').click();
+  await page.waitForFunction(() => document.getElementById('play')?.textContent === '播放');
+  assert.equal((await f.store.scene(score.sceneId)).transport.playing, false);
+  await page.goto(`${preview.origin}/?scene=${photo.sceneId}`);
+  await page.waitForFunction(() => !!window.musicSpace);
+  await page.evaluate(() => window.musicSpace.frame(5));
+  const before = await page.locator('#stage canvas').screenshot();
+  await page.locator('#depth').evaluate(input => {
+    (input as HTMLInputElement).value = '1.5'; input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForFunction(() => document.getElementById('message')?.textContent === '调整已保存。');
+  await page.evaluate(() => window.musicSpace.frame(5));
+  const after = await page.locator('#stage canvas').screenshot();
+  assert.notDeepEqual(before, after);
+  assert.equal((await f.store.scene(photo.sceneId)).photo.depthStrength, 1.5);
+  await page.locator('#play').click();
+  await page.waitForFunction(() => window.musicSpace.snapshot().audioState === 'running' && window.musicSpace.snapshot().meter > 0.001);
+  await page.locator('#play').click();
+  await page.waitForFunction(() => document.getElementById('play')?.textContent === '播放');
+  const downloaded = page.waitForEvent('download'); await page.locator('#save').click();
+  const file = await downloaded; const path = await file.path(); assert.ok(path);
+  const saved: unknown = JSON.parse(await readFile(path, 'utf8'));
+  assert.ok(typeof saved === 'object' && saved && 'sceneId' in saved && saved.sceneId === photo.sceneId);
+  const denied = await fetch(`${preview.origin}/api/transport`, { method: 'POST', headers: { origin: 'https://example.com', 'content-type': 'application/json' }, body: JSON.stringify({ sceneId: score.sceneId, time: 0 }) });
+  assert.equal(denied.status, 403);
+  assert.equal((await fetch(`${preview.origin}/media/scenes/${photo.sceneId}/scene.json`)).status, 404);
+  assert.deepEqual(errors, []);
+  console.log('浏览器照片场景后端：', (await page.evaluate(() => window.musicSpace.snapshot())).backend);
+});
+
+test('导出有真实图像与 AAC 音轨，独听选择进入导出，保留固定配置回执', async t => {
+  const f = await fixture(t); const scene = await f.store.create(f.music.assetId, 'score', {});
+  await f.store.transport({ sceneId: scene.sceneId, soloTrackIds: ['track-2'] });
+  const preview = await startPreview(f.store); t.after(() => preview.close());
+  await assert.rejects(() => exportClip(f.store, scene.sceneId, preview.origin, { start: 1000, duration: 1, fps: 24, width: 640 }), /超过/);
+  const exported = await exportClip(f.store, scene.sceneId, preview.origin, { start: 5, duration: 0.5, fps: 24, width: 640 });
+  assert.equal(exported.frames, 12); assert.ok(exported.bytes > 1000);
+  const directory = join(exported.path, '..');
+  const mix = decodeOwnWav(await readFile(join(directory, 'audio.wav')));
+  const source = decodeOwnWav(await readFile(join(f.store.root, 'assets', f.music.assetId, 'track-2.wav')));
+  for (let i = 0; i < source.length; i += 1000) assert.ok(Math.abs((mix[i] ?? 0) - (source[i] ?? 0) * 0.7) < 0.00006);
+  const decoded = join(f.directory, 'mp4-audio.wav');
+  await ffmpeg(['-i', exported.path, '-vn', '-ac', '1', '-ar', '22050', '-c:a', 'pcm_s16le', decoded]);
+  assert.ok(decodeOwnWav(await readFile(decoded)).some(value => Math.abs(value) > 0.01));
+  const probe = await promisify(execFile)(process.env.FFPROBE_BIN ?? 'ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_type,codec_name,width,height', '-of', 'json', exported.path]);
+  assert.ok(probe.stdout.includes('h264')); assert.ok(probe.stdout.includes('aac')); assert.ok(probe.stdout.includes('640'));
+  const receipt = await readFile(join(directory, 'receipt.json'), 'utf8'); assert.ok(receipt.includes('track-2'));
+  await writeFile(join(f.directory, 'verification.txt'), '已完成视频与音频验证。');
+});

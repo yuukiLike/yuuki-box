@@ -120,4 +120,4 @@ STL 不携带单位；本例保留毫米数值，切片时按毫米解释。闭�
 
 接口资料：[Blender Python API](https://docs.blender.org/api/5.2/info_overview.html) · [布尔运算](https://docs.blender.org/manual/en/latest/modeling/modifiers/generate/booleans.html) · [STL 导出源码中的单位处理](https://github.com/blender/blender/blob/main/source/blender/io/stl/exporter/stl_export.cc)。
 
-返回[课程总览](README.md) · [第一个 MCP](00-minimal-mcp.md)。第三个 music-eyes MCP 的用途，留到本例完成后再讨论。
+返回[课程总览](README.md) · [第一个 MCP](00-minimal-mcp.md) · [下一项实践：GitHub 实验员](06-github-lab-mcp.md)。

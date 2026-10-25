@@ -36,6 +36,14 @@ export default defineConfig({
             { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
             { slug: 'ai-from-scaling/05-blender-mcp', label: '第二个 MCP：Blender 建模' },
             { slug: 'ai-from-scaling/06-github-lab-mcp', label: 'GitHub：重走一次真实修复' },
+            {
+              label: '末章选修：音乐 MCP',
+              collapsed: true,
+              items: [
+                { slug: 'ai-from-scaling/07-music-space-mcp', label: '选修 1：声部之结' },
+                { slug: 'ai-from-scaling/08-music-photo-mcp', label: '选修 2：光之剧场' },
+              ],
+            },
           ],
         },
         {
