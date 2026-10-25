@@ -11,32 +11,40 @@ async function main(): Promise<void> {
   const directory = await mkdtemp(join(tmpdir(), 'yuuki-continue-demo-'));
   try {
     await withClient(directory, async (client) => {
-      console.log('协议版本：', client.getNegotiatedProtocolVersion());
+      console.log(`[MCP] 连接已建立 | 协议版本：${client.getNegotiatedProtocolVersion()}`);
       const { tools } = await client.listTools();
-      console.log('发现工具：', tools.map((tool) => tool.name).join(', '));
+      console.log(`[MCP] tools/list → ${tools.map((tool) => tool.name).join(', ')}`);
       const checkpoint: CheckpointInput = {
         project: values.invalid ? '../outside' : 'yuuki-box',
-        context: '已读完 MCP 开场，知道客户端会发现和调用工具。',
-        next: '打开 src/server.ts，找到 save_checkpoint 真正写入文件的位置。',
-        stopWhen: '能解释记录为什么在服务进程重启后仍然存在。',
+        context: '本次实验：发现工具、保存记录，并在服务进程重启后读取。',
+        next: '打开 examples/minimal-mcp/src/server.ts，对照 writeFile() 与 readFile()。',
+        stopWhen: '能区分 MCP 的发现与调用，以及工具实现的文件持久化。',
       };
+      console.log(`[MCP] tools/call → save_checkpoint | project=${checkpoint.project}`);
       const result = await callTool(client, 'save_checkpoint', checkpoint, saveCheckpointOutputSchema);
-      console.log('留下记录：', result.saved);
+      console.log(`[结果] 保存成功 | saved=${result.saved}`);
+      console.log(`[文件] ${result.path}`);
     });
 
-    console.log('关闭连接，再启动一个服务进程。');
+    // 重启验证工具的文件持久化；发现工具已由前面的 tools/list 完成。
+    console.log('[演示] 原服务进程已关闭；使用同一存储目录启动新进程。');
     await withClient(directory, async (client) => {
+      console.log('[MCP] tools/call → resume | project=yuuki-box');
       const result = await callTool(client, 'resume', { project: 'yuuki-box' }, resumeOutputSchema);
       if (!result.found) throw new Error('重启后没有找到刚保存的记录。');
       // 检查 found 后，TS 知道这里必定有 note。
-      console.log('重启后取回：\n' + result.note);
+      console.log(`[结果] 读取成功 | found=${result.found}`);
+      console.log(`[文件] ${result.path}`);
+      console.log('\n--- resume 返回的 Markdown ---\n' + result.note + '--- Markdown 结束 ---');
+      console.log('[验证] 新进程已从同一文件读回记录。');
     });
   } finally {
     await rm(directory, { recursive: true, force: true });
+    console.log('[清理] 演示临时目录已删除。');
   }
 }
 
 main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  console.error('[失败]', error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
 });

@@ -4,11 +4,20 @@
 
 用“保存一段文字，再取回”做实验。服务端提供两个工具：`save_checkpoint` 把文字写进 Markdown 文件，`resume` 读出原文。客户端通过 MCP 调用它们。
 
-**你要做的事：运行一次 → 找到调用与读写代码 → 改一句话再运行 → 试一次错误输入。** 完成后，你能指出文字经过了哪里，以及服务进程重启后为什么还能取回它。整段练习约 30 分钟，可以分步完成。
+先分清这次实验里的两件事：
+
+| 你看到的过程 | 它在说明什么 |
+| --- | --- |
+| `tools/list` 获取清单 → `tools/call` 调用工具 → 收到结果 | **MCP 的发现与调用。** 客户端按协议使用服务端的工具。 |
+| 保存文件 → 重启服务进程 → 读取同一文件 | **工具实现的持久化。** 记录来自磁盘上的 Markdown；MCP 不会自动替工具保存业务数据。 |
+
+**工具发现看 `tools/list`；“重启后取回”用来验证文件持久化。** 重启不是发现工具的必要步骤，只是为了让你看清服务进程的内存和磁盘文件的区别。
+
+**你要做的事：运行一次 → 找到调用与读写代码 → 改一句话再运行 → 试一次错误输入。** 完成后，你能指出 MCP 负责哪一段，文件读写由谁实现。整段练习约 30 分钟，可以分步完成。
 
 ## 教学流程与你的操作
 
-[![第一课流程：运行 demo 看结果，找到调用与读写代码，修改 next 后核对输出，运行 demo --invalid 观察拒绝](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
+[![第一课流程：运行 demo，区分 MCP 发现与调用和文件持久化；定位代码，修改 next，再验证错误输入](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
 
 ## 1. 运行：先看到完整结果
 
@@ -19,22 +28,40 @@ pnpm --dir examples/minimal-mcp install --frozen-lockfile
 pnpm --dir examples/minimal-mcp demo
 ```
 
-**你要看到：** 输出中依次出现工具名、保存成功，以及重启后取回的文字：
+**你要看到：** 输出标明了 MCP 方法、工具名、执行状态和实际文件路径。下面省略启动日志与部分记录，`<临时目录>` 在实际运行时会显示为本机路径：
 
 ```text
-发现工具： save_checkpoint, resume
-留下记录： true
-关闭连接，再启动一个服务进程。
-重启后取回：
+[MCP] tools/list → save_checkpoint, resume
+[MCP] tools/call → save_checkpoint | project=yuuki-box
+[结果] 保存成功 | saved=true
+[文件] <临时目录>/yuuki-box.md
+[演示] 原服务进程已关闭；使用同一存储目录启动新进程。
+[MCP] tools/call → resume | project=yuuki-box
+[结果] 读取成功 | found=true
+[文件] <临时目录>/yuuki-box.md
+
+--- resume 返回的 Markdown ---
 # yuuki-box
 ……
 ## 下一步
-打开 src/server.ts，找到 save_checkpoint 真正写入文件的位置。
+打开 examples/minimal-mcp/src/server.ts，对照 writeFile() 与 readFile()。
+……
+--- Markdown 结束 ---
+[验证] 新进程已从同一文件读回记录。
+[清理] 演示临时目录已删除。
 ```
 
-启动新进程、保存、取回都由演示自动完成。安装依赖后，这次运行不联网，不需要模型或 API key。输出中的学习进度和“下一步”来自 `demo.ts` 预先填写的示例文字。
+按三个观察点读这段输出：
 
-**这一步完成的标志：** 你看到了 `留下记录：true`，以及 `重启后取回：` 后面的原文。已经得到这份输出，就从第 2 步继续。
+1. **发现：** `tools/list` 返回两个工具名，说明客户端拿到了工具清单。到这里，工具发现已经完成。
+2. **调用：** `tools/call → save_checkpoint` 后出现 `saved=true`，说明客户端调用了具体工具并收到了成功结果。这里已经走完一次 MCP 工具调用。
+3. **持久化：** 重启后，`tools/call → resume` 返回 `found=true` 和原文。前后两行 `[文件]` 指向同一路径，说明新进程读取了先前保存的文件。
+
+这些带方括号的行是演示客户端的日志；MCP 请求和响应由 SDK 收发。`saved`、`found` 和 `path` 是本例工具定义的结果字段，MCP 不规定每个工具都返回这些字段。
+
+启动新进程、保存、取回都由演示自动完成。安装依赖后，这次运行不联网，不需要模型或 API key。记录中的实验说明和“下一步”来自 `demo.ts` 预先填写的示例文字，不是模型对你的学习进度作出的判断。
+
+**这一步完成的标志：** 你能把输出里的“发现工具”“调用工具”和“文件持久化”分别指出来。看到两个成功结果后，从第 2 步继续。
 
 ## 2. 定位：谁调用，谁真正读写文件
 
@@ -51,7 +78,7 @@ await writeFile(temporaryPath, note, { flag: 'wx', mode: 0o600 });
 await rename(temporaryPath, path);
 ```
 
-输入先被整理成 Markdown 字符串 `note`，再写进临时文件，用 `rename()` 替换正式文件。这样读取方不会碰到只写了一半的记录。写完后，`toolResult({ saved: true, project, path })` 把成功结果交回客户端，所以终端会打印 `留下记录：true`。
+输入先被整理成 Markdown 字符串 `note`，再写进临时文件，用 `rename()` 替换正式文件。这样读取方不会碰到只写了一半的记录。写完后，`toolResult({ saved: true, project, path })` 把成功结果交回客户端，所以终端会打印 `[结果] 保存成功 | saved=true` 和文件路径。
 
 再看取回函数中的这一行：
 
@@ -61,7 +88,11 @@ const note = await readFile(path, 'utf8');
 
 两次服务进程使用同一个目录和项目名，所以能找到同一份文件。**进程退出会释放内存，已经写到磁盘上的文件仍然存在。** 新进程读取文件，再把原文返回给客户端。
 
-演示在 `demo.ts` 中创建临时目录，两次 `withClient(directory, ...)` 共用它，整个演示结束后才清理。这里观察的是一次演示内跨服务进程的保存与取回。
+具体看目录怎样传递：`demo.ts` 用 `mkdtemp()` 创建临时目录，两次 `withClient(directory, ...)` 共用它；`client.ts` 通过 `YUUKI_CONTINUE_DIR` 把目录传给新服务进程；`server.ts` 用目录加上 `${project}.md` 定位文件。整个演示结束后才删除该目录。
+
+**这里没有把记录存入 `sessions`，也没有恢复原来的 MCP 连接。** 每次 `withClient()` 都新建客户端连接和服务进程。这个示例独立使用 Markdown 文件，不依赖其他章节 Harness 的 `sessions.json`。演示中的 `resume` 只是我们给“读取项目记录”这个工具起的名字，不是 MCP 内置的会话恢复方法。
+
+**MCP 在这里的价值，是让客户端按统一协议发现和调用这两个读写工具。** 文件持久化由 `server.ts` 自己实现：即使不用 MCP，普通程序也能写入并读回文件；而只有 MCP 连接、没有存储实现，也不会自动留下这份记录。
 
 **这一步完成的标志：** 你能在代码中指出“调用从哪里发出”和“文件在哪里读写”，并解释新进程为什么能读到旧记录。
 
@@ -79,7 +110,7 @@ next: '我改了这句话，重启后还能读到。',
 pnpm --dir examples/minimal-mcp demo
 ```
 
-**你要看到：** `重启后取回：` 下的对应内容变成：
+**你要看到：** `resume 返回的 Markdown` 中的对应内容变成：
 
 ```text
 ## 下一步
@@ -98,7 +129,7 @@ pnpm --dir examples/minimal-mcp demo
 pnpm --dir examples/minimal-mcp demo --invalid
 ```
 
-**你要看到：** 参数错误，命令以非零状态退出。这次演示会把项目名改成 `../outside`；保存请求被拒绝，不会打印 `留下记录：true`。
+**你要看到：** `[失败]` 日志中的参数错误，命令以非零状态退出。这次演示会把项目名改成 `../outside`；保存请求被拒绝，不会打印 `[结果] 保存成功`。
 
 打开 [contracts.ts](../../examples/minimal-mcp/src/contracts.ts)，找到 `projectSchema` 的 `.regex(...)`。它限定了项目名的格式，`../outside` 不符合规则。再回到 `server.ts`，找到注册工具时传入的 `inputSchema: saveCheckpointInputSchema`：SDK 会按这份规则检查输入。
 
@@ -108,8 +139,8 @@ pnpm --dir examples/minimal-mcp demo --invalid
 
 用自己的话说清下面三件事，就完成了这一课：
 
-1. 客户端在哪里发现和调用工具，服务端在哪里执行文件读写。
-2. 你修改的 `next` 怎样进入文件，又为什么能被新进程读回。
+1. `tools/list` 怎样发现工具，`tools/call` 怎样发起调用；服务端在哪里执行文件读写。
+2. 你修改的 `next` 怎样进入 Markdown 文件；新进程能读回它，为什么是存储实现的效果。
 3. `../outside` 为什么被拒绝，输入规则定义在哪里。
 
 下面是需要时再查的细节。想继续主线，可以回到[课程总览](README.md)，进入[第一小时 从缩放定律理解模型](01-understand-models.md)。

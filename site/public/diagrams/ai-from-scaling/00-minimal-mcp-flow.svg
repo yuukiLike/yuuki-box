@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="824" viewBox="0 0 680 824" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="920" viewBox="0 0 680 920" role="img" aria-labelledby="title desc">
   <title id="title">第一课：看懂一次 MCP 工具调用</title>
-  <desc id="desc">四步教学流程及你的操作：一，运行 demo，看到发现工具、保存和重启后取回；二，找到 callTool、writeFile 与 readFile，理解调用和执行；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。完成后能指出调用路径，并解释记录为什么能在服务进程重启后取回。</desc>
+  <desc id="desc">四步教学流程及你的操作：一，运行 demo，区分 MCP 的工具发现与调用，以及工具实现的文件持久化；二，找到 callTool、writeFile 与 readFile；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。tools/list 展示工具发现；服务重启后读取同一 Markdown 文件，验证的是文件持久化，不是 MCP 自动记忆。</desc>
   <style>
     .canvas { fill: #ffffff; }
     .step { fill: #f4f6fa; stroke: #c9d1df; stroke-width: 1.5; }
@@ -15,18 +15,18 @@
     .arrow { fill: none; stroke: #71809a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   </style>
 
-  <rect class="canvas" width="680" height="824" rx="16"/>
+  <rect class="canvas" width="680" height="920" rx="16"/>
   <text class="title" x="32" y="52">看懂一次 MCP 工具调用</text>
-  <text class="body" x="32" y="88">先看结果，再找代码，最后亲手验证。</text>
+  <text class="body" x="32" y="88">MCP 负责发现与调用，工具负责文件读写。</text>
   <text class="label" x="48" y="137">教学流程</text>
   <text class="label" x="392" y="137">你来做</text>
 
   <rect class="step" x="24" y="158" width="632" height="108" rx="12"/>
-  <text class="heading" x="48" y="201">01  看到完整结果</text>
-  <text class="body" x="48" y="238">发现 → 保存 → 重启 → 取回</text>
+  <text class="heading" x="48" y="201">01  分清两种职责</text>
+  <text class="body" x="48" y="238">协议调用 / 文件持久化</text>
   <rect class="action" x="372" y="174" width="268" height="76" rx="8"/>
   <text class="action-title" x="392" y="205">运行 demo</text>
-  <text class="action-note" x="392" y="234">看“重启后取回”</text>
+  <text class="action-note" x="392" y="234">看 [MCP] / [文件]</text>
   <path class="arrow" d="M340 274 V296 M334 290 L340 296 L346 290"/>
 
   <rect class="step" x="24" y="306" width="632" height="108" rx="12"/>
@@ -52,6 +52,8 @@
   <text class="action-title" x="392" y="649">运行 demo --invalid</text>
   <text class="action-note" x="392" y="678">找到 projectSchema</text>
 
-  <text class="body" x="32" y="758">完成：指出谁发起调用、谁读写文件；</text>
-  <text class="body" x="32" y="790">说明重启后为什么还能取回。</text>
+  <text class="body" x="32" y="758">MCP：tools/list 发现，tools/call 调用。</text>
+  <text class="body" x="32" y="790">持久化：写入文件 → 重启服务 → 读取同一文件。</text>
+  <text class="body" x="32" y="852">完成：指出谁发起调用、谁读写文件；</text>
+  <text class="body" x="32" y="884">能说明重启验证的是文件持久化。</text>
 </svg>
