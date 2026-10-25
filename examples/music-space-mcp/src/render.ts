@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright';
-import { type MusicScene } from './contracts.js';
+import { toolCallSchema, type MusicScene } from './contracts.js';
 import { decodeOwnWav, ffmpeg, wav } from './media.js';
 import { atomicJson, MusicStore } from './store.js';
 import { audibleTracks } from './timeline.js';
@@ -14,6 +14,23 @@ export async function launchBrowser(): Promise<Browser> {
     ...(executable ? { executablePath: executable } : existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome') ? { channel: 'chrome' } : {}),
     headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader'],
   });
+}
+
+export async function renderWorkbench(root: string, previewUrl: string, sceneId: string, tool: string, filename: string): Promise<string> {
+  const browser = await launchBrowser();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+    await page.goto(`${previewUrl}&backend=webgl`); await page.waitForFunction(() => !!window.musicSpace);
+    const records = toolCallSchema.array().parse(JSON.parse(await readFile(join(root, 'tool-calls.json'), 'utf8')));
+    const record = records.findLast(record => record.arguments.sceneId === sceneId && record.name === tool && !record.error);
+    if (!record) throw new Error(`没有找到用于展示的真实 ${tool} 调用。`);
+    await page.locator(`[data-call="${record.id}"]`).click(); await page.locator('#toggle-console').click();
+    await page.evaluate(async () => {
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+      await window.musicSpace.frame(window.musicSpace.snapshot().time);
+    });
+    const path = join(root, filename); await page.screenshot({ path }); return path;
+  } finally { await browser.close(); }
 }
 
 async function openCapture(store: MusicStore, scene: MusicScene, origin: string, width: number, signal?: AbortSignal) {
@@ -42,20 +59,19 @@ export async function renderPreview(store: MusicStore, sceneId: string, origin: 
     const frame = await capture.page.evaluate(time => window.musicSpace.frame(time), time);
     const path = join(capture.directory, 'preview.png');
     await capture.page.screenshot({ path, type: 'png' });
-    return { path, time, backend: frame.backend, width: 1280, height: 720 };
+    return { path, downloadUrl: `${origin}/exports/${sceneId}/${basename(capture.directory)}/preview.png`, time, backend: frame.backend, width: 1280, height: 720 };
   } finally { await capture.close(); }
 }
 
 export async function exportModel(store: MusicStore, sceneId: string, origin: string, time: number, signal?: AbortSignal) {
   const scene = await store.scene(sceneId); const music = await store.music(scene.assetId);
-  if (scene.mode !== 'score') throw new Error('GLB 导出只适用于声部之结。');
   if (time > music.duration) throw new Error('模型时间超过音乐时长。');
   const capture = await openCapture(store, scene, origin, 640, signal);
   try {
     await capture.page.evaluate(time => window.musicSpace.frame(time), time);
     const data = Buffer.from(await capture.page.evaluate(() => window.musicSpace.model()), 'base64');
-    const path = join(capture.directory, 'phrase-knot.glb'); await writeFile(path, data);
-    return { path, bytes: data.length, time, revision: scene.revision };
+    const path = join(capture.directory, 'scene-model.glb'); await writeFile(path, data);
+    return { path, downloadUrl: `${origin}/exports/${sceneId}/${basename(capture.directory)}/scene-model.glb`, bytes: data.length, time, revision: scene.revision };
   } finally { await capture.close(); }
 }
 
@@ -95,7 +111,7 @@ export async function exportClip(store: MusicStore, sceneId: string, origin: str
       '-ss', String(options.start), '-i', audioPath,
       '-frames:v', String(frames), '-t', String(duration), '-c:v', 'libx264', '-preset', 'fast', '-crf', '19',
       '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', path], signal);
-    const result = { path, bytes: (await stat(path)).size, frames, duration, backend };
+    const result = { path, downloadUrl: `${origin}/exports/${sceneId}/${basename(capture.directory)}/clip.mp4`, bytes: (await stat(path)).size, frames, duration, backend };
     await atomicJson(join(capture.directory, 'receipt.json'), { sceneId, revision: scene.revision, ...options, ...result,
       soloTrackIds: scene.transport.soloTrackIds, createdAt: new Date().toISOString() });
     return result;

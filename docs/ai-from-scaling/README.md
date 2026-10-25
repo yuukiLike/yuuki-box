@@ -88,8 +88,8 @@ node --version
 
 | 选修章节 | 内容 |
 | --- | --- |
-| [音乐 1：声部之结](07-music-space-mcp.md) | 把 MIDI 折成可编辑的音乐雕塑，练习独听、配置保存与 GLB 导出 |
-| [音乐 2：光之剧场](08-music-photo-mcp.md) | 用透明图层、音乐包络与灯光关键帧制作 2.5D 舞台短片 |
+| [音乐 1：钢琴排练台](07-music-space-mcp.md) | 用 MCP 定位小节、独听声部、核对琴键，保存练习预览与 GLB |
+| [音乐 2：舞台预演台](08-music-photo-mcp.md) | 读取对象、调整音箱与屏幕、切换机位，导出预演图和模型 |
 
 两篇共用同一个 TypeScript MCP，可保存场景、重新打开和导出 MP4，独立于 music-eyes。
 

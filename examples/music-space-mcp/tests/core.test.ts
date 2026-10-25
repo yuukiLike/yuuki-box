@@ -83,6 +83,17 @@ test('同版本并发更新只接受一次，过期配置和非法关键帧不�
   assert.equal((await f.store.scene(scene.sceneId)).revision, 2);
 });
 
+test('机位与部件参数保存恢复；非法参数不会覆盖模型配置', async t => {
+  const f = await fixture(t); const scene = await f.store.create(f.music.assetId, 'score', {});
+  const updated = await f.store.update({ sceneId: scene.sceneId, expectedRevision: scene.revision,
+    presentation: { view: 'detail' }, model: { lidAngle: 45, showGuide: false } });
+  assert.equal(updated.camera.distance, 11); assert.equal(updated.model.lidAngle, 45); assert.equal(updated.presentation.view, 'detail');
+  const restored = await new MusicStore(f.store.root).scene(scene.sceneId); assert.deepEqual(restored, updated);
+  assert.ok((await f.store.inspect(scene.sceneId)).objects.some(object => object.id === 'piano.lid' && object.controls.includes('model.lidAngle')));
+  await assert.rejects(() => f.store.update({ sceneId: scene.sceneId, expectedRevision: updated.revision, model: { lidAngle: 90 } }));
+  assert.equal((await f.store.scene(scene.sceneId)).revision, updated.revision);
+});
+
 test('照片深度来源明确；支持提供深度图，宽高比错误不会留下半成品场景', async t => {
   const f = await fixture(t);
   const image = join(f.directory, 'image.png'); const depth = join(f.directory, 'depth.png');

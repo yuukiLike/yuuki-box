@@ -23,8 +23,11 @@ test('真实 stdio MCP：发现九个工具，拒绝坏输入，场景跨服务�
     const glb = await readFile(model.path);
     assert.equal(glb.toString('ascii', 0, 4), 'glTF'); assert.equal(glb.readUInt32LE(4), 2); assert.equal(glb.readUInt32LE(8), glb.length);
     const document = JSON.parse(glb.toString('utf8', 20, 20 + glb.readUInt32LE(12))) as { meshes: unknown[]; nodes: { name?: string }[] };
-    assert.equal(document.meshes.length, 3);
-    assert.deepEqual(document.nodes.map(node => node.name).filter(name => ['Melody', 'Counterline', 'Bass'].includes(name ?? '')).sort(), ['Bass', 'Counterline', 'Melody']);
+    const keyNames = document.nodes.map(node => node.name).filter(name => name?.startsWith('Key_'));
+    assert.equal(keyNames.length, 88);
+    assert.ok(keyNames.includes('Key_C4_60')); assert.ok(keyNames.includes('Key_A0_21')); assert.ok(keyNames.includes('Key_C8_108'));
+    assert.ok(document.nodes.some(node => node.name === 'piano.lid'));
+    const downloaded = await fetch(model.downloadUrl); assert.equal(downloaded.status, 200); assert.equal((await downloaded.arrayBuffer()).byteLength, glb.length);
     assert.equal((await fetch(`${new URL(created.previewUrl).origin}/api/scenes`)).status, 200);
   });
   await withClient(root, async client => {

@@ -40,8 +40,8 @@ export default defineConfig({
               label: '末章选修：音乐 MCP',
               collapsed: true,
               items: [
-                { slug: 'ai-from-scaling/07-music-space-mcp', label: '选修 1：声部之结' },
-                { slug: 'ai-from-scaling/08-music-photo-mcp', label: '选修 2：光之剧场' },
+                { slug: 'ai-from-scaling/07-music-space-mcp', label: '选修 1：钢琴排练台' },
+                { slug: 'ai-from-scaling/08-music-photo-mcp', label: '选修 2：舞台预演台' },
               ],
             },
           ],

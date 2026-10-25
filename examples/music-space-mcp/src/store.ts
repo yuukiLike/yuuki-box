@@ -3,7 +3,8 @@ import { lstat, mkdir, readFile, readdir, realpath, rename, rm, writeFile } from
 import { isAbsolute, join } from 'node:path';
 import sharp from 'sharp';
 import { z } from 'zod';
-import { assetSummarySchema, idSchema, musicSchema, sceneSchema, type Music, type MusicScene, type SceneUpdate, type TransportInput } from './contracts.js';
+import { assetSummarySchema, idSchema, musicSchema, sceneSchema, toolCallSchema, type Music, type MusicScene, type SceneUpdate, type ToolCall, type TransportInput } from './contracts.js';
+import { sceneObjects, viewCamera } from './presentation.js';
 import { importMusic, localFile } from './media.js';
 import { frameAt, positionAt } from './timeline.js';
 
@@ -64,7 +65,7 @@ export class MusicStore {
     try {
       const scene = sceneSchema.parse({
         schemaVersion: 1, sceneId, assetId, mode, revision: 1, title: options.title ?? music.title,
-        camera: { azimuth: 25, elevation: 20, distance: 32 },
+        camera: viewCamera(mode, 'overview'),
         score: { timeScale: 0.9, pitchScale: 0.3, layerSpacing: 3.2, showRepeats: true },
         photo: { depthStrength: 1, cameraTravel: 0.6, zoom: 1.07, pulse: 0.16 },
         colors: ['#ffbd69', '#6ce5d4', '#b9a4ff', '#ef8095'],
@@ -123,8 +124,9 @@ export class MusicStore {
       const music = await this.music(scene.assetId);
       const next = sceneSchema.parse({ ...scene,
         title: input.title ?? scene.title, revision: scene.revision + 1,
-        camera: { ...scene.camera, ...input.camera }, score: { ...scene.score, ...input.score },
+        camera: { ...scene.camera, ...(input.presentation?.view && input.presentation.view !== scene.presentation.view ? viewCamera(scene.mode, input.presentation.view) : {}), ...input.camera }, score: { ...scene.score, ...input.score },
         photo: { ...scene.photo, ...input.photo }, colors: input.colors ?? scene.colors,
+        presentation: { ...scene.presentation, ...input.presentation }, model: { ...scene.model, ...input.model },
         cues: (input.cues ?? scene.cues).toSorted((a, b) => a.time - b.time),
       });
       if (next.cues.some((cue, index) => cue.time > music.duration || (index > 0 && cue.time === next.cues[index - 1]?.time))) throw new Error('镜头关键帧时间须唯一且位于音乐时长内。');
@@ -153,6 +155,16 @@ export class MusicStore {
     const music = await this.music(scene.assetId);
     const currentTime = positionAt(scene, music.duration);
     const frame = frameAt(scene, music, currentTime);
-    return { scene, music: this.summary(music), currentTime, activeNotes: frame.activeNotes, audibleTrackIds: frame.audibleTrackIds };
+    return { scene, music: this.summary(music), currentTime, activeNotes: frame.activeNotes, audibleTrackIds: frame.audibleTrackIds, objects: sceneObjects(scene) };
+  }
+  async calls(): Promise<ToolCall[]> {
+    try { return await json(join(this.root, 'tool-calls.json'), z.array(toolCallSchema).max(40)); }
+    catch (error) { if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return []; throw error; }
+  }
+  async recordCall(call: ToolCall): Promise<void> {
+    await this.serial('tool-calls', async () => {
+      await mkdir(this.root, { recursive: true, mode: 0o700 });
+      await atomicJson(join(this.root, 'tool-calls.json'), [...await this.calls(), toolCallSchema.parse(call)].slice(-40));
+    });
   }
 }

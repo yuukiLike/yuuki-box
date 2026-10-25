@@ -135,4 +135,4 @@
 
 ## 末章选修：音乐 MCP
 
-完成 MCP、模型与 Harness 主线后，再按兴趣阅读 [声部之结](ai-from-scaling/07-music-space-mcp.md)与 [光之剧场](ai-from-scaling/08-music-photo-mcp.md)。两个案例保留在课程末尾，练习 MIDI 到三维对象、透明图层与音乐短片导出。
+完成 MCP、模型与 Harness 主线后，再按兴趣阅读 [钢琴排练台](ai-from-scaling/07-music-space-mcp.md)与 [舞台预演台](ai-from-scaling/08-music-photo-mcp.md)。两个案例保留在课程末尾，练习定位与独听、对象参数修改、机位切换和预演交付。
