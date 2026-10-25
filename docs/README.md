@@ -31,6 +31,8 @@
 
 ### 前端 × AI 实验室
 
+想先理解模型怎样学习，再自己接通工具，可以从[四小时 AI 跟做课](ai-from-scaling/README.md)开始：从缩放定律走到字符模型训练，再搭一个可调用工具的 Harness。
+
 从[数据结构与缓存](frontend-foundations/README.md)走到 [KV Cache](kv-cache/README.md)，从 [Wasm 与 Worker](wasm/README.md)走到浏览器计算，再用[渲染学习路线](learning/rendering-performance.md)和[十五个场景](learning/harness-scenario-lab.md)追踪界面卡在哪里。
 
 准备研究模型缓存，可以沿 [KV 专题](kv-cache/README.md)读原理，再对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 与 [Pi](kv-cache/05-pi.md) 的请求装配、缓存用量和预热；[知识地图](kv-cache/06-study-map.md)给出关联概念与三轮研究停点。

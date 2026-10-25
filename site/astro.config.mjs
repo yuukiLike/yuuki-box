@@ -91,6 +91,16 @@ export default defineConfig({
           items: [
             { slug: 'learning/ai-frontend-intersections', label: '挑个问题，开一场小实验' },
             {
+              label: '四小时理解 AI 并动手实现',
+              items: [
+                { slug: 'ai-from-scaling', label: '从缩放定律到模型与 Harness' },
+                { slug: 'ai-from-scaling/01-understand-models', label: '1 · 理解模型怎样学习' },
+                { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
+                { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
+                { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
+              ],
+            },
+            {
               label: '查找与缓存：少做重复功',
               items: [
                 { slug: 'frontend-foundations', label: '从一万条消息里找出那一条' },
