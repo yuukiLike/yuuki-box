@@ -3,14 +3,24 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.14.0",
-  "engines": { "node": ">=22.22.0" },
+  "engines": {
+    "node": ">=22.22.0"
+  },
   "scripts": {
-    "start": "node server.mjs",
-    "demo": "node client.mjs"
+    "start": "node --enable-source-maps dist/src/stdio.js",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "demo": "pnpm run build && node --enable-source-maps dist/src/demo.js",
+    "test": "pnpm run build && node --enable-source-maps --test dist/tests/*.test.js",
+    "check": "pnpm run typecheck && pnpm run test"
   },
   "dependencies": {
     "@modelcontextprotocol/client": "2.4.0",
     "@modelcontextprotocol/server": "2.4.0",
     "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "6.0.3"
   }
 }

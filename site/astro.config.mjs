@@ -28,12 +28,13 @@ export default defineConfig({
         {
           label: '从 MCP 到模型与 Harness',
           items: [
-            { slug: 'ai-from-scaling/00-minimal-mcp', label: '先做一个极简 MCP' },
+            { slug: 'ai-from-scaling/00-minimal-mcp', label: '换个会话，接着做' },
             { slug: 'ai-from-scaling', label: '开场与四小时主线安排' },
             { slug: 'ai-from-scaling/01-understand-models', label: '1 · 理解模型怎样学习' },
             { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
             { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
             { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
+            { slug: 'ai-from-scaling/05-blender-mcp', label: '第二个 MCP：Blender 建模' },
           ],
         },
         {

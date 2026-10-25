@@ -1,18 +1,20 @@
 # 从极简 MCP 到模型训练与 Harness
 
-**先动手：[开场 亲手实现一个极简 MCP](00-minimal-mcp.md)。** 用约 30 分钟写出工具服务和客户端，发现工具并完成一次调用，再对照 OpenAI 与 Claude 的官方案例。
+**先动手：[换个会话，接着做](00-minimal-mcp.md)。** 用五分钟跑通一个保存与取回项目接续记录的 MCP；跟写版约 30 分钟，包含 TypeScript 严格检查、编译、工具服务和客户端，再对照官方案例。
 
 之后从缩放定律开始，理解模型怎样从数据中学习，再训练一个能续写短句的语言模型，搭出一个能调用工具的 Harness。原主线为四小时，含新增开场连做约四小时三十分钟，也可以分次学习。
 
-这里以大语言模型为主线。你需要会一点 JavaScript，能打开终端和编辑文件；概率、梯度和 Attention 都在用到时解释。MCP 开场使用官方 SDK，小模型与 Harness 使用 Node.js 标准库，先在本地运行，接真实模型时再配置 API。
+这里以大语言模型为主线。你需要会一点 JavaScript，能打开终端和编辑文件；概率、梯度和 Attention 都在用到时解释。MCP 开场使用 TypeScript 和官方 SDK，保留类型检查、编译与测试；小模型与 Harness 使用 JavaScript 和 Node.js 标准库，先在本地运行，接真实模型时再配置 API。
 
 完成开场后进入[第一小时 从缩放定律理解模型](01-understand-models.md)，先回答一个问题：缩放曲线上不断下降的误差，到底是什么误差？
+
+想先做第二个真实工具，可以转到 [Blender MCP：做一个能拿在手里的模型](05-blender-mcp.md)。它沿用 TS 工程，把参数交给本机 Blender，保留可编辑模型、预览图与 STL；这一篇独立于下面的四小时主线。
 
 ## 先做 MCP 再进入四小时主线
 
 | 开场 | 内容 | 第一份成果 |
 | --- | --- | --- |
-| 约 30 分钟 | [实现极简 MCP 并对照官方案例](00-minimal-mcp.md) | 客户端发现工具，独立服务进程返回核算结果 |
+| 约 30 分钟 | [实现「接着做」MCP 并对照官方案例](00-minimal-mcp.md) | 保存一条接续记录，重启服务进程后取回原文 |
 
 下面的 240 分钟属于原来的模型与 Harness 主线。
 
@@ -33,7 +35,7 @@
 
 ### 一个可被发现和调用的 MCP 服务
 
-把预算计算包装成独立工具服务，再用客户端执行 `tools/list` 和 `tools/call`。从这里分清工具提供方、调用方与后面的模型执行循环，并通过官方案例继续看远程接入、UI 和业务状态。
+把“留下下一步、回来接着做”包装成独立工具服务，用客户端执行 `tools/list` 和 `tools/call`。记录是按项目保存的 Markdown，重启服务进程后仍可取回；从这里分清工具提供方、调用方、业务状态与后面的模型执行循环。
 
 ### 一个真正更新参数的小模型
 
@@ -59,7 +61,7 @@ node --version
 
 使用 Node.js 22.22 或更高版本，与现有文档站要求一致。MCP 开场需要用 pnpm 安装固定版本的官方 SDK；小模型与 Harness 两份实验无需安装 npm 包，所有本地实验均无需下载模型或使用 GPU。
 
-参考实现：[MCP 服务端](../../examples/minimal-mcp/server.mjs)、[MCP 客户端](../../examples/minimal-mcp/client.mjs)、[小语言模型](labs/tiny-model.mjs)与[Harness](labs/harness.mjs)。按章节逐个函数跟写，或先运行参考实现，再回头改动关键步骤。
+参考实现：[MCP 服务端](../../examples/minimal-mcp/src/server.ts)、[MCP 客户端](../../examples/minimal-mcp/src/client.ts)、[演示入口](../../examples/minimal-mcp/src/demo.ts)、[小语言模型](labs/tiny-model.mjs)与[Harness](labs/harness.mjs)。按章节逐个函数跟写，或先运行参考实现，再回头改动关键步骤。
 
 真实模型实验需要你自己的 DeepSeek API key，并会产生 API 用量。前面的训练、工具执行和故障实验均可离线完成；配置步骤在第四章。
 
@@ -76,6 +78,6 @@ node --version
 
 想继续实现 Transformer，可以先复习 [Attention 与 KV Cache](../kv-cache/02-attention-and-kv.md)，再参考 Karpathy 的 [makemore](https://github.com/karpathy/makemore) 从字符模型走到神经网络结构。
 
-想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。本课的记录保存在内存并打印到终端；持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
+想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场的接续记录已保存为 Markdown；Harness 的运行事件仍保存在内存并打印到终端，执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
 
 返回[文档目录](../README.md)。

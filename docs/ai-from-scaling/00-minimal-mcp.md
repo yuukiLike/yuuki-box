@@ -1,182 +1,225 @@
-# 开场 亲手实现一个极简 MCP
+# 开场 换个会话，接着做
 
-先做出一个能被客户端发现和调用的工具：输入人数、费用和预算，服务返回总额与余额。跑通以后，再沿着缩放定律、模型训练与 Harness 理解完整的 Agent。
+今天读到一半的 AI 教程，明天从哪里继续？算法练习暂时放下，回来时还记得卡在哪个输入吗？
 
-这一章约 30 分钟，放在[四小时主线](README.md)之前。使用 JavaScript 和官方 MCP SDK v2，本地测试无需模型、API key 或 GPU。参考实现：[服务端](../../examples/minimal-mcp/server.mjs) · [客户端](../../examples/minimal-mcp/client.mjs)。
+做一个你能反复使用的小工具：**「接着做」MCP，给每个项目留下一份接续记录。** 关掉会话、重启工具进程，再回来取出原文。记录是普通 Markdown，你可以直接修改。
 
-## 先分清服务端与客户端
+先用五分钟跑通下面的演示，能解释“为什么重启以后还在”就可以停。想亲手跟写，整段开场约 30 分钟。实现使用完整的 TypeScript 工程。参考实现：[工具服务](../../examples/minimal-mcp/src/server.ts) · [客户端](../../examples/minimal-mcp/src/client.ts) · [演示入口](../../examples/minimal-mcp/src/demo.ts)。
 
-服务端提供工具的名字、参数说明和实际函数。客户端发现工具、发送调用、接收结果。把模型接进来以后，由 Host 中的客户端代它调用服务。
+## 先跑一次，今天就到这里也可以
 
-```text
-本地客户端 → tools/list → 发现 calculate_total
-本地客户端 → tools/call → 服务端计算 → 返回结果
-```
-
-本章先用确定的参数调用工具，方便检查协议与计算。后面的 Harness 再负责把工具交给模型选择，并把结果送回模型上下文。
-
-## 第一步 安装这个实验的依赖
-
-在仓库根目录执行，使用 Node.js 22.22 或更高版本、pnpm 11.14：
+使用 Node.js 22.22 或更高版本、pnpm 11.14，在仓库根目录执行：
 
 ```bash
 pnpm --dir examples/minimal-mcp install --frozen-lockfile
+pnpm --dir examples/minimal-mcp demo
 ```
 
-这个实验单独固定了 `@modelcontextprotocol/server`、`@modelcontextprotocol/client` 的 `2.4.0` 和 `zod` 的 `4.6.7`，依赖只安装到示例项目。版本以同目录的 `package.json` 和锁文件为准。
+客户端会发现两个工具，保存一条记录，关闭连接，再启动新的服务进程取回它：
 
-如果从空目录跟写，可以在仓库外建立临时实验目录，再执行：
+```text
+发现工具： save_checkpoint, resume
+留下记录： true
+关闭连接，再启动一个服务进程。
+重启后取回：
+# yuuki-box
+……
+## 下一步
+打开 src/server.ts，找到 save_checkpoint 真正写入文件的位置。
 
-```bash
-MCP_LAB_DIR=$(mktemp -d)
-cd "$MCP_LAB_DIR"
-pnpm init
-pnpm add @modelcontextprotocol/server@2.4.0 @modelcontextprotocol/client@2.4.0 zod@4.6.7
+## 到这里就停
+能解释记录为什么在服务进程重启后仍然存在。
 ```
 
-接下来创建 `server.mjs` 和 `client.mjs`。使用 `.mjs`，可以直接运行 ES module，无需额外配置 TypeScript 编译。
+演示只写临时目录，退出时清理；不会覆盖日常记录。安装依赖后，这次运行不联网，不需要模型、API key 或 GPU。
 
-## 第二步 写一个提供工具的服务
+**第一处停点：** 找到 [src/server.ts](../../examples/minimal-mcp/src/server.ts) 里的 `writeFile()` 和 `readFile()`。记录留在文件里，新进程读的是同一份文件。
 
-先写导入，再把工具注册进 `createServer()`。下面就是本课服务端的主体：
+## 为什么选这个题目
 
-```js
-import { McpServer } from '@modelcontextprotocol/server';
-import { serveStdio } from '@modelcontextprotocol/server/stdio';
-import { z } from 'zod';
+结合你此前表达的学习和工作偏好，把第一版收在三个细节里：
 
-function createServer() {
-  const server = new McpServer({ name: 'yuuki-budget', version: '1.0.0' });
-  server.registerTool('calculate_total', {
-    description: '根据人数、每人费用、场地费和预算核算活动花费，金额单位为元。',
-    inputSchema: z.object({
-      people: z.number().int().min(1).max(1000),
-      perPerson: z.number().min(0).max(1e6),
-      venue: z.number().min(0).max(1e6),
-      budget: z.number().min(0).max(1e6),
-    }).strict(),
-  }, async ({ people, perPerson, venue, budget }) => {
-    const total = Math.round((people * perPerson + venue) * 100) / 100;
-    const result = {
-      total,
-      remaining: Math.round((budget - total) * 100) / 100,
-      withinBudget: total <= budget,
-    };
-    return {
-      content: [{ type: 'text', text: JSON.stringify(result) }],
-      structuredContent: result,
-    };
-  });
-  return server;
+| 你的工作方式 | 工具里的对应选择 |
+| --- | --- |
+| 在 AI 学习、算法练习和音乐项目间切换 | 按项目分别保存，下次取回对应记录 |
+| 一次先做一小步，有清楚的停点 | 必填“下一步”，可选“到这里就停” |
+| 喜欢小核心、透明数据流，也愿意自己改 Markdown | 两个工具、每项目一个文件，存取过程可以顺着代码读完 |
+
+这是根据已有记录选出的使用场景，是否值得长期保留，要看你实际用过后的反馈。
+
+例如，可以留下这些内容；它们只是示例，不代表这些项目当前的真实进度：
+
+| 项目 | 下一步 | 到这里就停 |
+| --- | --- | --- |
+| `yuuki-box` | 跑一次缓存实验，对照有无缓存的输出 | 能解释结果为什么应当一致 |
+| `algorithm-box` | 给自己的答案跑测试，找出第一个失败输入 | 能解释这个输入为什么失败 |
+| `violin` | 慢练自己标出的两小节 | 完成这一小段就收琴 |
+
+## 两个工具就够了
+
+| 工具 | 参数 | 实际行为 |
+| --- | --- | --- |
+| `save_checkpoint` | `project`、`next`；可选 `context`、`stopWhen` | 创建或替换该项目的记录 |
+| `resume` | `project` | 返回 Markdown 原文；不存在则返回 `found: false` |
+
+项目名使用 1–64 个小写字母、数字或连字符，首字符为字母或数字，例如 `yuuki-box`。每个项目只保留最新一份；下次保存会替换整份旧记录，包括你手动补充的内容。多个会话同时保存时，以最后完成替换的那份为准。
+
+日常记录默认放在 `~/.yuuki/continue/<project>.md`，也可以在服务启动环境里设置 `YUUKI_CONTINUE_DIR` 为另一个绝对路径。不同客户端使用同一目录，就能共享记录。
+
+一条保存请求可以长这样：
+
+```json
+{
+  "project": "algorithm-box",
+  "context": "答案仍由我自己完成，今天先检查已有实现。",
+  "next": "跑一次括号练习的测试，记录第一个失败输入。",
+  "stopWhen": "能解释这个输入为什么失败。"
 }
-
-serveStdio(createServer, { onerror: (error) => console.error(error.message) });
-console.error('Yuuki budget MCP 已启动，等待 stdio 请求。');
 ```
 
-先认清三处：`inputSchema` 声明并校验输入；回调函数实际计算；`content` 与 `structuredContent` 分别提供文本内容和结构化结果。参考实现另外加了只读、幂等等工具提示，权限决定仍由使用工具的应用负责。
+工具把你传入的内容保存下来；选择下一步、判断进度、决定是否开工，仍由你和当前会话完成。取回记录也不会自动执行里面的动作。
 
-这里的 stdio 是客户端启动子进程后，通过标准输入与标准输出传递协议消息。服务端日志用 `console.error()` 写到 stderr，stdout 留给 MCP，避免普通日志混进协议消息。[MCP 官方服务端教程](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server#logging-in-mcp-servers)
+## 顺着代码亲手跟写
 
-`serveStdio(createServer, ...)` 负责协议版本协商，并按需要创建服务实例。它能处理新版本的请求，也支持仍使用 `initialize` 的旧客户端；不要把旧初始化流程当成所有版本都必须手写的步骤。[官方运行方式](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server)
+依赖使用官方 MCP SDK v2：`@modelcontextprotocol/server`、`@modelcontextprotocol/client` 均为 `2.4.0`，`zod` 为 `4.6.7`；TypeScript 与 Node 类型也锁定在 `package.json` 和锁文件里。
 
-## 第三步 写一个调用它的客户端
+先看文件分别负责什么：
 
-新建 `client.mjs`，先写下面这份正常调用。仓库里的参考实现额外提供了 `--invalid` 参数，用来测试错误输入。
+| 文件 | 负责 |
+| --- | --- |
+| [src/contracts.ts](../../examples/minimal-mcp/src/contracts.ts) | 输入、输出的 Zod 契约，以及由它们推导的 TS 类型 |
+| [src/server.ts](../../examples/minimal-mcp/src/server.ts) | 注册两个工具，读写记录 |
+| [src/stdio.ts](../../examples/minimal-mcp/src/stdio.ts) | 启动服务；日志写 stderr |
+| [src/client.ts](../../examples/minimal-mcp/src/client.ts) | 连接服务、发出调用、校验返回值、关闭连接 |
+| [src/demo.ts](../../examples/minimal-mcp/src/demo.ts) | 用两次连接演示保存与取回 |
+| [tests/server.test.ts](../../examples/minimal-mcp/tests/server.test.ts) | 用真实服务进程检查行为 |
 
-```js
-import { Client } from '@modelcontextprotocol/client';
-import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
-import { fileURLToPath } from 'node:url';
+先打开 `contracts.ts`，找到这一行：
 
-const client = new Client(
-  { name: 'yuuki-budget-client', version: '1.0.0' },
-  { versionNegotiation: { mode: 'auto' } },
-);
-const transport = new StdioClientTransport({
-  command: process.execPath,
-  args: [fileURLToPath(new URL('./server.mjs', import.meta.url))],
+```ts
+export type CheckpointInput = z.infer<typeof saveCheckpointInputSchema>;
+```
+
+Zod schema 校验运行时的数据，`z.infer` 从同一份规则推导 TypeScript 类型。工具回调的参数由 SDK 从 schema 推导；演示里的 `CheckpointInput` 也来自这份契约。只改一份规则，编辑器和实际调用都跟着检查。
+
+客户端先验证真实的 `structuredContent`，再把结果交给调用方。`resume` 的输出按 `found` 分成两种情况：没有记录时只有项目名；找到记录时才有路径和原文。
+
+```ts
+const result = await callTool(client, 'resume', { project: 'yuuki-box' }, resumeOutputSchema);
+if (result.found) {
+  console.log(result.note); // 此处 TS 已经知道 note 存在。
+}
+```
+
+先看服务端的 `createServer()`。两次 `registerTool()` 都包含工具名、`inputSchema` 和执行回调。以只读的工具为起点：
+
+```ts
+server.registerTool('resume', {
+  description: '取回一个项目上次留下的 Markdown 原文。',
+  inputSchema: resumeInputSchema,
+  outputSchema: resumeOutputSchema,
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+}, async ({ project }) => {
+  // 在参考实现中继续找到：路径 → readFile → 返回结果。
 });
-
-try {
-  await client.connect(transport);
-  console.log('协议版本：', client.getNegotiatedProtocolVersion());
-  const { tools } = await client.listTools();
-  console.log('发现工具：', tools.map((tool) => tool.name).join(', '));
-  const result = await client.callTool({
-    name: 'calculate_total',
-    arguments: { people: 20, perPerson: 35, venue: 80, budget: 800 },
-  });
-  if (result.isError) throw new Error(JSON.stringify(result.content));
-  console.log('计算结果：', JSON.stringify(result.structuredContent));
-} finally {
-  await client.close();
-}
 ```
 
-客户端的 `connect()` 启动并连接服务进程，本例显式启用 `auto` 版本协商；`listTools()` 对应工具发现，`callTool()` 对应工具调用，最后关闭连接。客户端在自己的 stdout 打印结果没有问题；需要保持干净的是服务端的协议输出。
+然后看 `save_checkpoint`：把输入排成 Markdown，写入同目录的临时文件，再用 `rename()` 替换正式文件，避免读取方撞上写到一半的记录。保存失败会返回工具错误，不能把它当成保存成功。
 
-## 第四步 运行并故意给一次错误输入
+返回结果里，`content` 提供文本，`structuredContent` 提供结构化数据；`found: false` 表示确实没有记录，其他文件读取失败则报告错误。手动编辑后的文件超过 16 KiB 时，工具也会拒绝整份返回，提示你先精简。
 
-使用仓库参考实现时，在仓库根目录执行：
+`src/stdio.ts` 负责启动，导入 `server.ts` 只会取得工厂函数，不会启动服务。服务端通过 stdio 收发协议消息。日志使用 `console.error()` 写 stderr，stdout 留给 MCP；`serveStdio(createServer, ...)` 处理消息与版本协商。[MCP 服务端教程](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server#logging-in-mcp-servers)
 
-```bash
-node examples/minimal-mcp/client.mjs
-```
-
-预期结果：
+再看客户端的 `withClient()`，沿下面这条路找对应代码：
 
 ```text
-协议版本： 2026-07-28
-发现工具： calculate_total
-计算结果： {"total":780,"remaining":20,"withinBudget":true}
+connect → listTools → callTool(save_checkpoint) → close
+connect → callTool(resume) → close
 ```
 
-客户端会自动启动服务端，不需要另开终端。若单独运行 `server.mjs`，它会等待协议请求，不能把等待输入误认为程序卡死。
+两次 `withClient()` 分别创建连接和服务进程，使用同一个演示目录。模型暂时没有参与，参数由客户端写好；MCP 已经完成真实的工具发现与跨进程调用。
 
-再执行：
+### 看懂 TypeScript 怎样变成可运行的程序
+
+`package.json` 使用 `"type": "module"`，`tsconfig.json` 使用 `NodeNext`。源码中的本地导入写 `./server.js`：TS 检查时能找到对应的 `server.ts`，编译后 Node 读取真实的 `.js` 文件。
+
+| 配置或约定 | 在这个例子里保护什么 |
+| --- | --- |
+| `strict` | 参数、返回值和错误处理要有明确类型 |
+| `noUncheckedIndexedAccess` | 不能假设数组中的某个工具一定存在 |
+| `exactOptionalPropertyTypes` | 区分没传可选字段与显式传 `undefined` |
+| `noEmitOnError` | 有类型错误时不生成新产物 |
+| `import type`、捕获错误后先缩小类型 | 区分类型与运行时代码，先检查 `unknown` 再使用 |
+| `sourceMap` 与 Node 的 `--enable-source-maps` | 运行出错时尽量定位回 TS 源码 |
 
 ```bash
-node examples/minimal-mcp/client.mjs --invalid
+pnpm --dir examples/minimal-mcp typecheck
+pnpm --dir examples/minimal-mcp build
 ```
 
-这次把人数设为 `-1`。检查调用被拒绝、终端报告参数错误并以非零状态退出，而不是返回正常预算。自己跟写的版本，可以临时把调用参数中的 `people` 改为 `-1`，再恢复为 20。
+前者只检查，后者编译到 `dist/`。`demo` 和 `test` 都会先构建，确保执行的是这次的源码；`start` 直接运行编译后的 stdio 入口，避免构建日志进入 MCP 协议输出。
 
-此时你已经完成了一次真实 MCP 工具发现和跨进程调用。测试过程没有请求语言模型，计算由你的服务端代码完成。
+这些选择遵循 [TypeScript 的 Node 模块说明](https://www.typescriptlang.org/tsconfig/module.html)与[严格模式说明](https://www.typescriptlang.org/tsconfig/strict.html)。可以对照 [MCP 官方 TS 工程示例](https://github.com/modelcontextprotocol/typescript-sdk/tree/main/examples/server-quickstart)看源码、配置与运行入口。
 
-## 第五步 按需接入 Claude Code
-
-如果已安装 Claude Code，可以在仓库根目录执行下面的注册命令。它会把这个本地服务加入 Claude Code 的项目本地配置：
+最后故意给一次错误输入：
 
 ```bash
+pnpm --dir examples/minimal-mcp demo --invalid
+```
+
+这次项目名为 `../outside`，应报告参数错误并以非零状态退出。找到拒绝它的 schema，再看正常项目名怎样变成文件名。
+
+自动检查也可以单独运行：
+
+```bash
+pnpm --dir examples/minimal-mcp check
+```
+
+`check` 依次运行类型检查、编译和测试。测试覆盖重启后的取回、手改 Markdown、项目隔离、错误参数和文件读写失败。
+
+<details>
+<summary>以后日常使用：接入 Claude Code</summary>
+
+如果已安装 Claude Code，可以在仓库根目录执行：
+
+```bash
+pnpm --dir examples/minimal-mcp build
 MCP_NODE=$(command -v node)
-MCP_SERVER="$PWD/examples/minimal-mcp/server.mjs"
-claude mcp add --transport stdio yuuki-budget -- "$MCP_NODE" "$MCP_SERVER"
-claude mcp get yuuki-budget
+MCP_SERVER="$PWD/examples/minimal-mcp/dist/src/stdio.js"
+claude mcp add --transport stdio yuuki-continue -- "$MCP_NODE" "$MCP_SERVER"
+claude mcp get yuuki-continue
 ```
 
-然后在 Claude Code 中检查 `/mcp`，提出任务：
+这会注册项目本地配置；服务通过默认目录保存日常记录。随后在 Claude Code 的 `/mcp` 检查连接，试着说：
 
 ```text
-使用 yuuki-budget 的 calculate_total 工具，核算 20 人、
-每人 35 元、场地费 80 元、预算 800 元的活动。
+用 yuuki-continue 给 algorithm-box 留个接续记录：
+今天只检查了已有答案，下一步跑括号练习的测试，
+能解释第一个失败输入就停。
 ```
 
-核对实际调用参数与返回值。需要移除时使用 `claude mcp remove yuuki-budget`。命令写法与配置范围来自 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。
+换一个会话，再说：
+
+```text
+用 yuuki-continue 取回 algorithm-box 上次留下的记录，先展示原文。
+```
+
+需要移除连接时执行 `claude mcp remove yuuki-continue`；记录文件仍然保留。命令与配置范围见 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。本章验证了参考客户端，尚未实际修改或验证你的 Claude Code 配置。
+
+服务本身不联网。接到云端模型后，取回的文字会进入该模型的对话上下文；只留下你愿意交给当前客户端的内容。
+
+</details>
 
 ## 从 Cookie 接回身份与状态
 
-这个工具是纯计算：每次输入包含核算所需的全部业务数据，服务无需记住上一次结果。stdio 的进程连接可以持续存在，但本例没有登录、远程 HTTP 授权或跨请求业务存储。
+这个例子里，`project` 标识“要读哪份记录”，Markdown 文件保存业务状态。MCP 服务进程重启后，文件仍然存在；客户端重新连接，就能再读。
 
-如果以后增加草稿工具，可以让创建操作返回 `draftId`，后续修改带上它；草稿内容由业务服务保存。谁能访问这份草稿，则由另外的授权凭据与权限检查决定。
+`project` 不是授权凭据，工具提示也不是权限控制。这个本地示例由启动它的客户端使用当前系统用户的文件权限；将来变成多用户远程服务时，需要另做身份与访问检查。
 
-| 要解决的问题 | 可以放在哪里 |
-| --- | --- |
-| 谁在调用、有什么权限 | 客户端管理授权凭据，服务端验证 |
-| 操作哪份草稿 | 工具参数里的 `draftId`，以及业务服务的存储 |
-| Agent 做到哪一步 | Host／Harness 的任务与执行记录 |
+记录只有被 `resume` 读取并交回会话后，才会影响模型的回答。这份文件保存的是接续信息；KV cache 复用的是推理中的注意力中间结果，可以继续沿[缓存专题](../kv-cache/README.md)分别学习。
 
-当前 `2026-07-28` 版 Streamable HTTP 已移除协议级会话；旧资料中的 `Mcp-Session-Id` 属于较早版本。协议级会话与业务存储需要分开理解。[MCP Streamable HTTP](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http)
+<details>
+<summary>继续对照：OpenAI 与 Claude 的官方案例</summary>
 
 ## 对照 OpenAI 与 Claude 的官方案例
 
@@ -204,10 +247,12 @@ claude mcp get yuuki-budget
 
 如果想进一步比较由服务商托管 MCP 客户端的方式，可读 [Claude Messages API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)。它连接远程 HTTP 服务，本章的本地 stdio 服务不能直接填进 `mcp_servers.url`。
 
+</details>
+
 ## 做完以后检查三件事
 
-1. 找出工具名、输入 schema、真正计算的函数、返回内容分别在哪里。
-2. 解释 `listTools()` 与 `callTool()` 的区别，证明错误人数没有得到正常结果。
-3. 指出当前例子里的客户端与服务端，以及接入模型后由哪个程序把结果放回上下文。
+1. 指出工具名、输入 schema、实际文件读写与返回内容分别在哪里。
+2. 解释为什么新进程能取回旧记录，并确认错误项目名没有创建记录。
+3. 分清服务端、客户端与模型：现在谁在填写参数，以后谁把取回的原文交给模型？
 
-接下来回到[课程总览](README.md)，进入[第一小时 从缩放定律理解模型](01-understand-models.md)。
+能解释就停。想继续时，回到[课程总览](README.md)，进入[第一小时 从缩放定律理解模型](01-understand-models.md)。
