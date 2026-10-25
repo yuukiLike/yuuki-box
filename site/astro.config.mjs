@@ -35,6 +35,7 @@ export default defineConfig({
             { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
             { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
             { slug: 'ai-from-scaling/05-blender-mcp', label: '第二个 MCP：Blender 建模' },
+            { slug: 'ai-from-scaling/06-github-lab-mcp', label: 'GitHub：重走一次真实修复' },
           ],
         },
         {

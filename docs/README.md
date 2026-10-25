@@ -34,6 +34,8 @@
 
 想先接入一个真实软件，做[第二个 MCP：Blender 建模](ai-from-scaling/05-blender-mcp.md)，用同样的 TS 工程生成可编辑模型、预览图与 STL。
 
+想把开源项目变成练习题，做 [GitHub 实验员](ai-from-scaling/06-github-lab-mcp.md)：发现项目，从旧版本复现真实问题，再拿候选修改与官方补丁做对照。
+
 ### 让 AI 接手开发
 
 先按任务选择：[交 Issue、接 PR](ai-practices/02-issue-to-pr.md)、[带错误现场去破案](ai-practices/03-error-to-fix.md)、[限定范围做迁移](ai-practices/06-code-migration.md)。想给改动补一道检查，选 [CodeRabbit 审查](ai-practices/01-coderabbit-review.md)、[有效测试](ai-practices/05-test-generation.md)或[安全告警修复](ai-practices/04-security-autofix.md)。
