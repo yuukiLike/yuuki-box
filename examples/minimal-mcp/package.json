@@ -1,0 +1,16 @@
+{
+  "name": "yuuki-minimal-mcp",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.14.0",
+  "engines": { "node": ">=22.22.0" },
+  "scripts": {
+    "start": "node server.mjs",
+    "demo": "node client.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
+    "zod": "4.6.7"
+  }
+}

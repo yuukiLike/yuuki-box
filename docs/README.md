@@ -8,16 +8,21 @@
 
 现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
 
-目录按“想做成什么”分成六条路线。工具名留在对应章节里，浏览器实验紧跟它解释的概念。
+目录按“想做成什么”分成七条路线。最前面先从一个极简 MCP 开始，其他工具名留在对应章节里，浏览器实验紧跟它解释的概念。
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
+| **从 MCP 到模型与 Harness** | [先实现一个极简 MCP](ai-from-scaling/00-minimal-mcp.md) | 一次工具发现与调用，再进入模型训练和 Harness 跟做 |
 | **让 AI 接手开发** | [挑一件真活](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
 | **亲手搭 Agent** | [从会聊天，到能把活干完](agent-engineering/README.md) | 一次能取消、能解释终态的工具运行 |
 | **前端 × AI 实验室** | [挑个问题开实验](learning/ai-frontend-intersections.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
 | **让 Yuuki 听见和开口** | [给它装上耳朵和嘴巴](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
 | **试试下一种 AI 玩法** | [给点子找块试验田](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
 | **读架构，选路线** | [五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
+
+### 从 MCP 到模型与 Harness
+
+先做[极简 MCP 开场](ai-from-scaling/00-minimal-mcp.md)，对照 OpenAI 与 Claude 的官方案例；再沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。开场约 30 分钟，主线保留原来的四小时安排。
 
 ### 让 AI 接手开发
 
@@ -30,8 +35,6 @@
 按实际建设顺序走：先用 [Harness 管稳运行](agent-engineering/05-harness-vertical-slice.md)，再用 [MCP 接工具](agent-engineering/01-mcp-tool-source.md)，用 [Skills 复用流程](agent-engineering/03-skills-structure.md)。需要完整设计时回查 [Mac 本地 Harness](architecture/mac-local-harness.md)。这一组是实现实验建议，验收目标写在各篇里。
 
 ### 前端 × AI 实验室
-
-想先理解模型怎样学习，再自己接通工具，可以从[四小时 AI 跟做课](ai-from-scaling/README.md)开始：从缩放定律走到字符模型训练，再搭一个可调用工具的 Harness。
 
 从[数据结构与缓存](frontend-foundations/README.md)走到 [KV Cache](kv-cache/README.md)，从 [Wasm 与 Worker](wasm/README.md)走到浏览器计算，再用[渲染学习路线](learning/rendering-performance.md)和[十五个场景](learning/harness-scenario-lab.md)追踪界面卡在哪里。
 

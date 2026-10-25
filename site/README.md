@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，按想做成的事组织为六条路线：让 AI 接手开发、亲手搭 Agent、前端 × AI 实验室、让 Yuuki 听见和开口、试试下一种 AI 玩法、读架构选路线。
+以 Astro 与 Starlight 浏览仓库的学习资料，按想做成的事组织为七条路线：从 MCP 到模型与 Harness、让 AI 接手开发、亲手搭 Agent、前端 × AI 实验室、让 Yuuki 听见和开口、试试下一种 AI 玩法、读架构选路线。最前面的 MCP 开场提供可运行的本地服务、客户端和官方案例入口。
 
 ## 本地运行
 

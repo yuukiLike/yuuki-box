@@ -26,6 +26,17 @@ export default defineConfig({
       sidebar: [
         { label: '文档目录', link: '/' },
         {
+          label: '从 MCP 到模型与 Harness',
+          items: [
+            { slug: 'ai-from-scaling/00-minimal-mcp', label: '先做一个极简 MCP' },
+            { slug: 'ai-from-scaling', label: '开场与四小时主线安排' },
+            { slug: 'ai-from-scaling/01-understand-models', label: '1 · 理解模型怎样学习' },
+            { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
+            { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
+            { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
+          ],
+        },
+        {
           label: '让 AI 接手开发',
           items: [
             { slug: 'ai-practices', label: '挑一件真活：六种开发实践' },
@@ -90,16 +101,6 @@ export default defineConfig({
           label: '前端 × AI 实验室',
           items: [
             { slug: 'learning/ai-frontend-intersections', label: '挑个问题，开一场小实验' },
-            {
-              label: '四小时理解 AI 并动手实现',
-              items: [
-                { slug: 'ai-from-scaling', label: '从缩放定律到模型与 Harness' },
-                { slug: 'ai-from-scaling/01-understand-models', label: '1 · 理解模型怎样学习' },
-                { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
-                { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
-                { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
-              ],
-            },
             {
               label: '查找与缓存：少做重复功',
               items: [
