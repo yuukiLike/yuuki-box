@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="824" viewBox="0 0 680 824" role="img" aria-labelledby="title desc">
+  <title id="title">第一课：看懂一次 MCP 工具调用</title>
+  <desc id="desc">四步教学流程及你的操作：一，运行 demo，看到发现工具、保存和重启后取回；二，找到 callTool、writeFile 与 readFile，理解调用和执行；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。完成后能指出调用路径，并解释记录为什么能在服务进程重启后取回。</desc>
+  <style>
+    .canvas { fill: #ffffff; }
+    .step { fill: #f4f6fa; stroke: #c9d1df; stroke-width: 1.5; }
+    .action { fill: #e6f4ed; }
+    text { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #21314b; }
+    .title { font-size: 30px; font-weight: 650; }
+    .label { font-size: 20px; fill: #52627a; }
+    .heading { font-size: 24px; font-weight: 600; }
+    .body { font-size: 21px; }
+    .action-title { font-size: 23px; font-weight: 600; fill: #255b40; }
+    .action-note { font-size: 20px; fill: #35634b; }
+    .arrow { fill: none; stroke: #71809a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <rect class="canvas" width="680" height="824" rx="16"/>
+  <text class="title" x="32" y="52">看懂一次 MCP 工具调用</text>
+  <text class="body" x="32" y="88">先看结果，再找代码，最后亲手验证。</text>
+  <text class="label" x="48" y="137">教学流程</text>
+  <text class="label" x="392" y="137">你来做</text>
+
+  <rect class="step" x="24" y="158" width="632" height="108" rx="12"/>
+  <text class="heading" x="48" y="201">01  看到完整结果</text>
+  <text class="body" x="48" y="238">发现 → 保存 → 重启 → 取回</text>
+  <rect class="action" x="372" y="174" width="268" height="76" rx="8"/>
+  <text class="action-title" x="392" y="205">运行 demo</text>
+  <text class="action-note" x="392" y="234">看“重启后取回”</text>
+  <path class="arrow" d="M340 274 V296 M334 290 L340 296 L346 290"/>
+
+  <rect class="step" x="24" y="306" width="632" height="108" rx="12"/>
+  <text class="heading" x="48" y="349">02  找到调用与执行</text>
+  <text class="body" x="48" y="386">客户端 → 服务端 → 文件</text>
+  <rect class="action" x="372" y="322" width="268" height="76" rx="8"/>
+  <text class="action-title" x="392" y="353">找 callTool</text>
+  <text class="action-note" x="392" y="382">找 writeFile / readFile</text>
+  <path class="arrow" d="M340 422 V444 M334 438 L340 444 L346 438"/>
+
+  <rect class="step" x="24" y="454" width="632" height="108" rx="12"/>
+  <text class="heading" x="48" y="497">03  验证内容变化</text>
+  <text class="body" x="48" y="534">输入改变，取回结果改变</text>
+  <rect class="action" x="372" y="470" width="268" height="76" rx="8"/>
+  <text class="action-title" x="392" y="501">改 next，再运行</text>
+  <text class="action-note" x="392" y="530">核对你写的文字</text>
+  <path class="arrow" d="M340 570 V592 M334 586 L340 592 L346 586"/>
+
+  <rect class="step" x="24" y="602" width="632" height="108" rx="12"/>
+  <text class="heading" x="48" y="645">04  验证错误被拒绝</text>
+  <text class="body" x="48" y="682">按输入规则检查参数</text>
+  <rect class="action" x="372" y="618" width="268" height="76" rx="8"/>
+  <text class="action-title" x="392" y="649">运行 demo --invalid</text>
+  <text class="action-note" x="392" y="678">找到 projectSchema</text>
+
+  <text class="body" x="32" y="758">完成：指出谁发起调用、谁读写文件；</text>
+  <text class="body" x="32" y="790">说明重启后为什么还能取回。</text>
+</svg>

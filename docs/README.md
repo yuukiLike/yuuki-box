@@ -20,7 +20,7 @@
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **从 MCP 到模型与 Harness** | [换个会话，接着做](ai-from-scaling/00-minimal-mcp.md) | 留下项目下一步，重启后取回，再进入模型训练和 Harness 跟做 |
+| **从 MCP 到模型与 Harness** | [看懂一次 MCP 工具调用](ai-from-scaling/00-minimal-mcp.md) | 解释一次工具调用，改写记录并在服务重启后取回 |
 | **让 AI 接手开发** | [挑一件真活](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
 | **亲手搭 Agent** | [从会聊天，到能把活干完](agent-engineering/README.md) | 一次能取消、能解释终态的工具运行 |
 | **前端 × AI 实验室** | [挑个问题开实验](learning/ai-frontend-intersections.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
@@ -30,7 +30,7 @@
 
 ### 从 MCP 到模型与 Harness
 
-先做[极简 MCP 开场](ai-from-scaling/00-minimal-mcp.md)，对照 OpenAI 与 Claude 的官方案例；再沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。开场约 30 分钟，主线保留原来的四小时安排。
+先做[极简 MCP 开场](ai-from-scaling/00-minimal-mcp.md)，运行并修改一次工具调用，沿代码找到输入、执行与返回结果；再沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。开场约 30 分钟，工程配置与官方案例可在完成后选读。
 
 想先接入一个真实软件，做[第二个 MCP：Blender 建模](ai-from-scaling/05-blender-mcp.md)，用同样的 TS 工程生成可编辑模型、预览图与 STL。
 
