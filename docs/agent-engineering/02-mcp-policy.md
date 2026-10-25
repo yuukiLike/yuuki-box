@@ -12,7 +12,7 @@
 
 [![MCP 权限检查：发现清单先筛选，调用入口重新核对工具、参数和审批；未授权请求拒绝，执行结果受限处理；外部文本不会获得授权](../../site/public/diagrams/agent-engineering/02-mcp-policy.svg)](../../site/public/diagrams/agent-engineering/02-mcp-policy.svg)
 
-MCP 定义工具发现与调用消息，具体准入、审批和记录由宿主实现。[工具规范](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)
+MCP 定义工具发现与调用消息，本课的允许清单、审批和记录由宿主实现。**在 `tools/list` 看到工具，只说明服务提供了这个接口；宿主仍须判断这次调用是否被允许。** 服务端也应独立检查自身的访问权限。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 
 ## 1. 配置：只允许两个已核对的只读工具
 
@@ -35,6 +35,8 @@ MCP 定义工具发现与调用消息，具体准入、审批和记录由宿主�
 ```
 
 占位符需要替换为你实际使用的服务、目录和版本。`sideEffects` 来自你核对过的实现，不能仅抄服务端的“只读”声明。远程连接只存凭据引用，token 由配置之外的凭据来源提供。
+
+这份 JSON 是待实现的宿主配置，`allowedTools`、`sideEffects`、`timeoutMs`、`maxResultBytes` 都不是发给 MCP 服务就会自动生效的标准参数。你需要让适配器读取它，并把检查放到第 2、3 步的实际执行位置；仅保存配置文件不会拦住调用。
 
 **完成标志：** 你能说出允许哪些工具、读取哪个目录，以及每次调用最多等多久、接收多少内容。
 
@@ -98,7 +100,7 @@ MCP 定义工具发现与调用消息，具体准入、审批和记录由宿主�
 
 本课允许清单约束宿主可以发出哪些调用。server 进程本身能读什么文件、访问什么网络，还要由系统账户、沙箱或隔离环境约束。通过参数校验不代表服务端进程已经受限。
 
-固定版本便于核对行为，后续升级仍需审查。工具标注也不构成权限证明。[工具规范中的安全考虑](https://modelcontextprotocol.io/specification/2025-11-25/server/tools#security-considerations)
+固定版本便于核对行为，后续升级仍需审查。工具标注也不构成权限证明：`readOnlyHint` 是服务端给出的行为提示，不能替代宿主核对实现，也不会给进程建立只读沙箱。[工具规范中的安全考虑](https://modelcontextprotocol.io/specification/2026-07-28/server/tools#security-considerations)
 
 </details>
 

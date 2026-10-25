@@ -1,6 +1,6 @@
 # 从极简 MCP 到模型训练与 Harness
 
-**先动手：[看懂一次 MCP 工具调用](00-minimal-mcp.md)。** 运行保存与取回记录的演示，找到调用与读写代码，改一句话再运行，最后试一次错误输入。约 30 分钟，能解释调用路径和重启后取回的原因就完成；工程配置与官方案例放在选读区。
+**先动手：[看懂一次 MCP 工具调用](00-minimal-mcp.md)。** 运行保存与取回记录的演示，找到调用与读写代码，改一句话再运行，最后试一次错误输入。约 30 分钟，能区分 MCP 的发现与调用、工具实现的文件持久化就完成；工程配置与官方案例放在选读区。
 
 之后从缩放定律开始，理解模型怎样从数据中学习，再训练一个能续写短句的语言模型，搭出一个能调用工具的 Harness。原主线为四小时，含新增开场连做约四小时三十分钟，也可以分次学习。
 
@@ -13,6 +13,8 @@
 想验证一次修改是否有效，可以做 [GitHub MCP：证明一次修复有效](06-github-lab-mcp.md)。用同一份断言对照旧代码、候选与官方修复，再补一条检查，核对新回执；同样独立于四小时主线。
 
 ## MCP 练习怎么选
+
+三份可运行演示都由脚本安排工具调用，不调用语言模型。MCP 提供发现与调用的共同协议；Markdown 存取、Blender 建模和 GitHub 修复检查分别由对应工具实现。读每一篇时，都先找“请求怎么发出”，再找“谁真正执行，以及结果保存在哪里”。
 
 [![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
 
@@ -86,6 +88,6 @@ node --version
 
 想继续实现 Transformer，可以先复习 [Attention 与 KV Cache](../kv-cache/02-attention-and-kv.md)，再参考 Karpathy 的 [makemore](https://github.com/karpathy/makemore) 从字符模型走到神经网络结构。
 
-想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场的接续记录已保存为 Markdown；Harness 的运行事件仍保存在内存并打印到终端，执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
+想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场通过 Markdown 文件实现持久化，演示结束时会清理临时记录；本课程小型 Harness 的运行事件保存在内存并打印到终端。执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
 
 返回[文档目录](../README.md)。

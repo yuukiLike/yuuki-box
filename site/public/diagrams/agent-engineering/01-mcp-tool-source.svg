@@ -3,7 +3,7 @@
 <desc id="desc">模型提出工具调用，Harness 检查来源、参数和权限并保存执行意图，再通过 MCP 调用外部服务。正常结果检查限额并保存回执；请求已发出后断连且效果无法确认时记录 unknown，运行进入 interrupted，先对账再决定后续动作。</desc>
 <rect width="800" height="930" rx="18" fill="#ffffff"/>
 <text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">外部调用：先记录，再发出</text>
-<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">设计练习 · 图中 ToolSource 尚未接入当前 runtime。</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">设计练习 · ToolSource 是待实现的宿主适配接口。</text>
 <rect x="32" y="118" width="736" height="77" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
 <text x="52" y="153" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">你来做：接只读工具源 → 读取 README → 故意断连</text>
 <rect x="200" y="234" width="400" height="80" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>

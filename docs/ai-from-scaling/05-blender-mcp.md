@@ -4,6 +4,8 @@
 
 用一个 **80 × 50 × 12 mm** 的托盘做实验，四周和底部各留 3 mm。三个工具依次完成创建、检查和导出；你的任务是看结果、理解挖空、改尺寸，再沿代码找到真正执行建模的位置。
 
+**MCP 负责发现工具、传递参数和返回结果；几何由 Blender 的 Python API 创建。** 本课特别观察：客户端怎样把第一次返回的 `modelId` 显式传给后两次调用，让工具找到同一份模型文件。参数与调用顺序写在 `demo.ts`，运行演示不会让 AI 自动设计托盘。
+
 **你来做：运行 → 看剖面 → 改两处尺寸 → 对照新结果。** 前置练习是[看懂一次 MCP 工具调用](00-minimal-mcp.md)。需要本机安装 Blender、Node.js ≥ 22.22 和 pnpm 11.14。仓库已有演示记录使用 Blender 5.2.3 LTS；其他版本和实际打印效果需另行验证。
 
 ## 先看：三个工具怎样接力
@@ -19,16 +21,22 @@ pnpm --dir examples/blender-mcp install --frozen-lockfile
 pnpm --dir examples/blender-mcp demo
 ```
 
-**你要看到：**
+**你要看到：** 下面省略连接日志，用 `<modelId>` 和 `<模型目录>` 代替本次生成的值：
 
 ```text
-发现工具： create_model, inspect_model, export_stl
-Blender 文件： …/model.blend
-预览图： …/preview.png
-尺寸（mm）： 80 × 50 × 12
-网格闭合： true
-STL 文件： …/model.stl
+[MCP] tools/list → create_model, inspect_model, export_stl
+[MCP] tools/call → create_model | name=practice-tray
+[结果] create_model 完成 | modelId=<modelId>
+[文件] Blender：<模型目录>/model.blend
+[文件] 预览：<模型目录>/preview.png
+[MCP] tools/call → inspect_model | modelId=<modelId>
+[结果] inspect_model 完成 | dimensionsMm=80 × 50 × 12 | closed=true
+[MCP] tools/call → export_stl | modelId=<modelId>
+[结果] export_stl 完成 | bytes=<文件字节数>
+[文件] STL：<模型目录>/model.stl
 ```
+
+`tools/list` 只证明客户端拿到了工具清单；三个 `tools/call` 才执行建模、检查和导出。`closed=true` 是本例 Python 代码的网格检查结果，不是 MCP 的连接状态，也不代表已经完成切片或打印。
 
 打开终端打印的 `preview.png`，再用 Blender 打开同一目录的 `model.blend`。演示产物保存在 `examples/blender-mcp/.artifacts/`；每次创建使用新的目录和 `modelId`。
 
@@ -86,13 +94,15 @@ parts: [
 2. [blender.ts](../../examples/blender-mcp/src/blender.ts)：`runBlender()` 用 `execFile()` 启动后台 Blender，通过 JSON 文件交付参数。
 3. [worker.py](../../examples/blender-mcp/worker.py)：`create_model()` 用 `bpy` 创建实体，并用 `DIFFERENCE` 做减法。
 
-回到图中观察后两步：`inspect_model` 和 `export_stl` 都会重新打开 `model.blend`。前一步传回的 `modelId` 用于定位同一个目录；文件把多次独立 Blender 进程连接起来。
+回到图中观察后两步：`inspect_model` 和 `export_stl` 都会重新打开 `model.blend`。在 `demo.ts` 找到这两次调用的 `{ modelId: model.modelId }`：演示客户端主动把同一个编号作为参数传回。服务端用 `join(root, modelId)` 定位目录，Blender 再从磁盘读文件。
+
+`modelId` 是本例工具的业务编号，区别于配对请求和响应的 JSON-RPC `id`。模型能跨进程继续处理，依靠这个编号和保留的文件；只有编号、文件已经删除时，检查会失败。MCP 负责传递编号，不会自动保留 Blender 场景或帮客户端选择“上一个模型”。
 
 **完成标志：** 你能指出“TS 发出调用”和“Python 创建几何”的位置，并说明三个工具为什么能接着处理同一个模型。
 
 ## 到这里完成
 
-拿着你新生成的模型，说清三件事：参数怎样决定底厚与侧壁，`modelId` 怎样串起三次操作，以及 `.blend`、PNG、STL 分别用来编辑、预览和交给切片软件。
+拿着你新生成的模型，说清三件事：MCP 怎样调用 Blender 工具，参数怎样决定底厚与侧壁，以及客户端怎样用 `modelId` 让工具找到保存的文件。`.blend`、PNG、STL 分别用于编辑、预览和交给切片软件。
 
 ## 选读与参考
 

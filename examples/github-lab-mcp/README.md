@@ -4,6 +4,8 @@
 
 完整跟做：[GitHub MCP：证明一次修复有效](../../docs/ai-from-scaling/06-github-lab-mcp.md)。对照三版本结果图，补一条断言，再核对测试与源码指纹。
 
+`tools/list` 发现的是服务提供的工具，`discover_projects` 执行的是 GitHub 仓库搜索。MCP 传递请求与结果；实验代码负责保存工作树、执行断言并给出判定。`experimentId` 是定位这些本地文件的业务编号，恢复实验依赖同一数据目录。
+
 ## 跑一次真实实验
 
 需要 Node.js ≥ 22.22、pnpm 11.14 和 Git，网络可以访问 GitHub。无需模型 key 或 GitHub token 即可读取公开资料；匿名 API 额度不足时可以通过环境变量 `GITHUB_TOKEN` 使用自己的只读凭据。

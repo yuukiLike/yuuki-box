@@ -2,6 +2,8 @@
 
 使用 TypeScript、官方 MCP SDK 和 Zod，通过本机 Blender 创建毫米尺寸模型，检查网格并导出 STL。工具：`create_model`、`inspect_model`、`export_stl`。
 
+MCP 负责发现和调用；Python 中的 Blender API 执行建模。演示参数写在 `src/demo.ts`，不调用语言模型；后续操作显式传入 `modelId`，由服务端定位已保存的模型文件。
+
 在仓库根目录执行；需要 Node.js 22.22+、pnpm 11.14 和可运行的 Blender：
 
 ```bash

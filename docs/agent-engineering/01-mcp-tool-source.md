@@ -12,11 +12,15 @@
 
 图中的 `proposed`、`ready`、`unknown` 等是本练习采用的内部状态名，便于记录发生过什么。MCP 提供发现与调用协议，宿主继续负责策略、审批、记录与恢复。
 
+本课要接入的是一条可核查的执行路径：**MCP 客户端负责发请求，外部服务负责读文件，Harness 负责决定是否允许以及保存调用记录。** `ToolSource` 是这里设计的适配接口，不是 MCP 自带的类；接上 SDK 后，审批和运行恢复仍需要你实现。
+
 ## 1. 定位：先找到现有工具执行入口
 
 **你来做：** 打开 [Sources/main.swift](../../examples/shared/runtime/Sources/main.swift)，结合 [runtime 说明](../../examples/shared/runtime/README.md#代码如何读)，找到 `run`、`tool`、`workspacePath` 和 `saveSessions`。
 
 写下三个答案：谁决定执行哪个工具，哪里检查工作区路径，哪里保存工具意图和结果。外部工具接入时，需要经过对应的检查和记录。
+
+这里的 `saveSessions` 保存 Harness 的会话与执行状态；极简 MCP 的 Markdown、Blender 的模型和 GitHub 的实验目录各由对应服务保存。宿主恢复聊天记录，不等于恢复或撤销远端工具已经产生的结果。
 
 **完成标志：** 你能在现有代码上指出外部调用应该接入的位置。
 
@@ -39,9 +43,11 @@ protocol ToolSource: Sendable {
 }
 ```
 
-**你来做：** 为一个本地测试 server 实现适配器。第一版只提供 `list_directory` 和 `read_file`，读取你准备的临时练习目录，只处理文本结果。
+**你来做：** 先准备一个由你控制的本地 filesystem 测试 server，再实现适配器。本仓库尚未提供这份测试服务；第一版约定它只提供 `list_directory` 和 `read_file`，读取你准备的临时练习目录，只处理文本结果。
 
-调用顺序可以先对照[极简客户端](../../examples/minimal-mcp/src/client.ts)的连接、发现、调用和关闭，再适配当前技术栈。对外工具名加上来源，例如 `mcp.filesystem.read_file`，并按[下一课的允许清单](02-mcp-policy.md)筛选。
+调用顺序可以先对照[极简客户端](../../examples/minimal-mcp/src/client.ts)的连接、发现、调用和关闭，再适配当前技术栈。接口中的 `discover()` 对应 `tools/list`，`call()` 对应 `tools/call`；连接时的 `server/discover` 查询版本与能力，由 SDK 处理。
+
+向模型展示时给工具名加上来源，例如 `mcp.filesystem.read_file`，并按[下一课的允许清单](02-mcp-policy.md)筛选。这个前缀是宿主的命名约定：适配器需把它还原为配置中的 `filesystem` 服务和原始工具名 `read_file`，再发送 MCP 请求。
 
 **完成标志：** 适配器能发现两个工具，且一次调用能映射回正确的 server 和原始工具名。
 
@@ -71,7 +77,7 @@ protocol ToolSource: Sendable {
 
 如果能确认请求尚未发出，可以记录调用失败。**请求已发出但没有结果时，要保留“发生过什么尚不确定”这条事实。** 重启后读取记录，先核对文件或外部状态，再决定后续动作。
 
-取消也有两端：本地可以结束等待并记录取消，服务端可能已经完成操作。普通请求的 `notifications/cancelled` 通知不能证明副作用被撤回；迟到响应需要按已终止请求处理。[取消规范](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/cancellation)
+取消也有两端：本地可以结束等待并记录取消，服务端可能已经完成操作。在本课的 stdio 连接中，客户端用 `notifications/cancelled` 通知取消，但通知不能证明副作用被撤回；迟到响应需要按已终止请求处理。2026-07-28 的 Streamable HTTP 则以关闭该请求的响应流表达取消，不能照搬 stdio 的传输步骤。[取消规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/cancellation)
 
 **完成标志：** 你能用记录解释“调用失败”“已发出但结果未知”和“用户取消等待”的差别。
 
@@ -84,7 +90,7 @@ protocol ToolSource: Sendable {
 <details>
 <summary>协议与实现细节</summary>
 
-基础连接顺序是 `initialize → notifications/initialized → tools/list → tools/call`。SDK 可以处理初始化和消息编码；适配器仍需要把请求 ID、超时、进程退出、stderr、未知通知、取消和结果上限接到宿主的生命周期中。[生命周期规范](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)
+当前示例的 2026-07-28 路径是 `server/discover → tools/list → tools/call`；旧版才使用 `initialize → notifications/initialized`。版本区别见[通信章节](../ai-communication/04-mcp.md)。SDK 可以处理版本发现和消息编码；适配器仍需要把请求 ID、超时、进程退出、stderr、未知通知、取消和结果上限接到宿主的生命周期中。[服务发现规范](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
 
 第一版只支持文本；遇到图片、资源引用或未知 content 类型，记录类型和受限的原始材料，向模型明确返回暂不支持。原始材料的保存也要有大小与访问限制。
 
