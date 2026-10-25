@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="380" viewBox="0 0 920 380" role="img" aria-labelledby="title desc">
+  <title id="title">客户端超时，服务端仍可能继续</title>
+  <desc id="desc">本地实验时间示意。客户端只等待 20 毫秒，服务端延迟 120 毫秒后才读取完成。本地超时没有通知服务端停止。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="920" height="380" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="36" y="49" font-size="26" font-weight="600">客户端超时，服务端仍可能继续</text>
+    <text x="36" y="151" font-size="24">客户端</text>
+    <text x="36" y="267" font-size="24">服务端</text>
+    <path d="M166 145H379" fill="none" stroke="#547261" stroke-width="3" marker-end="url(#arrow)"/>
+    <circle cx="166" cy="145" r="6" fill="#547261"/>
+    <rect x="393" y="117" width="223" height="54" rx="9" fill="#ede9dd" stroke="#b9ac8d"/>
+    <text x="504" y="152" text-anchor="middle" font-size="22">20 ms：不再等</text>
+    <path d="M166 260H755" fill="none" stroke="#547261" stroke-width="3" marker-end="url(#arrow)"/>
+    <circle cx="166" cy="260" r="6" fill="#547261"/>
+    <text x="450" y="237" text-anchor="middle" font-size="22">仍在执行</text>
+    <circle cx="774" cy="260" r="7" fill="#547261"/>
+    <text x="774" y="301" text-anchor="middle" font-size="22">120 ms：读完</text>
+    <path d="M379 178V279" fill="none" stroke="#a4b8aa" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="36" y="351" font-size="21">停止等待以后，对方可能还在做。时间仅作实验示意。</text>
+  </g>
+</svg>

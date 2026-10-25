@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="330" viewBox="0 0 920 330" role="img" aria-labelledby="title desc">
+  <title id="title">先拼成事件，再更新文字</title>
+  <desc id="desc">收到的字节可能只有一小片。把字节解码并拼成完整事件后，再把文字追加到页面；还需要等响应的完成标记。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="920" height="330" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="36" y="49" font-size="26" font-weight="600">先拼成事件，再更新文字</text>
+    <rect x="36" y="110" width="236" height="119" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="154" y="155" text-anchor="middle" font-size="25">收到字节</text>
+    <text x="154" y="195" text-anchor="middle" font-size="21">可能只有一小片</text>
+    <rect x="342" y="110" width="236" height="119" rx="12" fill="#dcebdc" stroke="#72967b"/>
+    <text x="460" y="155" text-anchor="middle" font-size="25">拼成事件</text>
+    <text x="460" y="195" text-anchor="middle" font-size="21">遇到空行，读一条</text>
+    <rect x="648" y="110" width="236" height="119" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="766" y="155" text-anchor="middle" font-size="25">更新页面</text>
+    <text x="766" y="195" text-anchor="middle" font-size="21">你好，RPC</text>
+    <g fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"><path d="M286 169H328"/><path d="M592 169H634"/></g>
+    <text x="36" y="286" font-size="22">文字可以逐步显示；完成状态要等完成标记。</text>
+  </g>
+</svg>

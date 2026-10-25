@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="380" viewBox="0 0 920 380" role="img" aria-labelledby="title desc">
+  <title id="title">回答按 id 配对</title>
+  <desc id="desc">先发 id 为 1 的慢请求，再发 id 为 2 的快请求。id 2 先返回，id 1 后返回。连线按 id 对应。</desc>
+  <defs>
+    <marker id="green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker>
+    <marker id="blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#416c88"/></marker>
+  </defs>
+  <rect width="920" height="380" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="36" y="49" font-size="26" font-weight="600">回答按 id 配对</text>
+    <text x="187" y="106" text-anchor="middle" font-size="22">发出请求</text>
+    <text x="733" y="106" text-anchor="middle" font-size="22">收到结果</text>
+    <rect x="36" y="130" width="302" height="67" rx="10" fill="#e2ece1" stroke="#9db49f"/>
+    <text x="187" y="173" text-anchor="middle" font-size="23">先发：id 1 · 慢</text>
+    <rect x="36" y="231" width="302" height="67" rx="10" fill="#e5edf2" stroke="#a1b7c5"/>
+    <text x="187" y="274" text-anchor="middle" font-size="23" fill="#355b74">后发：id 2 · 快</text>
+    <rect x="582" y="130" width="302" height="67" rx="10" fill="#e5edf2" stroke="#a1b7c5"/>
+    <text x="733" y="173" text-anchor="middle" font-size="23" fill="#355b74">先到：id 2 的结果</text>
+    <rect x="582" y="231" width="302" height="67" rx="10" fill="#e2ece1" stroke="#9db49f"/>
+    <text x="733" y="274" text-anchor="middle" font-size="23">后到：id 1 的结果</text>
+    <path d="M354 163C455 163 465 264 566 264" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#green)"/>
+    <path d="M354 264C455 264 465 163 566 163" fill="none" stroke="#416c88" stroke-width="2.5" marker-end="url(#blue)"/>
+    <text x="36" y="345" font-size="22">用同一个 id，把请求和结果连起来。</text>
+  </g>
+</svg>

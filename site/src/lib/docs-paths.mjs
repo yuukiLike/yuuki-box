@@ -35,7 +35,7 @@ export function resolveDocumentLink(target, sourceFile) {
   if (!fromDocs.startsWith('../') && /\.(md|mdx)$/i.test(filename) && existsSync(absolute)) {
     return documentUrl(fromDocs) + suffix;
   }
-  if (!fromDocs.startsWith('../') && fromDocs.includes('/labs/') && /\.(mjs|wat)$/.test(filename)) {
+  if (!fromDocs.startsWith('../') && fromDocs.includes('/labs/') && /\.(mjs|ts|wat)$/.test(filename)) {
     return '/source/' + fromDocs.split('/').map(encodeURIComponent).join('/') + suffix;
   }
   if (fromRepo.startsWith('site/src/pages/') && filename.endsWith('.astro')) {

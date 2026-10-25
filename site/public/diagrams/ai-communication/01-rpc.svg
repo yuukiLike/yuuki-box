@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="380" viewBox="0 0 920 380" role="img" aria-labelledby="title desc">
+  <title id="title">一次请求，一次回答</title>
+  <desc id="desc">两个进程的 PID 不同。左边发出 id 为 1 的读笔记请求，右边返回带相同 id 的结果。图中 PID 是示意。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="920" height="380" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="36" y="49" font-size="26" font-weight="600">一次请求，一次回答</text>
+    <rect x="36" y="117" width="230" height="170" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="151" y="171" text-anchor="middle" font-size="25">发请求的进程</text>
+    <text x="151" y="214" text-anchor="middle" font-size="23">PID 10001</text>
+    <text x="151" y="253" text-anchor="middle" font-size="20">等待结果</text>
+    <rect x="654" y="117" width="230" height="170" rx="12" fill="#dcebdc" stroke="#72967b"/>
+    <text x="769" y="171" text-anchor="middle" font-size="25">读笔记的进程</text>
+    <text x="769" y="214" text-anchor="middle" font-size="23">PID 10002</text>
+    <text x="769" y="253" text-anchor="middle" font-size="20">执行操作</text>
+    <path d="M282 167H638" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="460" y="144" text-anchor="middle" font-size="22">读 welcome · id 1</text>
+    <path d="M638 252H282" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="460" y="228" text-anchor="middle" font-size="22">笔记文字 · id 1</text>
+    <text x="36" y="340" font-size="22">PID 认出进程，id 认出这次请求。编号仅作示意。</text>
+  </g>
+</svg>

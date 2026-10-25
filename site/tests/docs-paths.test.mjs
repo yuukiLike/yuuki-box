@@ -25,6 +25,7 @@ test('lab pages and downloadable sources point to local built routes', () => {
   assert.equal(resolveDocumentLink('../../site/src/pages/labs/kv-memory.astro', source), '/labs/kv-memory/');
   assert.equal(resolveDocumentLink('../../site/src/pages/index.astro', source), '/');
   assert.equal(resolveDocumentLink('labs/prefix-cache.mjs', source), '/source/kv-cache/labs/prefix-cache.mjs');
+  assert.equal(resolveDocumentLink('../ai-communication/labs/01-rpc.ts', source), '/source/ai-communication/labs/01-rpc.ts');
 });
 
 test('repository code links preserve line numbers and other local checkouts remain non-links', () => {

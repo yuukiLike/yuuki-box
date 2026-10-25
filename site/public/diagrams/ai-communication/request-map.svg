@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="470" viewBox="0 0 1040 470" role="img" aria-labelledby="title desc">
+  <title id="title">页面、运行程序、模型与工具</title>
+  <desc id="desc">页面发送任务并显示结果，运行程序联系模型、安排工具。页面与运行程序用 JSONL，模型连接用 HTTP 和 SSE。虚线是未来接入的 MCP 工具。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker>
+  </defs>
+  <rect width="1040" height="470" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="40" y="45" font-size="25" font-weight="600">页面显示，运行程序安排，工具执行</text>
+    <rect x="40" y="155" width="180" height="100" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="130" y="198" text-anchor="middle" font-size="25">页面</text>
+    <text x="130" y="229" text-anchor="middle" font-size="18">发任务 · 看结果</text>
+    <rect x="395" y="155" width="245" height="100" rx="12" fill="#dcebdc" stroke="#72967b"/>
+    <text x="517" y="198" text-anchor="middle" font-size="25">运行程序</text>
+    <text x="517" y="229" text-anchor="middle" font-size="19">联系模型 · 安排工具</text>
+    <rect x="815" y="85" width="185" height="95" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="907" y="126" text-anchor="middle" font-size="25">模型</text>
+    <text x="907" y="156" text-anchor="middle" font-size="19">生成回复</text>
+    <rect x="815" y="300" width="185" height="95" rx="12" fill="#eef1ec" stroke="#9bab9c" stroke-dasharray="6 4"/>
+    <text x="907" y="341" text-anchor="middle" font-size="25">外部工具</text>
+    <text x="907" y="371" text-anchor="middle" font-size="19">MCP · 以后再接</text>
+    <g fill="none" stroke="#547261" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)">
+      <path d="M235 205H380"/>
+      <path d="M655 185L800 140"/>
+      <path d="M605 270L800 338" stroke-dasharray="6 4"/>
+    </g>
+    <text x="307" y="169" text-anchor="middle" font-size="20">任务与变化</text>
+    <text x="307" y="243" text-anchor="middle" font-size="20">JSONL</text>
+    <text x="714" y="88" text-anchor="middle" font-size="20">发问题：HTTP</text>
+    <text x="714" y="115" text-anchor="middle" font-size="20">收文字：SSE</text>
+    <text x="690" y="350" text-anchor="middle" font-size="20">调用与结果</text>
+    <text x="690" y="377" text-anchor="middle" font-size="20">JSON-RPC</text>
+    <text x="40" y="433" font-size="20" fill="#536b5b">实线是已有连接，虚线留作后续练习。</text>
+  </g>
+</svg>

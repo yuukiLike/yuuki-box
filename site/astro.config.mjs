@@ -103,6 +103,18 @@ export default defineConfig({
           items: [
             { slug: 'learning/ai-frontend-intersections', label: '挑个问题，开一场小实验' },
             {
+              label: 'AI 应用通信：从 RPC、SSE 到 Agent 工具调用',
+              items: [
+                { slug: 'ai-communication', label: '课程入口：今天只学一课' },
+                { slug: 'ai-communication/01-rpc', label: '1 · 请另一个程序读笔记' },
+                { slug: 'ai-communication/02-json-rpc', label: '2 · 让回答找到对应请求' },
+                { slug: 'ai-communication/03-sse', label: '3 · 一边接收，一边显示' },
+                { slug: 'ai-communication/04-mcp', label: '4 · 让应用调用工具' },
+                { slug: 'ai-communication/05-failure', label: '5 · 停止等待后，对方还在做吗' },
+                { slug: 'ai-communication/06-yuuki', label: '6 · 回到自己的代码' },
+              ],
+            },
+            {
               label: '查找与缓存：少做重复功',
               items: [
                 { slug: 'frontend-foundations', label: '从一万条消息里找出那一条' },
