@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="850" viewBox="0 0 760 850" role="img" aria-labelledby="title desc">
+<title id="title">Blender：三个工具，一份模型</title>
+<desc id="desc">用户提交形状参数，create_model 启动后台 Blender 创建模型和预览；inspect_model 用显式传入 modelId 重新读取 blend，返回几何信息；export_stl 再读文件并检查闭合后导出 STL。每次调用使用独立 Blender 进程。</desc>
+<rect width="760" height="850" rx="18" fill="#ffffff"/>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">Blender：三个工具，一份模型</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">客户端传 modelId；服务端按编号读取模型文件。</text>
+<rect x="32" y="117" width="696" height="80" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
+<text x="52" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">你来做：运行 → 看剖面 → 改尺寸 → 核对文件</text>
+<text x="48" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">每次调用 → 新启 Blender</text>
+<text x="448" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">你能检查的产物</text>
+<rect x="32" y="252" width="332" height="114" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="52" y="287" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">01  create_model</text>
+<text x="52" y="319" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">形状参数 → 建模与保存</text>
+<polyline points="372,309 424,309" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="417.0,304.45 424,309 417.0,313.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="432" y="252" width="296" height="114" rx="12" fill="#f2eefb" stroke="#b7a7d3" stroke-width="1.5"/>
+<text x="452" y="287" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#665086" text-anchor="start">可编辑与预览</text>
+<text x="452" y="319" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#665086" text-anchor="start">design.json / model.blend</text>
+<text x="452" y="348" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#665086" text-anchor="start">preview.png</text>
+<rect x="32" y="424" width="332" height="114" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="52" y="459" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">02  inspect_model</text>
+<text x="52" y="491" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">重新打开 model.blend</text>
+<polyline points="372,481 424,481" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="417.0,476.45 424,481 417.0,485.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="432" y="424" width="296" height="114" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="452" y="459" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">几何检查结果</text>
+<text x="452" y="491" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">尺寸、体积、面数</text>
+<text x="452" y="520" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">closed: true / false</text>
+<rect x="32" y="596" width="332" height="114" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
+<text x="52" y="631" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">03  export_stl</text>
+<text x="52" y="663" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">重读文件 → 检查 → 导出</text>
+<polyline points="372,653 424,653" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="417.0,648.45 424,653 417.0,657.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="432" y="596" width="296" height="114" rx="12" fill="#f2eefb" stroke="#b7a7d3" stroke-width="1.5"/>
+<text x="452" y="631" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#665086" text-anchor="start">切片输入文件</text>
+<text x="452" y="663" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#665086" text-anchor="start">model.stl</text>
+<text x="452" y="692" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#665086" text-anchor="start">在切片软件中按毫米核对</text>
+<polyline points="198,372 198,414" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="202.55,407.0 198,414 193.45,407.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="222" y="398" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">显式传入 modelId</text>
+<polyline points="198,544 198,586" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="202.55,579.0 198,586 193.45,579.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="222" y="570" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">显式传入 modelId</text>
+<rect x="32" y="755" width="696" height="68" rx="12" fill="#fff6e4" stroke="#d9b66a" stroke-width="1.5"/>
+<text x="52" y="790" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#76551d" text-anchor="start">闭合检查失败：报告错误，原有 STL 保持原样。</text>
+</svg>

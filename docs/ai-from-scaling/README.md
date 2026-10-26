@@ -1,6 +1,6 @@
 # 从极简 MCP 到模型训练与 Harness
 
-**先动手：[换个会话，接着做](00-minimal-mcp.md)。** 用五分钟跑通一个保存与取回项目接续记录的 MCP；跟写版约 30 分钟，包含 TypeScript 严格检查、编译、工具服务和客户端，再对照官方案例。
+**先动手：[看懂一次 MCP 工具调用](00-minimal-mcp.md)。** 运行保存与取回记录的演示，找到调用与读写代码，改一句话再运行，最后试一次错误输入。约 30 分钟，能区分 MCP 的发现与调用、工具实现的文件持久化就完成；工程配置与官方案例放在选读区。
 
 之后从缩放定律开始，理解模型怎样从数据中学习，再训练一个能续写短句的语言模型，搭出一个能调用工具的 Harness。原主线为四小时，含新增开场连做约四小时三十分钟，也可以分次学习。
 
@@ -8,15 +8,25 @@
 
 完成开场后进入[第一小时 从缩放定律理解模型](01-understand-models.md)，先回答一个问题：缩放曲线上不断下降的误差，到底是什么误差？
 
-想先做第二个真实工具，可以转到 [Blender MCP：做一个能拿在手里的模型](05-blender-mcp.md)。它沿用 TS 工程，把参数交给本机 Blender，保留可编辑模型、预览图与 STL；这一篇独立于下面的四小时主线。
+想先操作一个真实软件，可以转到 [Blender MCP：让参数变成模型](05-blender-mcp.md)。对着俯视与剖面图改两处尺寸，核对新生成的模型、预览与 STL；这一篇独立于下面的四小时主线。
 
-想把 GitHub 当作 AI 实验场，可以做 [GitHub 实验员：重走一次真实修复](06-github-lab-mcp.md)。从公开 Issue 与旧版本出发，写出能抓住 bug 的断言，尝试修复，再打开官方补丁对照；同样独立于四小时主线。
+想验证一次修改是否有效，可以做 [GitHub MCP：证明一次修复有效](06-github-lab-mcp.md)。用同一份断言对照旧代码、候选与官方修复，再补一条检查，核对新回执；同样独立于四小时主线。
+
+已经看懂 `McpServer` 和 `registerTool`，想做一个每天能用的工具，可以接着做 [Apple 天气 MCP：从查询天气到安排出门](07-weatherkit-mcp.md)。先改离线样本的出门条件，再配置自己的 WeatherKit，查询常用地点并筛选连续时段。
+
+## MCP 练习怎么选
+
+极简、Blender 和 GitHub 三份演示都由脚本安排工具调用，不调用语言模型。WeatherKit 课程另外提供离线样本、真实 API 检查和接入现成 AI 客户端的步骤；没有 Apple 密钥时可先完成样本练习。MCP 提供发现与调用的共同协议，各项业务由工具实现。读每一篇时，都先找“请求怎么发出”，再找“谁真正执行，以及结果来自哪里”。
+
+[![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
+
+想看清请求如何往返，读[发现与调用](../ai-communication/04-mcp.md)；准备接入自己的 Agent 时，再做[工具源](../agent-engineering/01-mcp-tool-source.md)和[调用策略](../agent-engineering/02-mcp-policy.md)两篇实现练习。后两篇的接口与状态是待实现方案，正文标出了需要自己补上的部分。
 
 ## 先做 MCP 再进入四小时主线
 
 | 开场 | 内容 | 第一份成果 |
 | --- | --- | --- |
-| 约 30 分钟 | [实现「接着做」MCP 并对照官方案例](00-minimal-mcp.md) | 保存一条接续记录，重启服务进程后取回原文 |
+| 约 30 分钟 | [看懂一次 MCP 工具调用](00-minimal-mcp.md) | 改一句记录并在服务重启后取回，找到调用、读写和输入校验的位置 |
 
 下面的 240 分钟属于原来的模型与 Harness 主线。
 
@@ -80,7 +90,7 @@ node --version
 
 想继续实现 Transformer，可以先复习 [Attention 与 KV Cache](../kv-cache/02-attention-and-kv.md)，再参考 Karpathy 的 [makemore](https://github.com/karpathy/makemore) 从字符模型走到神经网络结构。
 
-想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场的接续记录已保存为 Markdown；Harness 的运行事件仍保存在内存并打印到终端，执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
+想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场通过 Markdown 文件实现持久化，演示结束时会清理临时记录；本课程小型 Harness 的运行事件保存在内存并打印到终端。执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
 
 ## 末章选修：音乐 MCP
 

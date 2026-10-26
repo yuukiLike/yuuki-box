@@ -1,102 +1,119 @@
-# MCP：接上第一个外部工具
+# MCP：把外部工具接进 Harness
 
-现在的 Agent 会读文件了，接下来想让它用上外部工具。先接一个本地 server，让它读出 README，再在调用中途故意断开连接。成功时会用，出错时也知道发生了什么，这次接入才完整。
+**这一课的目的：把外部工具放进现有运行流程，让成功、拒绝和断连都有可查的结果。**
 
-**让 MCP 只负责发现与调用工具；权限、审批、事件和恢复仍由现有 Harness 负责。** 换一个 MCP server 不应该绕过你已经写好的工作区校验和审批流程。
+**这是实现练习。** 当前 [shared/runtime](../../examples/shared/runtime/README.md) 提供 `list_files`、`read_file`、`write_note`，尚未接入这里的 MCP `ToolSource`。下面的接口、状态和图是待实现方案，没有一条命令能直接跑出全部验收结果。
 
-状态：实现建议。以下 Swift 片段只说明接口，未接入 `examples/shared/runtime`。资料核对：2026-10-23。
+**你来做：找到现有执行入口 → 接一个只读工具源 → 跑一次读取 → 在调用中途断连。** 开始前先完成[极简 MCP](../ai-from-scaling/00-minimal-mcp.md)，并具备[运行状态与恢复](05-harness-vertical-slice.md)的基础。
 
-## 为什么不让模型直连 server
+## 先看：正常返回与中途断连
 
-你现在的 runtime 只有 `list_files`、`read_file`、`write_note` 三个固定工具，参数逐项校验，写入需要审批，结果有大小上限。[runtime 说明](../../examples/shared/runtime/README.md)
+[![待实现的 Harness 接入流程：模型提出请求，Harness 检查和记录，再经 MCP 调用外部服务；正常结果有界返回，已发出的请求断连时记录未知并停止自动重放](../../site/public/diagrams/agent-engineering/01-mcp-tool-source.svg)](../../site/public/diagrams/agent-engineering/01-mcp-tool-source.svg)
 
-MCP 会把工具数量、参数和返回内容交给外部进程。外部进程可能超时、崩溃、返回超大内容，或者在 tool description、resource、prompt 里夹带指令。如果模型直接连接 server，这些内容会绕过现有的参数校验、审批和事件记录。
+图中的 `proposed`、`ready`、`unknown` 等是本练习采用的内部状态名，便于记录发生过什么。MCP 提供发现与调用协议，宿主继续负责策略、审批、记录与恢复。
 
-所以 MCP client 应该是 Harness 的一个 `ToolSource`，不是第二个执行器。
+本课要接入的是一条可核查的执行路径：**MCP 客户端负责发请求，外部服务负责读文件，Harness 负责决定是否允许以及保存调用记录。** `ToolSource` 是这里设计的适配接口，不是 MCP 自带的类；接上 SDK 后，审批和运行恢复仍需要你实现。
 
-## 最小接口
+## 1. 定位：先找到现有工具执行入口
+
+**你来做：** 打开 [Sources/main.swift](../../examples/shared/runtime/Sources/main.swift)，结合 [runtime 说明](../../examples/shared/runtime/README.md#代码如何读)，找到 `run`、`tool`、`workspacePath` 和 `saveSessions`。
+
+写下三个答案：谁决定执行哪个工具，哪里检查工作区路径，哪里保存工具意图和结果。外部工具接入时，需要经过对应的检查和记录。
+
+这里的 `saveSessions` 保存 Harness 的会话与执行状态；极简 MCP 的 Markdown、Blender 的模型和 GitHub 的实验目录各由对应服务保存。宿主恢复聊天记录，不等于恢复或撤销远端工具已经产生的结果。
+
+**完成标志：** 你能在现有代码上指出外部调用应该接入的位置。
+
+## 2. 实现：把发现和调用包成一个工具源
+
+先提供两个能力：查询工具清单、按名称调用工具。接口可以从下面的示意开始；`SideEffect`、`ToolResult` 需要与你的运行时类型对齐。
 
 ```swift
 struct ToolDescriptor: Sendable {
-    let name: String          // server 内的原始名字
+    let name: String
     let description: String
     let inputSchema: Data
     let sideEffect: SideEffect
 }
 
 protocol ToolSource: Sendable {
-    var id: String { get }    // 例如 "mcp.filesystem"
+    var id: String { get }
     func discover() async throws -> [ToolDescriptor]
     func call(_ tool: String, arguments: Data) async throws -> ToolResult
 }
 ```
 
-Harness 对外暴露的名字是 `mcp.<server>.<tool>`，例如 `mcp.filesystem.read_file`。模型看到的 schema 由 Harness 重新生成和校验，不直接把 server 的原始 JSON 透传。这样在名字冲突、schema 变化和版本升级时仍有控制点。
+**你来做：** 先准备一个由你控制的本地 filesystem 测试 server，再实现适配器。本仓库尚未提供这份测试服务；第一版约定它只提供 `list_directory` 和 `read_file`，读取你准备的临时练习目录，只处理文本结果。
 
-## 接进现有状态机
+调用顺序可以先对照[极简客户端](../../examples/minimal-mcp/src/client.ts)的连接、发现、调用和关闭，再适配当前技术栈。接口中的 `discover()` 对应 `tools/list`，`call()` 对应 `tools/call`；连接时的 `server/discover` 查询版本与能力，由 SDK 处理。
 
-```text
-用户提交任务 → 模型请求 mcp.filesystem.read_file
-            → ToolCall proposed → 策略允许只读 → ready
-            → 持久化执行 intent → tools/call → result
-            → 原始内容写 artifact → 模型收到有界摘要 → 继续回答
-```
+向模型展示时给工具名加上来源，例如 `mcp.filesystem.read_file`，并按[下一课的允许清单](02-mcp-policy.md)筛选。这个前缀是宿主的命名约定：适配器需把它还原为配置中的 `filesystem` 服务和原始工具名 `read_file`，再发送 MCP 请求。
 
-- 只读工具可以按策略直接进入 `ready`；写入、网络或破坏性工具默认进入 `waiting_for_approval`。
-- 发送 `tools/call` 前先持久化执行 intent。崩溃后才能知道“可能已经发出过”。
-- 原始结果先落 artifact，模型只收摘要和引用；不要因为 server 说结果很短就跳过限额。
-- 取消时发送 `notifications/cancelled` 只是 best effort。本地必须立即停止等待并记录 `cancelled`，不能假设 server 已经停止。
-- 超时和连接中断不要一律标成 `failed`；无法确认副作用时使用 `unknown`，并让 Run 进入可对账的 `interrupted`。
+**完成标志：** 适配器能发现两个工具，且一次调用能映射回正确的 server 和原始工具名。
 
-## 最小 MCP 客户端
+## 3. 串起：让一次读取留下完整记录
 
-先用 stdio 和 JSON-RPC 2.0，只实现四步：
+让运行时完成这个任务：
 
 ```text
-initialize
-→ notifications/initialized
-→ tools/list
-→ tools/call
+列出练习目录，读取其中的 README.md，然后概括内容。
 ```
 
-需要处理：请求 id、每类请求的超时、进程退出、stderr、消息分帧、未知通知、结果大小上限。不要先引入完整 SDK 再理解协议；一个只支持文本工具的最小客户端更容易审查。
+**你来做：** 把图中的主线接完整：参数与权限检查 → 保存执行意图 → 发出调用 → 检查结果 → 保存回执 → 把有界内容交回模型。
 
-第一版只支持文本结果。遇到图片、资源引用或不认识的 content 类型时，保存原始 JSON 到 artifact，并向模型返回“暂不支持该类型”，不要猜内容。
+每次调用至少能查到来源、工具名、参数摘要、开始时间、耗时、结果字节数和终态。参数摘要不记录 token 或密码原文。
 
-## 小挑战：读完 README，再拔掉连接
+**完成标志：** 正常调用返回预期文件内容，并有与之对应的执行记录。找到输出中某句话时，也能追到它来自哪次工具结果。
 
-接一个本地 stdio server，只暴露两个只读工具，例如列目录和读文本。用现有 JSONL 协议跑一次：
+## 4. 故障练习：在三个位置打断它
 
-```text
-列出工作区里的文件，读取 README.md，然后用三句话概括。
-```
+用你控制的测试 server 做以下实验，先写出预期，再运行：
 
-然后做三次故障注入：
-
-| 注入 | 期望 |
+| 你制造的情况 | 必须观察到什么 |
 | --- | --- |
-| 调用一个未加入 allowlist 的写入工具 | ToolCall 以 `permission_denied` 结束，模型能继续回答 |
-| server 在调用中途被 kill | ToolCall 落到 `failed` 或 `unknown`，Run 不丢失已有事件 |
-| server 返回超过上限的内容 | 原始内容进 artifact，模型只收到截断标记和摘要 |
+| 绕过展示清单，直接请求未授权工具 | 调用入口返回 `permission_denied`，不向 server 发出调用 |
+| 请求已发出，收到结果前终止测试 server | 记录断连；无法确认执行效果时标为 `unknown`，Run 进入 `interrupted` |
+| 返回超过配置上限的文本 | 接收有硬上限；返回明确错误或有界内容与截断标记，模型上下文不接收整份超大文本 |
 
-## 验收
+如果能确认请求尚未发出，可以记录调用失败。**请求已发出但没有结果时，要保留“发生过什么尚不确定”这条事实。** 重启后读取记录，先核对文件或外部状态，再决定后续动作。
 
-- 每次调用都能查到 `server`、`tool`、参数摘要、开始时间、耗时、结果字节数和终态。
-- 断连后重启不会自动重放副作用；需要人工确认的调用有明确记录。
-- 工作区边界仍由 Harness 校验，不依赖 server 自觉遵守。
-- 模型看到的工具表只包含 allowlist 中的工具。
+取消也有两端：本地可以结束等待并记录取消，服务端可能已经完成操作。在本课的 stdio 连接中，客户端用 `notifications/cancelled` 通知取消，但通知不能证明副作用被撤回；迟到响应需要按已终止请求处理。2026-07-28 的 Streamable HTTP 则以关闭该请求的响应流表达取消，不能照搬 stdio 的传输步骤。[取消规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/cancellation)
 
-## 边界
+**完成标志：** 你能用记录解释“调用失败”“已发出但结果未知”和“用户取消等待”的差别。
 
-- **MCP server 不继承你的 `read_file` 限制。** 它可能读到隐藏文件、凭据或工作区外路径；Harness 侧仍要校验路径和参数。
-- **tool annotations 不可信。** 除非 server 本身可信，否则“只读”“安全”这类标注只能当提示，不能当权限依据。
-- **stdio server 是本机进程，不是沙箱。** 它拥有你启动它时的 OS 权限；不可信 server 应换独立用户、容器或虚拟机运行。
-- **远程 server 另算信任边界。** 使用最小 scope 的凭据，固定版本，记录连接来源；不要因为走 HTTPS 就默认可信。
+## 到这里完成
 
-## 和现有代码的关系
+交出一次成功读取、一条拒绝记录和一次断连记录。每条都能对应到请求及终态，恢复时不会自动重放不确定的副作用。以上需要你完成适配器与故障测试后才能算通过。
 
-- 工具执行与审批：[`examples/shared/runtime/Sources/main.swift`](../../examples/shared/runtime/Sources/main.swift)
-- 协议与命令：[`examples/shared/runtime/PROTOCOL.md`](../../examples/shared/runtime/PROTOCOL.md)
-- Run/ToolCall 状态与事件建议：[Mac 本地 Harness](../architecture/mac-local-harness.md) 第 6、7、9、10 节
+## 选读与参考
 
-返回[上一篇：故障演练](07-scenario-regression.md) · [总览](README.md) · 下一篇[MCP：清单与默认拒绝](02-mcp-policy.md)。
+<details>
+<summary>协议与实现细节</summary>
+
+当前示例的 2026-07-28 路径是 `server/discover → tools/list → tools/call`；旧版才使用 `initialize → notifications/initialized`。版本区别见[通信章节](../ai-communication/04-mcp.md)。SDK 可以处理版本发现和消息编码；适配器仍需要把请求 ID、超时、进程退出、stderr、未知通知、取消和结果上限接到宿主的生命周期中。[服务发现规范](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
+
+第一版只支持文本；遇到图片、资源引用或未知 content 类型，记录类型和受限的原始材料，向模型明确返回暂不支持。原始材料的保存也要有大小与访问限制。
+
+工具描述和 schema 由外部服务提供，应验证、筛选后生成模型可用的工具表。工具版本或定义变化应触发检查，不能只凭同名工具自动继承权限。
+
+</details>
+
+<details>
+<summary>宿主检查与进程权限的边界</summary>
+
+允许清单和参数检查约束的是宿主发出的调用。stdio server 是独立本机进程，其文件和网络权限由运行它的系统环境决定，不会自动继承内建 `read_file` 的限制。
+
+工具的 `readOnlyHint` 等标注只提供线索。准入和副作用分类要来自你核对过的实现与配置。远程服务还需要明确凭据来源、访问范围和服务身份。
+
+</details>
+
+<details>
+<summary>已有代码与后续设计入口</summary>
+
+- [runtime 协议](../../examples/shared/runtime/PROTOCOL.md)：现有 UI 与运行时的 JSONL 命令。
+- [Mac 本地 Harness](../architecture/mac-local-harness.md)：Run、ToolCall、持久化与恢复的设计建议。
+- [故障演练](07-scenario-regression.md)：把成功、拒绝、取消与断连做成可重复场景。
+
+</details>
+
+返回[总览](README.md) · 下一篇[MCP：决定哪些工具可以执行](02-mcp-policy.md)。
