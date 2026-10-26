@@ -19,6 +19,10 @@
 
 `client.ts` 和 `demo.ts` 不属于这个版本。你提供工具，Codex 负责连接服务、发现工具、根据对话生成调用参数，再把结果交回会话。
 
+[![每日一眼：temperature 是温度，0.2 稳、0.7 日常、1.0 多样；top_p 是核采样阈值，1.0 不裁剪、0.95 或 0.9 收窄候选。温度调概率，Top-P 划范围。](../../site/public/diagrams/ai-from-scaling/sampling-memory-card.svg)](../../site/public/diagrams/ai-from-scaling/sampling-memory-card.svg)
+
+采样参数速记，点击图片可放大。图中的取值是经验起点；先确认模型支持，通常先只调整其中一个，另一个保持默认。[参数说明](https://developers.openai.com/api/reference/resources/responses/websocket-events#response.create)
+
 ## 先接入 Codex
 
 需要 Node.js 22.22 或更高版本、pnpm 11.14，以及已经可以正常使用的 Codex CLI。在仓库根目录执行：

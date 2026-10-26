@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="340" viewBox="0 0 480 340" role="img" aria-labelledby="title desc">
+  <title id="title">每日一眼：temperature 与 top_p</title>
+  <desc id="desc">温度调概率，Top-P 划范围。temperature 叫温度，低温更集中，高温更分散；经验起点是 0.2 稳、0.7 日常、1.0 多样。top_p 叫核采样阈值，按概率从高到低累加，达到 p 就截住；1.0 不裁剪，0.95 或 0.9 缩小候选范围。一次先调一个，另一个保持默认，并确认模型支持。</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #21314b; }
+    .eyebrow { font-size: 12px; fill: #52627a; }
+    .mnemonic { font-size: 21px; font-weight: 650; }
+    .name { font-size: 18px; font-weight: 600; }
+    .meaning { font-size: 16px; font-weight: 600; }
+    .body { font-size: 14px; fill: #52627a; }
+    .value { font-size: 16px; font-weight: 600; }
+    .note { font-size: 12px; fill: #52627a; }
+    .temperature { fill: #304fb4; }
+    .nucleus { fill: #255b40; }
+  </style>
+
+  <rect x="0.5" y="0.5" width="479" height="339" rx="16" fill="#ffffff" stroke="#c9d1df"/>
+  <text class="eyebrow" x="22" y="27">每日一眼 · 采样参数</text>
+  <text class="mnemonic" x="22" y="55">温度调概率，Top-P 划范围</text>
+
+  <rect x="14" y="72" width="452" height="114" rx="10" fill="#edf2ff"/>
+  <text class="name temperature" x="28" y="98">temperature</text>
+  <text class="meaning temperature" x="163" y="98">温度</text>
+  <text class="body" x="28" y="122">低温更集中 → 高温更分散</text>
+  <g aria-hidden="true">
+    <g fill="#3e63dd">
+      <rect x="332" y="106" width="8" height="22" rx="2"/>
+      <rect x="344" y="121" width="8" height="7" rx="2"/>
+      <rect x="356" y="124" width="8" height="4" rx="2"/>
+    </g>
+    <path d="M373 118 H387 M383 114 L387 118 L383 122" fill="none" stroke="#71809a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#bd682b">
+      <rect x="396" y="114" width="8" height="14" rx="2"/>
+      <rect x="408" y="117" width="8" height="11" rx="2"/>
+      <rect x="420" y="119" width="8" height="9" rx="2"/>
+    </g>
+  </g>
+  <g fill="#ffffff">
+    <rect x="28" y="136" width="134" height="34" rx="7"/>
+    <rect x="173" y="136" width="134" height="34" rx="7"/>
+    <rect x="318" y="136" width="134" height="34" rx="7"/>
+  </g>
+  <text class="value temperature" x="43" y="159">0.2 稳</text>
+  <text class="value temperature" x="188" y="159">0.7 日常</text>
+  <text class="value temperature" x="333" y="159">1.0 多样</text>
+
+  <rect x="14" y="196" width="452" height="108" rx="10" fill="#e6f4ed"/>
+  <text class="name nucleus" x="28" y="222">top_p</text>
+  <text class="meaning nucleus" x="93" y="222">核采样阈值</text>
+  <g aria-hidden="true">
+    <rect x="330" y="209" width="76" height="18" rx="9" fill="none" stroke="#397857"/>
+    <g fill="#397857">
+      <circle cx="343" cy="218" r="4"/>
+      <circle cx="359" cy="218" r="4"/>
+      <circle cx="375" cy="218" r="4"/>
+      <circle cx="391" cy="218" r="4"/>
+    </g>
+    <circle cx="423" cy="218" r="4" fill="#bac9c0"/>
+    <circle cx="439" cy="218" r="4" fill="#bac9c0"/>
+  </g>
+  <text class="body" x="28" y="247">按概率从高到低累加，达到 p 就截住</text>
+  <g fill="#ffffff">
+    <rect x="28" y="260" width="150" height="30" rx="7"/>
+    <rect x="190" y="260" width="262" height="30" rx="7"/>
+  </g>
+  <text class="value nucleus" x="43" y="281">1.0 不裁剪</text>
+  <text class="value nucleus" x="205" y="281">0.95 / 0.9 收窄候选</text>
+
+  <text class="note" x="22" y="325">经验起点 · 一次先调一个 · 以模型支持为准</text>
+</svg>
