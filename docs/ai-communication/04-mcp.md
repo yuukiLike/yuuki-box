@@ -1,5 +1,9 @@
 # 第四章：看清 MCP 的发现与调用
 
+[![MCP 全景：用户操作 Host，Host 内的 Client 连接 Server；Codex、Zed、Warp、Raycast 都可以作为 Host，外接 GitHub、Context7、Playwright 等服务](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
+
+点击图可打开完整 SVG、放大查看；原图中的平台与服务卡片链接到官方资料。
+
 [上一课](03-sse.md) · [目录](README.md) · [下一课](05-failure.md)
 
 **这一课的目的：把“先问有哪些工具，再按约定调用”对应到代码和协议消息。**
@@ -7,6 +11,58 @@
 复用[第一个 MCP 演示](../ai-from-scaling/00-minimal-mcp.md)。这次重点看两个方法：`tools/list` 返回工具名称和输入规则，`tools/call` 发送具体工具名与参数。前者发现的是已连接服务提供的工具，不是扫描电脑或搜索互联网来寻找 MCP 服务；服务启动命令在 `client.ts` 中已经指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 
 **你来做：看输出 → 顺时序找代码 → 对照一次调用的名称、参数和结果。**
+
+## 先分清：你、Host、Client、Server
+
+| 角色 | 负责什么 | 和你的关系 |
+| --- | --- | --- |
+| 用户 | 提出目标、选择应用、连接账号，按应用策略确认操作 | 你在应用里说话、查看调用与结果 |
+| **Host：宿主应用** | 管理对话和模型、决定暴露哪些工具、检查权限、管理 Client | 在这个接入场景里，就是你操作的 Codex、Zed、Warp 或 Raycast |
+| **Client：连接组件** | 与一个 Server 通信，发现能力、发送请求、接收结果 | 通常内置在 Host 中，接入已有平台时由平台提供 |
+| **Server：能力提供程序** | 提供工具、资源或提示模板；收到调用后访问实际文件、浏览器或业务 API | 你安装、连接或自己编写的 MCP 服务 |
+| 模型（LLM） | 根据上下文提出工具调用，收到结果后继续回答 | Host 通过模型接口联系它；图中紫色连接表示模型 API，绿色连接表示 MCP |
+
+**一个 Host 可以管理多个 Client，每个 Client 负责一条 Server 连接；同一个远程 Server 可以同时服务多个平台的 Client。** 这些是角色分工：本机运行的程序也可以是 Server。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
+
+平时大家也会把整个 Codex 或 Zed 叫作“MCP 客户端”。这是从使用者角度说“它能接 MCP”；严格拆开内部结构时，整个应用是 Host，负责协议连接的组件是 Client。
+
+<details>
+<summary>图里的四个平台，分别怎样接入 MCP？</summary>
+
+以下支持方式核对于 **2026-10-26**，指各平台自己的 AI / Agent 功能接入外部 Server。
+
+| 平台 | 接入入口与配置 | 连接方式与边界 |
+| --- | --- | --- |
+| [Codex](https://learn.chatgpt.com/docs/extend/mcp) | `codex mcp`、MCP 设置；配置保存在 `config.toml` | 本机 stdio、远程 Streamable HTTP；支持相应的 token / OAuth 认证。本仓库的[Codex 实操篇](../ai-from-scaling/00-codex-mcp.md)只需编写 Server |
+| [Zed](https://zed.dev/docs/ai/mcp) | Settings → AI → MCP Servers；配置字段是 `context_servers`，也可通过扩展安装 | 支持本地命令和远程 URL；Zed Agent 直接使用这些服务，外部 Agent 的配置传递还涉及 ACP |
+| [Warp](https://docs.warp.dev/agents/capabilities/mcp/) | Settings → Agents → MCP servers；添加启动命令或 URL | 本地命令、Streamable HTTP，也兼容 SSE 连接；此处指 Warp 应用内的本地 Agent |
+| [Raycast](https://manual.raycast.com/ai/model-context-protocol) | `Install MCP Server` / `Manage MCP Servers`；在 AI Chat、Quick AI 等入口使用 | 桌面支持 stdio 和 HTTP，HTTP 支持 OAuth；iOS 只支持 HTTP |
+
+复用同一个 Server 时，各平台分别管理配置、登录授权和会话。能否连接还取决于双方支持的传输、认证和具体功能。比如把 GitHub MCP 接到 Codex 和 Raycast，意味着两边各有自己的连接，可以访问授权范围内的 GitHub 数据。
+
+“在 Warp 终端里运行 Codex CLI”时，直接连接 MCP 的是 Codex；使用 Warp 自己的 Agent 时，则由 Warp 管理连接。Zed 的内置 Agent、外部 Agent 和终端线程也有各自的配置路径，详见上表官方文档。
+
+</details>
+
+<details>
+<summary>图中常见的 MCP Server，各自提供什么？</summary>
+
+以下按用途举例，不是热度排行榜。服务提供的 Tools、Resources、Prompts，以及平台能使用其中哪些功能，都以双方实际支持为准。
+
+| Server | 把什么能力接进 Host | 实际连接的对象 |
+| --- | --- | --- |
+| [GitHub MCP](https://github.com/github/github-mcp-server) | 查询或操作仓库、Issue、PR 等 | GitHub API；官方提供本地与远程服务 |
+| [Context7](https://github.com/upstash/context7) | 按库查询文档与代码示例 | Context7 的开发文档索引 |
+| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | 打开网页、点击、读取页面 | Playwright 控制的浏览器 |
+| [Figma MCP](https://developers.figma.com/docs/figma-mcp-server/) | 读取设计上下文，按支持的功能创建或修改画布内容 | Figma 文件与设计系统；具体能力受服务模式与权限影响 |
+| [Sentry MCP](https://mcp.sentry.dev/) | 查询错误、性能与项目问题 | 授权范围内的 Sentry 项目 |
+| [Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) | 读写允许目录中的文件 | 本机文件系统；这是 MCP 的参考实现之一 |
+
+你自己的「接着做」也处在 **Server** 的位置：Host 里的 Client 调用 `save_checkpoint` / `resume`，服务端代码读写 Markdown。接入 Codex 时，这个 Client 由 Codex 提供；下面独立演示里的 `client.ts` 则是为了让你看见连接过程而单独写的。
+
+</details>
+
+总览图说明角色与连接关系；下面的实验和消息顺序按本课明确引用的 **2026-07-28** 规范阅读。
 
 ## 1. 运行：观察两种不同的请求
 

@@ -1,6 +1,8 @@
 # 从极简 MCP 到模型训练与 Harness
 
-**先动手：[看懂一次 MCP 工具调用](00-minimal-mcp.md)。** 运行保存与取回记录的演示，找到调用与读写代码，改一句话再运行，最后试一次错误输入。约 30 分钟，能区分 MCP 的发现与调用、工具实现的文件持久化就完成；工程配置与官方案例放在选读区。
+**直接在 Codex 里使用：[在 Codex 里用自己的 MCP](00-codex-mcp.md)。** 只写服务端，让 Codex 根据你的话保存一条接续记录，再换个会话取回。客户端由 Codex 提供。
+
+**单独观察协议：[看懂一次 MCP 工具调用](00-minimal-mcp.md)。** 运行保存与取回记录的演示，找到调用与读写代码，改一句话再运行，最后试一次错误输入。约 30 分钟，能区分 MCP 的发现与调用、工具实现的文件持久化就完成；工程配置与官方案例放在选读区。
 
 之后从缩放定律开始，理解模型怎样从数据中学习，再训练一个能续写短句的语言模型，搭出一个能调用工具的 Harness。原主线为四小时，含新增开场连做约四小时三十分钟，也可以分次学习。
 
@@ -26,6 +28,7 @@
 
 | 开场 | 内容 | 第一份成果 |
 | --- | --- | --- |
+| Codex 接入 | [只写服务端，在真实会话里调用工具](00-codex-mcp.md) | 看到 Codex 的工具调用，保存并跨会话取回自己的记录 |
 | 约 30 分钟 | [看懂一次 MCP 工具调用](00-minimal-mcp.md) | 改一句记录并在服务重启后取回，找到调用、读写和输入校验的位置 |
 
 下面的 240 分钟属于原来的模型与 Harness 主线。
@@ -47,7 +50,7 @@
 
 ### 一个可被发现和调用的 MCP 服务
 
-把“留下下一步、回来接着做”包装成独立工具服务，用客户端执行 `tools/list` 和 `tools/call`。记录是按项目保存的 Markdown，重启服务进程后仍可取回；从这里分清工具提供方、调用方、业务状态与后面的模型执行循环。
+把“留下下一步、回来接着做”包装成独立工具服务，用客户端执行 `tools/list` 和 `tools/call`。Codex 接入篇使用应用内置的客户端，独立演示篇提供客户端源码供你观察。记录是按项目保存的 Markdown，重启服务进程后仍可取回；从这里分清工具提供方、调用方、业务状态与后面的模型执行循环。
 
 ### 一个真正更新参数的小模型
 
@@ -73,9 +76,9 @@ node --version
 
 使用 Node.js 22.22 或更高版本，与现有文档站要求一致。MCP 开场需要用 pnpm 安装固定版本的官方 SDK；小模型与 Harness 两份实验无需安装 npm 包，所有本地实验均无需下载模型或使用 GPU。
 
-参考实现：[MCP 服务端](../../examples/minimal-mcp/src/server.ts)、[MCP 客户端](../../examples/minimal-mcp/src/client.ts)、[演示入口](../../examples/minimal-mcp/src/demo.ts)、[小语言模型](labs/tiny-model.mjs)与[Harness](labs/harness.mjs)。按章节逐个函数跟写，或先运行参考实现，再回头改动关键步骤。
+参考实现：[Codex 用 MCP 服务端](../../examples/codex-continue-mcp/src/server.ts)、[独立演示服务端](../../examples/minimal-mcp/src/server.ts)、[独立演示客户端](../../examples/minimal-mcp/src/client.ts)、[演示入口](../../examples/minimal-mcp/src/demo.ts)、[小语言模型](labs/tiny-model.mjs)与[Harness](labs/harness.mjs)。按章节逐个函数跟写，或先运行参考实现，再回头改动关键步骤。
 
-真实模型实验需要你自己的 DeepSeek API key，并会产生 API 用量。前面的训练、工具执行和故障实验均可离线完成；配置步骤在第四章。
+第四章的真实模型实验需要你自己的 DeepSeek API key，并会产生 API 用量，配置步骤写在该章。独立 MCP 演示、字符模型训练与脚本 Harness 可离线完成；Codex 接入篇使用你已经配置好的 Codex 模型服务。
 
 ## 学完以后检查什么
 

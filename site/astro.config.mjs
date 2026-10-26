@@ -28,7 +28,8 @@ export default defineConfig({
         {
           label: '从 MCP 到模型与 Harness',
           items: [
-            { slug: 'ai-from-scaling/00-minimal-mcp', label: '看懂一次 MCP 工具调用' },
+            { slug: 'ai-from-scaling/00-codex-mcp', label: '在 Codex 里用自己的 MCP' },
+            { slug: 'ai-from-scaling/00-minimal-mcp', label: '独立演示：看懂一次 MCP 工具调用' },
             { slug: 'ai-from-scaling/07-weatherkit-mcp', label: 'Apple 天气：查询天气、安排出门' },
             { slug: 'ai-from-scaling', label: '开场与四小时主线安排' },
             { slug: 'ai-from-scaling/01-understand-models', label: '1 · 理解模型怎样学习' },

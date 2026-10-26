@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2080" viewBox="0 0 1200 2080" role="img" aria-labelledby="mcp-title mcp-desc">
+  <title id="mcp-title">MCP 全景：用户、Host、Client、Server 与接入平台</title>
+  <desc id="mcp-desc">用户操作 Host。Host 管理对话、模型、权限和工具调用，其内部为每个 MCP Server 建立一个 Client 连接。模型通过模型 API 与 Host 沟通，提出工具调用；Host 检查后，由 Client 通过 MCP 请求 Server。Server 操作实际的文件、浏览器或业务系统，再把结果返回。Codex、Zed、Warp、Raycast 在接入外部 MCP 时都是 Host；它们可以各自连接同一个远程 Server。常见 Server 包括 GitHub、Context7、Playwright、Figma、Sentry 和 Filesystem。本图核对于 2026 年 10 月 26 日。</desc>
+  <defs>
+    <marker id="mcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mcp-arrowhead" d="M0 0 10 5 0 10z"/></marker>
+    <marker id="model-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="model-arrowhead" d="M0 0 10 5 0 10z"/></marker>
+    <marker id="user-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="user-arrowhead" d="M0 0 10 5 0 10z"/></marker>
+  </defs>
+  <style>
+    svg { color-scheme: light dark; }
+    text { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #203246; }
+    .canvas { fill: #f7f9fc; }
+    .card { fill: #ffffff; stroke: #cfdae5; stroke-width: 1.5; }
+    .host { fill: #edf4ff; stroke: #799bc8; stroke-width: 2; }
+    .client { fill: #ffffff; stroke: #91acd0; stroke-width: 1.5; }
+    .server { fill: #edf7f2; stroke: #85ad99; stroke-width: 1.5; }
+    .model { fill: #f3effa; stroke: #a797be; stroke-width: 1.5; }
+    .note { fill: #faf4e8; stroke: #d9c7a3; stroke-width: 1.5; }
+    .band { fill: #e6eef8; }
+    .rule { stroke: #d6e0ea; stroke-width: 1.5; }
+    .title { font-size: 36px; font-weight: 650; letter-spacing: -.7px; }
+    .section { font-size: 28px; font-weight: 650; }
+    .heading { font-size: 26px; font-weight: 600; }
+    .label { font-size: 23px; font-weight: 600; }
+    .body { font-size: 21px; }
+    .small { font-size: 18px; }
+    .muted { fill: #53667b; }
+    .blue { fill: #345f93; }
+    .green { fill: #316d53; }
+    .purple { fill: #72568f; }
+    .mcp-line, .model-line, .user-line { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .mcp-line { stroke: #467b64; }
+    .model-line { stroke: #80649c; stroke-dasharray: 7 6; }
+    .user-line { stroke: #63788f; }
+    .mcp-arrowhead { fill: #467b64; }
+    .model-arrowhead { fill: #80649c; }
+    .user-arrowhead { fill: #63788f; }
+    a { text-decoration: none; }
+    a:hover .card, a:hover .server { stroke: #416f9e; stroke-width: 2.5; }
+    a:focus-visible { outline: 3px solid #416f9e; outline-offset: 4px; }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e7edf6; }
+      .canvas { fill: #111b29; }
+      .card { fill: #192638; stroke: #3b4e65; }
+      .host { fill: #1b304c; stroke: #648ab9; }
+      .client { fill: #213a59; stroke: #6689b4; }
+      .server { fill: #19392e; stroke: #5f947b; }
+      .model { fill: #342a46; stroke: #9f87bb; }
+      .note { fill: #393124; stroke: #8f7b52; }
+      .band { fill: #22364e; }
+      .rule { stroke: #3b4e65; }
+      .muted { fill: #b2c0d1; }
+      .blue { fill: #b6d2fa; }
+      .green { fill: #b0ddc4; }
+      .purple { fill: #d4beec; }
+      .mcp-line { stroke: #9bceb3; }
+      .model-line { stroke: #c7aadd; }
+      .user-line { stroke: #afc1d6; }
+      .mcp-arrowhead { fill: #9bceb3; }
+      .model-arrowhead { fill: #c7aadd; }
+      .user-arrowhead { fill: #afc1d6; }
+      a:hover .card, a:hover .server { stroke: #b6d2fa; }
+      a:focus-visible { outline-color: #b6d2fa; }
+    }
+  </style>
+
+  <rect class="canvas" width="1200" height="2080" rx="24"/>
+  <text class="title" x="44" y="65">MCP 全景：你、AI 应用与外部能力</text>
+  <text class="body muted" x="44" y="104">先认清谁负责什么，再看 Codex、Zed、Warp、Raycast 放在哪里。</text>
+  <rect class="band" x="44" y="132" width="1112" height="66" rx="14"/>
+  <text class="heading blue" x="600" y="175" text-anchor="middle">你说目标 · Host 安排 · Client 连接 · Server 执行</text>
+
+  <text class="section" x="44" y="252">01 · 角色与连接：Client 在 Host 里面</text>
+  <text class="body muted" x="44" y="288">这里画一个 Host 接入三个 Server；Server 可以运行在本机，也可以运行在远程。</text>
+
+  <!-- Host is an application boundary, not a separate machine or an LLM. -->
+  <rect class="host" x="280" y="320" width="510" height="680" rx="20"/>
+  <text class="heading blue" x="308" y="364">Host · 你使用的 AI 应用</text>
+  <text class="body muted" x="308" y="402">管理对话、模型、权限与工具调用</text>
+  <rect class="card" x="308" y="434" width="454" height="102" rx="12"/>
+  <text class="label" x="330" y="474">应用的工具调度</text>
+  <text class="body muted" x="330" y="510">接收调用建议，检查后安排执行</text>
+
+  <rect class="card" x="44" y="434" width="186" height="184" rx="16"/>
+  <text class="heading" x="64" y="477">用户 · 你</text>
+  <text class="small muted" x="64" y="515">提出目标与要求</text>
+  <text class="small muted" x="64" y="551">连接账号与授权</text>
+  <text class="small muted" x="64" y="587">查看调用和结果</text>
+  <path class="user-line" d="M232 486H277" marker-end="url(#user-arrow)"/>
+  <text class="small muted" x="254" y="469" text-anchor="middle">任务</text>
+  <path class="user-line" d="M278 550H233" marker-end="url(#user-arrow)"/>
+  <text class="small muted" x="254" y="577" text-anchor="middle">结果</text>
+
+  <!-- Model traffic uses the model API; the MCP links below are separate. -->
+  <rect class="model" x="944" y="320" width="212" height="116" rx="14"/>
+  <text class="label purple" x="1050" y="365" text-anchor="middle">模型 · LLM</text>
+  <text class="small muted" x="1050" y="402" text-anchor="middle">提出调用、组织回答</text>
+  <path class="model-line" d="M794 378H940" marker-start="url(#model-arrow)" marker-end="url(#model-arrow)"/>
+  <text class="body purple" x="867" y="350" text-anchor="middle">模型 API</text>
+  <text class="small muted" x="867" y="410" text-anchor="middle">另一条连接</text>
+
+  <text class="body blue" x="308" y="571">MCP Client · Host 内部的连接组件</text>
+  <rect class="client" x="308" y="590" width="454" height="104" rx="12"/>
+  <text class="label blue" x="330" y="632">Client A</text>
+  <text class="body muted" x="330" y="669">发现工具、发出请求、接收结果</text>
+  <rect class="client" x="308" y="722" width="454" height="104" rx="12"/>
+  <text class="label blue" x="330" y="764">Client B</text>
+  <text class="body muted" x="330" y="801">发现工具、发出请求、接收结果</text>
+  <rect class="client" x="308" y="854" width="454" height="104" rx="12"/>
+  <text class="label blue" x="330" y="896">Client C</text>
+  <text class="body muted" x="330" y="933">发现工具、发出请求、接收结果</text>
+  <text class="small muted" x="308" y="983">每个 Client 负责自己那条 Server 连接。</text>
+
+  <!-- Each pair of arrows represents a separate MCP client/server connection. -->
+  <g text-anchor="middle">
+    <path class="mcp-line" d="M766 642H940" marker-start="url(#mcp-arrow)" marker-end="url(#mcp-arrow)"/>
+    <text class="label green" x="855" y="616">MCP</text>
+    <text class="small muted" x="855" y="678">stdio · 本机</text>
+    <path class="mcp-line" d="M766 774H940" marker-start="url(#mcp-arrow)" marker-end="url(#mcp-arrow)"/>
+    <text class="label green" x="855" y="748">MCP</text>
+    <text class="small muted" x="855" y="810">HTTP · 远程</text>
+    <path class="mcp-line" d="M766 906H940" marker-start="url(#mcp-arrow)" marker-end="url(#mcp-arrow)"/>
+    <text class="label green" x="855" y="880">MCP</text>
+    <text class="small muted" x="855" y="942">stdio · 本机</text>
+  </g>
+  <rect class="server" x="944" y="590" width="212" height="104" rx="14"/>
+  <text class="small green" x="962" y="618">Server A · 本机进程</text>
+  <text class="label" x="962" y="650">Playwright</text>
+  <text class="small muted" x="962" y="678">执行 → 操作浏览器</text>
+  <rect class="server" x="944" y="722" width="212" height="104" rx="14"/>
+  <text class="small green" x="962" y="750">Server B · 远程服务</text>
+  <text class="label" x="962" y="782">GitHub</text>
+  <text class="small muted" x="962" y="810">执行 → GitHub API</text>
+  <rect class="server" x="944" y="854" width="212" height="104" rx="14"/>
+  <text class="small green" x="962" y="882">Server C · 本机进程</text>
+  <text class="label" x="962" y="914">你的「接着做」</text>
+  <text class="small muted" x="962" y="942">执行 → 本地笔记</text>
+
+  <rect class="note" x="44" y="714" width="186" height="186" rx="14"/>
+  <text class="small muted" x="64" y="751">这次写哪一块？</text>
+  <text class="body" x="64" y="790">通常写 Server</text>
+  <text class="small muted" x="64" y="828">Client 由你选择的</text>
+  <text class="small muted" x="64" y="860">平台提供和管理</text>
+  <text class="body muted" x="44" y="1040">Server 是提供 MCP 接口的程序；实际操作发生在它连接的文件、浏览器或业务系统中。</text>
+
+  <line class="rule" x1="44" y1="1078" x2="1156" y2="1078"/>
+  <text class="section" x="44" y="1130">02 · 这四个平台：都可以作为 Host 接入 MCP</text>
+  <text class="body muted" x="44" y="1166">「支持 MCP」在这里表示：应用带有 Client，能连接你配置的 Server。</text>
+
+  <!-- Platform links can be followed when the SVG is opened on its own. -->
+  <a href="https://learn.chatgpt.com/docs/extend/mcp">
+    <rect class="card" x="44" y="1190" width="266" height="160" rx="14"/>
+    <text class="heading" x="66" y="1230">Codex</text>
+    <text class="small blue" x="66" y="1260">Host + 内置 Client</text>
+    <text class="body muted" x="66" y="1296">CLI / IDE 等入口</text>
+    <text class="small muted" x="66" y="1326">config.toml / codex mcp</text>
+  </a>
+  <a href="https://zed.dev/docs/ai/mcp">
+    <rect class="card" x="326" y="1190" width="266" height="160" rx="14"/>
+    <text class="heading" x="348" y="1230">Zed</text>
+    <text class="small blue" x="348" y="1260">Host + 内置 Client</text>
+    <text class="body muted" x="348" y="1296">编辑器中的 Agent</text>
+    <text class="small muted" x="348" y="1326">AI → MCP Servers</text>
+  </a>
+  <a href="https://docs.warp.dev/agents/capabilities/mcp/">
+    <rect class="card" x="608" y="1190" width="266" height="160" rx="14"/>
+    <text class="heading" x="630" y="1230">Warp</text>
+    <text class="small blue" x="630" y="1260">Host + 内置 Client</text>
+    <text class="body muted" x="630" y="1296">终端中的 Agent</text>
+    <text class="small muted" x="630" y="1326">Agents → MCP servers</text>
+  </a>
+  <a href="https://manual.raycast.com/ai/model-context-protocol">
+    <rect class="card" x="890" y="1190" width="266" height="160" rx="14"/>
+    <text class="heading" x="912" y="1230">Raycast</text>
+    <text class="small blue" x="912" y="1260">Host + 内置 Client</text>
+    <text class="body muted" x="912" y="1296">AI Chat / Quick AI</text>
+    <text class="small muted" x="912" y="1326">Install MCP Server</text>
+  </a>
+  <g class="mcp-line" marker-end="url(#mcp-arrow)">
+    <path d="M177 1354V1380H510V1414"/>
+    <path d="M459 1354V1370H570V1414"/>
+    <path d="M741 1354V1370H630V1414"/>
+    <path d="M1023 1354V1380H690V1414"/>
+  </g>
+  <rect class="server" x="332" y="1418" width="536" height="66" rx="14"/>
+  <text class="label green" x="600" y="1460" text-anchor="middle">同一个远程 Server · 例如 GitHub MCP</text>
+  <text class="body muted" x="44" y="1524">四条独立连接；每个平台分别管理自己的配置、账号授权与会话。</text>
+
+  <line class="rule" x1="44" y1="1558" x2="1156" y2="1558"/>
+  <text class="section" x="44" y="1610">03 · 当前常见的 MCP Server：按能力认识它们</text>
+  <text class="body muted" x="44" y="1646">以下为服务示例，不按热度排名；Tools / Resources / Prompts 以双方支持为准。</text>
+  <a href="https://github.com/github/github-mcp-server">
+    <rect class="card" x="44" y="1670" width="352" height="128" rx="14"/>
+    <text class="heading" x="66" y="1708">GitHub MCP</text>
+    <text class="body" x="66" y="1742">仓库、Issue、PR</text>
+    <text class="small muted" x="66" y="1774">GitHub 官方 · 本地 / 远程</text>
+  </a>
+  <a href="https://github.com/upstash/context7">
+    <rect class="card" x="424" y="1670" width="352" height="128" rx="14"/>
+    <text class="heading" x="446" y="1708">Context7</text>
+    <text class="body" x="446" y="1742">查库文档与代码示例</text>
+    <text class="small muted" x="446" y="1774">Upstash · 文档检索</text>
+  </a>
+  <a href="https://github.com/microsoft/playwright-mcp">
+    <rect class="card" x="804" y="1670" width="352" height="128" rx="14"/>
+    <text class="heading" x="826" y="1708">Playwright MCP</text>
+    <text class="body" x="826" y="1742">打开网页、点击、读取页面</text>
+    <text class="small muted" x="826" y="1774">Microsoft · 浏览器自动化</text>
+  </a>
+  <a href="https://developers.figma.com/docs/figma-mcp-server/">
+    <rect class="card" x="44" y="1818" width="352" height="128" rx="14"/>
+    <text class="heading" x="66" y="1856">Figma MCP</text>
+    <text class="body" x="66" y="1890">读取设计上下文、操作画布</text>
+    <text class="small muted" x="66" y="1922">Figma 官方 · 设计工具</text>
+  </a>
+  <a href="https://mcp.sentry.dev/">
+    <rect class="card" x="424" y="1818" width="352" height="128" rx="14"/>
+    <text class="heading" x="446" y="1856">Sentry MCP</text>
+    <text class="body" x="446" y="1890">查错误、堆栈与性能</text>
+    <text class="small muted" x="446" y="1922">Sentry 官方 · 线上故障</text>
+  </a>
+  <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem">
+    <rect class="card" x="804" y="1818" width="352" height="128" rx="14"/>
+    <text class="heading" x="826" y="1856">Filesystem</text>
+    <text class="body" x="826" y="1890">读写允许目录中的文件</text>
+    <text class="small muted" x="826" y="1922">MCP 官方参考实现 · 本机</text>
+  </a>
+
+  <rect class="band" x="44" y="1972" width="1112" height="64" rx="14"/>
+  <text class="body blue" x="600" y="2013" text-anchor="middle">结果回到 Host → 交给模型继续回答 → 由应用展示给你</text>
+  <text class="small muted" x="44" y="2062">概念图 · 平台支持核对于 2026-10-26 · 原图中的平台与服务卡片可点击查看官方资料</text>
+</svg>
