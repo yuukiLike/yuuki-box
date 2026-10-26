@@ -54,6 +54,7 @@ runtime 发给页面的文字变化类似：
 
 - 想自己写工具循环：[搭建 Harness](../ai-from-scaling/03-build-a-harness.md)。
 - 想接外部工具：[MCP 工具源](../agent-engineering/01-mcp-tool-source.md)。
+- 想提供自己的远程服务：[Supabase × Apple WeatherKit 天气 MCP](weather-mcp/README.md)。
 - 想知道模型缓存什么：[KV Cache](../kv-cache/00-first-request.md)。
 - 想查界面为什么卡：[渲染实验](../learning/rendering-performance.md)。
 - 想让它听见和开口：[语音工具](../tts/README.md)。

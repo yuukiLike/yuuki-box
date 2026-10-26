@@ -30,6 +30,10 @@ node docs/ai-communication/labs/01-rpc.ts
 
 </details>
 
+## 实战：让 Codex 查询 Apple 天气
+
+想把“用户登录 → 授权 → 工具调用”接成完整服务，进入[天气 MCP 实战教程](weather-mcp/README.md)。后端使用 Supabase，天气来自 Apple WeatherKit；五课配合 Codex 风格的 SVG 界面示意，先分清两套 token，再做一次真实查询。
+
 <details>
 <summary>运行环境与检查</summary>
 

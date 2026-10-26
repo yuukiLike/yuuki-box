@@ -50,6 +50,8 @@
 
 想补 RPC 和 SSE，打开[AI 应用通信：从 RPC、SSE 到 Agent 工具调用](ai-communication/README.md)。每课一张图、一个动作，先请另一个程序读笔记。
 
+想做一次带用户授权的完整接入，打开[天气 MCP：Supabase × Apple WeatherKit](ai-communication/weather-mcp/README.md)。从 Codex 的连接体验开始，依次完成登录、权限、天气查询与 MCP 工具。
+
 从[数据结构与缓存](frontend-foundations/README.md)走到 [KV Cache](kv-cache/README.md)，从 [Wasm 与 Worker](wasm/README.md)走到浏览器计算，再用[渲染学习路线](learning/rendering-performance.md)和[十五个场景](learning/harness-scenario-lab.md)追踪界面卡在哪里。
 
 准备研究模型缓存，可以沿 [KV 专题](kv-cache/README.md)读原理，再对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 与 [Pi](kv-cache/05-pi.md) 的请求装配、缓存用量和预热；[知识地图](kv-cache/06-study-map.md)给出关联概念与三轮研究停点。

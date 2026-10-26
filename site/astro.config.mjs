@@ -121,6 +121,17 @@ export default defineConfig({
                 { slug: 'ai-communication/04-mcp', label: '4 · 让应用调用工具' },
                 { slug: 'ai-communication/05-failure', label: '5 · 停止等待后，对方还在做吗' },
                 { slug: 'ai-communication/06-yuuki', label: '6 · 回到自己的代码' },
+                {
+                  label: '实战 · Supabase × Apple 天气 MCP',
+                  items: [
+                    { slug: 'ai-communication/weather-mcp', label: '入口 · 从连接到查询' },
+                    { slug: 'ai-communication/weather-mcp/01-user-journey', label: '1 · 用户点击连接以后' },
+                    { slug: 'ai-communication/weather-mcp/02-supabase-auth', label: '2 · Supabase 登录与权限' },
+                    { slug: 'ai-communication/weather-mcp/03-apple-weatherkit', label: '3 · 向 Apple 查询天气' },
+                    { slug: 'ai-communication/weather-mcp/04-mcp-server', label: '4 · 封装成 MCP 工具' },
+                    { slug: 'ai-communication/weather-mcp/05-connect-and-verify', label: '5 · 连接 Codex 与验收' },
+                  ],
+                },
               ],
             },
             {
