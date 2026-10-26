@@ -12,9 +12,11 @@
 
 想验证一次修改是否有效，可以做 [GitHub MCP：证明一次修复有效](06-github-lab-mcp.md)。用同一份断言对照旧代码、候选与官方修复，再补一条检查，核对新回执；同样独立于四小时主线。
 
+已经看懂 `McpServer` 和 `registerTool`，想做一个每天能用的工具，可以接着做 [Apple 天气 MCP：从查询天气到安排出门](07-weatherkit-mcp.md)。先改离线样本的出门条件，再配置自己的 WeatherKit，查询常用地点并筛选连续时段。
+
 ## MCP 练习怎么选
 
-三份可运行演示都由脚本安排工具调用，不调用语言模型。MCP 提供发现与调用的共同协议；Markdown 存取、Blender 建模和 GitHub 修复检查分别由对应工具实现。读每一篇时，都先找“请求怎么发出”，再找“谁真正执行，以及结果保存在哪里”。
+极简、Blender 和 GitHub 三份演示都由脚本安排工具调用，不调用语言模型。WeatherKit 课程另外提供离线样本、真实 API 检查和接入现成 AI 客户端的步骤；没有 Apple 密钥时可先完成样本练习。MCP 提供发现与调用的共同协议，各项业务由工具实现。读每一篇时，都先找“请求怎么发出”，再找“谁真正执行，以及结果来自哪里”。
 
 [![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
 

@@ -268,3 +268,202 @@ claude mcp get yuuki-continue
 如果想进一步比较由服务商托管 MCP 客户端的方式，可读 [Claude Messages API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)。它连接远程 HTTP 服务，本章的本地 stdio 服务不能直接填进 `mcp_servers.url`。
 
 </details>
+
+## 延伸：调试、状态、协议与发布
+
+看懂 `demo.ts`、`client.ts`、`server.ts` 和 `stdio.ts` 后，可以用下面四个问题，把“能跑通示例”推进到“能开发和交付一个 MCP 服务”。协议说明以本例使用的 **2026-07-28** 为准，同时对照旧版 **2025-11-25**；查教程时要先确认版本。
+
+### 1. 编写 MCP 时，应该怎样调试？
+
+**先用确定的参数直接调用服务，再接上模型观察它会怎样选择工具。** 本章的 `demo.ts` 就是一个可以调试的客户端：它发出的是真实 MCP 请求，调用顺序和输入由脚本预先写好。
+
+在仓库根目录，先检查现有代码：
+
+```bash
+pnpm --dir examples/minimal-mcp check
+pnpm --dir examples/minimal-mcp demo
+pnpm --dir examples/minimal-mcp demo --invalid
+```
+
+前两条应通过；最后一条预期失败，以非零状态退出，用来确认 `../outside` 被拒绝。自动测试适合反复检查输入、输出和文件行为；`demo` 适合观察一次完整调用。这里没有接模型，因此服务问题不会与模型是否选对工具混在一起。
+
+想自己选工具、填写参数，可以使用官方 **MCP Inspector**。它相当于一个专门理解 MCP 的接口调试客户端，支持查询工具清单、发送调用和检查结果。下面使用命令行模式，在仓库根目录执行：
+
+```bash
+pnpm --dir examples/minimal-mcp build
+
+# 查询工具清单。
+pnpm dlx @modelcontextprotocol/inspector --cli \
+  node examples/minimal-mcp/dist/src/stdio.js \
+  --method tools/list
+
+# 读取一个项目；没有对应记录时应返回 found: false。
+pnpm dlx @modelcontextprotocol/inspector --cli \
+  node examples/minimal-mcp/dist/src/stdio.js \
+  --method tools/call --tool-name resume \
+  --tool-arg project=inspector-demo
+```
+
+`pnpm dlx` 首次运行会下载 Inspector。想在终端交互操作，可以运行 `pnpm dlx @modelcontextprotocol/inspector --tui node examples/minimal-mcp/dist/src/stdio.js`；默认模式则提供浏览器界面。以上入口由 Inspector 启动服务端子进程，服务仍使用默认存储目录，或你显式设置的 `YUUKI_CONTINUE_DIR`。[Inspector 官方文档](https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector)
+
+定位问题时，沿这条顺序检查：
+
+| 现象 | 先看哪里 |
+| --- | --- |
+| 连不上服务，工具清单拿不到 | 启动命令、Node 版本、编译产物、环境变量和服务端 stderr |
+| 清单有工具，但参数被拒绝 | `inputSchema` 与实际发出的 `arguments` |
+| 参数通过，执行或结果不对 | `registerTool()` 的回调、文件或外部 API，以及输出 schema |
+| 手动调用正常，模型却不调用或填错参数 | 宿主是否加载了服务、工具描述是否清楚、模型实际生成的调用 |
+
+要看变量和逐行执行，就把 Node 调试器附加到运行 `stdio.js` 的**服务端子进程**，在 `registerTool()` 的回调、`writeFile()` 或 `readFile()` 附近打断点，再从客户端发起调用。只调试 `demo.ts` 所在的父进程，不能自动看见子进程内部的变量；编辑器需要启用子进程调试或单独附加。
+
+临时日志使用 `console.error()`：服务端 stdout 被 stdio 协议占用，夹入 `console.log()` 的普通文字会破坏消息解析。`demo.ts` 的 stdout 用于给人看日志；`stdio.ts` 所在服务进程的 stdout 用于给客户端传协议消息，两者职责不同。[stdio 规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)
+
+读结果时再分清三种情况：JSON-RPC `error` 是协议层的错误响应；工具结果中的 `isError: true` 表示工具调用失败，可能发生在参数校验或工具执行阶段；`found: false` 则是本例“没有这份记录”的正常业务结果。[工具错误约定](https://modelcontextprotocol.io/specification/2026-07-28/server/tools#error-handling)
+
+**你可以做的练习：** 在 Inspector 中先调用 `resume`，再把 `project` 改成 `../outside`，比较“找不到记录”和“输入不合法”两种返回。本例后者实际返回 `isError: true` 和项目名校验错误；SDK 在进入文件读取逻辑前就拒绝了输入。
+
+### 2. MCP 的无状态体现在哪里？早期的有状态又体现在哪里？
+
+**这里的“无状态”，主要指处理一次协议请求时，不依赖前面某次握手留在服务端的会话上下文。** 工具可以照常保存业务数据，客户端也可以保留聊天记录。
+
+先对照两个版本：
+
+| 观察点 | 旧版：2025-11-25 | 本例：2026-07-28 |
+| --- | --- | --- |
+| 开始使用 | `initialize` 请求与响应，随后 `notifications/initialized` | 没有这套初始化握手；客户端可先调用 `server/discover` |
+| 协议版本与客户端能力 | 在初始化阶段交换，后续交互遵守已建立的上下文 | 每次请求在 `_meta` 中携带版本与客户端能力 |
+| HTTP 会话标识 | 服务端可以分配 `Mcp-Session-Id`，客户端随后带回 | 移除了协议层会话与 `Mcp-Session-Id` |
+| 服务端需要记住什么 | 采用会话的实现需要关联初始化信息、订阅等会话数据 | 处理当前请求所需的协议信息随请求而来 |
+
+旧版过程见[初始化生命周期](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)与[HTTP 会话管理](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management)；新版过程见[版本与兼容规则](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning)与[无状态架构说明](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture#statelessness-and-discovery)。新版 `server/discover` 用来查询服务信息，客户端可以调用它，但它不是必须先完成的初始化握手。
+
+旧版的“有状态”可以这样理解：客户端先介绍自己支持哪些能力，服务端在后续交互中沿用这些信息。HTTP 服务如果把会话存在进程 A 的内存里，下一次请求被分配到进程 B，B 就可能找不到对应会话；部署时需要让请求回到 A，或专门处理会话共享。
+
+不过，旧版规范中的 HTTP Session ID 从来就不是服务端必选项，一些旧版 SDK 也提供无状态 HTTP 模式。**“旧版有初始化握手”“某个 HTTP 实现保存会话”“工具保存业务数据”是三个不同判断。** 不能看到使用 HTTP 就推断无状态，也不能看到旧版就推断每个实现都必须生成 Session ID。[旧版会话规则](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management)、[SDK 对两类模式的说明](https://csharp.sdk.modelcontextprotocol.io/v2/concepts/stateless/stateless.html)
+
+回到本章，下面这些“状态”分别归谁管理：
+
+| 状态 | 本例如何处理 |
+| --- | --- |
+| 协议版本、客户端能力 | SDK 随新版请求携带，不依赖旧的初始化会话 |
+| 保存的项目记录 | `save_checkpoint` 写入磁盘，`resume` 按 `project` 读取 |
+| 一次尚未完成的调用 | SDK 仍要用请求 `id` 对应响应，处理超时与取消 |
+| 模型的聊天历史 | 由宿主应用管理；本章脚本没有模型聊天历史 |
+
+所以，`resume({ project: "yuuki-box" })` 会成功，是因为服务能按明确的 `project` 找到文件；它不需要记住“上一次这个客户端选择的是哪个项目”。前一次保存产生的**业务数据**仍然存在，前一个进程的**协议会话**不需要恢复。
+
+这也说明：stdio 保持进程和管道打开、某次请求通过 SSE 持续返回进度，都不等于必须保存跨请求的协议会话。无状态允许处理单次请求期间保留临时数据。[传输与请求元数据](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+
+部署多个新版服务实例时，协议不再要求“必须回到记得我握手信息的那台机器”；但本例若仍把记录写在各机器自己的磁盘上，另一台机器还是读不到。要共享记录，仍需共享文件存储或数据库。天气缓存、订单、文档也一样：**协议无状态不会自动解决业务数据的存储与一致性。**
+
+### 3. MCP 可以理解为 HTTP + client + RPC 吗？
+
+可以把其中的 RPC 和客户端方向保留下来，再把层次分清：**MCP 采用客户端与服务端的架构，用 JSON-RPC 2.0 表达消息，并规定工具、资源、提示模板等能力的发现与使用规则；HTTP 是可选的传输方式。**[MCP 架构](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)
+
+| 层次 | 回答的问题 | 本章对应 |
+| --- | --- | --- |
+| 宿主 Host | 谁组织整个应用与工具使用？ | 演示脚本；接模型后是聊天或编程应用 |
+| Client / Server | 谁发起协议调用，谁提供能力？ | `client.ts` 与 `server.ts` |
+| MCP 语义 | 有哪些方法？参数和结果怎样描述？ | `tools/list`、`tools/call`、工具 schema |
+| JSON-RPC 2.0 | 请求、响应、通知长什么样？ | `jsonrpc`、`id`、`method`、`params`、`result` / `error` |
+| Transport | 消息怎样从一个程序送到另一个程序？ | 本地 stdio；远程可用 Streamable HTTP |
+| 业务实现 | 工具最终做什么？ | 读写 Markdown，或请求 WeatherKit |
+
+比如本章一次调用可以这样拆开，下面只展示核心字段，实际新版请求还由 SDK 补上 `_meta`：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 7,
+  "method": "tools/call",
+  "params": {
+    "name": "resume",
+    "arguments": { "project": "yuuki-box" }
+  }
+}
+```
+
+JSON-RPC 规定 `method`、`params`、`id` 这类消息结构；MCP 规定 `tools/call` 和工具调用参数的含义；我们的程序定义 `resume`、`project`，并执行 `readFile()`。RPC 的“远程”也不要求另一台电脑，本章跨的是同一台电脑上的两个进程。
+
+使用 stdio 时，这段消息通过输入输出管道传递；使用 Streamable HTTP 时，消息通过 HTTP POST 送到 MCP 端点，响应可以是 JSON 或本次请求的 SSE 流。SSE 是流式传输机制，JSON-RPC 是消息格式，MCP 则规定这些消息代表哪些操作。[传输规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+
+因此，只写一个 `POST /weather` 的 HTTP 接口，或者用 JSON-RPC 自定义一个 `weather.query` 方法，还不等于实现了 MCP。要让通用 MCP 客户端发现并调用它，需要遵守 MCP 的版本、能力、工具定义与调用约定；SDK 帮你完成了其中大量协议工作。
+
+### 4. 如何发布一个 MCP？
+
+**先确定别人通过什么方式使用它。** `new McpServer(...)` 设置的是运行时服务身份，`registerTool(...)` 把工具加入这个服务实例；这两个调用都不会把程序上传到互联网或登记到公共目录。
+
+| 交付方式 | 你交付什么 | 别人怎样使用 |
+| --- | --- | --- |
+| 本地 stdio 服务 | 源码、可执行程序，或 npm / PyPI 等软件包 | 在自己的客户端配置启动命令，由客户端启动本地进程 |
+| 远程 HTTP 服务 | 已部署的 MCP 地址，例如 `https://mcp.example.com/mcp` | 客户端连接该地址，按服务要求完成认证 |
+| MCP Registry 登记 | 描述包、地址、版本和配置需求的元数据 | 从目录发现服务，再按包或地址连接 |
+
+Registry 是发现目录，实际程序仍由软件包仓库分发，或由你部署的服务器运行。已有启动命令或服务地址时，客户端可以直接连接。[Registry 发布说明](https://modelcontextprotocol.io/registry/quickstart)
+
+**方式 A：交付本地 stdio 程序**
+
+本章已经能通过源码交付：别人克隆仓库，安装依赖、构建，再按上面的 Claude Code 配置接入 `dist/src/stdio.js`。这时程序运行在对方电脑上，记录也保存在对方的本地目录。
+
+如果希望别人用一条 `npx` 命令启动，可以进一步发布 npm 包。当前示例的 `package.json` 有 `"private": true`，也没有 `bin`，还没有配置成可发布的命令行包。准备发布时，需要：
+
+1. 选择自己拥有的包名和版本，移除 `private: true`，保留运行时依赖，补齐 README、许可证等发布资料。
+2. 把 `bin` 指向 `dist/src/stdio.js`，并在 `src/stdio.ts` 第一行添加 `#!/usr/bin/env node`，让编译后的入口可以作为命令执行。
+3. 用 `files` 指定要发布的文件，例如本例的 `dist/src`；检查包内有运行所需代码，没有 `.env`、私钥或个人记录。
+4. 若还计划登记到 Registry，在发布 npm 包前就加入后面介绍的 `mcpName`。
+
+需要合并进原 `package.json` 的字段示意如下，**这不是完整的替换文件**。`@your-scope` 是占位命名空间：
+
+```json
+{
+  "name": "@your-scope/yuuki-continue-mcp",
+  "version": "1.0.0",
+  "bin": { "yuuki-continue-mcp": "dist/src/stdio.js" },
+  "files": ["dist/src"]
+}
+```
+
+完成 npm 登录及账号要求的验证后，在准备发布的包目录执行：
+
+```bash
+pnpm check
+pnpm build
+npm pack --dry-run
+# 检查上一步列出的包内容，再发布。
+npm publish --access public
+```
+
+发布成功后，用户的客户端才可以配置 `command: "npx"` 和 `args: ["-y", "@your-scope/yuuki-continue-mcp@1.0.0"]`。发布后的验收也应通过这个包启动服务，再检查 `tools/list` 和一次实际调用，才能发现漏打包等问题。[npm 的 bin / files 规则](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/)、[发布公开作用域包](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)
+
+**方式 B：部署远程 Streamable HTTP 服务**
+
+这时保留工具注册与业务实现，增加 HTTP 启动入口，把 MCP transport 接到服务地址，再部署到能运行该程序的平台。当前示例只有 stdio 入口，尚没有可直接填写的远程 URL。
+
+部署时要明确三件事：客户端支持哪些协议版本；谁可以调用及访问哪些业务数据；进程重启或扩容后数据放在哪里。对外地址使用 HTTPS，认证方式与目标客户端相匹配。以上面的记录工具为例，远程多用户版本还需要按已认证用户隔离记录，不能只凭一个 `project` 字符串读取所有人的文件。
+
+部署后，用 Inspector 连接真实 URL，验证工具发现、调用和认证失败的情况，再交付 URL 与配置说明。远程 MCP 的标准接入方式是 Streamable HTTP；早期独立 HTTP+SSE 传输主要用于兼容旧客户端。[当前传输规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)、[远程服务发布说明](https://modelcontextprotocol.io/registry/remote-servers)
+
+**方式 C：登记到官方 MCP Registry**
+
+在已经准备好软件包或远程地址后，可以使用官方 `mcp-publisher`：
+
+```bash
+brew install mcp-publisher
+mcp-publisher init
+```
+
+先编辑生成的 `server.json`，填好服务名、版本和分发方式：npm 包写在 `packages`，远程地址写在 `remotes`，后者的传输类型为 `streamable-http`。配置项只声明名称与用途，实际私钥由使用者或部署环境提供。[远程服务元数据](https://modelcontextprotocol.io/registry/remote-servers)
+
+使用 GitHub 身份认证时，服务名使用 `io.github.<GitHub 用户名>/<服务名>`。npm 包中的 `mcpName` 要与这个名字一致，因此应在发布 npm 包前加入它。确认文件内容后执行：
+
+```bash
+mcp-publisher login github
+mcp-publisher publish
+```
+
+按登录提示完成授权，发布后通过 Registry 查询对应名称和版本，确认元数据可见。它不会替你启动 HTTP 服务，也不会让所有客户端自动连接你的工具。[官方发布教程](https://modelcontextprotocol.io/registry/quickstart)
+
+对于这个仓库，当前可交付的是源码和本地 stdio 启动方式；npm 包发布、HTTP 部署和 Registry 登记是后续交付选项。`git push` 只是把课程和代码推送到 Git 远端，不会自动完成这三种发布。
+
+继续做实用工具，可以进入 [WeatherKit 天气 MCP 课程](07-weatherkit-mcp.md)，对照“本地配置 Apple 凭据 → MCP 调用天气接口 → 返回天气与户外时间窗口”的完整实现。

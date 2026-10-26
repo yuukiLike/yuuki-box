@@ -1,0 +1,4 @@
+[
+  { "name": "上海", "latitude": 31.2304, "longitude": 121.4737, "timezone": "Asia/Shanghai" },
+  { "name": "杭州", "latitude": 30.2741, "longitude": 120.1551, "timezone": "Asia/Shanghai" }
+]
