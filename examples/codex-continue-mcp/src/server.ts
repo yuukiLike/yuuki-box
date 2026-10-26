@@ -5,9 +5,11 @@ import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { isAbsolute, join } from 'node:path';
 import { z } from 'zod';
+import { UsageStore, UsageTransport, usageStatsSchema } from './usage.js';
 
 const directory = process.env.YUUKI_CONTINUE_DIR ?? join(homedir(), '.yuuki', 'continue');
 if (!isAbsolute(directory)) throw new Error('YUUKI_CONTINUE_DIR 必须是绝对路径。');
+const usage = new UsageStore(directory);
 
 const projectSchema = z.string()
   .regex(/^[a-z0-9][a-z0-9-]{0,63}$/, '项目名须为 1–64 个小写字母、数字或连字符，且以字母或数字开头。')
@@ -89,8 +91,25 @@ function createServer(): McpServer {
       return { isError: true, content: [{ type: 'text', text: `读取失败：${message}` }] };
     }
   });
+  server.registerTool('get_usage_stats', {
+    description: '查看接着做 MCP 自启用统计以来的连接次数、已完成工具调用次数、成功/失败和耗时，按工具与 Host 声明的软件名称/版本汇总。连接次数不是独立用户或设备数；查看统计本身不计入工具调用次数。',
+    inputSchema: z.strictObject({}),
+    outputSchema: usageStatsSchema,
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+  }, async () => {
+    try {
+      const stats = usage.read();
+      return { content: [{ type: 'text', text: JSON.stringify(stats, null, 2) }], structuredContent: stats };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return { isError: true, content: [{ type: 'text', text: `读取使用统计失败：${message}` }] };
+    }
+  });
   return server;
 }
 
 // Codex 启动这个入口。SDK 处理 JSON-RPC；stdout 只传协议，日志走 stderr。
-serveStdio(createServer, { onerror: (error) => console.error(error.message) });
+serveStdio(createServer, {
+  transport: new UsageTransport(usage),
+  onerror: (error) => console.error(error.message),
+});

@@ -2,6 +2,8 @@
 
 这一小时完成一个具体任务：读取内置活动计划，核算预算，申请保存摘要，再给出回答。我们把模型放在一个自己编写的执行循环里，逐步看清请求、工具、权限和结果的关系。
 
+**本课重点：找到 `complete`、`runTool`、`emit` 三个可自定义入口，知道用量统计、行为控制和审计记录分别接在哪里。** 跑通任务后，再用一个离线包装练习理解框架里的 middleware（中间件）。
+
 参考实现：[harness.mjs](labs/harness.mjs)。使用 Node.js 22.22 或更高版本，在仓库根目录执行。内容用 50 分钟，留 10 分钟休息。
 
 在[「接着做」MCP 开场](00-minimal-mcp.md)里，接续记录由独立服务进程保存和取回。本章换一个离线预算练习，把工具作为本地函数接入循环，看清模型请求、执行与结果回传；以后接入 MCP 工具时，由 MCP 客户端的 `callTool()` 发出调用，运行限制和审批继续由 Harness 管理。
@@ -121,6 +123,60 @@ for (const call of calls) {
 
 参考实现最多请求模型 4 次，一轮最多接收 4 个工具调用，并拒绝重复调用 ID。它检查结束原因：正常文本回答需要 `stop`；工具请求需要 `tool_calls`。输出达到长度上限等异常结束会进入失败状态。
 
+### 三个可自定义入口
+
+`runHarness()` 接收三个函数。我们可以包装原函数，在调用前后加入自己的逻辑，再把同样的输入输出交回循环；这就是本课理解中间件的起点。
+
+| 入口 | 什么时候经过这里 | 可以加什么 |
+| --- | --- | --- |
+| `complete(messages, { signal })` | 每次请求模型 | 计时、读取返回的 `usage`、请求前检查用量预算 |
+| `runTool(call, options)` | 每次执行工具 | 参数检查、权限策略、等待审批、拒绝执行 |
+| `emit(event)` | 产生运行事件时 | 记录 `model.request`、`model.usage`、`tool.proposed`、`tool.result` 与终态 |
+
+先只给模型调用加计时。在仓库根目录运行下面的离线练习，无需 API key：
+
+```bash
+node --input-type=module <<'JS'
+import { runHarness, scriptedModel } from './docs/ai-from-scaling/labs/harness.mjs';
+
+const withTiming = (complete) => async (messages, options) => {
+  const started = performance.now();
+  try {
+    return await complete(messages, options);
+  } finally {
+    console.log(JSON.stringify({ type: 'model.duration', elapsedMs: performance.now() - started }));
+  }
+};
+
+const result = await runHarness({
+  complete: withTiming(scriptedModel()),
+  emit: (event) => console.log(JSON.stringify(event)),
+});
+console.log(result.answer);
+JS
+```
+
+**你要看到：** 四条 `model.duration`，原有工具事件仍然出现，最终仍是“已核算，未保存”。`withTiming` 是这里自定义的函数包装器；它把 `options`（含取消信号）、返回值和异常继续传递，`return await` 让计时等到调用结束。没有改动参考源码或工具实现。
+
+**审计负责记录，控制要接在执行前。** `emit` 在本例中是同步事件回调，异步落盘需要另外处理完成与失败；要拒绝写入，应在 `runTool` 的实际写入之前等待检查通过。当前例子已提供请求轮数限制和 `model.usage` 事件；累计 token 预算拦截、跨对话审计与持久化尚需实现。离线脚本没有模型 token 用量；真实请求缺少 `usage` 时应保留未知。
+
+只包装某个 MCP 的 transport，观察范围是那个服务的通信。要统一统计模型请求和工具行为，需要让相关调用都经过 Harness 的这些入口。
+
+<details>
+<summary>选读：在 JD 里看到 LangChain，怎样对照这里的代码？</summary>
+
+下面三个框架都支持自定义。先对照扩展位置，再按官方接口跑最小例子；本课没有引入这些框架依赖。
+
+| 框架与官方入口 | 自己能写的逻辑 | 对照本课 |
+| --- | --- | --- |
+| [LangChain 自定义中间件](https://docs.langchain.com/oss/javascript/langchain/middleware/custom) | 用 `createMiddleware` 定义 `beforeModel`、`afterModel`、`wrapModelCall`、`wrapToolCall` 等钩子 | 包装 `complete`、`runTool`，观察执行前后 |
+| [Vercel AI SDK 模型中间件](https://ai-sdk.dev/docs/ai-sdk-core/middleware) | 用 `wrapLanguageModel` 接入自己的 `transformParams`、`wrapGenerate`、`wrapStream` | 包装模型参数、普通回复与流式回复；本例只实现非流式调用 |
+| [OpenAI Agents SDK 检查与审批](https://developers.openai.com/api/docs/guides/agents/guardrails-approvals)、[运行追踪](https://developers.openai.com/api/docs/guides/agents/integrations-observability) | 自定义 guardrail 的 `execute`，配置工具审批，在追踪中加入自定义 span | 对照输入输出检查、工具执行前的决定和运行记录 |
+
+读 LangChain 的 `wrapModelCall(request, handler)` 时，先找“检查在哪里发生”和“何时调用 `handler`”；它与你刚写的 `withTiming(complete)` 有相同的包装结构。框架钩子的执行顺序与状态约定，以各自文档为准。
+
+</details>
+
 ## 第三十到四十分钟 让保存经过你的决定
 
 默认运行不会保存任何文件。`save_note` 收到的内容会被转换为 `permission_denied` 结果，交回模型继续回答。
@@ -171,6 +227,7 @@ terminal.once('SIGINT', cancel);
 2. 写入审批发生在什么时候？
 3. 哪一条工具结果证明文件已创建？怎样再用文件内容核对？
 4. 哪个条件阻止模型无限继续调用工具？
+5. 模型用量统计、执行前拒绝工具、审计事件，分别应该接在哪个入口？
 
 本课的事件只保存在内存并打印到终端，进程退出后不会自动恢复。需要持久化与崩溃恢复时，继续做[Harness 工程实验](../agent-engineering/05-harness-vertical-slice.md)。
 

@@ -8,6 +8,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "tsc",
+    "test": "pnpm run build && node --test tests/*.test.mjs",
+    "check": "pnpm run typecheck && pnpm run test",
     "start": "node --enable-source-maps dist/server.js"
   },
   "dependencies": {

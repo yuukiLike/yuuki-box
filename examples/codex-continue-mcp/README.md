@@ -1,6 +1,6 @@
 # 给 Codex 使用的「接着做」MCP
 
-这个版本只提供 MCP 服务端。你在 Codex 里说话，Codex 用内置的 MCP 客户端调用工具。业务代码都在 [`src/server.ts`](src/server.ts)，不需要编写客户端或演示脚本。
+这个版本只提供 MCP 服务端。你在 Codex 里说话，Codex 用内置的 MCP 客户端调用工具。记录存取和工具注册在 [`src/server.ts`](src/server.ts)，调用统计在 [`src/usage.ts`](src/usage.ts)，不需要编写客户端或演示脚本。
 
 完整跟做教程：[在 Codex 里用自己的 MCP](../../docs/ai-from-scaling/00-codex-mcp.md)。
 
@@ -56,7 +56,7 @@ codex mcp get yuuki-continue
 3. `resume` 回调里的 `readFile()`：下次怎样取回。
 4. 文件末尾的 `serveStdio()`：让 Codex 通过标准输入、标准输出连接服务。
 
-`typecheck` 检查类型，`build` 将这一份 TS 源码编译为 `dist/server.js`；`start` 是直接启动服务的备用命令。源码中没有模型调用，也没有自己构造 JSON-RPC 的代码，这些通信工作交给 SDK。
+`typecheck` 检查类型，`build` 将 TS 源码编译到 `dist/`，入口仍为 `dist/server.js`；`start` 是直接启动服务的备用命令。`check` 检查类型、编译并运行使用临时目录的真实 stdio 测试。协议解析和工具执行仍交给 SDK；统计只观察传输入口的请求与响应。
 
 ## 保存什么、保存在哪里
 
@@ -64,11 +64,35 @@ codex mcp get yuuki-continue
 | --- | --- | --- |
 | `save_checkpoint` | 必填 `project`、`next`；可选 `context`、`stopWhen` | 保存或替换该项目的一份 Markdown |
 | `resume` | `project` | 返回原文；不存在时返回 `found: false` |
+| `get_usage_stats` | 无 | 返回连接次数、工具调用次数、成功/失败、耗时和 Host 软件分组 |
 
 默认目录是 `~/.yuuki/continue/`，沿用原示例的记录格式。同项目再次保存会替换整份旧记录；项目名只接受 1–64 个小写字母、数字或连字符，以字母或数字开头。多个会话同时保存时，以最后完成替换的记录为准。读取超过 16 KiB 的文件会报告错误。
 
 需要独立目录时，在注册命令的 `--` 前加入 `--env YUUKI_CONTINUE_DIR=/你的绝对路径`。文件写入失败会作为工具错误返回，不会报告保存成功。
 
 服务本身不联网；取回的记录会交给当前 Codex 会话，只保存你愿意放进该会话的内容。`resume` 只读取记录，是否继续执行由你和当前会话决定。
+
+## 查看调用计数
+
+更新后运行 `pnpm --dir examples/codex-continue-mcp build`，重新连接 `yuuki-continue` 或重新打开 Codex 会话，再说：
+
+```text
+用 yuuki-continue 查看调用统计。
+```
+
+统计从启用新版服务开始，旧调用没有历史数据可补算。SQLite 文件是 `~/.yuuki/continue/.usage.sqlite`，随 `YUUKI_CONTINUE_DIR` 一起移动；使用 Node 自带的 SQLite，不需要额外数据库服务。多个 MCP 进程共享同一目录时，通过事务累加；退出和重启不会清空记录。
+
+- **连接次数**：一个 stdio 服务进程首次返回成功的协议响应时记一次，后续请求不重复记。仅启动进程不算；重连或另一个会话新建进程会再计一次。
+- **调用次数**：统计已经生成响应的 `tools/call`，包括输入校验失败、未知工具和工具自身的错误。正常返回 `found: false` 算成功。工具发现和 `get_usage_stats` 本身不计入调用次数；新连接只查看统计，仍会产生连接计数。
+- **成功/失败及耗时**：记录服务端收到请求到生成响应的时间，返回总计、各工具、各 Host 的次数、平均/最大耗时及最近调用时间。没有生成响应就被强杀或取消的调用不计入。
+- **Host 分组**：按客户端声明的名称和版本汇总；未提供时返回 `null`。它代表软件标签，不是独立用户或设备数。
+
+只持久化连接标识、Host 名称/版本、工具名、计数、耗时和时间，不保存工具参数、项目名、Markdown 内容或错误正文。统计写入失败时，原有存取结果保留，响应文本和 stderr 会提示统计缺失；不会自动重置损坏的统计文件。查看不可读的统计会明确返回工具错误。
+
+验证命令：
+
+```bash
+pnpm --dir examples/codex-continue-mcp check
+```
 
 移除连接用 `codex mcp remove yuuki-continue`，已经保存的 Markdown 文件仍然保留。原来的 [`minimal-mcp`](../minimal-mcp/) 演示保持独立。
