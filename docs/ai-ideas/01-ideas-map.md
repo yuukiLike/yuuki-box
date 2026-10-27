@@ -47,6 +47,8 @@ SVG 与这份 Mermaid 表达同一层级，SVG 用于直接阅读，源码保留
 
 首版建议一次只领一个问题，已有 PR 的任务跳过。完整学习路径从[先替我看一眼 Issue](../issue-garden/01-first-scan.md)开始，调度与权限分工见[把流程交给夜班](../issue-garden/03-night-shift.md)。
 
+已有 Dot 时，可以跟做[用 Dot 接手 GitHub 开发任务](../issue-garden/04-dot-shift.md)：用现有产品额度安排 Codex 开发、独立审查和有限返修，先试跑一个 Issue，再确认持续跟进的方式。
+
 这条路线已有产品对应：GitHub 支持把 Issue 分配给 Copilot cloud agent，由它处理并产出 PR。[GitHub 官方说明](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
 
 ## 你的设想二：另一个 AI 来审查代码

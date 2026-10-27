@@ -4,6 +4,8 @@
 
 **这一班的挑战是把“你在旁边看着”时做的判断，变成清楚的交接规则。** 完整自动化需要在选定仓库里接好扫描、验证与 PR 发布；下面给出连接方式和演练路径。
 
+本篇采用 GitHub Actions 加模型 API 的执行方式。已有 Dot、希望使用现有产品额度时，改走[用 Dot 接手 GitHub 开发任务](04-dot-shift.md)：先准备 GitHub 连接与 Codex 云端环境，再由 Dot 协调开发和返修。
+
 ## 一次只领一个 Issue
 
 每天扫描所有未关闭 Issue，然后按明确规则选一个：
@@ -22,7 +24,7 @@
 
 ## 把手动修复接到 Actions
 
-云端运行时，可以使用 OpenAI 官方的 `openai/codex-action@v1`。先在练习仓库的 Actions secrets 中配置 `OPENAI_API_KEY`，再准备项目依赖和任务输入。[OpenAI Docs：Codex GitHub Action](https://learn.chatgpt.com/docs/github-action)
+采用 Actions 执行时，可以使用 OpenAI 官方的 `openai/codex-action@v1`。先在练习仓库的 Actions secrets 中配置 `OPENAI_API_KEY`，再准备项目依赖和任务输入。[OpenAI Docs：Codex GitHub Action](https://learn.chatgpt.com/docs/github-action)
 
 下面是 **AI 执行步骤的片段**，用于已经检出仓库、准备好依赖的 job：
 

@@ -46,6 +46,8 @@
 
 想串成自己的流程，就跟做 [Issue 夜班](issue-garden/README.md)。想先少盯几轮，读[你的工作流](ai-practices/your-workflow.md)。六项案例有公开使用记录；夜班是跟做教程，尚未在本仓库启用。
 
+已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
+
 ### Agent 工程：运行控制、MCP 与 Skills
 
 按实际建设顺序走：先用 [Harness 管稳运行](agent-engineering/05-harness-vertical-slice.md)，再用 [MCP 接工具](agent-engineering/01-mcp-tool-source.md)，用 [Skills 复用流程](agent-engineering/03-skills-structure.md)。需要完整设计时回查 [Mac 本地 Harness](architecture/mac-local-harness.md)。这一组是实现实验建议，验收目标写在各篇里。
