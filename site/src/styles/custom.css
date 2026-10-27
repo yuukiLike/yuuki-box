@@ -37,6 +37,13 @@
   --yuuki-nav-selected: #1d374b;
   --yuuki-nav-pressed: #26465d;
   --yuuki-nav-text: #a3d9ff;
+  --topic-blue: #92baff;
+  --topic-green: #82cfaa;
+  --topic-purple: #c6abf9;
+  --topic-cyan: #77d0e5;
+  --topic-rose: #efa5bb;
+  --topic-amber: #e7bf7a;
+  --topic-slate: #acbdd6;
 }
 
 :root[data-theme='light'] {
@@ -64,6 +71,49 @@
   --yuuki-nav-selected: #e7f4ff;
   --yuuki-nav-pressed: #d9edfc;
   --yuuki-nav-text: #286b99;
+  --topic-blue: #2756aa;
+  --topic-green: #28704f;
+  --topic-purple: #7950ad;
+  --topic-cyan: #176b80;
+  --topic-rose: #ab4061;
+  --topic-amber: #895815;
+  --topic-slate: #526480;
+}
+
+:where([data-topic='blue'], .topic-blue) { --topic-color: var(--topic-blue); }
+:where([data-topic='green'], .topic-green) { --topic-color: var(--topic-green); }
+:where([data-topic='purple'], .topic-purple) { --topic-color: var(--topic-purple); }
+:where([data-topic='cyan'], .topic-cyan) { --topic-color: var(--topic-cyan); }
+:where([data-topic='rose'], .topic-rose) { --topic-color: var(--topic-rose); }
+:where([data-topic='amber'], .topic-amber) { --topic-color: var(--topic-amber); }
+:where([data-topic='slate'], .topic-slate) { --topic-color: var(--topic-slate); }
+
+.topic-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.topic-tag {
+  display: inline-block;
+  margin: 0;
+  padding: .12rem .45rem;
+  border: 1px solid color-mix(in srgb, var(--topic-color) 28%, transparent);
+  border-radius: .4rem;
+  color: var(--topic-color);
+  background: color-mix(in srgb, var(--topic-color) 9%, transparent);
+  font: 500 .6875rem/1.6 var(--sl-font);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+a.topic-tag:hover {
+  color: var(--topic-color);
+  border-color: var(--topic-color);
+  background: color-mix(in srgb, var(--topic-color) 18%, transparent);
+  text-decoration: underline;
 }
 
 html { scrollbar-gutter: stable; scroll-behavior: auto; }
@@ -87,6 +137,17 @@ site-search dialog::backdrop { background: #101c354d; }
 .sidebar-content summary { gap: .65rem; padding: .35rem .6rem; border-radius: .4rem; }
 .sidebar-content summary .large { font-size: .79rem; line-height: 1.6; font-weight: 650; }
 .sidebar-content summary .caret { width: .9rem; color: var(--yuuki-muted); }
+.sidebar-content .group-label { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem; }
+.sidebar-content summary .large { color: var(--topic-color, var(--sl-color-white)); }
+.sidebar-content summary:has(> .group-label > .topic-blue) { --topic-color: var(--topic-blue); }
+.sidebar-content summary:has(> .group-label > .topic-green) { --topic-color: var(--topic-green); }
+.sidebar-content summary:has(> .group-label > .topic-purple) { --topic-color: var(--topic-purple); }
+.sidebar-content summary:has(> .group-label > .topic-cyan) { --topic-color: var(--topic-cyan); }
+.sidebar-content summary:has(> .group-label > .topic-rose) { --topic-color: var(--topic-rose); }
+.sidebar-content summary:has(> .group-label > .topic-amber) { --topic-color: var(--topic-amber); }
+.sidebar-content summary:has(> .group-label > .topic-slate) { --topic-color: var(--topic-slate); }
+.sidebar-content .topic-tag { padding: .08rem .35rem; font-size: .625rem; line-height: 1.5; }
+.sidebar-content a > .topic-tag { margin: .1rem .3rem .1rem .5rem; vertical-align: middle; }
 .sidebar-content a {
   position: relative;
   padding: .12rem .15rem;
@@ -96,6 +157,7 @@ site-search dialog::backdrop { background: #101c354d; }
   font-weight: 400;
   line-height: 1.6;
 }
+.sidebar-content a[data-topic] { color: var(--topic-color); }
 .sidebar-content a > span:first-child {
   display: inline-block;
   max-width: 100%;
@@ -113,13 +175,21 @@ site-search dialog::backdrop { background: #101c354d; }
   background: transparent;
   box-shadow: none;
 }
-.sidebar-content a[aria-current='page'] > span:first-child { background: var(--yuuki-nav-selected); }
+.sidebar-content a[aria-current='page'] > span:first-child {
+  color: var(--topic-color, var(--yuuki-nav-text));
+  background: color-mix(in srgb, var(--topic-color, var(--yuuki-nav-text)) 12%, transparent);
+}
 .sidebar-content a:is([aria-current='page']:hover, :active) > span:first-child { background: var(--yuuki-nav-pressed); }
 .sidebar-content ul ul li { border-inline-start-color: var(--yuuki-border); }
 .sidebar-pane { scrollbar-width: thin; scrollbar-color: var(--sl-color-gray-5) transparent; }
 
 /* Reading pages share the same spacing, quiet borders and focus states. */
 h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
+.reading-frame[data-topic] :is(h1#_top, .sl-markdown-content h2, .sl-markdown-content h3, .sl-markdown-content h4, .sl-markdown-content h5, .sl-markdown-content h6) { color: var(--topic-color); }
+.page-topics { margin-top: .65rem; }
+.page-description { margin: .7rem 0 0; color: var(--sl-color-gray-2); font-size: .875rem; line-height: 1.8; }
+.outline-topics { margin-bottom: .85rem; }
+.reading-frame[data-topic] .reading-toc { border-inline-start-color: color-mix(in srgb, var(--topic-color) 35%, transparent); }
 .content-panel:first-child { padding-top: 1.25rem; padding-bottom: .5rem; }
 .content-panel + .content-panel { border-top: 0; padding-top: .5rem; }
 .sl-markdown-content { line-height: 1.85; }
@@ -153,7 +223,7 @@ footer .meta:empty { display: none; }
   min-width: 0;
   margin: 0;
   padding: .65rem 0 0;
-  border-top: 1px solid var(--yuuki-border);
+  border-top: 2px solid color-mix(in srgb, var(--topic-color) 55%, var(--yuuki-border));
 }
 .directory-home .document-directory li { margin-block: 0; }
 .directory-home .document-directory > .directory-group { margin-block-start: .65rem; }
@@ -168,14 +238,21 @@ footer .meta:empty { display: none; }
   font-size: .8rem;
   font-weight: 600;
   line-height: 1.65;
-  color: var(--sl-color-gray-2);
+  color: var(--topic-color, var(--sl-color-gray-2));
 }
 .directory-home .directory-heading-root {
   margin-bottom: .3rem;
   padding-bottom: .4rem;
   font-size: 1rem;
-  color: var(--sl-color-white);
+  color: var(--topic-color, var(--sl-color-white));
 }
+.directory-home .directory-description {
+  margin: 0 .35rem .65rem;
+  color: var(--sl-color-gray-2);
+  font-size: .8125rem;
+  line-height: 1.85;
+}
+.directory-home :is(.directory-section, .directory-group) > .topic-tags { margin: 0 .35rem .65rem; }
 .directory-home .directory-link {
   display: flex;
   align-items: center;
@@ -189,11 +266,12 @@ footer .meta:empty { display: none; }
   text-decoration: none;
   overflow-wrap: anywhere;
 }
-.directory-link-title { min-width: 0; }
+.directory-link-copy { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; min-width: 0; }
+.directory-link-title { min-width: 0; color: var(--topic-color, var(--sl-color-gray-1)); }
 .directory-link-arrow { flex-shrink: 0; margin-inline-start: auto; color: var(--sl-color-accent); opacity: 0; }
 .directory-home .directory-link:hover, .directory-home .directory-link:focus-visible {
-  color: var(--sl-color-accent-high);
-  background: var(--yuuki-hover);
+  color: var(--topic-color);
+  background: color-mix(in srgb, var(--topic-color) 7%, transparent);
 }
 .directory-link:is(:hover, :focus-visible) .directory-link-arrow { opacity: 1; }
 
@@ -221,9 +299,6 @@ footer .meta:empty { display: none; }
 .directory-chapters[open] > summary .chapters-closed,
 .directory-chapters:not([open]) > summary .chapters-open,
 .directory-section:has(> .directory-chapters[open]) > .directory-preview { display: none; }
-.lightweight-only { display: none; }
-html[data-display-mode='lightweight'] .lightweight-only { display: inline; }
-html[data-display-mode='lightweight'] .full-only { display: none; }
 
 /* A quiet reading view, with the complete directory and search one click away. */
 html[data-display-mode='lightweight'] { --yuuki-brand-width: auto; }
@@ -330,7 +405,7 @@ html[data-display-mode='lightweight'] .reading-frame.with-toc {
 
 /* Motion is optional. Content is already visible when animations are unavailable. */
 @media (prefers-reduced-motion: no-preference) {
-  .sidebar-content :is(a, summary), .directory-link,
+  .sidebar-content :is(a, summary), .directory-link, a.topic-tag,
   site-search button[data-open-modal], .control-grid :is(input, select),
   .lab-button, .pagination-links a {
     transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;

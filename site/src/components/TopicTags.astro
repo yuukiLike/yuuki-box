@@ -1,0 +1,19 @@
+---
+import { tagText } from '../lib/navigation.mjs';
+
+interface Props {
+  tags: (string | { text: string; href: string })[];
+  color: string;
+  linked?: boolean;
+}
+
+const { tags, color, linked = false } = Astro.props;
+---
+
+<span class="topic-tags" data-topic={color}>
+  {tags.map((tag) => linked && typeof tag !== 'string' ? (
+    <a class="topic-tag" href={tag.href}>{tag.text}</a>
+  ) : (
+    <span class="topic-tag">{tagText(tag)}</span>
+  ))}
+</span>

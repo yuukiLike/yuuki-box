@@ -4,6 +4,7 @@ import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import DisplayMode from './DisplayMode.astro';
+import { navigationMetadata } from '../lib/navigation.mjs';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
 const { entry, sidebar, siteTitleHref, toc } = Astro.locals.starlightRoute;
@@ -16,9 +17,10 @@ function isCurrent(item: StarlightRouteData['sidebar'][number]): boolean {
 const sections = sidebar.filter((item) => item.type === 'group');
 const sectionIndex = sections.findIndex(isCurrent);
 const section = sections[sectionIndex];
+const sectionMetadata = section ? navigationMetadata(section) : undefined;
 ---
 
-<div class:list={['content-tools', { 'with-page-menu': Boolean(toc) }]}>
+<div class:list={['content-tools', { 'with-page-menu': Boolean(toc) }]} data-topic={sectionMetadata?.color}>
   <a class="site-signature" href={siteTitleHref} aria-label="Yuuki 学习手记，返回文档目录" aria-current={isDirectory ? 'page' : undefined}>
     <span class="site-wordmark" lang="en">
       Yuuki
@@ -32,7 +34,7 @@ const section = sections[sectionIndex];
     <a class="directory-return" href={siteTitleHref} aria-current={isDirectory ? 'page' : undefined}>目录</a>
     {section && <>
       <span class="path-separator" aria-hidden="true">/</span>
-      <a class="current-section" href={`${siteTitleHref}#directory-${sectionIndex + 1}`} title={section.label}>{section.label}</a>
+      <a class="current-section" data-topic={sectionMetadata?.color} href={`${siteTitleHref}#directory-${sectionIndex + 1}`} title={section.label}>{section.label}</a>
     </>}
   </nav>
   <div class="content-actions">
@@ -103,6 +105,7 @@ const section = sections[sectionIndex];
     line-height: 1.4;
   }
   .content-path a { color: var(--sl-color-gray-2); text-decoration: none; }
+  .content-path .current-section { color: var(--topic-color, var(--sl-color-gray-2)); }
   .content-path a:hover { color: var(--sl-color-accent); }
   .directory-return { flex-shrink: 0; }
   .path-separator { color: var(--sl-color-gray-4); }

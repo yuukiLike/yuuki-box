@@ -1,4 +1,4 @@
-# 摊开人机协作的构想地图
+# AI 协作构想：Issue 夜班、独立代码审查与验收流程
 
 从“白天记 Issue，晚上有人来修”出发，旁边还会长出自动审查、故障驱动任务、目标驱动实验。先把整张地图摊开，沿一条最让你好奇的分支走走看。
 
@@ -8,11 +8,11 @@
 
 2026-10-22 补充：[已落地的 AI 开发实践](../ai-practices/README.md)收录 CodeRabbit 等六项方案的案例与小实验；[你的工作流分析](../ai-practices/your-workflow.md)则说明哪些做法更适合减少验收与返工。
 
-## 先看整张图
+## 协作地图：Issue 夜班、独立审查与探索方案
 
 [![思维导图：你的两个设想是 Issue 夜班和独立 AI 审查；新增五个方向是运行数据驱动任务、目标驱动实验、数字孪生、规格驱动开发、空闲时间整理知识](../../site/public/diagrams/ai-ideas-map.svg)](../../site/public/diagrams/ai-ideas-map.svg)
 
-点击图片可打开 SVG 原图放大。新增方向的来源、时间和小实验见[五个新方向，挑一个玩](02-five-new-directions.md)。
+点击图片可打开 SVG 原图放大。各方向的来源、时间和小实验见[故障驱动、自动实验、模拟验收、规格驱动与知识整理](02-five-new-directions.md)。
 
 <details>
 <summary>展开可编辑的 Mermaid 源码</summary>
@@ -76,7 +76,7 @@ AI A 创建或更新 PR
 
 如果已经在使用 Copilot，也可以给自己的一份 PR 手动请求一次代码审查。观察反馈是否有用，再决定是否启用自动审查。具体入口与账号条件见[GitHub 代码审查操作](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)。
 
-## 已聊过的配套环节
+## 配套环节：Issue 澄清、回归测试、CI 返修与维护
 
 这些保留为原有路线的扩展，不计入本次新增五个方向：
 
@@ -91,7 +91,7 @@ AI A 创建或更新 PR
 
 GitHub Agentic Workflows 已将 Issue 分类、CI 调查、文档维护和测试覆盖列为应用场景；该功能当前为公开预览。[官方介绍](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows)
 
-## 怎么判断它们是否有用
+## 效果验证：确认问题、验收时间与合并后返工
 
 产品已经支持某件事，说明有现成路径可试；公司工程实践说明有团队在使用；研究或开源实验说明存在一种可探索的方法。它们对个人项目的收益仍需分别验证。
 

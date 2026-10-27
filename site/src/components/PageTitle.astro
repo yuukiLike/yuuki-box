@@ -1,0 +1,13 @@
+---
+import DefaultPageTitle from '@astrojs/starlight/components/PageTitle.astro';
+import TopicTags from './TopicTags.astro';
+import { pageMetadata } from '../lib/navigation.mjs';
+
+const metadata = pageMetadata(Astro.url.pathname);
+---
+
+<DefaultPageTitle />
+{metadata && <div class="page-topics" data-topic={metadata.color}>
+  <TopicTags tags={metadata.tags} color={metadata.color} />
+  {metadata.description && <p class="page-description">{metadata.description}</p>}
+</div>}

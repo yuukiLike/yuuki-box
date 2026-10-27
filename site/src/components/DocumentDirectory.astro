@@ -1,5 +1,7 @@
 ---
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+import TopicTags from './TopicTags.astro';
+import { navigationMetadata } from '../lib/navigation.mjs';
 
 interface Props {
   entries?: StarlightRouteData['sidebar'];
@@ -26,20 +28,32 @@ function firstLink(items: StarlightRouteData['sidebar']): Extract<StarlightRoute
 
 <ul class:list={['document-directory', { 'directory-sections': depth === 0 }]}>
   {entries.map((entry, index) => {
+    const metadata = navigationMetadata(entry);
     const preview = entry.type === 'group' && depth === 0 ? firstLink(entry.entries) : undefined;
-    return <li class:list={{ 'directory-section': depth === 0, 'directory-group': depth > 0 && entry.type === 'group' }}>
+    const previewMetadata = preview ? navigationMetadata(preview) : undefined;
+    return <li class:list={{ 'directory-section': depth === 0, 'directory-group': depth > 0 && entry.type === 'group' }} data-topic={metadata?.color}>
       {entry.type === 'link' ? (
         <a class="directory-link" href={entry.href}>
-          <span class="directory-link-title">{entry.label}</span>
+          <span class="directory-link-copy">
+            <span class="directory-link-title">{entry.label}</span>
+            {metadata && <TopicTags tags={metadata.tags} color={metadata.color} />}
+          </span>
           <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
         </a>
       ) : (
         <>
           <Heading id={`${prefix}-${index + 1}`} class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>{entry.label}</Heading>
+          {metadata && <>
+            {metadata.description && <p class="directory-description">{metadata.description}</p>}
+            <TopicTags tags={metadata.tags} color={metadata.color} linked />
+          </>}
           {depth === 0 ? (
             <>
               {preview && <a class="directory-link directory-preview" href={preview.href}>
-                <span class="directory-link-title">{preview.label}</span>
+                <span class="directory-link-copy">
+                  <span class="directory-link-title">{preview.label}</span>
+                  {previewMetadata && <TopicTags tags={previewMetadata.tags.slice(0, 2)} color={previewMetadata.color} />}
+                </span>
                 <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
               </a>}
               <details class="directory-chapters">

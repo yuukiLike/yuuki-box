@@ -5,6 +5,7 @@ import type { Loader } from 'astro/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { i18nLoader } from '@astrojs/starlight/loaders';
 import { documentId, docsRoot } from './lib/docs-paths.mjs';
+import { pageMetadata, navigationBadge } from './lib/navigation.mjs';
 
 const source = glob({
   base: docsRoot,
@@ -24,6 +25,17 @@ const repositoryDocs: Loader = {
         const title = markdown.match(/^#\s+(.+)$/m)?.[1].replace(/[*`]/g, '');
         if (!title) throw new Error(`文档需要一级标题：${options.filePath}`);
         Object.assign(options.data, { title, editUrl: false });
+        const metadata = pageMetadata(options.id);
+        if (metadata) {
+          const sidebar = options.data.sidebar as { attrs?: Record<string, unknown> } | undefined;
+          Object.assign(options.data, {
+            sidebar: {
+              ...sidebar,
+              badge: navigationBadge(metadata),
+              attrs: { ...sidebar?.attrs, 'data-topic': metadata.color },
+            },
+          });
+        }
         return context.parseData(options);
       },
     });

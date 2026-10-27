@@ -1,11 +1,16 @@
 ---
+import TopicTags from './TopicTags.astro';
+import { pageMetadata } from '../lib/navigation.mjs';
+
 const { entry, toc } = Astro.locals.starlightRoute;
 const isDirectory = entry.id === '' || entry.id === 'index';
+const metadata = pageMetadata(Astro.url.pathname);
 ---
 
-<div class:list={['reading-frame', { 'with-toc': Boolean(toc), 'directory-frame': isDirectory }]}>
+<div class:list={['reading-frame', { 'with-toc': Boolean(toc), 'directory-frame': isDirectory }]} data-topic={metadata?.color}>
   <div class="main-pane"><slot /></div>
   {toc && <aside class="reading-toc print:hidden">
+    {metadata && <div class="outline-topics"><TopicTags tags={metadata.tags} color={metadata.color} /></div>}
     <slot name="right-sidebar" />
   </aside>}
 </div>
@@ -58,7 +63,7 @@ const isDirectory = entry.id === '' || entry.id === 'index';
       text-decoration: none;
       overflow-wrap: anywhere;
     }
-    .reading-toc :global(a:hover), .reading-toc :global(a[aria-current='true']) { color: var(--sl-color-accent); }
+    .reading-toc :global(a:hover), .reading-toc :global(a[aria-current='true']) { color: var(--topic-color, var(--sl-color-accent)); }
     .reading-toc :global(a[aria-current='true']) { font-weight: 500; }
   }
 </style>

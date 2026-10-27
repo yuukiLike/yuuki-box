@@ -20,15 +20,15 @@
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **从 MCP 到模型与 Harness** | [在 Codex 里用自己的 MCP](ai-from-scaling/00-codex-mcp.md) | 让 Codex 保存和取回项目下一步，再进入模型训练和 Harness 跟做 |
-| **让 AI 接手开发** | [挑一件真活](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
-| **亲手搭 Agent** | [从会聊天，到能把活干完](agent-engineering/README.md) | 一次能取消、能解释终态的工具运行 |
-| **前端 × AI 实验室** | [挑个问题开实验](learning/ai-frontend-intersections.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
-| **让 Yuuki 听见和开口** | [给它装上耳朵和嘴巴](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
-| **试试下一种 AI 玩法** | [给点子找块试验田](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
-| **读架构，选路线** | [五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
+| **MCP 接入、模型训练与工具调用** | [Codex MCP：保存与取回项目记录](ai-from-scaling/00-codex-mcp.md) | 让 Codex 保存和取回项目下一步，再进入模型训练和 Harness 跟做 |
+| **AI 开发：修复、审查、测试与迁移** | [Issue 修复、故障定位、PR 审查、测试、安全与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
+| **Agent 工程：运行控制、MCP 与 Skills** | [Harness、MCP 与 Skills 的工程实验](agent-engineering/README.md) | 一次能取消、能解释终态的工具运行 |
+| **前端与 AI：通信、缓存、计算与渲染** | [RPC/SSE、Map、KV Cache、Wasm 与流式渲染实验](learning/ai-frontend-intersections.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
+| **语音交互：合成、转写与人声检测** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
+| **AI 探索：故障驱动、自动实验与知识整理** | [故障驱动、自动实验、模拟验收、规格驱动与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
+| **架构研究：Mac 技术路线与产品设计** | [五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
 
-### 从 MCP 到模型与 Harness
+### MCP 接入、模型训练与工具调用
 
 先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再看[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)，对照 OpenAI 与 Claude 的官方案例；之后沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。独立演示跟写约 30 分钟，主线保留原来的四小时安排。
 
@@ -40,17 +40,17 @@
 
 已经看懂 MCP 结构，想用自己的 Apple 开发者会员做个日常工具，继续 [Apple 天气 MCP](ai-from-scaling/07-weatherkit-mcp.md)：查常用地点的天气、按个人条件找连续出门时段，再接入现成 AI 客户端。没有密钥也能先做离线练习。
 
-### 让 AI 接手开发
+### AI 开发：修复、审查、测试与迁移
 
 先按任务选择：[交 Issue、接 PR](ai-practices/02-issue-to-pr.md)、[带错误现场去破案](ai-practices/03-error-to-fix.md)、[限定范围做迁移](ai-practices/06-code-migration.md)。想给改动补一道检查，选 [CodeRabbit 审查](ai-practices/01-coderabbit-review.md)、[有效测试](ai-practices/05-test-generation.md)或[安全告警修复](ai-practices/04-security-autofix.md)。
 
 想串成自己的流程，就跟做 [Issue 夜班](issue-garden/README.md)。想先少盯几轮，读[你的工作流](ai-practices/your-workflow.md)。六项案例有公开使用记录；夜班是跟做教程，尚未在本仓库启用。
 
-### 亲手搭 Agent
+### Agent 工程：运行控制、MCP 与 Skills
 
 按实际建设顺序走：先用 [Harness 管稳运行](agent-engineering/05-harness-vertical-slice.md)，再用 [MCP 接工具](agent-engineering/01-mcp-tool-source.md)，用 [Skills 复用流程](agent-engineering/03-skills-structure.md)。需要完整设计时回查 [Mac 本地 Harness](architecture/mac-local-harness.md)。这一组是实现实验建议，验收目标写在各篇里。
 
-### 前端 × AI 实验室
+### 前端与 AI：通信、缓存、计算与渲染
 
 想补 RPC 和 SSE，打开[AI 应用通信：从 RPC、SSE 到 Agent 工具调用](ai-communication/README.md)。每课一张图、一个动作，先请另一个程序读笔记。
 
@@ -62,15 +62,15 @@
 
 三个浏览器实验就在对应专题旁：[数组与 Map](../site/src/pages/labs/lookup.astro)、[KV 内存计算器](../site/src/pages/labs/kv-memory.astro)、[JavaScript 调用 Wasm](../site/src/pages/labs/wasm-bridge.astro)。先玩一个，再回来找解释。
 
-### 让 Yuuki 听见和开口
+### 语音交互：合成、转写与人声检测
 
 从[第一句话](tts/让-Yuuki-开口说第一句话.md)开始，用[语音工具](tts/README.md)补上转写和人声检测。准备接进工作台时读[模型与语音基础](architecture/ai-and-speech-foundation.md)。教程保留各自的环境记录与未验证项。
 
-### 试试下一种 AI 玩法
+### AI 探索：故障驱动、自动实验与知识整理
 
-[构想地图](ai-ideas/01-ideas-map.md)摆出已有设想，[五个新方向](ai-ideas/02-five-new-directions.md)提供实验起点。这里保存脑暴与迁移建议；代表方案的公开记录和本项目的验证状态在正文分别说明。
+[Issue 夜班与独立审查构想](ai-ideas/01-ideas-map.md)摆出协作流程；[故障驱动、自动实验、模拟验收、规格驱动与知识整理](ai-ideas/02-five-new-directions.md)分别提供实验起点。这里保存脑暴与迁移建议；代表方案的公开记录和本项目的验证状态在正文分别说明。
 
-### 读架构，选路线
+### 架构研究：Mac 技术路线与产品设计
 
 带着问题读 [Zed、Raycast、Warp](research/zed-raycast-warp.md)，再深入 [Zed、Rust 与 PI-Desktop](deep/2026-09-26-zed-pi-rust/README.md)，或研究[简单、组合与复杂性](deep/2026-09-26-simplicity-composition-complexity/README.md)。想改代码，直接进[五条路线的示例](../examples/README.md)，对照[实现中的收益与代价](../examples/COMPARISON.md)形成判断。
 
