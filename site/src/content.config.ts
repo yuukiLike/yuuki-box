@@ -5,7 +5,7 @@ import type { Loader } from 'astro/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { i18nLoader } from '@astrojs/starlight/loaders';
 import { documentId, docsRoot } from './lib/docs-paths.mjs';
-import { pageMetadata, navigationBadge } from './lib/navigation.mjs';
+import { pageMetadata } from './lib/navigation.mjs';
 
 const source = glob({
   base: docsRoot,
@@ -31,7 +31,6 @@ const repositoryDocs: Loader = {
           Object.assign(options.data, {
             sidebar: {
               ...sidebar,
-              badge: navigationBadge(metadata),
               attrs: { ...sidebar?.attrs, 'data-topic': metadata.color },
             },
           });

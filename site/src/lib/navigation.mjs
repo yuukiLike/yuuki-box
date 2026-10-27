@@ -23,10 +23,10 @@ const page = (slug, label, tags) => ({ slug, label, tags });
 // 首页、侧栏与阅读页共用主题信息。标签链接在章节收起时仍能直达具体内容。
 /** @type {NavigationItem[]} */
 export const navigation = [
-  { label: '文档目录', link: '/', color: 'slate', tags: ['学习路线'] },
+  { label: '文档目录', link: '/', color: 'sky', tags: ['学习路线'] },
   {
     label: 'MCP 接入、模型训练与工具调用',
-    color: 'blue',
+    color: 'sky',
     description: '从 Codex 调用自己的 MCP 开始，训练字符模型、搭建 Harness，再连接天气、Blender 与 GitHub。',
     tags: [topic('Codex MCP', 'ai-from-scaling/00-codex-mcp'), topic('模型训练', 'ai-from-scaling/02-train-a-model'), topic('工具调用循环', 'ai-from-scaling/03-build-a-harness'), topic('天气查询', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender 建模', 'ai-from-scaling/05-blender-mcp'), topic('GitHub 修复验证', 'ai-from-scaling/06-github-lab-mcp')],
     items: [
@@ -54,7 +54,7 @@ export const navigation = [
   },
   {
     label: 'AI 开发：修复、审查、测试与迁移',
-    color: 'green',
+    color: 'emerald',
     description: '按手头任务选案例：从 Issue 交付 PR、从报错追根因，再做代码审查、有效测试、安全修复与版本迁移。',
     tags: [topic('Issue → PR', 'ai-practices/02-issue-to-pr'), topic('故障修复', 'ai-practices/03-error-to-fix'), topic('PR 审查', 'ai-practices/01-coderabbit-review'), topic('测试生成', 'ai-practices/05-test-generation'), topic('安全修复', 'ai-practices/04-security-autofix'), topic('代码迁移', 'ai-practices/06-code-migration')],
     items: [
@@ -96,7 +96,7 @@ export const navigation = [
   },
   {
     label: 'Agent 工程：运行控制、MCP 与 Skills',
-    color: 'purple',
+    color: 'pink',
     description: '实现取消、崩溃恢复、上下文与用量报告，接入外部工具和权限，再用 Skills 复用流程与验收。',
     tags: [topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('上下文与用量', 'agent-engineering/06-context-and-report'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('工具权限', 'agent-engineering/02-mcp-policy'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('回归演练', 'agent-engineering/07-scenario-regression')],
     items: [
@@ -131,7 +131,7 @@ export const navigation = [
   },
   {
     label: '前端与 AI：通信、缓存、计算与渲染',
-    color: 'cyan',
+    color: 'sky',
     description: '追踪请求与流式响应，比较数组与 Map、拆解 KV Cache，用 Wasm 和 Worker 计算，再检查界面更新成本。',
     tags: [topic('RPC / SSE / MCP', 'ai-communication'), topic('Map 与缓存', 'frontend-foundations'), topic('KV Cache', 'kv-cache'), topic('Wasm / Worker', 'wasm'), topic('流式渲染', 'learning/rendering-performance')],
     items: [
@@ -212,7 +212,7 @@ export const navigation = [
   },
   {
     label: '语音交互：合成、转写与人声检测',
-    color: 'rose',
+    color: 'orange',
     description: '用 edge-tts 合成中文，用 whisper.cpp 转写录音，用 Silero VAD 找出人声，再接入 Yuuki 的模型与工具流程。',
     tags: [topic('语音合成 / TTS', 'tts/让-Yuuki-开口说第一句话'), topic('Whisper 转写', 'tts#第二站--whispercpp把声音接回文字'), topic('VAD 人声检测', 'tts#第三站--silero-vad在录音里找出人声'), topic('模型与语音集成', 'architecture/ai-and-speech-foundation')],
     items: [
@@ -223,7 +223,7 @@ export const navigation = [
   },
   {
     label: 'AI 探索：故障驱动、自动实验与知识整理',
-    color: 'amber',
+    color: 'gold',
     description: '探索五种工作方式：从故障发起任务、自动比较改法、在模拟接口中验收、按规格实现，以及整理可复用经验。',
     tags: [
       topic('故障驱动', 'ai-ideas/02-five-new-directions#1-故障驱动从真实报错生成修复任务'),
@@ -243,7 +243,7 @@ export const navigation = [
   },
   {
     label: '架构研究：Mac 技术路线与产品设计',
-    color: 'slate',
+    color: 'emerald',
     description: '对照 Zed、Raycast 与 Warp，研究 Swift、Rust / GPUI 和 Web 界面，梳理组件组合、进程边界与 Mac 实施计划。',
     tags: [topic('项目状态', 'guide'), topic('Zed / Raycast / Warp', 'research/zed-raycast-warp'), topic('简单与组合', 'deep/2026-09-26-simplicity-composition-complexity'), topic('Rust / GPUI', 'deep/2026-09-26-zed-pi-rust'), topic('Mac 实施计划', 'plan/first-mac-loop')],
     items: [
@@ -270,18 +270,11 @@ export const navigation = [
 
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;
 
-export function navigationBadge(metadata, group = false) {
-  return {
-    text: metadata.tags.slice(0, group ? 1 : 2).map(tagText).join(' · '),
-    class: `topic-tag topic-${metadata.color}`,
-  };
-}
-
-export function starlightSidebar(items = navigation, inheritedColor = 'slate') {
-  return items.map(({ tags = [], description, color = inheritedColor, ...item }) => {
-    if (item.items) return { ...item, badge: navigationBadge({ tags, color }, true), items: starlightSidebar(item.items, color) };
+export function starlightSidebar(items = navigation, inheritedColor = 'sky') {
+  return items.map(({ tags, description, color = inheritedColor, ...item }) => {
+    if (item.items) return { ...item, items: starlightSidebar(item.items, color) };
     if (item.autogenerate) return { ...item, autogenerate: { ...item.autogenerate, attrs: { 'data-topic': color } } };
-    return { ...item, badge: navigationBadge({ tags, color }), attrs: { 'data-topic': color } };
+    return { ...item, attrs: { 'data-topic': color } };
   });
 }
 
