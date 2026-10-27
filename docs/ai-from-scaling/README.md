@@ -97,6 +97,10 @@ node --version
 
 想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 开场通过 Markdown 文件实现持久化，演示结束时会清理临时记录；本课程小型 Harness 的运行事件保存在内存并打印到终端。执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
 
+## 番外：工具调用怎样长成 Agent
+
+主线跑完、或者中途想换口气时，可以读[这篇番外](extra-tool-use-story.md)。它不要求跟做，把 ReAct、Plugins、Code Interpreter、function calling 与 MCP 串成一条故事线，解释主线里的 `stopWhen`、`readOnlyHint`、`outputSchema` 分别是从哪次失败里长出来的。
+
 ## 末章选修：音乐 MCP
 
 先完成模型与 Harness 主线，以及感兴趣的 Blender、GitHub 实践，最后再按兴趣阅读这两个音乐案例。

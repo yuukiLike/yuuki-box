@@ -36,6 +36,7 @@ export default defineConfig({
             { slug: 'ai-from-scaling/02-train-a-model', label: '2 · 训练一个小语言模型' },
             { slug: 'ai-from-scaling/03-build-a-harness', label: '3 · 搭建工具调用循环' },
             { slug: 'ai-from-scaling/04-experiments', label: '4 · 接真实模型并做对照' },
+            { slug: 'ai-from-scaling/extra-tool-use-story', label: '番外 · 工具调用怎样长成 Agent' },
             { slug: 'ai-from-scaling/05-blender-mcp', label: 'Blender：让参数变成模型' },
             { slug: 'ai-from-scaling/06-github-lab-mcp', label: 'GitHub：证明一次修复有效' },
             {

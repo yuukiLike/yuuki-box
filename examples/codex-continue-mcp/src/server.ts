@@ -91,6 +91,7 @@ function createServer(): McpServer {
       return { isError: true, content: [{ type: 'text', text: `读取失败：${message}` }] };
     }
   });
+
   server.registerTool('get_usage_stats', {
     description: '查看接着做 MCP 自启用统计以来的连接次数、已完成工具调用次数、成功/失败和耗时，按工具与 Host 声明的软件名称/版本汇总。连接次数不是独立用户或设备数；查看统计本身不计入工具调用次数。',
     inputSchema: z.strictObject({}),
