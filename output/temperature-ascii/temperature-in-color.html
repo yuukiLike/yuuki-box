@@ -1,0 +1,158 @@
+<div id="temperature-ascii-explainer">
+  <style>
+    #temperature-ascii-explainer { color: var(--foreground); }
+    #temperature-ascii-explainer .temperature-control { margin: 20px 0 26px; }
+    #temperature-ascii-explainer .control-label { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    #temperature-ascii-explainer .range-labels { display: flex; justify-content: space-between; color: var(--muted-foreground); }
+    #temperature-ascii-explainer .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    #temperature-ascii-explainer .panel { min-width: 0; }
+    #temperature-ascii-explainer .panel-title { margin-bottom: 14px; font-weight: 500; }
+    #temperature-ascii-explainer .ascii { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-ligatures: none; white-space: pre; margin: 0; background: transparent; border: 0; padding: 0; color: var(--muted-foreground); }
+    #temperature-ascii-explainer .ascii-line { display: block; min-height: 1lh; }
+    #temperature-ascii-explainer .series-a { color: var(--viz-series-1); }
+    #temperature-ascii-explainer .series-b { color: var(--viz-series-2); }
+    #temperature-ascii-explainer .series-c { color: var(--viz-series-3); }
+    #temperature-ascii-explainer .particle { color: var(--viz-series-1); font-weight: 500; }
+    #temperature-ascii-explainer .motion { color: var(--viz-series-2); }
+    #temperature-ascii-explainer .values { color: var(--foreground); }
+    #temperature-ascii-explainer .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; }
+    #temperature-ascii-explainer .legend-mark { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 500; }
+    #temperature-ascii-explainer .panel-caption { margin-top: 14px; color: var(--muted-foreground); }
+    #temperature-ascii-explainer .samples { margin-top: 24px; }
+    #temperature-ascii-explainer .sample-strip { display: flex; flex-wrap: wrap; column-gap: 8px; row-gap: 4px; margin-top: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 500; }
+    @media (max-width: 640px) { #temperature-ascii-explainer .comparison { grid-template-columns: 1fr; gap: 28px; } }
+  </style>
+  <h2>温度升高，选择怎样散开？</h2>
+  <div class="temperature-control">
+    <div class="control-label">
+      <label for="ascii-temperature">温度 T <span class="text-small text-muted">相对刻度</span></label>
+      <output id="ascii-temperature-value" class="tabular-nums" for="ascii-temperature">0.50</output>
+    </div>
+    <input class="form-range" id="ascii-temperature" type="range" min="0.1" max="3" step="0.05" value="0.5">
+    <div class="range-labels text-small"><span>低温</span><span>高温</span></div>
+  </div>
+  <div class="comparison">
+    <section class="panel" aria-labelledby="particle-title">
+      <div class="panel-title" id="particle-title">物理 · 气体粒子的热运动</div>
+      <div id="particle-ascii" class="ascii" role="img" aria-label="气体粒子运动示意，箭头随温度升高变长"></div>
+      <div class="legend text-small"><span><span class="legend-mark particle">o</span> 粒子</span><span><span class="legend-mark motion">--&gt;</span> 速度方向与大小</span></div>
+      <div class="panel-caption text-small">运动示意 · 同种气体</div>
+    </section>
+    <section class="panel" aria-labelledby="probability-title">
+      <div class="panel-title" id="probability-title">模型 · 下一词的选择概率</div>
+      <div id="probability-ascii" class="ascii" role="img" aria-label="三个候选词的概率分布"></div>
+      <div class="legend text-small"><span><span class="legend-mark series-a">A</span> 茶</span><span><span class="legend-mark series-b">B</span> 咖啡</span><span><span class="legend-mark series-c">C</span> 牛奶</span></div>
+      <div class="panel-caption text-small">我想喝一杯____ · 固定示例得分</div>
+    </section>
+  </div>
+  <div class="samples">
+    <div class="text-small text-muted">同一开头，24 次独立抽样（模拟）</div>
+    <div id="ascii-samples" class="sample-strip" role="img" aria-label="24 次抽样结果"></div>
+  </div>
+  <div id="temperature-status" class="sr-only" aria-live="polite"></div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('temperature-ascii-explainer');
+  const slider = root.querySelector('#ascii-temperature');
+  const output = root.querySelector('#ascii-temperature-value');
+  const particles = root.querySelector('#particle-ascii');
+  const chart = root.querySelector('#probability-ascii');
+  const samples = root.querySelector('#ascii-samples');
+  const status = root.querySelector('#temperature-status');
+  const names = ['茶', '咖啡', '牛奶'];
+  const letters = ['A', 'B', 'C'];
+  const classes = ['series-a', 'series-b', 'series-c'];
+  const scores = [Math.log(5), Math.log(2), 0];
+  let seed = 419;
+  const draws = Array.from({ length: 24 }, () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  });
+  function line(parent, parts) {
+    const row = document.createElement('span');
+    row.className = 'ascii-line';
+    for (const part of parts) {
+      const span = document.createElement('span');
+      span.textContent = typeof part === 'string' ? part : part.text;
+      if (typeof part !== 'string') span.className = part.className;
+      row.appendChild(span);
+    }
+    parent.appendChild(row);
+  }
+  function renderParticles(t) {
+    particles.replaceChildren();
+    const width = 27;
+    const trail = Math.max(1, Math.round(5 * Math.sqrt(t)));
+    line(particles, ['+' + '-'.repeat(width) + '+']);
+    const positions = [[2, 1, 0], [14, -1, 1], [7, 1, 0], [22, -1, 2]];
+    for (let y = 0; y < 8; y++) {
+      if (y % 2 === 0) {
+        const [x, direction, extra] = positions[y / 2];
+        const length = Math.max(1, trail - extra);
+        const cells = Array.from({ length: width }, () => ({ text: ' ', className: '' }));
+        cells[x] = { text: 'o', className: 'particle' };
+        for (let step = 1; step <= length; step++) {
+          const index = x + direction * step;
+          if (index >= 0 && index < width) cells[index] = { text: step === length ? (direction > 0 ? '>' : '<') : '-', className: 'motion' };
+        }
+        line(particles, ['|', ...cells, '|']);
+      } else line(particles, ['|' + ' '.repeat(width) + '|']);
+    }
+    line(particles, ['+' + '-'.repeat(width) + '+']);
+    line(particles, [' ']);
+    line(particles, [' ']);
+    line(particles, [' ']);
+  }
+  function render(t, announce) {
+    const temperature = Math.min(3, Math.max(0.1, t));
+    slider.value = String(temperature);
+    output.textContent = temperature.toFixed(2);
+    const weights = scores.map(score => Math.exp((score - scores[0]) / temperature));
+    const total = weights.reduce((a, b) => a + b, 0);
+    const probabilities = weights.map(weight => weight / total);
+    chart.replaceChildren();
+    for (let level = 10; level >= 1; level--) {
+      const tick = level % 2 === 0 ? String(level * 10).padStart(3) + '% |' : '     |';
+      const parts = [tick];
+      probabilities.forEach((p, index) => {
+        const fill = Math.min(1, Math.max(0, p * 10 - level + 1));
+        const mark = fill >= 0.75 ? '#' : fill >= 0.35 ? ':' : fill > 0.03 ? '.' : ' ';
+        parts.push(' ', { text: mark.repeat(5), className: classes[index] }, ' ');
+      });
+      line(chart, parts);
+    }
+    line(chart, ['  0% +' + '-'.repeat(21)]);
+    line(chart, [{ text: '         A      B      C', className: 'values' }]);
+    line(chart, [{ text: '      ' + probabilities.map(p => (100 * p).toFixed(1).padStart(5) + '% ').join(''), className: 'values' }]);
+    chart.setAttribute('aria-label', names.map((name, i) => name + ' ' + (probabilities[i] * 100).toFixed(1) + '%').join('，'));
+    renderParticles(temperature);
+    const choices = draws.map(u => u < probabilities[0] ? 0 : u < probabilities[0] + probabilities[1] ? 1 : 2);
+    samples.replaceChildren(...choices.map(index => {
+      const span = document.createElement('span');
+      span.className = classes[index];
+      span.textContent = letters[index];
+      return span;
+    }));
+    samples.setAttribute('aria-label', choices.map(i => names[i]).join('、'));
+    if (announce) status.textContent = '温度 ' + temperature.toFixed(2) + '。' + chart.getAttribute('aria-label');
+  }
+  function restore(state) {
+    const saved = state && state.modelContent && state.modelContent.temperature;
+    render(typeof saved === 'number' && Number.isFinite(saved) ? saved : 0.5, false);
+  }
+  slider.addEventListener('input', () => render(Number(slider.value), false));
+  slider.addEventListener('change', () => {
+    const temperature = Number(slider.value);
+    render(temperature, true);
+    if (window.openai && typeof window.openai.setWidgetState === 'function') {
+      window.openai.setWidgetState({ modelContent: { temperature }, privateContent: null }).catch(() => {});
+    }
+  });
+  window.addEventListener('openai:set_globals', event => {
+    const globals = event.detail && event.detail.globals;
+    if (globals && Object.prototype.hasOwnProperty.call(globals, 'widgetState')) restore(globals.widgetState);
+  });
+  restore(window.openai && window.openai.widgetState);
+})();
+</script>
