@@ -32,7 +32,7 @@ node docs/ai-communication/labs/01-rpc.ts
 
 ## 学完后选做：让 Codex 查询 Apple 天气
 
-想把“用户登录 → 授权 → 工具调用”接成完整服务，到 [MCP 项目实战](../mcp-projects/README.md)选择[远程天气教程](weather-mcp/README.md)。它是独立的工程跟做课程，后端使用 Supabase，天气来自 Apple WeatherKit；不作为通信六课的必修续篇。
+想把“用户登录 → 授权 → 工具调用”接成完整服务，进入独立的[远程 MCP 与授权专题](weather-mcp/README.md)。它是工程跟做课程，后端使用 Supabase，天气来自 Apple WeatherKit；不作为通信六课的必修续篇。
 
 <details>
 <summary>运行环境与检查</summary>

@@ -56,6 +56,8 @@
 
 仓库还需要允许 Actions 创建 PR；组织策略也可能限制这项能力。[GitHub Actions 仓库设置](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository)
 
+[![计划启动时间可能延迟，全流程截止时间需要根据实际开始时间另行检查](../../site/public/diagrams/issue-garden/time-budget.svg)](../../site/public/diagrams/issue-garden/time-budget.svg)
+
 ## 时间段需要两道判断
 
 假设只允许北京时间 **02:15—04:00** 工作：

@@ -20,6 +20,10 @@
 | 改动是否符合用户意图 | 模型 + 人 |
 | 体验是否可接受 | 人 |
 
+[![同一检查器应让好样例通过，并指出坏样例中的具体错误](../../site/public/diagrams/agent-engineering/04-skill-validation.svg)](../../site/public/diagrams/agent-engineering/04-skill-validation.svg)
+
+先构造一对只有一个条件不同的样例。坏样例如果也通过，先修检查器，再用它验收任务。
+
 ## 校验脚本的契约
 
 一个可复用的 skill 脚本至少满足：
@@ -53,7 +57,7 @@ if (errors.length) {
 console.log(`检查通过: ${file}`);
 ```
 
-这个片段只检查相对链接。实际 skill 可以再检查标题、必需章节、生成的 diff 或测试结果。
+这个片段演示“发现缺失文件 → 输出原因 → 非零退出”，只适合简单的行内相对链接。它没有解析 Markdown AST，无法可靠区分代码示例、引用式链接或带括号的地址，也没有验证页内锚点。先用小 fixture 理解契约，正式文档校验再复用 Markdown 解析器或站点构建结果，不能把这段正则当作完整链接检查器。
 
 ## 负例 fixture
 

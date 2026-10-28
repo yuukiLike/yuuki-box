@@ -21,6 +21,8 @@
 
 它为[Issue 夜班](../issue-garden/README.md)提供了“单次任务交付”的落地依据。定时选择任务、避免重复领取与控制预算，仍是夜班调度需要另外处理的部分。
 
+[![Issue 定义问题，实现留下检查，PR 交回行为变化与证据](../../site/public/diagrams/ai-practices/issue-pr.svg)](../../site/public/diagrams/ai-practices/issue-pr.svg)
+
 ## 小挑战：让一个失效链接走完开发流程
 
 选一个失效文档链接之类的小任务。在 Issue 里写清入口、实际结果、预期目标和验收路径，把关键条件直接写入正文。交给 Agent 后，观察它是否找到真正的引用位置，以及是否给出对应的检查记录。

@@ -12,6 +12,8 @@
 
 只想先听一句话，点[让 Yuuki 开口说第一句话](让-Yuuki-开口说第一句话.md)。
 
+[![TTS 把文字变音频，VAD 找人声时间段，ASR 将录音转写为文字](../../site/public/diagrams/tts/speech-paths.svg)](../../site/public/diagrams/tts/speech-paths.svg)
+
 **先准备一次：Mac + 独立 Python 环境**
 
 本机已确认有 Homebrew、Python **3.14.6** 和 pip **26.1.2**（2026-10-14）。环境外用 `python3 -m pip` 或 `pip3`；下面在虚拟环境里用 `python -m pip`。
@@ -123,6 +125,8 @@ PY
 ```
 
 VAD 只检测人声；文字内容交给 Whisper。保留的人声片段里仍可能有背景噪声。[官方用法](https://github.com/snakers4/silero-vad#fast-start)、[音频读写说明](https://python-soundfile.readthedocs.io/en/latest/)
+
+`spans` 的样本位置对应原始 `audio.wav`。`speech.wav` 拼接了人声并移除了中间静音，时间轴已经变短；给原视频做字幕时，保留原时间位置或建立片段映射，不能直接套用拼接音频的时间。
 
 ## 串起来玩一次
 

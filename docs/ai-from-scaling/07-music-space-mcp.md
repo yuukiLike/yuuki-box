@@ -53,6 +53,8 @@ pnpm --dir examples/music-space-mcp preview
 
 拖动改变观察方向，滚轮靠近。按“回到默认视角”恢复构图。暂停后仍可围绕结观察，运镜参数会保存。
 
+[![MIDI 音符映射为空间，普通音频包络和关键帧驱动剧场，两者共享导出时间轴](../../site/public/diagrams/ai-from-scaling/music-timeline.svg)](../../site/public/diagrams/ai-from-scaling/music-timeline.svg)
+
 ## 先取得可靠的音乐数据
 
 这一篇直接输入多轨 MIDI，保留每个音符的音高、起点、时值、力度与所属轨道，同时保留速度和拍号事件。解析复用 Tonejs/Midi，而不是自行重写 MIDI 二进制协议。

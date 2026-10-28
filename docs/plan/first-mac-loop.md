@@ -1,12 +1,14 @@
 # 第一轮 Mac 闭环开发计划
 
-更新日期：2026-09-26。状态：**五条技术路线已扩展 Agent 与 Whisper：DeepSeek、固定工具、审批、取消和持久会话已实现，并完成统一构建、打包与本地签名（build-all.sh 退出码 0）。** 按用户指示不做测试验证和 computer-use，没有打开应用、使用 API key、实际识别语音或测量性能。
+实现记录日期：2026-09-26。**五条技术路线已扩展 Agent 与 Whisper：DeepSeek、固定工具、审批、取消和持久会话已实现，并完成统一构建、打包与本地签名（build-all.sh 退出码 0）。** 当时按用户指示跳过测试验证和 computer-use，没有打开应用、使用 API key、实际识别语音或测量性能。这是那次交付的边界，不是后续工作一律跳过验证的规则。
 
 最新使用与边界见 [AI 与语音基础](../architecture/ai-and-speech-foundation.md) 和 [runtime README](../../examples/shared/runtime/README.md)。下文里程碑是完整产品方向；“代码已实现”与“运行验收通过”分别记录。
 
 本计划把详细调研转成可以立即开始的小步实现。用户已确认“自建模型与工具循环”和“先 Mac 本地，后远程设备”，并要求通过并行 MVP 实际接触 Swift、Rust、GPUI 与 React 的不同宿主。最终 UI 和运行时语言尚未确定；可以直接从 GPUI/Rust 开始学习，无需先完成 Swift 版本。SQLite 与独立 Runner 仍是架构建议。
 
 相关文档：[五路线 examples 入口](../../examples/README.md) · [阅读入口](../README.md) · [产品架构调研](../research/zed-raycast-warp.md) · [Harness 提案](../architecture/mac-local-harness.md) · [渲染实验](../learning/rendering-performance.md)。
+
+第一次跟做，只选一条感兴趣的路线，追踪“输入任务 → 收到一条事件 → 更新一行界面”。能指出状态在哪里改变、停止信号发给谁，就可以进入模型或工具部分；不需要先学完五种技术栈。
 
 ## 1. 这轮开发的结果
 
@@ -22,7 +24,7 @@
 
 | 检查 | 实际结果 | 对开发的影响 |
 |---|---|---|
-| 当前目录 | `/Users/chp/explore/yuuki-box`，现在包含 `docs/` 和 `examples/` | 已有可继续修改的路线样例 |
+| 调查目录 | 当时的 `yuuki-box` 工作树，包含 `docs/` 和 `examples/` | 已有可继续修改的路线样例 |
 | 系统 | macOS 27.0，build `26A428` | 记录为开发环境，不能据此决定最低部署版本 |
 | 架构 | `arm64` | 当前在 Apple Silicon 环境下工作 |
 | Swift | Apple Swift 6.4，target `arm64-apple-macosx27.0.0` | 已用 `swiftc` 编译实际 App 和语音 helper |
@@ -70,7 +72,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 ### M0 尚未完成的内容与以后可选的观察
 
-用户已明确允许本轮跳过测试验证和 computer-use，因此以下是以后想深入体验时可选的工作，不是本轮已执行或必须补跑的检查：
+2026-09-26 的交付按当时要求跳过测试验证和 computer-use，因此以下项目没有验收结果。后续继续实现时，按改动范围选择相应检查：
 
 - 输入内容不会因为事件追加或切换状态丢失。
 - 切换会话后，不会把之前会话的输出追加到当前会话。
@@ -135,7 +137,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 ## 5. 后续可选验证矩阵
 
-下表保留未来实现真实 Harness 时值得观察的行为和可用方法，目前全部未验证。它不是本轮的执行要求，也不是已运行测试的清单；用户本轮明确允许跳过测试验证和 computer-use。以后按当前阶段选择需要的验证，不必为学习样例先搭建完整测试体系。
+下表保留完整 Harness 需要观察的行为和可用方法；在上述交付记录中全部未验证。继续开发时按当前阶段选择检查，不必为学习样例先搭建完整测试体系，也不能把源码存在视为行为已通过。
 
 | 情况 | 预期行为 | 合适的验证方式 |
 |---|---|---|
@@ -157,7 +159,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 | 时点 | 要明确的事项 | 暂缓依据 |
 |---|---|---|
 | M0 继续推进时 | 先打开和修改哪条路线、需要补哪项真实交互 | 五路线已构建，不要求先选定最终技术栈 |
-| M1 开始前 | 一家模型提供方、认证方式、流式与错误契约 | 具体接口需以当时官方文档为准 |
+| M1 继续推进时 | 验证已接入的 DeepSeek，确认认证、流式与错误契约 | 代码已有入口，真实调用和失败路径仍需验收 |
 | M2 开始前 | 首个真实任务、可操作目录、工具策略与隔离范围 | 决定真正需要哪些工具及权限 |
 | M3 开始前 | 保存位置、保留策略、恢复语义、凭据引用 | 保证关键状态和副作用有证据 |
 | M4 开始前 | 退出 UI 后是否继续、后台 helper 的注册与关闭方式 | 决定实际生命周期实现 |
@@ -197,7 +199,7 @@ Rust 也不要求等出现性能瓶颈才学习。可以直接沿 GPUI 示例学
 
 ## 9. 完成记录模板
 
-当前实施记录是：五条 UI 路线与共同语音 helper 已生成本机应用包；M0 部分完成，M1–M4 未开始。没有 GUI、性能、实际语音或完整更新安装的验证结果。helper 在用户调整要求之前做过的无权限检查见 [examples 入口](../../examples/README.md)，不外推成整套 App 验收结论。
+当前实施记录是：五条 UI 路线与共同语音 helper 已生成本机应用包；M0–M4 均已有部分实现，具体完成范围以上方阶段表为准。DeepSeek 接入代码存在，但真实调用未验收；工具、持久化和 Runner 也只覆盖表中列出的子集。没有 GUI、性能、实际语音或完整更新安装的验证结果。helper 在当时调整要求之前做过的无权限检查见 [examples 入口](../../examples/README.md)，不外推成整套 App 验收结论。
 
 下列模板用于后续每个里程碑的工作记录；未执行的项目可以直接写“本轮未执行”：
 

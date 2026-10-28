@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">浏览器模型的冷启动与热运行</title>
+<desc id="desc">浏览器模型的冷启动与热运行。支持 WebGPU 或 Wasm，不代表指定模型、算子与设备组合已验证可用。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">浏览器模型的冷启动与热运行</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">把下载、初始化和推理分别计时，才能解释用户的等待。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">第一次：冷启动</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">获取运行时与模型文件</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">编译、初始化与创建会话</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">准备输入并执行推理</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">记录总时间和各阶段时间</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#edf8f2" stroke="#92cdb0" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#23674a" font-weight="650">再次使用：热运行</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">复用已有模型与会话</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">准备同样大小的新输入</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">执行推理并取回结果</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">同时观察常驻内存与资源释放</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">支持 WebGPU 或 Wasm，不代表指定模型、算子与设备组合已验证可用。</text>
+</g></svg>

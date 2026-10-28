@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织专题：MCP 入门、模型基础与推理缓存、Agent 工程、MCP 项目实战、AI 开发实践、应用通信、前端性能、语音交互、AI 探索与架构研究。四小时路线和前端与 AI 联读指南单独串联相关专题。
+以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织十四个专题：MCP 入门、模型基础、模型推理与 KV Cache、Agent 工程、MCP 项目实战、远程 MCP 与授权、AI 开发实践、Issue 工作流、应用通信、前端性能、语音交互、AI 探索、架构研究、项目设计与计划。四小时路线和前端与 AI 联读指南单独串联相关专题。
 
 ## 本地运行
 
@@ -71,8 +71,8 @@ pnpm --dir site build
 - `src/content.config.ts` 基于 Astro glob loader 直接读取这些文件，保留原生文件监听与内容处理。
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。
-- `src/lib/navigation.mjs` 统一维护阅读顺序、具体标题、主题标签、专题颜色与总览描述；`astro.config.mjs` 将其接入 Starlight。首页、阅读页标题与页内大纲展示主题标签；侧栏使用同一阅读顺序，只显示标题。浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
-- 导航按学习目标分类：MCP 入门与实战分开，天气完整工程归入实战；模型专题下分基础两课与 KV Cache 进阶；Agent 按入门、运行控制、MCP、Skills 组织；开发实践保留任务交付、质量检查与 Issue 夜班；应用通信独立成课，前端性能下分查找缓存、浏览器计算与界面响应。三个浏览器实验各自放回对应专题。架构研究内将产品研究与项目设计、实施计划分组。
+- `src/lib/navigation.mjs` 统一维护阅读顺序、具体标题、主题标签、专题颜色与总览描述；`astro.config.ts` 将其接入 Starlight，并监听导航文件触发配置重载。使用 TypeScript 配置让 Astro 经 Vite 重新加载导航依赖，避免开发服务只刷新正文标签却保留旧分组。首页、阅读页标题与页内大纲展示主题标签；侧栏使用同一阅读顺序，只显示标题。浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
+- 导航按学习目标分类：原先混合的首组拆为 MCP 入门、模型基础、MCP 项目实战，Harness 入门归入 Agent 工程。较长课程再把 KV Cache、远程授权工程、Issue 工作流、项目设计与计划各自独立。Agent 保留入门、运行控制、MCP、Skills 四段；前端性能保留查找缓存、浏览器计算与界面响应三段。三个浏览器实验各自放回对应专题。
 - 跨专题导读在首页介绍和侧栏顶部提供入口，专题卡片只列本专题内容。调整分组不移动已有 Markdown 文件和路由；正文中的前置要求、选读说明与下一步建议同步维护。
 - `README.md` 对应 `/guide/`，子目录的 `README.md` 对应该目录；其他 Markdown 文件名保留在路由中。
 

@@ -19,6 +19,8 @@
 
 PR（Pull Request）保存准备合并的改动，方便你检查和讨论。GitHub Actions 支持按时间触发；Codex 也有供 Actions 调用的官方接入方式。[GitHub 定时触发](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、[OpenAI Docs：Codex GitHub Action](https://learn.chatgpt.com/docs/github-action)
 
+[![Issue 工作流先选择去重，再修改验证，最后发布可验收的草稿 PR](../../site/public/diagrams/issue-garden/handoff.svg)](../../site/public/diagrams/issue-garden/handoff.svg)
+
 ## 一次夜班会发生什么
 
 ```text

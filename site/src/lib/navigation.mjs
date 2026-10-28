@@ -45,27 +45,41 @@ export const navigation = [
     ],
   },
   {
-    label: '模型基础与推理缓存',
+    label: '模型基础',
     color: 'gold',
-    description: '从概率与参数更新开始，训练一个字符模型。进阶再研究 Attention、KV Cache 容量与前缀复用。',
-    tags: [topic('模型原理', 'ai-from-scaling/01-understand-models'), topic('字符模型训练', 'ai-from-scaling/02-train-a-model'), topic('Attention', 'kv-cache/02-attention-and-kv'), topic('KV Cache', 'kv-cache')],
+    description: '用两课理解参数、预测与训练，再亲手训练一个字符模型，比较训练前后的输出。',
+    tags: [topic('模型原理', 'ai-from-scaling/01-understand-models'), topic('字符模型训练', 'ai-from-scaling/02-train-a-model')],
     items: [
       page('ai-from-scaling/01-understand-models', '模型基础 1：参数、概率与缩放定律', ['模型原理'], '1 · 模型学习'),
       page('ai-from-scaling/02-train-a-model', '模型基础 2：数据、损失与字符生成', ['模型训练'], '2 · 训练字符语言模型'),
+    ],
+  },
+  {
+    label: '模型推理与 KV Cache',
+    color: 'gold',
+    description: '从消息和 token 走到 Attention、缓存容量与前缀复用，再对照 Harness 和 Pi 的请求及用量。',
+    tags: [topic('生成过程', 'kv-cache/00-first-request'), topic('Attention', 'kv-cache/02-attention-and-kv'), topic('内存容量', 'kv-cache/00-why-so-large'), topic('前缀复用', 'kv-cache/03-prefix-cache-and-yuuki')],
+    items: [
+      page('kv-cache', 'KV Cache 总览：原理、容量与 Agent 应用', ['模型缓存'], 'KV Cache · 原理与应用'),
       {
-        label: '进阶：Attention 与 KV Cache',
+        label: '原理与容量',
         tags: ['KV Cache', '模型缓存', '进阶'],
         items: [
-          page('kv-cache', 'KV Cache 总览：原理、容量与 Agent 应用', ['模型缓存']),
           page('kv-cache/00-first-request', '1 · 模型请求：消息、token 与生成过程', ['请求路径', 'Token']),
           page('kv-cache/01-from-frontend', '2 · 增量计算：追加输入与复用结果', ['增量计算']),
           page('kv-cache/02-attention-and-kv', '3 · 注意力：Q、K、V 与因果遮罩', ['Attention', 'Q/K/V']),
           page('kv-cache/00-why-so-large', 'KV 容量：层数、token 与数据精度', ['内存计算']),
+          { label: '交互实验：计算 KV Cache 内存容量', link: '/labs/kv-memory/', tags: ['交互实验', '内存计算'] },
+        ],
+      },
+      {
+        label: '应用：前缀复用与用量',
+        tags: ['前缀缓存', '用量统计'],
+        items: [
           page('kv-cache/03-prefix-cache-and-yuuki', '4 · 前缀缓存：DeepSeek 命中与失效', ['DeepSeek', '前缀缓存']),
           page('kv-cache/04-deepseek-harness', '5 · Harness：请求装配与缓存复用', ['Harness', '请求装配']),
           page('kv-cache/05-pi', '6 · Pi：用量映射、缓存计费与预热', ['Pi', '用量统计']),
           page('kv-cache/06-study-map', '知识地图：KV 术语、关联概念与实验', ['知识地图']),
-          { label: '交互实验：计算 KV Cache 内存容量', link: '/labs/kv-memory/', tags: ['交互实验', '内存计算'] },
         ],
       },
     ],
@@ -116,24 +130,12 @@ export const navigation = [
     label: 'MCP 项目实战',
     color: 'emerald',
     description: '选一个感兴趣的项目：天气查询、Blender 建模、GitHub 修复验证或音乐可视化。每个项目说明自己的前置条件。',
-    tags: [topic('项目怎么选', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('登录与授权', 'ai-communication/weather-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐可视化', 'ai-from-scaling/07-music-space-mcp')],
+    tags: [topic('项目怎么选', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐可视化', 'ai-from-scaling/07-music-space-mcp')],
     items: [
       page('mcp-projects', 'MCP 实战总览：按兴趣选择一个工具项目', ['选做', '项目入口']),
       page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], 'Apple 天气 MCP'),
       page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
       page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
-      {
-        label: '远程天气：登录、授权与接入',
-        tags: ['Supabase', 'WeatherKit', '工程跟做'],
-        items: [
-          page('ai-communication/weather-mcp', '天气 MCP 总览：登录、查询与客户端连接', ['完整实战']),
-          page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
-          page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
-          page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
-          page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
-          page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
-        ],
-      },
       {
         label: '音乐：MIDI 可视化与短片导出',
         tags: ['MIDI', '3D 可视化', '视频导出'],
@@ -142,6 +144,20 @@ export const navigation = [
           page('ai-from-scaling/08-music-photo-mcp', '光之剧场：照片图层、音乐动画与短片导出', ['照片图层', '视频导出']),
         ],
       },
+    ],
+  },
+  {
+    label: '远程 MCP 与授权',
+    color: 'emerald',
+    description: '以天气服务为完整工程，分清用户登录与上游鉴权，再实现业务权限、工具接入和端到端验收。',
+    tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
+    items: [
+      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
+      page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
+      page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
+      page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
+      page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
+      page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
     ],
   },
   {
@@ -173,17 +189,19 @@ export const navigation = [
           page('ai-practices/04-security-autofix', '安全修复：从扫描告警追到修复验证', ['CodeQL', '漏洞修复']),
         ],
       },
-      {
-        label: 'Issue 夜班：扫描问题、生成 PR 与交班',
-        tags: ['跟做教程', 'Issue 自动化'],
-        items: [
-          page('issue-garden', 'Issue 夜班总览：问题扫描与修复流程', ['流程设计']),
-          page('issue-garden/01-first-scan', '1 · 扫描仓库问题并整理候选 Issue', ['问题发现']),
-          page('issue-garden/02-first-repair', '2 · 修复一个 Issue 并验证补丁', ['修复验证']),
-          page('issue-garden/03-night-shift', '3 · 安排夜间任务与保留交班记录', ['定时流程', '交班记录']),
-          page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
-        ],
-      },
+    ],
+  },
+  {
+    label: 'Issue 工作流',
+    color: 'emerald',
+    description: '先扫描问题，再修复一个 Issue，验证补丁后交付草稿 PR；需要时再加入定时任务与交班。',
+    tags: [topic('问题扫描', 'issue-garden/01-first-scan'), topic('修复与验收', 'issue-garden/02-first-repair'), topic('夜班交接', 'issue-garden/03-night-shift'), topic('Dot 路线', 'issue-garden/04-dot-shift')],
+    items: [
+      page('issue-garden', 'Issue 工作流总览：扫描、修复与交班', ['流程设计', '工程跟做']),
+      page('issue-garden/01-first-scan', '1 · 扫描仓库问题并整理候选 Issue', ['问题发现']),
+      page('issue-garden/02-first-repair', '2 · 修复一个 Issue 并验证补丁', ['修复验证']),
+      page('issue-garden/03-night-shift', '3 · 安排夜间任务与保留交班记录', ['定时流程', '交班记录']),
+      page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
     ],
   },
   {
@@ -271,8 +289,8 @@ export const navigation = [
   {
     label: '架构研究',
     color: 'emerald',
-    description: '对照 Zed、Raycast 与 Warp，研究 Swift、Rust / GPUI 和 Web 界面，梳理组件组合、进程边界与 Mac 实施计划。',
-    tags: [topic('项目状态', 'guide'), topic('Zed / Raycast / Warp', 'research/zed-raycast-warp'), topic('简单与组合', 'deep/2026-09-26-simplicity-composition-complexity'), topic('Rust / GPUI', 'deep/2026-09-26-zed-pi-rust'), topic('Mac 实施计划', 'plan/first-mac-loop')],
+    description: '对照 Zed、Raycast 与 Warp，研究 Swift、Rust / GPUI 和 Web 界面，沿组件、状态与进程边界阅读源码。',
+    tags: [topic('Zed / Raycast / Warp', 'research/zed-raycast-warp'), topic('简单与组合', 'deep/2026-09-26-simplicity-composition-complexity'), topic('Rust / GPUI', 'deep/2026-09-26-zed-pi-rust'), topic('技术评估', 'architecture/technology-assessment')],
     items: [
       {
         label: '产品架构：Zed、Raycast 与 Warp',
@@ -289,15 +307,17 @@ export const navigation = [
         ],
       },
       page('architecture/technology-assessment', '技术评估：统一比较五条 Mac 实现路线', ['技术评估']),
-      {
-        label: '项目方向、设计与实施计划',
-        tags: ['Mac', '项目计划'],
-        items: [
-          page('guide', '全站学习入口、产品方向与项目状态', ['项目总览']),
-          page('architecture/mac-local-harness', 'Mac 本地 Harness：运行时与 UI 的完整设计', ['Mac', '架构设计']),
-          { autogenerate: { directory: '../docs/plan' } },
-        ],
-      },
+    ],
+  },
+  {
+    label: '项目设计与计划',
+    color: 'pink',
+    description: '回到 Yuuki 的实际范围：对照已有实现、架构提案与开发计划，明确下一步要补什么证据。',
+    tags: [topic('项目状态', 'guide'), topic('Harness 设计', 'architecture/mac-local-harness'), topic('Mac 实施计划', 'plan/first-mac-loop')],
+    items: [
+      page('guide', '全站学习入口、产品方向与项目状态', ['项目总览']),
+      page('architecture/mac-local-harness', 'Mac 本地 Harness：运行时与 UI 的完整设计', ['Mac', '架构设计']),
+      { autogenerate: { directory: '../docs/plan' } },
     ],
   },
 ];

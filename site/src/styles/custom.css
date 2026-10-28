@@ -197,6 +197,23 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
 .sl-markdown-content table { font-size: .875rem; line-height: 1.8; }
 .sl-markdown-content th { background: var(--yuuki-panel); }
 .sl-markdown-content th, .sl-markdown-content td { border-bottom-color: var(--yuuki-border); }
+.sl-markdown-content .learning-map-table { overflow-x: auto; }
+.sl-markdown-content .learning-map-table:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 3px;
+}
+.sl-markdown-content .learning-map-table table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  min-width: 48rem;
+}
+.sl-markdown-content .learning-map-table :is(th, td) { vertical-align: top; }
+.sl-markdown-content .learning-map-table :is(th, td):nth-child(1) { width: 6.5rem; white-space: nowrap; }
+.sl-markdown-content .learning-map-table :is(th, td):nth-child(2) { width: 8rem; white-space: nowrap; }
+.sl-markdown-content .learning-map-table :is(th, td):nth-child(3) { width: 42%; }
+.sl-markdown-content .learning-map-table th { white-space: nowrap; }
+.sl-markdown-content .learning-map-table td:nth-child(n + 3) { overflow-wrap: anywhere; }
 /* Keep questions and optional depth available without interrupting the reading path. */
 .sl-markdown-content details {
   --disclosure-color: var(--topic-sky);

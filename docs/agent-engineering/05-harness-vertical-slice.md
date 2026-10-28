@@ -43,6 +43,10 @@ fake model: "调用 list_files"
 
 真实模型 adapter 之后替换它；Run 状态、事件、审批和恢复逻辑不变。
 
+[![Run 的取消和 ToolCall 的未知结果分别记录，恢复需要持久化数据](../../site/public/diagrams/agent-engineering/05-run-recovery.svg)](../../site/public/diagrams/agent-engineering/05-run-recovery.svg)
+
+图中两行属于不同层级。工具结果未知时，相关 Run 应进入 `interrupted`；不能为了结束等待就把外部动作写成已撤销。
+
 ## 六个状态场景
 
 | 注入 | 期望终态与证据 |
@@ -69,7 +73,7 @@ fake model: "调用 list_files"
 1. 用 fake model 和内存 Store 跑通成功路径，确认事件顺序。
 2. 在流式输出中触发取消，检查是否还有 delta。
 3. 在审批等待中让审批超时，检查 ToolCall 与 Run 的终态。
-4. 在 intent 落盘后模拟进程退出，重启并读取 Store，确认 Run 为 `interrupted`。
+4. 将 Store 换成临时目录中的持久化实现，在 intent 落盘后退出子进程；启动新进程读取同一目录，确认 Run 为 `interrupted`。内存 Store 无法验证这一步。
 5. 重复提交同一个 `commandId`，分别测试相同与不同输入。
 6. 让工具返回一个错误，确认模型能收到结构化结果并继续。
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">停止录音与放弃转写，含义不同</title>
+<desc id="desc">停止录音与放弃转写，含义不同。收到 stop 后立即关闭 helper 的输入通道，会打断仍需完成的转写。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">停止录音与放弃转写，含义不同</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">这里描述本仓库 Whisper helper 的先录音、后转写路径。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">stop：收音结束，继续处理</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">结束麦克风采集</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">转换音频，启动本地识别</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">界面继续显示处理中</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">识别完成后返回文字草稿</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#fff8e8" stroke="#e5c977" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#806014" font-weight="650">cancel：放弃这次任务</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">停止当前录音、转换或识别</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">等待可控资源退出</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">再清理临时文件</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">不把取消写成正常 final</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">收到 stop 后立即关闭 helper 的输入通道，会打断仍需完成的转写。</text>
+</g></svg>

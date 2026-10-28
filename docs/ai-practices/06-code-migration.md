@@ -23,6 +23,8 @@
 
 对于 Yuuki Box，可以借鉴“限定升级目标、保留原有检查结果、根据错误逐项修正”的流程。用于 Astro 或其他前端依赖升级时，需要在本项目中验证效果。
 
+[![迁移比较旧环境与目标环境中的同一组检查，区分原有失败与新增失败](../../site/public/diagrams/ai-practices/migration-baseline.svg)](../../site/public/diagrams/ai-practices/migration-baseline.svg)
+
 ## 小挑战：带着同一张检查单完成一次升级
 
 等项目确实需要一次升级时，再选一个依赖或模块，在独立分支记录当前版本与检查结果。给 AI 明确的目标版本、官方迁移说明，以及必须保持的行为，让它处理这一次迁移。

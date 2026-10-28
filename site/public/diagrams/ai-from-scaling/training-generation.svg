@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">训练和生成，改变的东西不同</title>
+<desc id="desc">训练和生成，改变的东西不同。给模型更多上下文与继续训练，是两种不同的操作。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">训练和生成，改变的东西不同</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">同一份分数表，训练时被更新，生成时被读取。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#fff0f6" stroke="#e9a4c3" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#953959" font-weight="650">训练：用目标改参数</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">输入片段 → 候选字符概率</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">与真实目标比较，得到 loss</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">梯度与学习率决定更新</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">验证句不参与参数更新</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#245b86" font-weight="650">生成：用参数选下一项</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">输入片段 → 候选字符概率</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">按概率选择下一个字符</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">追加到上下文，再做一次预测</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">这个循环不调用 trainStep</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">给模型更多上下文与继续训练，是两种不同的操作。</text>
+</g></svg>

@@ -23,6 +23,8 @@ Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计�
 
 浏览器支持 API 不代表模型一定可运行；还要验证算子、后端、数值与内存需求。[ONNX Runtime Web 性能诊断](https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html)
 
+[![冷启动包括下载与初始化，热运行复用会话但持续占用资源](../../site/public/diagrams/wasm/runtime-cold-warm.svg)](../../site/public/diagrams/wasm/runtime-cold-warm.svg)
+
 ## 冷启动和热执行分别测量
 
 ```text

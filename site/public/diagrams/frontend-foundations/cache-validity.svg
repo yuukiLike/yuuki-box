@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">缓存有效性和淘汰是两件事</title>
+<desc id="desc">缓存有效性和淘汰是两件事。命中一个过期结果，比重新计算更快，却会显示错误内容。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">缓存有效性和淘汰是两件事</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">先判断能否复用，再决定容量不足时删谁。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">有效性：结果还是对的吗？</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">正文版本或解析配置改变</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">同一个消息 id 可能对应新内容</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">把影响结果的条件放进 key</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">条件变化后失效或更新</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#fff8e8" stroke="#e5c977" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#806014" font-weight="650">淘汰：空间留给谁？</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">容量只能容纳两个结果</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">写 A、写 B、读 A、写 C</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">按 LRU 淘汰最近没用的 B</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">淘汰策略不修正错误的 key</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">命中一个过期结果，比重新计算更快，却会显示错误内容。</text>
+</g></svg>

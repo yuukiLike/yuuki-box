@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">启动时间与运行截止时间</title>
+<desc id="desc">启动时间与运行截止时间。没有任务、已有 PR、验证失败与时间耗尽，都应留下明确的结束原因。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">启动时间与运行截止时间</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">调度器发起任务，执行器仍要按实际时间作决定。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">计划：北京时间 02:15 启动</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">定时触发可能延迟</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">记录任务实际开始的时间</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">超过 04:00 就跳过</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">不要把 cron 当作精确闹钟</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#fff8e8" stroke="#e5c977" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#806014" font-weight="650">执行：全流程 04:00 前收工</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">用剩余时间限制后续阶段</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">job 超时只约束单个 job</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">为保存结果与交接留出时间</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">费用预算与时间限制分开处理</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">没有任务、已有 PR、验证失败与时间耗尽，都应留下明确的结束原因。</text>
+</g></svg>

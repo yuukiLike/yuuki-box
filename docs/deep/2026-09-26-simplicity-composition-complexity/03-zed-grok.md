@@ -8,7 +8,7 @@ Zed 的例子展示数据与交互能力怎样叠加；Grok Build 的例子展�
 
 ### 片段组合的关键，是保留与真实文本的关系
 
-`MultiBuffer` 用 excerpts 组织一个或多个 `language::Buffer` 的片段；普通单文件也经过 `MultiBuffer::singleton`。Editor 因而可以围绕共同模型处理选区、输入和显示，不必为每种文本呈现各写一套编辑器。编辑时，片段坐标仍要映射到底层 Buffer，不能把显示文本拼成新字符串后丢掉来源。[MultiBuffer 定义](/Users/chp/explore/zed/crates/multi_buffer/src/multi_buffer.rs:71) · [单文件构造](/Users/chp/explore/zed/crates/editor/src/editor.rs:1857) · [编辑映射](/Users/chp/explore/zed/crates/multi_buffer/src/multi_buffer.rs:1403)
+`MultiBuffer` 用 excerpts 组织一个或多个 `language::Buffer` 的片段；普通单文件也经过 `MultiBuffer::singleton`。Editor 因而可以围绕共同模型处理选区、输入和显示，不必为每种文本呈现各写一套编辑器。编辑时，片段坐标仍要映射到底层 Buffer，不能把显示文本拼成新字符串后丢掉来源。[MultiBuffer 定义](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/multi_buffer/src/multi_buffer.rs#L71) · [单文件构造](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/editor.rs#L1857) · [编辑映射](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/multi_buffer/src/multi_buffer.rs#L1403)
 
 下面是据源码整理的职责图，不是全部调用栈：
 
@@ -27,15 +27,15 @@ flowchart LR
 
 ### 显示变换增加层次，却减少混合责任
 
-Zed 的 `DisplayMap` 组织 Inlay、Fold、Tab、Wrap、Block 等变换：源文本位置与屏幕位置使用各自的坐标及映射。折叠不是删除源文本，软换行也不改变文件中的换行。这些分层使不同显示能力有接合点；同时，变换顺序和增量同步需要实现者明确维护。[DisplayMap 设计说明](/Users/chp/explore/zed/crates/editor/src/display_map.rs:1)
+Zed 的 `DisplayMap` 组织 Inlay、Fold、Tab、Wrap、Block 等变换：源文本位置与屏幕位置使用各自的坐标及映射。折叠不是删除源文本，软换行也不改变文件中的换行。这些分层使不同显示能力有接合点；同时，变换顺序和增量同步需要实现者明确维护。[DisplayMap 设计说明](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/display_map.rs#L1)
 
-`SumTree` 的结构共享、Rope 分块与 Buffer snapshot 则降低后台读取对当前编辑状态的直接依赖。后台可以处理一个明确版本；回到前台后仍要处理版本差异。语法解析路径可能接纳本次结果并继续重解析，以追上新的编辑，不能概括为“所有旧结果一律丢弃”。[共享节点](/Users/chp/explore/zed/crates/sum_tree/src/sum_tree.rs:647) · [快照](/Users/chp/explore/zed/crates/language/src/buffer.rs:1319) · [解析结果处理](/Users/chp/explore/zed/crates/language/src/buffer.rs:1994)
+`SumTree` 的结构共享、Rope 分块与 Buffer snapshot 则降低后台读取对当前编辑状态的直接依赖。后台可以处理一个明确版本；回到前台后仍要处理版本差异。语法解析路径可能接纳本次结果并继续重解析，以追上新的编辑，不能概括为“所有旧结果一律丢弃”。[共享节点](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/sum_tree/src/sum_tree.rs#L647) · [快照](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/language/src/buffer.rs#L1319) · [解析结果处理](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/language/src/buffer.rs#L1994)
 
 **分析：**这些机制让开发者分别思考“这一版本是什么”和“当前界面该采用什么”，付出的成本是版本与生命周期规则。删掉快照和映射层，可能减少目录，却把并发读写和坐标换算散落到调用者。
 
 ### 注册表让窗口知道“可打开的对象”，不必知道所有编辑器
 
-Editor 向 `ProjectItemRegistry` 注册 Buffer 的打开和视图构建方式。Workspace 通过 trait/注册表工作，`editor` 可以依赖 `workspace`，而 Workspace 不必形成到 Editor 的静态反向依赖。运行时回调方向与编译依赖方向因此不同。[注册表](/Users/chp/explore/zed/crates/workspace/src/workspace.rs:1050) · [Editor 注册](/Users/chp/explore/zed/crates/editor/src/editor.rs:364) · [项目项构建](/Users/chp/explore/zed/crates/editor/src/items.rs:1568)
+Editor 向 `ProjectItemRegistry` 注册 Buffer 的打开和视图构建方式。Workspace 通过 trait/注册表工作，`editor` 可以依赖 `workspace`，而 Workspace 不必形成到 Editor 的静态反向依赖。运行时回调方向与编译依赖方向因此不同。[注册表](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/workspace/src/workspace.rs#L1050) · [Editor 注册](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/editor.rs#L364) · [项目项构建](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/items.rs#L1568)
 
 **变化推演：**增加一种工作区 Item 时，可以先检查它是否满足已有身份、打开、焦点和生命周期契约，再提供具体实现。注册机制将一部分变化局部化；如果新对象不满足共同契约，不能以“多注册一个类型”掩盖差异。这也是为什么模块数量和可组合性不能画等号。
 
@@ -43,7 +43,7 @@ Editor 向 `ProjectItemRegistry` 注册 Buffer 的打开和视图构建方式。
 
 GPUI 的 `Entity<T>`、`Context<T>`、弱引用、Subscription 与 Task，让状态和生命周期可以通过类型与持有关系表达；前台 async 与后台 executor 仍不同，`notify()` 仍须正确调用，嵌套更新同一实体也存在运行时借用检查。[GPUI 生命周期与调度证据](../2026-09-26-zed-pi-rust/02-zed-architecture.md)
 
-特别要区分两件事：Zed 内部 Agent 能复用项目和 UI 体系；它的 `agent` crate 却仍依赖 GPUI、UI、Project，`Thread` 也持有实体状态。内部模块清楚，不等于直接获得可抽走的独立 headless SDK。[agent 清单](/Users/chp/explore/zed/crates/agent/Cargo.toml) · [Thread](/Users/chp/explore/zed/crates/agent/src/thread.rs:1272)
+特别要区分两件事：Zed 内部 Agent 能复用项目和 UI 体系；它的 `agent` crate 却仍依赖 GPUI、UI、Project，`Thread` 也持有实体状态。内部模块清楚，不等于直接获得可抽走的独立 headless SDK。[agent 清单](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/agent/Cargo.toml) · [Thread](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/agent/src/thread.rs#L1272)
 
 ## 2. Grok Build：先分清终端 Agent 与 Web 造物入口
 

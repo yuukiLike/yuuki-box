@@ -21,15 +21,19 @@
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
 | **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
-| **模型基础与推理缓存** | [模型基础](ai-from-scaling/01-understand-models.md)，进阶选读 [KV Cache](kv-cache/README.md) | 训练一个字符模型，解释预测与参数更新 |
+| **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 训练一个字符模型，解释预测与参数更新 |
+| **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | 算清 KV 容量，解释哪些前缀可以复用 |
 | **Agent 工程** | [从工具循环到运行控制](agent-engineering/README.md) | 跑通 Harness，再接真实模型与外部工具 |
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
+| **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
+| **Issue 工作流** | [扫描、修复与交班](issue-garden/README.md) | 从 Issue 清单走到一份可交接的草稿 PR |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
 | **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
 | **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
 | **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
+| **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 
 ### MCP 入门
 
@@ -37,29 +41,41 @@
 
 想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
 
-### 模型基础与推理缓存
+<span id="模型基础与推理缓存"></span>
+
+### 模型基础
 
 先读[参数、概率与缩放定律](ai-from-scaling/01-understand-models.md)，再[训练一个字符模型](ai-from-scaling/02-train-a-model.md)。两课到这里即可形成完整成果；训练模型不是学习 MCP 或 Agent 的前置要求。
 
-进阶再进入 [KV Cache](kv-cache/README.md)，从 Attention 走到容量与前缀复用，对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 和 [Pi](kv-cache/05-pi.md) 的请求装配与用量。浏览器里的 [KV 内存计算器](../site/src/pages/labs/kv-memory.astro)也归在这一专题。
+### 模型推理与 KV Cache
+
+从[一次请求](kv-cache/00-first-request.md)走到 Attention、容量与前缀复用，再对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 和 [Pi](kv-cache/05-pi.md) 的请求装配与用量。浏览器里的 [KV 内存计算器](../site/src/pages/labs/kv-memory.astro)也归在这一专题。无需先运行训练实验；概率与向量陌生时，按正文链接回补。
 
 ### Agent 工程
 
 从[搭建 Harness](ai-from-scaling/03-build-a-harness.md)和[接真实模型](ai-from-scaling/04-experiments.md)两课开始。这两课提供可运行代码；后续依次选做[运行控制](agent-engineering/05-harness-vertical-slice.md)、[MCP 接入](agent-engineering/01-mcp-tool-source.md)和 [Skills 复用](agent-engineering/03-skills-structure.md)。后续七个工程练习属于实现建议，尚未接入本仓库 runtime。
 
-需要 Mac 产品的完整方案时，回查架构研究中的[本地 Harness 设计](architecture/mac-local-harness.md)。
+需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
 
 ### MCP 项目实战
 
 在[实战总览](mcp-projects/README.md)选择天气、Blender、GitHub 或音乐项目。它们按兴趣选做，分别说明环境、前置知识与验证边界。
 
-两套天气教程分开：先做[本地天气工具](ai-from-scaling/07-weatherkit-mcp.md)，可从离线样本开始；需要登录、授权和远程接入时，再选[Supabase × WeatherKit 工程教程](ai-communication/weather-mcp/README.md)。音乐两篇从[声部之结](ai-from-scaling/07-music-space-mcp.md)走到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不要求先学完模型与 Harness。
+本地天气工具可从离线样本开始。音乐两篇从[声部之结](ai-from-scaling/07-music-space-mcp.md)走到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不要求先学完模型与 Harness。
+
+### 远程 MCP 与授权
+
+[Supabase × WeatherKit 工程教程](ai-communication/weather-mcp/README.md)独立成篇：用户体验、登录与 OAuth、上游天气 API、MCP 封装、端到端验收。它比本地工具多出账号、数据库和部署条件；先分清用户 token 与 Apple token 的接收方，再决定是否跟做完整工程。
 
 ### AI 开发实践
 
 先按任务选择：[交 Issue、接 PR](ai-practices/02-issue-to-pr.md)、[带错误现场去破案](ai-practices/03-error-to-fix.md)、[限定范围做迁移](ai-practices/06-code-migration.md)。想给改动补一道检查，选 [CodeRabbit 审查](ai-practices/01-coderabbit-review.md)、[有效测试](ai-practices/05-test-generation.md)或[安全告警修复](ai-practices/04-security-autofix.md)。
 
-想串成自己的流程，就跟做 [Issue 夜班](issue-garden/README.md)。想先少盯几轮，读[你的工作流](ai-practices/your-workflow.md)。六项案例有公开使用记录；夜班是跟做教程，尚未在本仓库启用。
+想先少盯几轮，读[你的工作流](ai-practices/your-workflow.md)。六项案例保留公开使用记录及其统计边界，可以独立挑选，不要求逐个安装服务。
+
+### Issue 工作流
+
+[Issue 夜班](issue-garden/README.md)按扫描、陪同修复、自动交班逐步推进。先让清单出现，再手动验证一个修复，最后连接选择、去重、验证与 PR 发布。它是独立跟做教程，尚未在本仓库启用。
 
 已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
 
@@ -67,7 +83,7 @@
 
 想补 RPC 和 SSE，打开[AI 应用通信：从 RPC、SSE 到 Agent 工具调用](ai-communication/README.md)。每课一张图、一个动作，先请另一个程序读笔记。
 
-六课只追踪请求、响应、流式事件、工具发现与失败处理。完整天气工程归入 MCP 项目实战，作为学完后的选做方向。
+六课只追踪请求、响应、流式事件、工具发现与失败处理。学完后可选做独立的远程 MCP 与授权专题。
 
 ### 前端性能
 
@@ -89,13 +105,17 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 带着问题读 [Zed、Raycast、Warp](research/zed-raycast-warp.md)，再深入 [Zed、Rust 与 PI-Desktop](deep/2026-09-26-zed-pi-rust/README.md)，或研究[简单、组合与复杂性](deep/2026-09-26-simplicity-composition-complexity/README.md)。想改代码，直接进[五条路线的示例](../examples/README.md)，对照[实现中的收益与代价](../examples/COMPARISON.md)形成判断。
 
-准备收敛实现时看[第一轮 Mac 闭环计划](plan/first-mac-loop.md)；准备系统比较时看[统一评估工具提案](architecture/technology-assessment.md)。可以从最想学的 GPUI、Swift 或 Web 路线开始。
+准备系统比较时看[统一评估工具提案](architecture/technology-assessment.md)。可以从最想学的 GPUI、Swift 或 Web 路线开始。
+
+### 项目设计与计划
+
+[本地 Harness 提案](architecture/mac-local-harness.md)说明模块、进程、状态与恢复边界；[第一轮 Mac 闭环计划](plan/first-mac-loop.md)把它拆成可实施的阶段。本页下半部分保留产品方向与历史状态，阅读时按记录日期区分“已有实现”和“待验证方案”。
 
 ## 已确认的产品方向
 
 架构与示例状态记录于 2026-09-26：五条技术路线的 MVP，以及 DeepSeek Agent、持久会话、Whisper 扩展和十五个 Harness 场景实验，已完成实现、构建和打包；当时尚未执行真实 API、语音运行与性能实验。
 
-以下来自用户在本轮讨论中的明确选择：
+以下是 **2026-09-26 讨论时**确认的方向与当轮验证范围；其中“跳过测试和 computer-use”只描述那次原型工作，不是后续课程或改动的通用规则：
 
 - 面向自己的 Apple 生态，最终覆盖 Mac mini、MacBook Air、iPad 和 iPhone。
 - 重视性能、简单，以及可以长期演进的结构。

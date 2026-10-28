@@ -58,6 +58,10 @@ Chinchilla 进一步指出：固定计算预算下，应搭配参数规模与数
 
 **参数更新就是训练发生的地方。** 核对训练 loss、验证 loss 和生成文本；训练集表现只说明对这些样本的拟合。
 
+[![训练更新参数，生成读取参数并追加上下文，两种循环分开理解](../../site/public/diagrams/ai-from-scaling/training-generation.svg)](../../site/public/diagrams/ai-from-scaling/training-generation.svg)
+
+指着左右两栏回答：哪一边需要真实目标，哪一边会改写分数表？下一课在代码里找同一条边界。
+
 ## 第二十五到三十五分钟 上下文与 Transformer
 
 现在给模型两段输入：
@@ -104,7 +108,7 @@ Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)�
 
 程序验证参数、执行函数、返回结果，模型再继续；模型提出调用，客户端实际执行。[Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)
 
-这段执行机制就是 Harness。后两章会实现循环、审批与错误处理。
+这段执行机制就是 Harness。[Agent 入门](03-build-a-harness.md)会实现循环、审批与错误处理；它属于独立的 Agent 工程专题，可以按四小时路线继续，也可以单独开始。
 
 休息前，试答三题：
 

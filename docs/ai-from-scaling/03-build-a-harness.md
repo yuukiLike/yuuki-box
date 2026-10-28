@@ -34,6 +34,8 @@ node docs/ai-from-scaling/labs/harness.mjs
 → 最终回答，或者因取消、错误、限额停止
 ```
 
+[![模型提出工具请求，Harness 检查并执行，把配对结果加入下一轮上下文](../../site/public/diagrams/ai-from-scaling/harness-loop.svg)](../../site/public/diagrams/ai-from-scaling/harness-loop.svg)
+
 ## 第十到二十分钟 写出工具契约与实现
 
 工具定义告诉模型有哪些动作可以请求。先手写其中一个：

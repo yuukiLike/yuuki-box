@@ -23,6 +23,8 @@ PR 写完了，自己看第三遍已经开始自动忽略熟悉的代码。这�
 
 它对应[构想地图中的独立 AI 审查](../ai-ideas/01-ideas-map.md)：可以先体验现成服务，观察自己最需要什么审查能力，再决定是否自建。
 
+[![先提取审查意见的触发条件，再复现或反证，最后决定是否采纳](../../site/public/diagrams/ai-practices/review-triage.svg)](../../site/public/diagrams/ai-practices/review-triage.svg)
+
 ## 小挑战：给审查意见做一次审查
 
 先打开上面的 Nuxt PR，挑一条能找到对应代码的意见，自己写下判断，再看作者如何处理。以后决定接入时，在自己的一份小 PR 上继续观察：

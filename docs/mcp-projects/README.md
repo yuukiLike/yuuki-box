@@ -9,7 +9,6 @@
 | 查询天气、筛选出门时段 | [本地 Apple 天气 MCP](../ai-from-scaling/07-weatherkit-mcp.md) | 样本可离线跑；真实查询需要 Apple 配置 | 一份带时间、来源与筛选依据的天气结果 |
 | 改尺寸、检查模型并导出 | [Blender MCP](../ai-from-scaling/05-blender-mcp.md) | 本机 Blender | 可编辑模型、预览图与 STL |
 | 判断一个 bug 是否修好 | [GitHub MCP](../ai-from-scaling/06-github-lab-mcp.md) | 按原教程准备 GitHub 与本地实验环境 | 同一断言在基线、候选与参考修复中的对照 |
-| 给天气服务增加登录与授权 | [远程天气 MCP](../ai-communication/weather-mcp/README.md) | Supabase、HTTPS 前端与 Apple 配置 | 用户授权后调用天气工具的完整路径 |
 | 将音乐变成可编辑的三维对象 | [声部之结](../ai-from-scaling/07-music-space-mcp.md) | 按教程准备音乐 MCP 与示例 MIDI | 声部分离、时间定位与 GLB 导出 |
 | 让照片与音乐组成短片 | [光之剧场](../ai-from-scaling/08-music-photo-mcp.md) | 沿用音乐 MCP，准备图层与音乐 | 一段有声音的舞台短片 |
 
@@ -19,7 +18,7 @@
 
 **本地天气 MCP** 先用样本练习业务规则，再配置 WeatherKit，最后接入已有客户端。适合先做一个自己使用的工具。
 
-**远程天气 MCP** 是独立的工程跟做教程，增加 Supabase 登录、OAuth、业务权限与远程接入。需要在自己的练习工程中实现和部署；本仓库尚未完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)，再决定是否开始。
+**远程天气 MCP** 已单独归入「远程 MCP 与授权」专题，增加 Supabase 登录、OAuth、业务权限与远程接入。需要在自己的练习工程中实现和部署；本仓库尚未完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)，再决定是否开始。
 
 其他项目也保留各自的环境与验证记录；能启动工具、工具成功返回和最终产物正确，要分别检查。
 

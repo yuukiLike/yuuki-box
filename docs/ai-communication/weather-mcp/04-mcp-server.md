@@ -115,6 +115,10 @@ export async function verifyWeatherUser(token: string): Promise<string> {
 
 离线 JWT 验证不等于实时查询“用户刚刚是否退出登录”。本例每次请求查询 `weather_access.enabled`，可立即停用天气权限；若要按客户端即时撤销某个授权，还需增加客户端授权状态检查。不要承诺一个已签发的 JWT 在点击退出后瞬间失效。
 
+[![天气调用前依次验证身份、业务资格与原子额度](../../../site/public/diagrams/weather-mcp/access-gates.svg)](../../../site/public/diagrams/weather-mcp/access-gates.svg)
+
+把“登录成功但没有天气资格”作为第一条负例：应在第二道门停下，不应调用 Apple，也不应反复要求登录。
+
 ## 4. 注册工具并连接两套权限
 
 入口中只有资源元数据是公开的。真正的 MCP 请求先验证用户，再查资格；真正的天气调用还要原子预占额度。

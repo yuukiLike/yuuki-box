@@ -29,6 +29,10 @@ description: 重构 docs 目录、拆分章节并同步站点导航。当用户�
 
 Claude Code 从 `.claude/skills/<name>/SKILL.md` 读取，Codex 从 `.agents/skills/<name>/SKILL.md` 读取；两者目录不同，`SKILL.md` 的结构可以共用。显式调用分别是 `/skill-name` 与 `$skill-name`，也都可以靠 description 隐式触发。
 
+[![Skill 按名称描述、正文、引用资料三层加载；工具权限另行检查](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)
+
+读图时只追踪一件事：这一步新增了哪些上下文，又为什么现在才需要它。
+
 ## 加载是渐进的
 
 1. 启动时只把 `name` 和 `description` 放进上下文。
@@ -55,15 +59,15 @@ description 要回答三件事：**做什么、什么时候用、什么时候不
 
 ## 什么时候用
 - 用户要求拆分章节、调整侧栏顺序或移动文件。
-- 需要同步 `docs/README.md` 与 `site/astro.config.mjs`。
+- 需要同步 `docs/README.md` 与 `site/src/lib/navigation.mjs`；站点配置在 `site/astro.config.ts`。
 
 ## 输入
 - 目标目录、新的章节顺序、需要保留的链接。
 
 ## 步骤
 1. 列出当前文件与引用。
-2. 设计新目录与文件名。
-3. 移动文件并更新相对链接。
+2. 按学习目标设计导航分组，优先保留已有页面地址。
+3. 确需移动文件时，更新相对链接并为旧地址安排兼容路径。
 4. 更新站点侧栏与目录表。
 5. 运行校验。
 

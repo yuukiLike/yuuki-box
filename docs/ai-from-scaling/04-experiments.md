@@ -96,7 +96,9 @@ node docs/ai-from-scaling/labs/harness.mjs --write-to "$AI_CANCEL_DIR/summary.md
 | 达到轮数上限 | `limit_reached` | 有工具结果，缺少最终回答 | 未完成，需要检查记录 |
 | 审批时取消 | `cancelled` | 本次未创建文件 | 已停止，保存未完成 |
 
-## 最后十分钟 回顾与验收
+<span id="最后十分钟-回顾与验收"></span>
+
+## 练习后的十分钟 回顾与验收
 
 只做 Agent 入门时，拿着 Harness 输出，解释工具请求怎样执行、结果怎样回传，以及为什么任务还可能未完成。
 

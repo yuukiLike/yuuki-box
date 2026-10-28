@@ -73,6 +73,8 @@ Brooks 在 *No Silver Bullet* 中区分问题本身的概念难度与表达、�
 
 也要留意反例：为了复用，把所有对象压成一个任意 JSON 结构，会把检查推迟到运行时；为了统一，把停止录音和放弃转写变成同一按钮，会损失必要意图；为了通用，把不同生命周期强塞进同一抽象，会使每个调用方都增加例外分支。
 
+[![用具体需求追踪接口、状态与取消路径，再判断改动能否局部完成](../../../site/public/diagrams/architecture/change-boundary.svg)](../../../site/public/diagrams/architecture/change-boundary.svg)
+
 ## 5. 用变化实验代替复杂度总分
 
 先固定一个真实变化，再记录以下内容，得到可复查的比较：

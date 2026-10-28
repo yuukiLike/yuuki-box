@@ -19,6 +19,8 @@ CodeQL 扫描 → 告警与相关代码 → AI 解释并建议补丁
 
 这条流程从扫描器报告的具体问题开始。告警消失后，还要确认合法输入能正常处理，原有业务行为得到保留。官方也要求开发者审阅与验证 AI 建议。[当前能力与局限](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)
 
+[![安全修复既阻止危险输入，也保留正常输入对应的功能](../../site/public/diagrams/ai-practices/security-inputs.svg)](../../site/public/diagrams/ai-practices/security-inputs.svg)
+
 ## 小挑战：让危险路径失败，让正常路径通过
 
 在已经启用 CodeQL 的练习仓库中，选择一条自己能理解的告警，保存其规则、位置与触发路径，再请求修复建议。所用语言、规则与账户需要在服务支持范围内。

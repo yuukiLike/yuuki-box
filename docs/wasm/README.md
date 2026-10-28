@@ -14,6 +14,8 @@ Wasm 有模块、实例、导入导出以及线性内存等概念，可以与 Ja
 
 **运行 Wasm 的位置仍需由应用安排。** 在主线程直接执行很长的计算，仍然会占用主线程；Worker 是另外一层执行与协作机制。
 
+[![主线程运行 Wasm 仍可能阻塞界面，Worker 用来转移工作并处理通信成本](../../site/public/diagrams/wasm/thread-boundary.svg)](../../site/public/diagrams/wasm/thread-boundary.svg)
+
 ## 先调用一个真实的小模块
 
 打开[JavaScript 调用 Wasm](../../site/src/pages/labs/wasm-bridge.astro)。实验编译并实例化一个只导出整数加法的小模块：

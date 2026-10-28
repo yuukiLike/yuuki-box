@@ -9,6 +9,15 @@ export default defineConfig({
   markdown: { processor: unified({ remarkPlugins: [repositoryMarkdown] }) },
   vite: { server: { fs: { allow: ['..'] } } },
   integrations: [
+    {
+      name: 'yuuki-navigation',
+      hooks: {
+        'astro:config:setup': ({ addWatchFile }) => {
+          // 分组在配置加载时生成，变更后要与页面中的标签一起刷新。
+          addWatchFile(new URL('./src/lib/navigation.mjs', import.meta.url));
+        },
+      },
+    },
     starlight({
       title: 'Yuuki 学习手记',
       credits: false,

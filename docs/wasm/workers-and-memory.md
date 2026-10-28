@@ -35,6 +35,8 @@ worker.postMessage({ samples }, [samples.buffer]);
 
 SharedArrayBuffer 的浏览器使用受安全上下文与跨源隔离等条件约束，需要检查部署和运行环境；它也要求应用明确并发访问方式。[MDN SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
 
+[![转移 ArrayBuffer 会分离发送方缓冲区，迟到的旧任务结果需要按 jobId 丢弃](../../site/public/diagrams/wasm/worker-transfer.svg)](../../site/public/diagrams/wasm/worker-transfer.svg)
+
 ## TypedArray 可以只是同一块内存的视图
 
 ```js

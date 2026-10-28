@@ -57,6 +57,10 @@ Whisper 模型  /你的目录/whisper.cpp/models/ggml-small.bin
 
 当前录音最多 120 秒；音频文件最多 10 分钟 / 256 MiB。转换采用有界分块，输出 16 kHz mono PCM WAV；CLI 使用参数数组启动，生成文本文件供 helper 读取。明确取消、关闭 App 或宿主断开都会结束工作并清理可控临时文件。详细限制见 [语音 helper 文档](../../examples/shared/native/README.md)。
 
+[![Whisper 的 stop 结束录音并继续转写，cancel 才表示放弃任务](../../site/public/diagrams/tts/stop-cancel.svg)](../../site/public/diagrams/tts/stop-cancel.svg)
+
+读 `WhisperSession` 时分别追踪 `stop` 与 `cancel`，再确认 UI 在转写阶段仍能显示忙碌和取消。这里的流程图是源码阅读辅助，未新增真实录音验收。
+
 ## 4. 这套 Whisper 接法的取舍
 
 优点是学习路径短：你能直接看见录音、音频格式、模型文件、CLI、结果与取消各在哪里。Rust、Swift、React 三种客户端不必各写一套声学输入和模型绑定。

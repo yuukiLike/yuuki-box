@@ -22,17 +22,17 @@ UI：草稿、按钮、状态投影
                    └─ 转写 → 用户采用为草稿 → 用户发送任务
 ```
 
-模型请求、工具结果与会话状态由 runtime 管；UI 保留尚未提交的草稿和正在编辑的设置。共享 Web model 收到 `state` 时替换 runtime 投影，收到 `delta` 时按 `sessionId` 和 `messageId` 更新消息，同时保护未提交草稿与设置。这些本地状态有各自目的，不能因“都有一份数据”就全部删掉；应检查是否出现两个地方同时决定同一个业务事实。[状态处理源码](/Users/chp/explore/yuuki-box/examples/shared/web/src/agent-model.mjs:37)。
+模型请求、工具结果与会话状态由 runtime 管；UI 保留尚未提交的草稿和正在编辑的设置。共享 Web model 收到 `state` 时替换 runtime 投影，收到 `delta` 时按 `sessionId` 和 `messageId` 更新消息，同时保护未提交草稿与设置。这些本地状态有各自目的，不能因“都有一份数据”就全部删掉；应检查是否出现两个地方同时决定同一个业务事实。[状态处理源码](../../../examples/shared/web/src/agent-model.mjs:37)。
 
-同样，JSONL 只解决传输表示。协议还必须说清：流式消息先出现在状态中，随后才有增量；终态重新提供完整状态；运行中哪些命令可用。当前 runtime 忙时拒绝新建会话、切会话和改设置，仅保留 bootstrap、取消和审批。这是通过限制可同时发生的事情缩小状态组合，代价是任务运行时用户不能随意切换工作。[协议](../../../examples/shared/runtime/PROTOCOL.md) · [命令入口](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:192)。
+同样，JSONL 只解决传输表示。协议还必须说清：流式消息先出现在状态中，随后才有增量；终态重新提供完整状态；运行中哪些命令可用。当前 runtime 忙时拒绝新建会话、切会话和改设置，仅保留 bootstrap、取消和审批。这是通过限制可同时发生的事情缩小状态组合，代价是任务运行时用户不能随意切换工作。[协议](../../../examples/shared/runtime/PROTOCOL.md) · [命令入口](../../../examples/shared/runtime/Sources/main.swift:192)。
 
 ### 变化链 A：加一个工具，再在不同阶段取消
 
-以尚未实现的 `file_info(path)` 为阅读探针：若它只返回工作区文件元信息，预计变化集中在工具 schema、参数校验、路径策略复用和执行分支。现有循环将工具结果统一转换为 `name/content/status` 消息；在保持这种结果形式时，五个 UI 不必各自理解一种新的工具输出。这个判断来自现有调用链，尚未用实际改动验证。[toolDefinitions](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:440) · [工具循环与结果](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:305)。
+以尚未实现的 `file_info(path)` 为阅读探针：若它只返回工作区文件元信息，预计变化集中在工具 schema、参数校验、路径策略复用和执行分支。现有循环将工具结果统一转换为 `name/content/status` 消息；在保持这种结果形式时，五个 UI 不必各自理解一种新的工具输出。这个判断来自现有调用链，尚未用实际改动验证。[toolDefinitions](../../../examples/shared/runtime/Sources/main.swift:440) · [工具循环与结果](../../../examples/shared/runtime/Sources/main.swift:305)。
 
-边界也很具体：当前 `tool()` 在分派前要求所有参数都含 `path`，并按 `write_note` 与其他工具限定字段。它是“少量工作区文件工具”的接口。如果新增无需路径的计算工具、需要分页的远端查询或长期任务，前置假设就要重新设计。泛化为“任意工具已经可插拔”会隐藏真正的改动。[参数检查和分派](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:472)。
+边界也很具体：当前 `tool()` 在分派前要求所有参数都含 `path`，并按 `write_note` 与其他工具限定字段。它是“少量工作区文件工具”的接口。如果新增无需路径的计算工具、需要分页的远端查询或长期任务，前置假设就要重新设计。泛化为“任意工具已经可插拔”会隐藏真正的改动。[参数检查和分派](../../../examples/shared/runtime/Sources/main.swift:472)。
 
-取消更能显露组合质量。UI 发 `run.cancel`；runtime 取消 Task 和网络请求，并唤醒等待审批的 continuation；循环将任务归为 cancelled，保存已收到内容和已完成结果。`write_note` 在审批后、创建前再检查取消。这里至少存在三个不同观察点：请求还在流式返回、正在等待允许、文件已经写入。最后一种情形不能靠按钮把副作用撤销；现有实现也没有自动回滚承诺。[取消入口](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:236) · [任务结束路径](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:276) · [审批与写入边界](/Users/chp/explore/yuuki-box/examples/shared/runtime/Sources/main.swift:492)。
+取消更能显露组合质量。UI 发 `run.cancel`；runtime 取消 Task 和网络请求，并唤醒等待审批的 continuation；循环将任务归为 cancelled，保存已收到内容和已完成结果。`write_note` 在审批后、创建前再检查取消。这里至少存在三个不同观察点：请求还在流式返回、正在等待允许、文件已经写入。最后一种情形不能靠按钮把副作用撤销；现有实现也没有自动回滚承诺。[取消入口](../../../examples/shared/runtime/Sources/main.swift:236) · [任务结束路径](../../../examples/shared/runtime/Sources/main.swift:276) · [审批与写入边界](../../../examples/shared/runtime/Sources/main.swift:492)。
 
 由此得到的研究问题是：新工具能否沿用取消、结果和恢复语义，而不是每加一个工具就新增一套特殊状态？若工具有无法撤销的副作用，就应把“开始执行”“结果已知”“结果未知”暴露给调用方。上轮 PI 的持久化与恢复调查也强调了已接收、已记录和已完成的区别；增加一个进程或换成 Rust 都不会替代这些定义。[PI 的简化与代价](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
 
@@ -42,11 +42,11 @@ UI：草稿、按钮、状态投影
 
 共享 helper 已有两条实际路径：Apple Speech / AVFoundation，以及 AVFoundation 录音与转换后调用本地 whisper.cpp CLI。两者复用 `speech.state/partial/final/error` 信封，但 Whisper 当前是先录音、后转写，不产生 partial。复用这一层让各 UI 无须各写一套音频转换与 CLI 管理。[语音 helper 说明](../../../examples/shared/native/README.md)。
 
-真正影响上层的是时间语义：Apple 实时 `stop` 停止采集并短暂等待收尾；Whisper 的 `stop` 则结束录音，继续转换和推理。`cancel`、stdin EOF 或宿主退出才表示放弃。因而宿主必须在 stop 后保持 stdin 打开，并提供等待状态与取消入口；沿用 Apple 的短时间强杀会截断 Whisper 的正常工作。共享 Swift 宿主现在只发送 stop，代码中明确保留后续转写时间。[宿主 stopSpeech](/Users/chp/explore/yuuki-box/examples/shared/web/NativeHostSupport.swift:132) · [两种后端的停止约定](../../../examples/shared/native/README.md)。
+真正影响上层的是时间语义：Apple 实时 `stop` 停止采集并短暂等待收尾；Whisper 的 `stop` 则结束录音，继续转换和推理。`cancel`、stdin EOF 或宿主退出才表示放弃。因而宿主必须在 stop 后保持 stdin 打开，并提供等待状态与取消入口；沿用 Apple 的短时间强杀会截断 Whisper 的正常工作。共享 Swift 宿主现在只发送 stop，代码中明确保留后续转写时间。[宿主 stopSpeech](../../../examples/shared/web/NativeHostSupport.swift:132) · [两种后端的停止约定](../../../examples/shared/native/README.md)。
 
-资源清理也不是一个通用 `stop()` 足够表达的。Whisper 有准备、录音、转换、推理、完成几个阶段；转换尚未响应取消时，不能删除它仍使用的临时文件；CLI 运行时先终止，等待退出后再清理。这些细节可以留在 helper，但“任务仍在收尾、取消不产出 final”必须成为外部契约。[Whisper 阶段与资源](/Users/chp/explore/yuuki-box/examples/shared/native/Sources/WhisperSession.swift:33) · [finish 清理顺序](/Users/chp/explore/yuuki-box/examples/shared/native/Sources/WhisperSession.swift:321)。
+资源清理也不是一个通用 `stop()` 足够表达的。Whisper 有准备、录音、转换、推理、完成几个阶段；转换尚未响应取消时，不能删除它仍使用的临时文件；CLI 运行时先终止，等待退出后再清理。这些细节可以留在 helper，但“任务仍在收尾、取消不产出 final”必须成为外部契约。[Whisper 阶段与资源](../../../examples/shared/native/Sources/WhisperSession.swift:33) · [finish 清理顺序](../../../examples/shared/native/Sources/WhisperSession.swift:321)。
 
-产品层另有一条有价值的限制：识别结果先成为草稿，经用户检查再发送给 Agent。它切断了“麦克风结果一到就产生工具执行或模型费用”的隐式联系，同时允许用户修正转写。代码中的 `useTranscript()` 只更新草稿，不启动任务。这是交互选择对状态复杂性的直接约束。[草稿与语音操作](/Users/chp/explore/yuuki-box/examples/shared/web/src/agent-model.mjs:29)。
+产品层另有一条有价值的限制：识别结果先成为草稿，经用户检查再发送给 Agent。它切断了“麦克风结果一到就产生工具执行或模型费用”的隐式联系，同时允许用户修正转写。代码中的 `useTranscript()` 只更新草稿，不启动任务。这是交互选择对状态复杂性的直接约束。[草稿与语音操作](../../../examples/shared/web/src/agent-model.mjs:29)。
 
 将来若把短命 CLI 换成常驻 worker，模型加载和临时文件策略可以在 helper 内变化；但新增流式 partial、并行识别或可恢复任务时，上层状态与身份契约仍可能需要扩展。这里的“可替换”有条件，不能从 JSON 字段相同推出所有行为都可互换。当前没有 Whisper 耗时、识别质量或取消延迟实测。[已有边界与未验证项](../../../examples/shared/native/README.md)。
 
@@ -54,13 +54,13 @@ UI：草稿、按钮、状态投影
 
 ### 变化链 C：加一个按钮，与加一种编辑器
 
-这条路线已有真实 React reconciler：Node 生成结构化 UI 树，Swift 映射为 AppKit 控件；用户动作再以 ID 回到 Node callback。固定词汇中已有 Button、Field、Select、Editor、Transcript 等。Swift 按稳定 ID 保留控件，避免每次提交重建输入对象。这说明“原生控件”背后包含一份共同维护的语义词汇。[实际拓扑](../../../examples/react-native-bridge/README.md) · [控件映射](/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/Host.swift:192)。
+这条路线已有真实 React reconciler：Node 生成结构化 UI 树，Swift 映射为 AppKit 控件；用户动作再以 ID 回到 Node callback。固定词汇中已有 Button、Field、Select、Editor、Transcript 等。Swift 按稳定 ID 保留控件，避免每次提交重建输入对象。这说明“原生控件”背后包含一份共同维护的语义词汇。[实际拓扑](../../../examples/react-native-bridge/README.md) · [控件映射](../../../examples/react-native-bridge/src/Host.swift:192)。
 
-如果只是给已有动作加一个 Button，现有 title、enabled、ID 和 onPress 往返机制可能足够，改动可留在 React UI 与 model。若按钮代表全新能力，能力侧依然要实现命令；按钮外观的复用不能替代业务实现。[现有按钮与回调](/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/main.jsx:75)。
+如果只是给已有动作加一个 Button，现有 title、enabled、ID 和 onPress 往返机制可能足够，改动可留在 React UI 与 model。若按钮代表全新能力，能力侧依然要实现命令；按钮外观的复用不能替代业务实现。[现有按钮与回调](../../../examples/react-native-bridge/src/main.jsx:75)。
 
-若“新编辑器”指在现有纯文本 Editor 上增加一个草稿区，仍可能只是复用；若指富文本、选区同步、IME composition、撤销和文档语义，就在扩展词汇本身。届时要决定 React props、JSON 表示、AppKit 对象生命周期、反向事件与谁持有编辑状态。当前 README 明确不承诺通用 UI 框架、复杂富文本或 Markdown 编辑器。这类成本应记在平台能力开发上，不能当成“React 写几行就够了”。[renderer 范围](../../../examples/react-native-bridge/README.md) · [文本控件入口](/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/Host.swift:213)。
+若“新编辑器”指在现有纯文本 Editor 上增加一个草稿区，仍可能只是复用；若指富文本、选区同步、IME composition、撤销和文档语义，就在扩展词汇本身。届时要决定 React props、JSON 表示、AppKit 对象生命周期、反向事件与谁持有编辑状态。当前 README 明确不承诺通用 UI 框架、复杂富文本或 Markdown 编辑器。这类成本应记在平台能力开发上，不能当成“React 写几行就够了”。[renderer 范围](../../../examples/react-native-bridge/README.md) · [文本控件入口](../../../examples/react-native-bridge/src/Host.swift:213)。
 
-还有一个容易被“有背压”遮住的成本：`commitTree()` 先遍历整个树并 JSON 序列化，随后 `writeRender()` 才在通道拥堵时只保留最新快照。它约束积压，尚未省去已发生的全树序列化。AppKit 保留控件、Node 丢弃旧待发快照、只更新变动数据是三个不同层次，不能相互代称。底部解码时间也不是端到端帧率。[提交与背压源码](/Users/chp/explore/yuuki-box/examples/react-native-bridge/src/main.jsx:12)。
+还有一个容易被“有背压”遮住的成本：`commitTree()` 先遍历整个树并 JSON 序列化，随后 `writeRender()` 才在通道拥堵时只保留最新快照。它约束积压，尚未省去已发生的全树序列化。AppKit 保留控件、Node 丢弃旧待发快照、只更新变动数据是三个不同层次，不能相互代称。底部解码时间也不是端到端帧率。[提交与背压源码](../../../examples/react-native-bridge/src/main.jsx:12)。
 
 这与[Raycast / Warp 的组合案例](02-raycast-warp.md)可以形成阅读对照：受控词汇让常见需求容易组合，超出词汇的能力则由平台承担扩展成本。Yuuki 无须现在成为一个通用 renderer；需要先看自己的产品是否频繁触碰同一个限制。
 

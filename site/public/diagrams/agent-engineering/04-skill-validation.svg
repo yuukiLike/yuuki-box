@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
+<title id="title">验收脚本也要被验收</title>
+<desc id="desc">验收脚本也要被验收。程序检查可枚举规则；是否满足需求，还要回到任务本身核对。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
+<rect width="1040" height="450" rx="20" fill="#ffffff"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">验收脚本也要被验收</text>
+<text x="40" y="94" font-size="20" fill="#455164" font-weight="400">用同一个检查器处理两份固定输入，观察它能否区分正确与错误。</text>
+<rect x="40" y="134" width="464" height="222" rx="16" fill="#edf8f2" stroke="#92cdb0" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#23674a" font-weight="650">好样例：应通过</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">相关链接与文件存在</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">检查器退出码为 0</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">能说明检查覆盖了哪些规则</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#fff0f6" stroke="#e9a4c3" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#953959" font-weight="650">坏样例：应拦住</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">只改坏一个已知条件</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">检查器退出码非 0</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">错误指出具体文件与原因</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">程序检查可枚举规则；是否满足需求，还要回到任务本身核对。</text>
+</g></svg>

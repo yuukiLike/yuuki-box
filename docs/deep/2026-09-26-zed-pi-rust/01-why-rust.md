@@ -13,7 +13,7 @@ Zed 的数百个 crate 是同一个产品采用 Rust 后形成的模块体系，
 | Raycast v2，2026-05 官方工程文 | 数据层、同步、文件索引等 | 性能与可移植性；部分数据能力可与 iOS 共用 | Swift/AppKit 或 C# 宿主，WebView/React UI，Node 业务层 |
 | Warp，2021 年官方基础架构回顾 | 当时的终端客户端与自绘 UI | 大量输出下的响应、平台覆盖、Rust 生态与包管理 | 自研元素树、GPU 后端、PTY 与 Shell 集成 |
 
-来源：[Zed 团队访谈](https://zed.dev/blog/we-have-to-start-over)、[PI ADR 0010](/Users/chp/codex/PI-Desktop/docs/adr/0010-rust-backend-host-core.md:1)、[Raycast v2](https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast)、[Warp 历史工程文](https://www.warp.dev/blog/how-warp-works)。Raycast/Warp 在本轮只作动机对照，未开展与 Zed 同深度的本地源码调查；Warp 2021 年的 Metal 设计不代表今天所有平台的实现。
+来源：[Zed 团队访谈](https://zed.dev/blog/we-have-to-start-over)、PI ADR 0010[^pi-1]、[Raycast v2](https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast)、[Warp 历史工程文](https://www.warp.dev/blog/how-warp-works)。Raycast/Warp 在本轮只作动机对照，未开展与 Zed 同深度的本地源码调查；Warp 2021 年的 Metal 设计不代表今天所有平台的实现。
 
 ## 2. Zed：Rust 让高频路径可以共享一套数据和类型
 
@@ -25,7 +25,7 @@ Zed 的数百个 crate 是同一个产品采用 Rust 后形成的模块体系，
 
 ### 2.2 源码如何支持这个动机
 
-**事实：** `SumTree<T>` 使用 `Arc<Node<T>>`，修改时使用 `Arc::make_mut`；`language::Buffer` 提供便宜克隆、可交给后台读取的 snapshot。主线程可以继续接受输入，后台解析读取它取得的版本。新旧视图共享未变化的树节点，而不是每次都深拷贝整篇文档。[SumTree](/Users/chp/explore/zed/crates/sum_tree/src/sum_tree.rs)、[Buffer](/Users/chp/explore/zed/crates/language/src/buffer.rs)
+**事实：** `SumTree<T>` 使用 `Arc<Node<T>>`，修改时使用 `Arc::make_mut`；`language::Buffer` 提供便宜克隆、可交给后台读取的 snapshot。主线程可以继续接受输入，后台解析读取它取得的版本。新旧视图共享未变化的树节点，而不是每次都深拷贝整篇文档。[SumTree](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/sum_tree/src/sum_tree.rs)、[Buffer](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/language/src/buffer.rs)
 
 **推断：** Rust 在这里提供的价值是把共享、可变性和跨线程要求表达在类型与 API 中，让同一批编辑器数据结构贯穿多层。把它换成 Rust 字符串并在每次输入后复制、重新解析、重新布局全文，仍然会慢。决定工作量的是增量算法和更新范围。
 
@@ -50,9 +50,9 @@ Zed 的数百个 crate 是同一个产品采用 Rust 后形成的模块体系，
 
 ## 4. PI：Rust 用于稳定宿主，TypeScript 用于快速变化的生态
 
-PI 的 ADR 0010 把文件系统、进程、插件隔离、存储适配和长驻服务列为 Rust host 的理由，同时明确不把 UI 或 pi Agent 循环迁移到 Rust。ADR 0011 随后确定 stdio NDJSON RPC 和 Rust 独占 SQLite；早期 0010 中“RPC 或 FFI”的候选不能继续当作当前实现。[ADR 0010](/Users/chp/codex/PI-Desktop/docs/adr/0010-rust-backend-host-core.md:7)、[ADR 0011](/Users/chp/codex/PI-Desktop/docs/adr/0011-host-rpc-and-storage-defaults.md:20)
+PI 的 ADR 0010 把文件系统、进程、插件隔离、存储适配和长驻服务列为 Rust host 的理由，同时明确不把 UI 或 pi Agent 循环迁移到 Rust。ADR 0011 随后确定 stdio NDJSON RPC 和 Rust 独占 SQLite；早期 0010 中“RPC 或 FFI”的候选不能继续当作当前实现。ADR 0010[^pi-2]、ADR 0011[^pi-3]
 
-ADR 0012 则明确拒绝自己重新实现所有供应商 SDK，其中包括用 Rust 重写；项目选择复用 pi-ai，再处理兼容端点和模型目录。这给出一条很实用的取舍：**稳定、需要掌控的宿主职责放 Rust，变化快且有成熟库的 Agent/provider 层留在 TypeScript。** 这是对项目决策的归纳，不是所有应用必须遵守的规则。[ADR 0012](/Users/chp/codex/PI-Desktop/docs/adr/0012-universal-provider-model-coverage.md:1)
+ADR 0012 则明确拒绝自己重新实现所有供应商 SDK，其中包括用 Rust 重写；项目选择复用 pi-ai，再处理兼容端点和模型目录。这给出一条很实用的取舍：**稳定、需要掌控的宿主职责放 Rust，变化快且有成熟库的 Agent/provider 层留在 TypeScript。** 这是对项目决策的归纳，不是所有应用必须遵守的规则。ADR 0012[^pi-4]
 
 也不能把设计目标自动当成安全或性能验收。当前 host-core 只有一个 crate，却承担大量模块；把它写成 Rust 不会自动证明 RPC 完整、迁移安全或所有权限路径正确。完整实现还要维护请求 ID、错误、超时、进程退出、事件顺序和恢复。
 
@@ -64,9 +64,9 @@ Warp 的 2021 年工程文把 PTY 读取、ANSI 解析、滚动和绘制拆开�
 
 ## 6. 源码里也有成本证据
 
-1. **编译和接口演进成本。** Zed `MultiBuffer::edit` 附近专门提取非泛型实现以控制 LLVM IR；本项目发布版 GPUI 0.2.2 与本地 Zed 同名版本的 API 已有区别。[MultiBuffer](/Users/chp/explore/zed/crates/multi_buffer/src/multi_buffer.rs:1497)、[本项目版本说明](../../../examples/rust-gpui/README.md)
+1. **编译和接口演进成本。** Zed `MultiBuffer::edit` 附近专门提取非泛型实现以控制 LLVM IR；本项目发布版 GPUI 0.2.2 与本地 Zed 同名版本的 API 已有区别。[MultiBuffer](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/multi_buffer/src/multi_buffer.rs#L1497)、[本项目版本说明](../../../examples/rust-gpui/README.md)
 2. **UI 框架的所有权要重新设计。** GPUI 官方文章记述过直接使用 `Rc` 等方式遇到的困难，并说明统一 Entity/App 所有权模型。该文 2024 年首发，已在 2025-12-12 更新 API；仍需用当前源码核对。[GPUI 所有权](https://zed.dev/blog/gpui-ownership)
-3. **Rust 不能替代内存预算。** Zed 的 `worktree::load_file` 留有超大文件曾耗费大量内存的说明，并对大于等于 6 GiB 的文件拒绝加载。这是文件加载路径的限制，不是整款应用的所有输入上限。[load_file](/Users/chp/explore/zed/crates/worktree/src/worktree.rs:1713)
+3. **Rust 不能替代内存预算。** Zed 的 `worktree::load_file` 留有超大文件曾耗费大量内存的说明，并对大于等于 6 GiB 的文件拒绝加载。这是文件加载路径的限制，不是整款应用的所有输入上限。[load_file](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/worktree/src/worktree.rs#L1713)
 4. **混合架构增加接口与发布工作。** PI 必须携带 Rust 二进制、Agent runtime bundle 与 Electron，并保证两条 sidecar 协议能处理故障。它接受这项成本以保留成熟 UI 与 Agent 生态，详见 [PI 实际调用链](03-pi-desktop.md)。
 
 ## 7. 对 Yuuki Box 的研究判断
@@ -74,3 +74,12 @@ Warp 的 2021 年工程文把 PTY 读取、ANSI 解析、滚动和绘制拆开�
 你可以把 Rust 当成正式学习路线，直接沿已有 GPUI MVP 深入，不必先证明 Swift 或 Web 技术失败。最值得验证的是两种不同收益：一是 GPUI 的状态、渲染和后台工作协作；二是 Rust 作为独立宿主时的生命周期与持久化边界。
 
 目前的证据支持认真实验 Rust，尚不足以确定 Yuuki Box 的全部 UI、模型循环、Apple 系统接入都使用 Rust。选型条件和最小实验见 [Yuuki Box 的搭配与验证](04-yuuki-box.md)。
+
+## 本地源码引用说明
+
+以下 PI-Desktop 引用定位 2026-09-26 的本地工作树，保留路径、行号与阅读主题供持有同一份源码的人复查；它们没有公开源码链接。该工作树含未归入 HEAD 的暂存改动，不能仅凭提交号重建，也没有在本次内容整理中重新验证运行行为。
+
+[^pi-1]: `PI-Desktop/docs/adr/0010-rust-backend-host-core.md:1`，来自上述本地调查记录。
+[^pi-2]: `PI-Desktop/docs/adr/0010-rust-backend-host-core.md:7`，来自上述本地调查记录。
+[^pi-3]: `PI-Desktop/docs/adr/0011-host-rpc-and-storage-defaults.md:20`，来自上述本地调查记录。
+[^pi-4]: `PI-Desktop/docs/adr/0012-universal-provider-model-coverage.md:1`，来自上述本地调查记录。

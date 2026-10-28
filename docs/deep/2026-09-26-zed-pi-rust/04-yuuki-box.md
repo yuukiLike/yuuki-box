@@ -55,10 +55,10 @@ UI：输入、展示、发取消意图
 
 ## 5. 建议的源码阅读顺序
 
-1. **自己的输入与 Render。** 看 [GPUI MVP main.rs](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:350) 和 `uniform_list`，确认状态、可见索引与 notify 的关系。
-2. **自己的流任务。** 看 [start_ticker](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:145)，再对照 Zed [命令面板后台匹配](/Users/chp/explore/zed/crates/command_palette/src/command_palette.rs:580)。关注线程、Task 的持有者与取消。Zed main 与发布版 GPUI API 不能混用。
-3. **自己的平台桥。** 看 [start_speech](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:246)、[stop_speech](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:285) 和 [Swift helper 协议](../../../examples/shared/native/README.md)。关注 stdout 分帧、EOF、停止和退出。
-4. **PI 的持久化闭环。** 看 [HostProcess](/Users/chp/codex/PI-Desktop/packages/host-runtime/src/host-process.ts:94) → [RPC appendMessage](/Users/chp/codex/PI-Desktop/crates/host-core/src/rpc/mod.rs:2392) → [append_record](/Users/chp/codex/PI-Desktop/crates/host-core/src/sessions.rs:2099)。先理解请求、记录与索引，再读恢复。
+1. **自己的输入与 Render。** 看 [GPUI MVP main.rs](../../../examples/rust-gpui/src/main.rs:350) 和 `uniform_list`，确认状态、可见索引与 notify 的关系。
+2. **自己的流任务。** 看 [start_ticker](../../../examples/rust-gpui/src/main.rs:145)，再对照 Zed [命令面板后台匹配](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/command_palette/src/command_palette.rs#L580)。关注线程、Task 的持有者与取消。Zed main 与发布版 GPUI API 不能混用。
+3. **自己的平台桥。** 看 [start_speech](../../../examples/rust-gpui/src/main.rs:246)、[stop_speech](../../../examples/rust-gpui/src/main.rs:285) 和 [Swift helper 协议](../../../examples/shared/native/README.md)。关注 stdout 分帧、EOF、停止和退出。
+4. **PI 的持久化闭环。** 看 HostProcess[^pi-1] → RPC appendMessage[^pi-2] → append_record[^pi-3]。先理解请求、记录与索引，再读恢复。
 5. **Zed 的数据结构。** 按 SumTree → Rope → text::Buffer → language::Buffer 阅读。大量可编辑文本需要这些设计；普通 Agent 日志列表可以先把它们作为算法学习素材。
 
 ## 6. 用同一负载验证
@@ -76,10 +76,18 @@ UI：输入、展示、发取消意图
 
 记录机器、系统、commit/工作树状态、fixture、release/debug、冷/热条件、重复次数、工具与误差来源。GPUI 当前 dev 产物不能与 Swift 优化构建直接排名；功能范围、文本长度和布局也应对齐。[已有比较边界](../../../examples/COMPARISON.md)
 
-已有代码还提供两项待验证假设：达到容量上限后的 `Vec::remove(0)` 和索引重建有 O(n) 成本；语音期间 50 ms timer 会持续轮询并通知 UI。测量后可以分别比较环形存储、事件驱动送达的效果。这是潜在优化点，不是已证实的体验故障。[移除事件](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:173)、[ticker](/Users/chp/explore/yuuki-box/examples/rust-gpui/src/main.rs:145)
+已有代码还提供两项待验证假设：达到容量上限后的 `Vec::remove(0)` 和索引重建有 O(n) 成本；语音期间 50 ms timer 会持续轮询并通知 UI。测量后可以分别比较环形存储、事件驱动送达的效果。这是潜在优化点，不是已证实的体验故障。[移除事件](../../../examples/rust-gpui/src/main.rs:173)、[ticker](../../../examples/rust-gpui/src/main.rs:145)
 
 ## 7. 这次调查支持的范围
 
 可以据此继续：把 Rust/GPUI 作为主学习线，用 PI 理解 UI 与系统核心的混合方式，优先掌握状态权威、异步结果、取消与持久化边界。
 
 仍需实现或测量才能决定：最终 UI 是否选 GPUI、是否拆独立 Rust host、是否需要日志/索引双存储、怎样支持 iPhone/iPad。现有自建 loop 的方向继续保留；若之后考虑改用 pi，需要另行判断需求和控制范围。参考项目的整个架构不自动成为 Yuuki 的实现范围。
+
+## 本地源码引用说明
+
+以下 PI-Desktop 引用定位 2026-09-26 的本地工作树，保留路径、行号与阅读主题供持有同一份源码的人复查；它们没有公开源码链接。该工作树含未归入 HEAD 的暂存改动，不能仅凭提交号重建，也没有在本次内容整理中重新验证运行行为。
+
+[^pi-1]: `PI-Desktop/packages/host-runtime/src/host-process.ts:94`，来自上述本地调查记录。
+[^pi-2]: `PI-Desktop/crates/host-core/src/rpc/mod.rs:2392`，来自上述本地调查记录。
+[^pi-3]: `PI-Desktop/crates/host-core/src/sessions.rs:2099`，来自上述本地调查记录。

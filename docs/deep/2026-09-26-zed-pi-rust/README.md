@@ -32,14 +32,14 @@
 
 | 对象 | 调查基线 | 如何解释 |
 |---|---|---|
-| Zed | `/Users/chp/explore/zed`；HEAD `7ea077c78b865d17854cee812bb775dbe64a925a`；工作树干净 | 结论绑定本地快照；[固定提交入口](https://github.com/zed-industries/zed/tree/7ea077c78b865d17854cee812bb775dbe64a925a) |
-| PI-Desktop | `/Users/chp/codex/PI-Desktop`；HEAD `e0d142ba56ced0c1d76eba8ab2a96c07959ad4e6`；44 项已暂存变动 | 研究当时工作树，不能把全部观察归到纯 HEAD；未修改这些变动 |
+| Zed | 本地 checkout；HEAD `7ea077c78b865d17854cee812bb775dbe64a925a`；工作树干净 | 结论绑定该快照；[固定提交入口](https://github.com/zed-industries/zed/tree/7ea077c78b865d17854cee812bb775dbe64a925a) |
+| PI-Desktop | 本地工作树；HEAD `e0d142ba56ced0c1d76eba8ab2a96c07959ad4e6`；44 项已暂存变动 | 研究当时工作树，不能把全部观察归到纯 HEAD；未修改这些变动 |
 | Yuuki Box | 当前 docs 与 examples；调查时未初始化 Git | 新建调查资料并增加导航，未建立仓库或提交 |
 | 外部资料 | 本轮打开的官方工程文章 | 用于历史动机；文章年代/更新日期与当前源码分别记录 |
 
 **事实** 指直接看到的源码、manifest、ADR 或官方陈述；**推断/建议** 指收益分析与 Yuuki 适用性判断；**待验证** 指未运行的行为或性能。ADR 表达意图，源码表达当前实现，二者有差异时会指出。
 
-本地绝对路径和行号适合在这台机器跳转；仓库移动或修改后需结合 symbol 与 commit 查找。PI 的 staged 改动没有导出为补丁，不能仅凭 HEAD 完整重建本次状态。
+Zed 引用已指向上述固定提交，Yuuki 源码使用仓库相对路径。PI 引用保留为文末的本地源码定位说明，没有可供公开访问的源码链接；其 staged 改动没有导出为补丁，不能仅凭 HEAD 完整重建当时状态。
 
 ## 深度和限制
 
@@ -56,16 +56,18 @@
 
 ```bash
 python3 docs/deep/2026-09-26-zed-pi-rust/collect_inventory.py \
-  --zed /Users/chp/explore/zed \
-  --pi /Users/chp/codex/PI-Desktop \
+  --zed /path/to/zed \
+  --pi /path/to/PI-Desktop \
   --out /tmp/yuuki-zed-pi-inventory.json
 ```
 
-需有 `python3`、`git`、`rg`，两个输入路径需为可读 Git 工作树。目录改变时传入新的参数。默认输出会覆盖脚本旁的 `inventory.json`，保留历史证据时请指定新的 `--out`。
+需有 `python3`、`git`、`rg`；把 `/path/to/...` 替换成自己的可读 Git 工作树路径。默认输出会覆盖脚本旁的 `inventory.json`，保留历史证据时请指定新的 `--out`。
 
 `path` 是本地包关系的定位依据；`package` 记录依赖声明名/alias，target/dev/build 边仍单列。全部声明边不能被当作当前 macOS release 的实际依赖。
 
 ## 本轮核对记录
+
+以下是 2026-09-26 原始调查记录，不覆盖后来新增的图解、导航与链接形式调整。
 
 - 五篇文档的 217 个本地链接已检查目标存在；带行号的链接已检查范围，Markdown 代码围栏已检查配对。源码/ADR 的核心结论另经人工定点阅读与交叉复核；路径存在不代表语义自动正确。
 - 上面的采集命令已实际重跑，两份清单除采集时间外一致；253/248/255 与 PI 14 份 package manifest 的数量断言通过。

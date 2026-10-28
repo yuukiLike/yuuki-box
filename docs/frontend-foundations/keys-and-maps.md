@@ -4,6 +4,8 @@
 
 收到消息增量时，先按 `messageId` 找对象，再判断要重算或重渲染什么。
 
+[![数组扫描逐次查找，Map 索引先建表并承担存储和维护成本](../../site/public/diagrams/frontend-foundations/scan-index.svg)](../../site/public/diagrams/frontend-foundations/scan-index.svg)
+
 ## 数组查找和索引各做什么
 
 ```js

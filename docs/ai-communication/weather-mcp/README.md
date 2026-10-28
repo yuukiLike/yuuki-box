@@ -1,10 +1,12 @@
 # 天气 MCP：从 Codex 里的连接按钮，到 Apple WeatherKit
 
-[MCP 项目实战](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
+[本地工具实战](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
 
 **做出这样一条路径：用户在 Codex 连接你的天气服务，登录一次，之后直接问“上海现在天气怎么样”。**
 
 后端使用 **Supabase Auth、Postgres 和 Edge Functions**；天气数据来自 **Apple WeatherKit REST API**。你提供远程 MCP Server，Codex 提供 Host 和内部的 MCP Client。
+
+这是「远程 MCP 与授权」独立专题。能看懂一次 `tools/call`、HTTP 请求和基础 TypeScript 后再开始；本地天气示例与模型训练都不是必修前置。第一次只读角色与凭证，第二轮再跟做云端工程。
 
 [![Codex 风格的天气服务连接界面，右侧说明用户只需连接账号](../../../site/public/diagrams/weather-mcp/01-connect.svg)](../../../site/public/diagrams/weather-mcp/01-connect.svg)
 

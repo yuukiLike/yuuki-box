@@ -6,6 +6,10 @@
 
 先用独立的练习项目。这一课包含数据库与 Auth 配置步骤，复制到已有项目之前，应先核对现有 RLS、OAuth 客户端和 Access Token Hook，不能覆盖它们。
 
+[![用户 token 只发天气服务，Apple token 只发 WeatherKit，私钥留在服务端](../../../site/public/diagrams/weather-mcp/token-boundaries.svg)](../../../site/public/diagrams/weather-mcp/token-boundaries.svg)
+
+本课只准备图中上半条链。后端为 Apple 签名是下一课的事情；不要用“都有 Bearer”判断凭证可以互换。
+
 ## 1. 记下三个地址
 
 这里的值都是占位符，请换成你的项目。Supabase 默认项目域名足够完成第一次练习，不必先配置自定义域名。
