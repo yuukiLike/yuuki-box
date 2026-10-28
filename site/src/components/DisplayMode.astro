@@ -16,7 +16,6 @@
     <rect x="3" y="4" width="18" height="16" rx="2" />
     <path d="M9 4v16m4-11h4m-4 4h4" />
   </svg>
-  <span>目录</span>
 </button>
 
 <button class="display-mode-toggle" type="button" aria-pressed="false" hidden>
@@ -96,16 +95,11 @@
         link?.scrollIntoView({ block: 'nearest' });
       }
     });
-    document.addEventListener('keydown', (event) => {
+    sidebar.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape' || !document.documentElement.hasAttribute('data-directory-open')) return;
       event.preventDefault();
       setDirectoryOpen(false);
       directoryToggle.focus();
-    });
-    document.addEventListener('click', (event) => {
-      if (!document.documentElement.hasAttribute('data-directory-open') || !(event.target instanceof Element)) return;
-      if (directoryToggle.contains(event.target)) return;
-      if (!sidebar.contains(event.target) || event.target.closest('a')) setDirectoryOpen(false);
     });
   }
 </script>
@@ -130,7 +124,21 @@
   }
   .desktop-directory-toggle[hidden],
   .display-mode-toggle[hidden] { display: none; }
-  .desktop-directory-toggle { border-color: transparent; padding-inline: .4rem; }
+  .desktop-directory-toggle {
+    position: fixed;
+    inset-block-start: calc(var(--sl-nav-height) + 1rem);
+    inset-inline-start: 0;
+    width: 2rem;
+    min-height: 2.5rem;
+    padding: 0;
+    border-inline-start: 0;
+    border-radius: 0 .4rem .4rem 0;
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-bg);
+  }
+  :global(html[data-directory-open]) .desktop-directory-toggle {
+    inset-inline-start: var(--sl-sidebar-width);
+  }
   .desktop-directory-toggle[aria-expanded='true'] { background: var(--yuuki-hover); }
   .display-mode-toggle[aria-pressed='true'] {
     color: var(--sl-color-accent-high);
