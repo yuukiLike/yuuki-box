@@ -10,37 +10,52 @@
 
 > **它此刻需要知道什么？哪些信息可靠？哪些已经过时？执行以后，又该把什么反馈给它？**
 
-带着这组问题学习 Prompt、RAG、Memory 和 MCP，观察信息如何进入上下文、工具如何执行，以及结果怎样影响下一次判断。
+带着这组问题学习 Prompt、上下文组织和 MCP，观察信息如何进入上下文、工具如何执行，以及结果怎样影响下一次判断。
 
 ## 阅读入口
 
 现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
 
-目录按“想做成什么”分成七条路线。最前面先从一个极简 MCP 开始，其他工具名留在对应章节里，浏览器实验紧跟它解释的概念。
+目录按学习目标分成独立专题。每个专题有自己的起点和前置条件，跨专题的阅读顺序由[模型与 Agent 四小时路线](ai-from-scaling/README.md)和[前端与 AI 联读指南](learning/ai-frontend-intersections.md)串联。
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **MCP 接入、模型训练与工具调用** | [Codex MCP：保存与取回项目记录](ai-from-scaling/00-codex-mcp.md) | 让 Codex 保存和取回项目下一步，再进入模型训练和 Harness 跟做 |
-| **AI 开发：修复、审查、测试与迁移** | [Issue 修复、故障定位、PR 审查、测试、安全与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
-| **Agent 工程：运行控制、MCP 与 Skills** | [Harness、MCP 与 Skills 的工程实验](agent-engineering/README.md) | 一次能取消、能解释终态的工具运行 |
-| **前端与 AI：通信、缓存、计算与渲染** | [RPC/SSE、Map、KV Cache、Wasm 与流式渲染实验](learning/ai-frontend-intersections.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
-| **语音交互：合成、转写与人声检测** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
-| **AI 探索：故障驱动、自动实验与知识整理** | [故障驱动、自动实验、模拟验收、规格驱动与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
-| **架构研究：Mac 技术路线与产品设计** | [五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
+| **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
+| **模型基础与推理缓存** | [模型基础](ai-from-scaling/01-understand-models.md)，进阶选读 [KV Cache](kv-cache/README.md) | 训练一个字符模型，解释预测与参数更新 |
+| **Agent 工程** | [从工具循环到运行控制](agent-engineering/README.md) | 跑通 Harness，再接真实模型与外部工具 |
+| **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
+| **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
+| **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
+| **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
+| **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
+| **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
+| **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
 
-### MCP 接入、模型训练与工具调用
+### MCP 入门
 
-先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再看[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)，对照 OpenAI 与 Claude 的官方案例；之后沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。独立演示跟写约 30 分钟，主线保留原来的四小时安排。
+先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再做约 30 分钟的[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)。需要补齐工程知识时，按需阅读其中的 [TypeScript 技术栈](ai-from-scaling/00-minimal-mcp.md#typescript-stack)。
 
 想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
 
-想先接入一个真实软件，做[第二个 MCP：Blender 建模](ai-from-scaling/05-blender-mcp.md)，用同样的 TS 工程生成可编辑模型、预览图与 STL。
+### 模型基础与推理缓存
 
-想把开源项目变成练习题，做 [GitHub 实验员](ai-from-scaling/06-github-lab-mcp.md)：发现项目，从旧版本复现真实问题，再拿候选修改与官方补丁做对照。
+先读[参数、概率与缩放定律](ai-from-scaling/01-understand-models.md)，再[训练一个字符模型](ai-from-scaling/02-train-a-model.md)。两课到这里即可形成完整成果；训练模型不是学习 MCP 或 Agent 的前置要求。
 
-已经看懂 MCP 结构，想用自己的 Apple 开发者会员做个日常工具，继续 [Apple 天气 MCP](ai-from-scaling/07-weatherkit-mcp.md)：查常用地点的天气、按个人条件找连续出门时段，再接入现成 AI 客户端。没有密钥也能先做离线练习。
+进阶再进入 [KV Cache](kv-cache/README.md)，从 Attention 走到容量与前缀复用，对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 和 [Pi](kv-cache/05-pi.md) 的请求装配与用量。浏览器里的 [KV 内存计算器](../site/src/pages/labs/kv-memory.astro)也归在这一专题。
 
-### AI 开发：修复、审查、测试与迁移
+### Agent 工程
+
+从[搭建 Harness](ai-from-scaling/03-build-a-harness.md)和[接真实模型](ai-from-scaling/04-experiments.md)两课开始。这两课提供可运行代码；后续依次选做[运行控制](agent-engineering/05-harness-vertical-slice.md)、[MCP 接入](agent-engineering/01-mcp-tool-source.md)和 [Skills 复用](agent-engineering/03-skills-structure.md)。后续七个工程练习属于实现建议，尚未接入本仓库 runtime。
+
+需要 Mac 产品的完整方案时，回查架构研究中的[本地 Harness 设计](architecture/mac-local-harness.md)。
+
+### MCP 项目实战
+
+在[实战总览](mcp-projects/README.md)选择天气、Blender、GitHub 或音乐项目。它们按兴趣选做，分别说明环境、前置知识与验证边界。
+
+两套天气教程分开：先做[本地天气工具](ai-from-scaling/07-weatherkit-mcp.md)，可从离线样本开始；需要登录、授权和远程接入时，再选[Supabase × WeatherKit 工程教程](ai-communication/weather-mcp/README.md)。音乐两篇从[声部之结](ai-from-scaling/07-music-space-mcp.md)走到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不要求先学完模型与 Harness。
+
+### AI 开发实践
 
 先按任务选择：[交 Issue、接 PR](ai-practices/02-issue-to-pr.md)、[带错误现场去破案](ai-practices/03-error-to-fix.md)、[限定范围做迁移](ai-practices/06-code-migration.md)。想给改动补一道检查，选 [CodeRabbit 审查](ai-practices/01-coderabbit-review.md)、[有效测试](ai-practices/05-test-generation.md)或[安全告警修复](ai-practices/04-security-autofix.md)。
 
@@ -48,31 +63,29 @@
 
 已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
 
-### Agent 工程：运行控制、MCP 与 Skills
-
-按实际建设顺序走：先用 [Harness 管稳运行](agent-engineering/05-harness-vertical-slice.md)，再用 [MCP 接工具](agent-engineering/01-mcp-tool-source.md)，用 [Skills 复用流程](agent-engineering/03-skills-structure.md)。需要完整设计时回查 [Mac 本地 Harness](architecture/mac-local-harness.md)。这一组是实现实验建议，验收目标写在各篇里。
-
-### 前端与 AI：通信、缓存、计算与渲染
+### 应用通信
 
 想补 RPC 和 SSE，打开[AI 应用通信：从 RPC、SSE 到 Agent 工具调用](ai-communication/README.md)。每课一张图、一个动作，先请另一个程序读笔记。
 
-想做一次带用户授权的完整接入，打开[天气 MCP：Supabase × Apple WeatherKit](ai-communication/weather-mcp/README.md)。从 Codex 的连接体验开始，依次完成登录、权限、天气查询与 MCP 工具。
+六课只追踪请求、响应、流式事件、工具发现与失败处理。完整天气工程归入 MCP 项目实战，作为学完后的选做方向。
 
-从[数据结构与缓存](frontend-foundations/README.md)走到 [KV Cache](kv-cache/README.md)，从 [Wasm 与 Worker](wasm/README.md)走到浏览器计算，再用[渲染学习路线](learning/rendering-performance.md)和[十五个场景](learning/harness-scenario-lab.md)追踪界面卡在哪里。
+### 前端性能
 
-准备研究模型缓存，可以沿 [KV 专题](kv-cache/README.md)读原理，再对照 [DeepSeek Harness](kv-cache/04-deepseek-harness.md) 与 [Pi](kv-cache/05-pi.md) 的请求装配、缓存用量和预热；[知识地图](kv-cache/06-study-map.md)给出关联概念与三轮研究停点。
+按三类问题学习：[数据结构与缓存](frontend-foundations/README.md)、[Wasm 与 Worker](wasm/README.md)、[界面渲染](learning/rendering-performance.md)。再用[十五个场景](learning/harness-scenario-lab.md)追踪更新范围与输入响应。
 
-三个浏览器实验就在对应专题旁：[数组与 Map](../site/src/pages/labs/lookup.astro)、[KV 内存计算器](../site/src/pages/labs/kv-memory.astro)、[JavaScript 调用 Wasm](../site/src/pages/labs/wasm-bridge.astro)。先玩一个，再回来找解释。
+[数组与 Map](../site/src/pages/labs/lookup.astro)和 [JavaScript 调用 Wasm](../site/src/pages/labs/wasm-bridge.astro)实验紧跟对应知识。想把这些经验与模型缓存、通信问题联系起来，再看[前端与 AI 联读指南](learning/ai-frontend-intersections.md)。
 
-### 语音交互：合成、转写与人声检测
+### 语音交互
 
 从[第一句话](tts/让-Yuuki-开口说第一句话.md)开始，用[语音工具](tts/README.md)补上转写和人声检测。准备接进工作台时读[模型与语音基础](architecture/ai-and-speech-foundation.md)。教程保留各自的环境记录与未验证项。
 
-### AI 探索：故障驱动、自动实验与知识整理
+### AI 探索（选读）
 
 [Issue 夜班与独立审查构想](ai-ideas/01-ideas-map.md)摆出协作流程；[故障驱动、自动实验、模拟验收、规格驱动与知识整理](ai-ideas/02-five-new-directions.md)分别提供实验起点。这里保存脑暴与迁移建议；代表方案的公开记录和本项目的验证状态在正文分别说明。
 
-### 架构研究：Mac 技术路线与产品设计
+Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作为其他课程的前置条件。
+
+### 架构研究
 
 带着问题读 [Zed、Raycast、Warp](research/zed-raycast-warp.md)，再深入 [Zed、Rust 与 PI-Desktop](deep/2026-09-26-zed-pi-rust/README.md)，或研究[简单、组合与复杂性](deep/2026-09-26-simplicity-composition-complexity/README.md)。想改代码，直接进[五条路线的示例](../examples/README.md)，对照[实现中的收益与代价](../examples/COMPARISON.md)形成判断。
 
@@ -140,7 +153,3 @@
 完成每个里程碑后，在开发计划中更新状态并链接实测记录。只有被接受的取舍才从“建议”升级为“决定”；只有实际跑过的用例才从“待验证”升级为“通过”。
 
 后续最先需要确认的事项是模型提供方、首批工作任务、最低系统版本和关闭应用后的运行语义。这些不阻塞最早的模拟事件与界面实验。
-
-## 末章选修：音乐 MCP
-
-完成 MCP、模型与 Harness 主线后，再按兴趣阅读 [声部之结](ai-from-scaling/07-music-space-mcp.md)与 [光之剧场](ai-from-scaling/08-music-photo-mcp.md)。两个案例保留在课程末尾，练习 MIDI 到三维对象、透明图层与音乐短片导出。

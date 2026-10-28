@@ -1,8 +1,8 @@
-# 从极简 MCP 到模型训练与 Harness
+# 四小时路线：模型基础与 Agent 入门
 
-先做[Codex MCP](00-codex-mcp.md)：保存项目进度，换个会话取回。想观察协议，再做约 30 分钟的[独立演示](00-minimal-mcp.md)。
+这是一条跨专题的阅读顺序：用前两课理解模型与训练，用后两课搭建 Harness、接入真实模型。可分四次完成；需要基础 JavaScript、终端与文件编辑，其他概念随用随讲。
 
-然后沿四小时主线学习模型、训练字符模型、搭建 Harness 并接真实模型。可分四次完成；需要基础 JavaScript、终端与文件编辑，其他概念随用随讲。
+目录中的 **MCP 入门、模型基础、Agent 工程、MCP 项目实战** 各有自己的学习目标。想先做工具，可以直接进入 [MCP 入门](00-codex-mcp.md)；想先写执行循环，可以直接进入 [Agent 入门](03-build-a-harness.md)。训练字符模型不作为这两条路线的前置。
 
 ## MCP 练习怎么选
 
@@ -10,31 +10,18 @@ Codex 篇由模型决定调用；独立演示由脚本安排。先分清谁发�
 
 想补齐 TS 工具工程基础，读独立演示里的 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#typescript-stack)：从现有代码认识 Node.js、Zod、异步执行、进程通信与自动测试，按需选读。
 
-[![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
+入门后去 [MCP 项目实战](../mcp-projects/README.md)选天气、Blender、GitHub 或音乐项目；想追踪消息，去[应用通信](../ai-communication/README.md)。这些实践按兴趣选择。
 
-<details>
-<summary>更多 MCP 练习</summary>
-
-| 想做什么 | 入口 |
-| --- | --- |
-| 改尺寸并导出模型 | [Blender](05-blender-mcp.md) |
-| 复现 bug、对照修复 | [GitHub](06-github-lab-mcp.md) |
-| 查询天气、筛选出门时段 | [WeatherKit](07-weatherkit-mcp.md)，无密钥可先做样本 |
-| 追踪请求往返 | [发现与调用](../ai-communication/04-mcp.md) |
-| 接进自己的 Agent | [工具源](../agent-engineering/01-mcp-tool-source.md)、[调用策略](../agent-engineering/02-mcp-policy.md)，均为待实现练习 |
-
-这些实践独立于四小时主线，按需选择。
-
-</details>
-
-## 先做 MCP 再进入四小时主线
+## 可选开场：先观察 MCP 工具调用
 
 | 开场 | 内容 | 第一份成果 |
 | --- | --- | --- |
 | Codex 接入 | [只写服务端，在真实会话里调用工具](00-codex-mcp.md) | 看到 Codex 的工具调用，保存并跨会话取回自己的记录 |
 | 约 30 分钟 | [看懂一次 MCP 工具调用](00-minimal-mcp.md) | 改一句记录并在服务重启后取回，找到调用、读写和输入校验的位置 |
 
-下面的 240 分钟属于原来的模型与 Harness 主线。
+## 四小时跨专题路线
+
+下面的 240 分钟连接两个专题。只学习其中一个专题时，按对应两课进行；MCP 开场的时间单独计算。
 
 | 时间 | 内容 | 这一段要完成什么 |
 | --- | --- | --- |
@@ -71,7 +58,7 @@ node --version
 
 参考实现：[Codex MCP](../../examples/codex-continue-mcp/src/server.ts)、[独立演示](../../examples/minimal-mcp/src/demo.ts)、[小模型](labs/tiny-model.mjs)、[Harness](labs/harness.mjs)。先跑通，再跟改关键函数。
 
-第四章需要自己的 DeepSeek API key 并产生用量。独立演示、小模型和脚本 Harness 可离线运行；Codex 篇使用已有模型配置。
+“接真实模型”需要自己的 DeepSeek API key 并产生用量。独立演示、小模型和脚本 Harness 可离线运行；Codex 篇使用已有模型配置。
 
 ## 学完以后检查什么
 
@@ -92,15 +79,4 @@ node --version
 
 [工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills，区分 Skills 首次推出与开放标准发布的日期，无需跟做。
 
-## 末章选修：音乐 MCP
-
-先完成模型与 Harness 主线，以及感兴趣的 Blender、GitHub 实践，最后再按兴趣阅读这两个音乐案例。
-
-| 选修章节 | 内容 |
-| --- | --- |
-| [音乐 1：声部之结](07-music-space-mcp.md) | 把 MIDI 折成可编辑的音乐雕塑，练习独听、配置保存与 GLB 导出 |
-| [音乐 2：光之剧场](08-music-photo-mcp.md) | 用透明图层、音乐包络与灯光关键帧制作 2.5D 舞台短片 |
-
-两篇共用同一个 TypeScript MCP，可保存场景、重新打开和导出 MP4，独立于 music-eyes。
-
-返回[文档目录](../README.md)。
+返回[文档目录](../../site/src/pages/index.astro)，或按兴趣选择一个 [MCP 实战项目](../mcp-projects/README.md)。

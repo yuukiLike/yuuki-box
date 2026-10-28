@@ -117,7 +117,9 @@ pnpm --dir examples/minimal-mcp demo --invalid
 
 ## 到这里完成
 
-能指出发现、调用、文件读写和输入校验的位置，就进入[模型学习](01-understand-models.md)。下面按需查阅。
+能指出发现、调用、文件读写和输入校验的位置，MCP 入门就完成了。下面按需查阅。
+
+接下来按目标选择：[MCP 项目实战](../mcp-projects/README.md)做一个工具，[应用通信](../ai-communication/README.md)追踪请求，或 [Agent 入门](03-build-a-harness.md)理解模型怎样选择和执行工具。想研究训练原理，再进入[模型基础](01-understand-models.md)。
 
 想理解这份 TS 工程为什么这样组织，展开 [TypeScript 技术栈与学习顺序](#typescript-stack)，从现有代码认识编译、数据契约、异步执行与进程通信。
 

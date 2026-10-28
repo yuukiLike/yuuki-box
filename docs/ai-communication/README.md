@@ -1,6 +1,6 @@
 # AI 应用通信：从 RPC、SSE 到 Agent 工具调用
 
-从“读一条笔记”开始，看懂程序怎样沟通。
+从“读一条笔记”开始，看懂程序怎样沟通。本专题只沿请求、响应、流式事件与失败处理展开；模型训练和前端性能可以分别学习。
 
 **每课一张图、一个动作。看懂就停。**
 
@@ -30,9 +30,9 @@ node docs/ai-communication/labs/01-rpc.ts
 
 </details>
 
-## 实战：让 Codex 查询 Apple 天气
+## 学完后选做：让 Codex 查询 Apple 天气
 
-想把“用户登录 → 授权 → 工具调用”接成完整服务，进入[天气 MCP 实战教程](weather-mcp/README.md)。后端使用 Supabase，天气来自 Apple WeatherKit；五课配合 Codex 风格的 SVG 界面示意，先分清两套 token，再做一次真实查询。
+想把“用户登录 → 授权 → 工具调用”接成完整服务，到 [MCP 项目实战](../mcp-projects/README.md)选择[远程天气教程](weather-mcp/README.md)。它是独立的工程跟做课程，后端使用 Supabase，天气来自 Apple WeatherKit；不作为通信六课的必修续篇。
 
 <details>
 <summary>运行环境与检查</summary>
@@ -51,4 +51,4 @@ node --test docs/ai-communication/labs/verify.test.mjs
 
 </details>
 
-返回[前端 × AI 实验室](../learning/ai-frontend-intersections.md)。
+返回[文档目录](../../site/src/pages/index.astro) · 跨专题联读[前端与 AI 实验](../learning/ai-frontend-intersections.md)。

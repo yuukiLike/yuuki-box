@@ -13,7 +13,7 @@ export default defineConfig({
       title: 'Yuuki 学习手记',
       credits: false,
       disable404Route: true,
-      description: 'MCP 接入与模型训练、AI 修复与代码审查、Agent 运行控制、前端通信与缓存、语音交互和 Mac 架构研究。按具体主题阅读案例、实验与源码。',
+      description: '按学习目标选择 MCP 入门、模型基础、Agent 工程、MCP 实战、AI 开发、应用通信、前端性能与语音交互，按需查阅探索和架构研究。',
       locales: { root: { label: '简体中文', lang: 'zh-CN' } },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/yuukiLike/yuuki-box' }],
       customCss: ['./src/styles/custom.css'],

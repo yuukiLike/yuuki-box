@@ -1,18 +1,18 @@
-# 前端与 AI 实验：RPC/SSE 通信、Map 缓存、KV Cache、Wasm 与流式渲染
+# 联读指南：前端与 AI 实验
 
 模型在吐字，界面却开始卡；缓存命中了，内存却越涨越高；计算搬进 Worker 以后，旧结果又抢在新结果后面回来。熟悉的前端问题一碰上 AI，就有了一批值得拆开的新现场。
 
-这里按五类工作组织实验：**应用通信、查找与缓存、模型缓存、浏览器计算、界面响应。** 每条线都从一个具体问题开始，改一个因素，拿到一组能解释的对照。
+这是一份跨专题指南，帮助你从前端经验连接 AI 问题。目录中，**应用通信**独立成课；查找缓存、浏览器计算与界面响应归入**前端性能**；KV Cache 归入**模型进阶**。每条线都从一个具体问题开始，改一个因素，拿到一组能解释的对照，可以分别学习。
 
 ## 实验分类：应用通信、查找缓存、KV、浏览器计算与界面响应
 
-| 你想拆开什么 | 先试哪一手 | 想观察什么 | 入口 |
+| 所属专题 | 你想拆开什么 | 先试哪一手 | 入口 |
 | --- | --- | --- | --- |
-| 应用通信 | 请另一个程序读笔记 | 请求怎样发出，结果怎样回来 | [RPC、SSE 与 Agent 小课](../ai-communication/README.md) |
-| 查找与缓存 | 把目标从第一项换到最后一项 | 查找工作量、索引准备与额外空间 | [前端缓存](../frontend-foundations/README.md)、[数组与 Map 实验](../../site/src/pages/labs/lookup.astro) |
-| 模型缓存 | 修改中间输入，再把上下文长度翻倍 | 复用从哪里失效，KV 容量怎样变化 | [KV 专题](../kv-cache/README.md)、[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro) |
-| 浏览器计算 | 调一次 Wasm，再把固定计算安排到 Worker | 调用边界、数据搬运、取消与过期结果 | [Wasm](../wasm/README.md)、[Wasm 实验](../../site/src/pages/labs/wasm-bridge.astro)、[已有 Worker](../../examples/react-webview/src/lab-worker.js) |
-| 界面响应 | 用相同文本和负载切换更新方式 | 解析次数、发布次数、输入与滚动 | [渲染与流式输出](rendering-performance.md)、[十五个场景](harness-scenario-lab.md) |
+| 应用通信 | 请求与响应 | 请另一个程序读笔记，追踪结果怎样回来 | [RPC、SSE 与 Agent 小课](../ai-communication/README.md) |
+| 前端性能 | 查找与缓存 | 把目标从第一项换到最后一项，比较工作量与额外空间 | [前端缓存](../frontend-foundations/README.md)、[数组与 Map 实验](../../site/src/pages/labs/lookup.astro) |
+| 模型进阶 | KV Cache | 修改中间输入，再把上下文长度翻倍，观察复用与容量 | [KV 专题](../kv-cache/README.md)、[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro) |
+| 前端性能 | 浏览器计算 | 调一次 Wasm，再把固定计算安排到 Worker | [Wasm](../wasm/README.md)、[Wasm 实验](../../site/src/pages/labs/wasm-bridge.astro)、[已有 Worker](../../examples/react-webview/src/lab-worker.js) |
+| 前端性能 | 界面响应 | 用相同文本和负载切换更新方式，观察解析、输入与滚动 | [渲染与流式输出](rendering-performance.md)、[十五个场景](harness-scenario-lab.md) |
 
 ## 想从一个小模块起步，就选 Wasm
 

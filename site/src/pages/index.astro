@@ -5,7 +5,7 @@ import DocumentDirectory from '../components/DocumentDirectory.astro';
 
 <StarlightPage hasSidebar frontmatter={{
   title: '文档目录',
-  description: '浏览 MCP 接入、模型训练、AI 修复与审查、Agent 工程、通信与缓存、语音交互、AI 探索及 Mac 架构研究。',
+  description: '按专题学习 MCP、模型基础、Agent 工程、项目实战、AI 开发、应用通信、前端性能与语音交互，按需查阅探索和架构研究。',
   tableOfContents: false,
   editUrl: false,
   prev: false,
@@ -13,7 +13,8 @@ import DocumentDirectory from '../components/DocumentDirectory.astro';
 }}>
   <div class="directory-home">
     <p class="directory-intro">
-      七条学习路线，每条都列出具体主题。点击主题标签直达对应内容，展开章节查看完整阅读顺序。
+      按学习目标选择专题，点击标题或主题标签进入，展开章节查看专题内的阅读顺序。
+      想连起来学，可以跟随<a href="/ai-from-scaling/">模型与 Agent 四小时路线</a>，或查阅<a href="/learning/ai-frontend-intersections/">前端与 AI 联读指南</a>。
     </p>
     <DocumentDirectory />
   </div>

@@ -1,10 +1,19 @@
-# Agent 工程：Harness 运行控制、MCP 工具接入与 Skills 复用
+# Agent 工程：从工具循环到运行控制、MCP 与 Skills
 
-先让一次工具调用能取消、能解释，再增加工具。用运行记录回答：刚才执行了什么，停在了哪里？
+先跑通模型与工具之间的循环，再让运行能取消、能解释，随后接入外部工具与可复用流程。
 
-七个独立练习，分三段：**Harness 管运行，MCP 接工具，Skills 复用流程。**
+本专题分四段：**入门跑循环 → 运行控制 → MCP 接入 → Skills 复用。** 模型训练是独立专题；入门两课可直接使用脚本模型与现成模型 API。
 
-状态：实现建议，不是已经有公开落地记录的案例。代码片段用于说明接口与边界，尚未接入本仓库的 runtime。MCP 与 Agent Skills 的规范仍在演进，具体字段和行为以当前官方文档为准。资料核对：2026-10-23。
+## 入门：先跑通两课
+
+| 顺序 | 教程 | 做出什么 |
+| --- | --- | --- |
+| 1 | [搭建工具调用 Harness](../ai-from-scaling/03-build-a-harness.md) | 用脚本模型走完读计划、算预算、审批保存与结果核对 |
+| 2 | [接真实模型并做对照实验](../ai-from-scaling/04-experiments.md) | 更换模型入口，比较成功、工具失败、限额与取消 |
+
+这两课提供可运行的 [harness.mjs](../ai-from-scaling/labs/harness.mjs)。离线部分不需要 API key；真实调用需要自己的模型配置。只学习 Agent 时，第二课中的字符模型对照可以跳过。想同时理解训练原理，再跟随[四小时联读路线](../ai-from-scaling/README.md)。
+
+后续七个工程练习是实现建议，代码片段用于说明接口与边界，尚未接入本仓库的 runtime。先跑通入门代码，再按需求选做。MCP 与 Agent Skills 的规范仍在演进，具体字段和行为以当前官方文档为准。资料核对：2026-10-23。
 
 ## 能力分类：MCP 协议、Skill 流程与 Harness 执行
 
@@ -28,9 +37,9 @@
 | 把反复解释的任务教一遍、存下来 | [Skills：结构与触发](03-skills-structure.md) | 一个稳定重复的任务 | 三次任务的触发与返工对照 |
 | 换个会话，检查它是否真的学会 | [Skills：校验与渐进加载](04-skills-validation.md) | 一个可执行检查命令 | 新会话跑通；坏 fixture 被抓住 |
 
-## 入门实验：取消工具调用并检查终态
+## 工程第一步：取消工具调用并检查终态
 
-初学先做[三个可自定义入口](../ai-from-scaling/03-build-a-harness.md#三个可自定义入口)，分清模型、工具与事件。
+完成入门后，回看[三个可自定义入口](../ai-from-scaling/03-build-a-harness.md#三个可自定义入口)，分清模型、工具与事件。
 
 打开[可恢复闭环](05-harness-vertical-slice.md)，先用 fake model 跑一次工具调用，再在中途取消。对着事件记录检查：最后一条 delta 在哪里，Run 怎样进入终态，已经发生的副作用留下了什么。
 
@@ -51,4 +60,6 @@
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [OpenAI Codex Skills](https://developers.openai.com/plugins/build/skills)
 
-返回[文档目录](../README.md)。
+想了解这些概念的来历，选读[工具调用简史](../ai-from-scaling/extra-tool-use-story.md)，其中记录了 Skills 首次推出与开放标准发布的日期。准备做 Mac 产品时，再查阅[本地 Harness 完整设计](../architecture/mac-local-harness.md)。
+
+返回[文档目录](../../site/src/pages/index.astro)。

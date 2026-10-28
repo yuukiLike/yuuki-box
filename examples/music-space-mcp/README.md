@@ -1,6 +1,6 @@
 # 音乐空间 MCP
 
-本例是[课程末章的选修实践](../../docs/ai-from-scaling/README.md#末章选修音乐-mcp)，可在完成模型与 Harness 主线后按兴趣学习。
+本例属于 [MCP 项目实战](../../docs/mcp-projects/README.md)的音乐选修。看懂[独立 MCP 演示](../../docs/ai-from-scaling/00-minimal-mcp.md)后即可按兴趣学习。
 
 同一个 TypeScript MCP 提供两种完整场景：
 

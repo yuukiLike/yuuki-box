@@ -1,8 +1,8 @@
 # 番外：工具调用怎样长成 Agent
 
-[课程目录](README.md) · [Harness 那一篇](03-build-a-harness.md)
+[MCP 入门](00-codex-mcp.md) · [Agent 工程](../agent-engineering/README.md) · [Harness 入门](03-build-a-harness.md)
 
-**这一篇是故事，不是跟做。** 它不讲 API，也不要求你改代码。它只回答一个问题：主线里那些看起来理所当然的东西——工具循环、function calling、MCP、Harness、Skills——分别是从哪里来的？
+**这一篇是故事，不是跟做。** 它是 MCP 与 Agent 两个专题共用的选读，不讲 API，也不要求你改代码。它只回答一个问题：工具循环、function calling、MCP、Harness、Skills——分别是从哪里来的？
 
 先把结论放在前面：**今天的 Agent 行业不是被设计出来的，是被拼出来的。** 几乎每个关键零件，都来自一个当时没成、或者没想那么远的东西。
 

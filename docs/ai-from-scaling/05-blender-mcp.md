@@ -1,4 +1,4 @@
-# 第二个 MCP：让参数变成模型
+# Blender MCP：让参数变成模型
 
 **这一课的目的：看懂一组尺寸参数怎样经过 MCP，变成可编辑、可检查、可导出的 Blender 模型。**
 
@@ -169,4 +169,4 @@ STL 不携带单位；本例保留毫米数值，切片时按毫米解释。闭�
 
 </details>
 
-返回[课程总览](README.md) · [第一个 MCP](00-minimal-mcp.md) · [GitHub 修复实验](06-github-lab-mcp.md)。
+返回[MCP 项目实战](../mcp-projects/README.md) · 回查[独立 MCP 演示](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。

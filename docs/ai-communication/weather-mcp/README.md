@@ -1,6 +1,6 @@
 # 天气 MCP：从 Codex 里的连接按钮，到 Apple WeatherKit
 
-[返回通信课程](../README.md) · [开始：用户会经历什么](01-user-journey.md)
+[MCP 项目实战](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
 
 **做出这样一条路径：用户在 Codex 连接你的天气服务，登录一次，之后直接问“上海现在天气怎么样”。**
 

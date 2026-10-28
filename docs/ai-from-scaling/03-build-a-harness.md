@@ -1,6 +1,8 @@
-# 第三小时 搭建工具调用 Harness
+# Agent 入门 1：搭建工具调用 Harness
 
 搭一个执行循环：读活动计划 → 算预算 → 申请保存 → 回答。
+
+这是 [Agent 工程](../agent-engineering/README.md)的第一课，可以直接开始。需要基础 JavaScript 与终端操作；本课使用脚本模拟模型，无需先训练字符模型或实现 MCP 服务。
 
 重点找三个入口：`complete` 请求模型，`runTool` 执行工具，`emit` 记录事件。
 
@@ -221,4 +223,4 @@ terminal.once('SIGINT', cancel);
 
 本课的事件只保存在内存并打印到终端，进程退出后不会自动恢复。需要持久化与崩溃恢复时，继续做[Harness 工程实验](../agent-engineering/05-harness-vertical-slice.md)。
 
-下一步：[第四小时 接真实模型并做对照实验](04-experiments.md)。
+下一步：[Agent 入门 2：接真实模型并做对照实验](04-experiments.md)。

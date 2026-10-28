@@ -1,6 +1,6 @@
-# 第二小时 训练一个小语言模型
+# 模型基础 2：训练一个字符语言模型
 
-亲手写出预测、误差、参数更新与生成，再比较一个字和两个字上下文。
+亲手写出预测、误差、参数更新与生成，再比较一个字和两个字上下文。先读[模型基础 1](01-understand-models.md)，或确认自己能区分参数、上下文与训练。
 
 参考实现：[tiny-model.mjs](labs/tiny-model.mjs)。使用 Node.js 22.22 或更高版本，所有命令在仓库根目录运行。内容用 50 分钟，留 10 分钟整理和休息。
 
@@ -138,4 +138,4 @@ node docs/ai-from-scaling/labs/tiny-model.mjs --load "$AI_LAB_DIR/model.json"
 模型仍然会错在：
 ```
 
-下一步：[第三小时 搭建工具调用 Harness](03-build-a-harness.md)。
+模型基础到这里可以停。想继续研究推理，选读 [Attention 与 KV Cache](../kv-cache/README.md)；沿[四小时路线](README.md)联读，则进入 [Agent 入门：搭建 Harness](03-build-a-harness.md)。

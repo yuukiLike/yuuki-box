@@ -67,4 +67,4 @@ codex mcp get yuuki-continue
 
 工具参数、目录设置与调用统计，见[示例说明](../../examples/codex-continue-mcp/README.md)。
 
-返回[课程目录](README.md) · 想单独观察跨进程调用，继续看[换个会话，接着做](00-minimal-mcp.md)。
+想单独观察跨进程调用，继续看[独立 MCP 演示](00-minimal-mcp.md)；已经看懂发现与调用，可以选择一个 [MCP 实战项目](../mcp-projects/README.md)。
