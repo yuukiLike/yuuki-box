@@ -8,6 +8,8 @@
 
 Codex 篇由模型决定调用；独立演示由脚本安排。先分清谁发请求、谁执行、结果来自哪里。
 
+想补齐 TS 工具工程基础，读独立演示里的 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#typescript-stack)：从现有代码认识 Node.js、Zod、异步执行、进程通信与自动测试，按需选读。
+
 [![MCP 学习路线：极简演示之后，可选 Blender 参数建模或 GitHub 修复验证；进一步理解通信，再实现 Harness 工具源与权限策略](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)](../../site/public/diagrams/ai-from-scaling/mcp-learning-route.svg)
 
 <details>
@@ -88,7 +90,7 @@ node --version
 
 ## 番外：工具调用怎样长成 Agent
 
-[工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling 与 MCP，无需跟做。
+[工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills，区分 Skills 首次推出与开放标准发布的日期，无需跟做。
 
 ## 末章选修：音乐 MCP
 

@@ -42,7 +42,11 @@ function firstLink(items: StarlightRouteData['sidebar']): Extract<StarlightRoute
         </a>
       ) : (
         <>
-          <Heading id={`${prefix}-${index + 1}`} class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>{entry.label}</Heading>
+          <Heading id={`${prefix}-${index + 1}`} class:list={['directory-heading', { 'directory-heading-root': depth === 0 }]}>
+            {preview ? (
+              <a class="directory-heading-link" href={preview.href}>{entry.label}</a>
+            ) : entry.label}
+          </Heading>
           {metadata && <>
             {metadata.description && <p class="directory-description">{metadata.description}</p>}
             <TopicTags tags={metadata.tags} color={metadata.color} linked />

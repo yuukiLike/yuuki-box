@@ -271,6 +271,15 @@ footer .meta:empty { display: none; }
   font-size: 1rem;
   color: var(--sl-color-white);
 }
+.directory-home .directory-heading-link {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+.directory-home .directory-heading-link:is(:hover, :focus-visible) {
+  color: var(--sl-color-accent-high);
+  text-decoration: underline;
+}
 .directory-home .directory-description {
   margin: 0 .35rem .4rem;
   color: var(--sl-color-gray-2);
@@ -393,6 +402,14 @@ html[data-display-mode='lightweight'] .reading-frame.with-toc {
     --sl-sidebar-width: 18.5rem;
     --sl-nav-height: 3.5rem;
     --sl-content-pad-x: 2rem;
+  }
+  html[data-display-mode='lightweight'][data-directory-open] .sidebar { display: block; }
+  html[data-display-mode='lightweight'][data-directory-open] .sidebar-pane {
+    inset-block: calc(var(--sl-nav-height) + .5rem) .75rem;
+    inset-inline-start: .75rem;
+    border: 1px solid var(--yuuki-border);
+    border-radius: .65rem;
+    box-shadow: .25rem .5rem 1.5rem #00000014;
   }
   .sidebar-content { padding-top: 1rem; }
   .sidebar-content summary { padding-block: .4rem; }

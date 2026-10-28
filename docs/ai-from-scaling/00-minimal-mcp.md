@@ -40,7 +40,7 @@ pnpm --dir examples/minimal-mcp demo
 # yuuki-box
 ……
 ## 下一步
-打开 examples/minimal-mcp/src/server.ts，对照 writeFile() 与 readFile()。
+我随便写一个
 ……
 --- Markdown 结束 ---
 [验证] 新进程已从同一文件读回记录。
@@ -49,7 +49,9 @@ pnpm --dir examples/minimal-mcp demo
 
 核对三处：`tools/list` 列出工具，`saved=true` 表示保存成功，重启后的 `found=true` 返回同一文件原文。
 
-演示由 `demo.ts` 填写参数并自动运行，安装依赖后可离线执行，无需模型。方括号是日志标签；`saved`、`found`、`path` 是本例的业务字段。
+**这次运行没有请求 AI 模型，也没有由模型决定的 function calling。** `demo.ts` 固定填写工具名和参数，先保存、再重启服务、最后读取；安装依赖后可离线执行。`next` 的文字来自源码中的 `checkpoint` 对象，修改后输出也会变化。
+
+MCP 通信和文件读写都实际发生；客户端的 `console.log()` 负责展示过程。方括号是日志标签；`saved`、`found`、`path` 是本例的业务字段。
 
 ## 2. 定位：谁调用，谁真正读写文件
 
@@ -117,6 +119,8 @@ pnpm --dir examples/minimal-mcp demo --invalid
 
 能指出发现、调用、文件读写和输入校验的位置，就进入[模型学习](01-understand-models.md)。下面按需查阅。
 
+想理解这份 TS 工程为什么这样组织，展开 [TypeScript 技术栈与学习顺序](#typescript-stack)，从现有代码认识编译、数据契约、异步执行与进程通信。
+
 ## 选读与参考
 
 <details>
@@ -135,20 +139,82 @@ pnpm --dir examples/minimal-mcp demo --invalid
 
 </details>
 
-<details>
-<summary>TypeScript、启动方式与自动检查</summary>
+<details id="typescript-stack">
+<summary>TypeScript 技术栈与学习顺序：从 MCP 走向 Agent</summary>
 
-依赖版本见 [package.json](../../examples/minimal-mcp/package.json)，严格编译选项见 [tsconfig.json](../../examples/minimal-mcp/tsconfig.json)。
+**当前的基础组合是 TypeScript + Node.js + pnpm + Zod + MCP SDK + 自动测试。** 先沿着一次调用读懂它们各自负责什么，再根据实际需求增加组件。
 
-[contracts.ts](../../examples/minimal-mcp/src/contracts.ts) 用 Zod 校验数据，并从同一份规则推导类型：
+| 层次 | 本例使用什么 | 从哪里观察 |
+| --- | --- | --- |
+| 依赖与命令 | pnpm、`package.json`、锁文件 | [启动与检查脚本](../../examples/minimal-mcp/package.json)，以及固定的依赖版本 |
+| 类型与编译 | TypeScript、`tsc`、strict 模式 | [tsconfig.json](../../examples/minimal-mcp/tsconfig.json)：源码怎样检查、输出到哪里 |
+| 程序运行 | Node.js | [client.ts](../../examples/minimal-mcp/src/client.ts)：启动服务子进程、连接与关闭 |
+| 数据契约 | Zod | [contracts.ts](../../examples/minimal-mcp/src/contracts.ts)：输入输出规则与类型推导 |
+| 工具通信 | MCP SDK | `listTools()` 发现工具，`callTool()` 发起调用，`registerTool()` 注册实现 |
+| 业务与存储 | 普通函数、`node:fs/promises`、Markdown | [server.ts](../../examples/minimal-mcp/src/server.ts)：真正读写文件的位置 |
+| 验证 | `node:test`、`assert` | [server.test.ts](../../examples/minimal-mcp/tests/server.test.ts)：正常、失败和重启后的行为 |
+
+### 1. 源码怎样成为运行中的程序
+
+本例的 `pnpm demo` 先用 `tsc` 编译，再用 Node 执行 `dist/src/demo.js`。编译检查类型并输出 JavaScript；运行阶段才会建立连接、读写文件。`@types/node` 提供 Node API 的类型声明，实际能力由 Node 运行时提供。
+
+先认识 ESM 的 `import/export`，再看本例的 `NodeNext` 配置。源码中的 `import './server.js'` 对应编译后的运行文件；Node 的 ESM 相对导入要求明确扩展名。[TypeScript 模块说明](https://www.typescriptlang.org/docs/handbook/2/modules.html)、[Node ESM 扩展名规则](https://nodejs.org/api/esm.html#mandatory-file-extensions)
+
+### 2. 类型与 Zod 怎样分工
+
+优先掌握 `unknown`、可选属性、联合类型、类型收窄和基础泛型。比如 `resume` 返回 `found: false` 或 `found: true` 两种结果，检查 `found` 后，TS 才能确认是否可以读取 `note`。
+
+TypeScript 的类型标注不会自动校验运行时收到的数据。`next: ''` 仍是合法的 `string`；本例的 `z.string().trim().min(1)` 会在实际校验时拒绝空字符串和纯空白内容。[类型擦除](https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types)、[Zod 文档](https://zod.dev/)
+
+Zod 适合本例的输入输出边界。同一份 schema 用于校验，并推导 TS 类型，避免另写一份容易不同步的定义：
 
 ```ts
 export type CheckpointInput = z.infer<typeof saveCheckpointInputSchema>;
 ```
 
-客户端也校验 `structuredContent`；`found: true` 时才有 `path/note`。ESM + `NodeNext` 下，本地导入写 `.js`，编译后供 Node 读取。
+客户端收到 `structuredContent` 后，也通过 `outputSchema.parse(...)` 检查结果。已经校验过的数据在内部函数间传递时，通常依靠 TS 类型即可，无需每一层重复解析。
 
-[stdio.ts](../../examples/minimal-mcp/src/stdio.ts) 由客户端启动；SDK 处理协议。stdout 传消息，stderr 写日志。[日志说明](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server#logging-in-mcp-servers)
+MCP 使用 JSON Schema 描述工具，SDK 可以把 Zod schema 转换为对应描述。Zod 是本项目的选择；当前 TypeScript SDK 也接受符合其 Standard Schema 接口要求的其他库。[MCP 工具定义](https://modelcontextprotocol.io/specification/2026-07-28/server/tools#tool)、[SDK 的 schema 接口](https://github.com/modelcontextprotocol/typescript-sdk#packages)
+
+### 3. 异步操作怎样开始、结束和清理
+
+先理解 `Promise`、`async/await`、串行与并发、`try/catch/finally`，再学习超时与取消。`await` 等待当前操作完成；某一步失败后，仍需释放已经建立的资源。
+
+从 [withClient()](../../examples/minimal-mcp/src/client.ts) 读这一小段：
+
+```ts
+try {
+  await client.connect(transport);
+  return await run(client);
+} finally {
+  await client.close();
+}
+```
+
+这里的 `return await` 让 `finally` 在任务完成或失败后执行；如果直接返回尚未完成的 Promise，连接可能提前关闭。后续接网络请求、流式模型输出时，再沿同一条调用路径传递取消信号，并检查资源是否真正释放。
+
+### 4. 数据经过进程边界时，哪些层在工作
+
+| 概念 | 在本例中的职责 |
+| --- | --- |
+| TypeScript 类型 | 编写和编译时检查代码如何使用数据 |
+| Zod schema | 运行时检查实际收到的字段与取值 |
+| JSON | 表示可序列化的数据 |
+| JSON-RPC | 约定请求、结果和错误的消息结构 |
+| MCP | 约定工具发现、调用等能力 |
+| stdio | 在客户端与服务端进程之间传递消息；HTTP 是另一种传输选择 |
+
+[stdio.ts](../../examples/minimal-mcp/src/stdio.ts) 由客户端启动，SDK 处理协议消息。客户端 demo 可以用 `console.log()` 展示结果；服务端 stdout 留给协议，日志用 `console.error()` 写到 stderr。[stdio 传输约定](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)
+
+接入模型后，调用链还会增加决策与反馈：用户需求 → 模型给出工具名和参数 → 应用通过 MCP 执行 → 结果回传模型。本例先用固定脚本观察通信，后面的 [Harness 课程](03-build-a-harness.md)负责串起模型与工具循环。
+
+### 5. 怎样区分业务结果与真正的失败
+
+“没有记录”“参数非法”“文件读取失败”应有不同处理。本例用 `found: false` 表示正常的未找到；非法参数由 SDK 按输入规则拒绝；文件系统错误返回工具失败，再由客户端传播异常。
+
+读测试时，观察它怎样确认：坏输入没有写入文件、重启后仍能读回内容、保存一个项目不会覆盖另一个项目。测试验证的是可观察的行为，不能只检查是否打印了成功日志。
+
+在仓库根目录运行已有检查：
 
 ```bash
 pnpm --dir examples/minimal-mcp typecheck
@@ -156,7 +222,17 @@ pnpm --dir examples/minimal-mcp build
 pnpm --dir examples/minimal-mcp check
 ```
 
-分别检查类型、编译、运行完整检查。[测试](../../examples/minimal-mcp/tests/server.test.ts)覆盖持久化、隔离、参数和文件错误。`demo/test` 自动先编译；`start` 只启动已有产物。
+分别检查类型、编译、运行完整检查。`check` 包含类型检查与测试；`demo/test` 自动先编译；`start` 只启动已有产物。
+
+### 出现具体需求后，再增加技术
+
+| 出现什么需求 | 可以考虑什么 |
+| --- | --- |
+| 提供 HTTP 接口、路由和中间件 | [Hono](https://hono.dev/docs/getting-started/nodejs)，可通过适配器运行在 Node.js 上 |
+| 数据需要查询、关联和事务 | SQLite；希望用 TS 组织查询时，再考虑 [Drizzle](https://orm.drizzle.team/docs/sqlite/get-started-sqlite) |
+| 接入多家模型，统一模型调用接口 | [AI SDK](https://ai-sdk.dev/docs/introduction)，提供跨模型提供商的集成能力 |
+
+这些是按需求扩展的候选，不是本例的依赖。当前最适合拆开读的是 `withClient()`：把异步执行、子进程、stdio、返回值校验和资源关闭连成一次完整调用。资料核对：2026-10-28；依赖版本以本例 `package.json` 与锁文件为准。
 
 </details>
 

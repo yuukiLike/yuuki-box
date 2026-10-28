@@ -2,13 +2,13 @@
 
 [课程目录](README.md) · [Harness 那一篇](03-build-a-harness.md)
 
-**这一篇是故事，不是跟做。** 它不讲 API，也不要求你改代码。它只回答一个问题：主线里那些看起来理所当然的东西——工具循环、function calling、MCP、Harness——分别是从哪里来的？
+**这一篇是故事，不是跟做。** 它不讲 API，也不要求你改代码。它只回答一个问题：主线里那些看起来理所当然的东西——工具循环、function calling、MCP、Harness、Skills——分别是从哪里来的？
 
 先把结论放在前面：**今天的 Agent 行业不是被设计出来的，是被拼出来的。** 几乎每个关键零件，都来自一个当时没成、或者没想那么远的东西。
 
-## 先记住四个零件
+## 先记住五个零件
 
-绕开产品名，先看四件事：
+绕开产品名，先看五件事：
 
 | 零件 | 解决的问题 | 后来的代表 |
 | --- | --- | --- |
@@ -16,6 +16,7 @@
 | 动作接口 | 模型怎样把“我想做什么”说成程序能执行的东西 | function calling |
 | 执行机构 | 谁真正动手，以及怎样保证它不闯祸 | Code Interpreter、Harness |
 | 发现协议 | 工具怎样被找到、被调用，而不必一家家写适配器 | MCP |
+| 流程复用 | 同类任务怎样复用步骤、脚本与参考资料 | Skills |
 
 后面出现的产品，基本都在补其中一块。有时补上了，有时只留下一个教训。
 
@@ -195,6 +196,20 @@ MCP 解决的是一个很朴素的问题：**N 个 Host × M 个工具，等于 
 
 到这一步，竞争点已经从“模型会不会调工具”变成“**系统能不能管住一个长循环**”。模型能力仍然重要，但 Harness 决定了它能不能安全地跑十分钟、一小时、一整天。
 
+## 2025 年 10 月：把做事方法封装成 Skills
+
+工具接好了，还有一件事要反复交代：**这类任务应该怎样做？** 比如每次整理 docs，都要说明先看目录、怎样拆章节、修改后检查哪些链接。这些做事方法也需要保存和复用。
+
+**2025 年 10 月 16 日，Anthropic 正式推出 Agent Skills。** Skills 把任务说明、脚本和资源组织成目录，供 Agent 按需使用；同一天发布的工程文章解释了以 `SKILL.md` 为入口的结构。[发布公告](https://claude.com/resources/articles/skills)、[设计介绍](https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills)
+
+它的关键是**渐进加载**：先提供名称和描述，匹配任务时再读取 `SKILL.md` 正文，之后按需读取参考资料或执行脚本。这样可以准备许多任务流程，而不必在每次请求里塞入全部内容。[加载机制](https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills)
+
+把它放回前面的故事：MCP 负责接通工具，Skills 可以说明怎样用这些工具完成某类任务，Harness 负责实际运行与控制。比如 MCP 提供读取 Issue、查看 diff 的能力，Skill 保存一套复现、修改、验证的步骤。Skill 也可以只使用本地文件和脚本。
+
+**2025 年 12 月 18 日，Anthropic 将 Agent Skills 发布为开放标准**，让这种格式可以被不同平台采用。首次推出与开放标准发布是两个节点；更早的 Voyager 等研究已经探索过技能复用，不能把这种思想的起点也算到 2025 年。[官方更新说明](https://claude.com/resources/articles/skills)
+
+留下的零件：**可复用的任务流程、按需加载的知识与可分享的技能目录。** 想动手时，再读 [Skills：结构与触发](../agent-engineering/03-skills-structure.md)。
+
 ## 一张零件表
 
 | 时间 | 事件 | 留下的零件 |
@@ -214,6 +229,8 @@ MCP 解决的是一个很朴素的问题：**N 个 Host × M 个工具，等于 
 | 2024.10 | Computer use | GUI 作为通用工具 |
 | 2024.11 | MCP | 工具发现与调用协议 |
 | 2025 | Coding agents | Harness 工程 |
+| 2025.10.16 | Agent Skills 正式推出 | 任务流程封装、渐进加载 |
+| 2025.12.18 | Agent Skills 发布为开放标准 | 跨平台复用技能格式 |
 
 ## 回到你的项目
 
@@ -239,6 +256,7 @@ MCP 解决的是一个很朴素的问题：**N 个 Host × M 个工具，等于 
 - Code Interpreter 想让人在聊天框里做数据分析
 - AutoGPT 想做一个全自动 Agent
 - MCP 想少写几遍适配器
+- Skills 想把做事方法保存下来，供同类任务复用
 
 没有人是在造“Agent 行业”。但探索期会产生大量局部最优，标准期会把可复用的接口固化，生态期再在标准上长产品。失败的产品贡献失败模式，成功的产品贡献交互范式。
 

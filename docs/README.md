@@ -32,7 +32,7 @@
 
 先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再看[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)，对照 OpenAI 与 Claude 的官方案例；之后沿[四小时主线](ai-from-scaling/README.md)从缩放定律走到字符模型训练，搭出自己的工具调用 Harness。独立演示跟写约 30 分钟，主线保留原来的四小时安排。
 
-想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling 与 MCP 串成一条故事线，不要求跟做。
+想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
 
 想先接入一个真实软件，做[第二个 MCP：Blender 建模](ai-from-scaling/05-blender-mcp.md)，用同样的 TS 工程生成可编辑模型、预览图与 STL。
 
