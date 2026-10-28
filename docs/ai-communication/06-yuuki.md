@@ -29,7 +29,7 @@ MCP 工具还没有接入当前 runtime。虚线表示后续练习；目前执�
 能在代码里指出 **“哪里发请求、哪里收文字、哪里执行工具”**，这一轮就完成了。
 
 <details>
-<summary>再看：页面怎样收到变化</summary>
+<summary>页面怎样收到变化</summary>
 
 页面与 runtime 用 JSONL 通信，一行一条 JSON。它们使用自己的命令和事件格式。
 
@@ -50,7 +50,7 @@ runtime 发给页面的文字变化类似：
 </details>
 
 <details>
-<summary>以后想继续，再选一个</summary>
+<summary>后续学习入口</summary>
 
 - 想自己写工具循环：[搭建 Harness](../ai-from-scaling/03-build-a-harness.md)。
 - 想接外部工具：[MCP 工具源](../agent-engineering/01-mcp-tool-source.md)。

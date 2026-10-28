@@ -91,13 +91,16 @@ import_music → create_score_scene → set_transport
 
 `update_scene` 要求携带 `inspect_scene` 返回的当前版本；旧界面拿旧版本更新时会被拒绝，防止覆盖较新的配置。当前保护覆盖单个服务进程内的并发修改，同一数据目录由一个可写实例管理。
 
-## 为什么声音和画面能对齐
+<details class="qa" id="为什么声音和画面能对齐">
+<summary>声音和画面怎样对齐？</summary>
 
-MIDI 先生成同样起点与时长的声部 WAV。浏览器用同一个 `AudioContext` 同时启动选中的声部，从同一个偏移播放；画面读取同一音频时钟。暂停和重新定位会停止旧音源，再从新的时间重建播放。
+MIDI 声部 WAV 使用相同起点，浏览器从同一个 `AudioContext` 时钟播放并更新画面。暂停或定位后重建音源。
 
-没有启用音频时，预览仍能按时间轴检查画面。导出时则逐帧使用 `start + frame / fps`，同时从相同起点截取音频，避免靠实际录屏的帧率维持同步。
+导出按 `start + frame / fps` 渲染，从相同起点截音频，因此不依赖录屏速度。未启用音频时仍可检查画面。
 
-渲染使用较新的 [Three.js WebGPURenderer](https://threejs.org/docs/pages/WebGPURenderer.html)，默认优先 WebGPU、不可用时回落 WebGL2；两个场景都使用 TSL 节点材质与 Bloom 辉光合成。圆环与绕环路径由明确规则构成，音符数据来自 MIDI。
+渲染用 [Three.js WebGPURenderer](https://threejs.org/docs/pages/WebGPURenderer.html)，优先 WebGPU，必要时回退 WebGL2；TSL 材质与 Bloom 处理颜色和辉光。
+
+</details>
 
 ## 保存、重新打开与导出
 

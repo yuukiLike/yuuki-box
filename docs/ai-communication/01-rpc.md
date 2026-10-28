@@ -41,7 +41,7 @@ node docs/ai-communication/labs/01-rpc.ts
 能说清 **“一个进程发请求，另一个进程执行，再返回同一个 id 的回答”**，就完成了。
 
 <details>
-<summary>想看代码，再展开</summary>
+<summary>代码入口</summary>
 
 先只找两处：
 
@@ -59,7 +59,7 @@ node docs/ai-communication/labs/01-rpc.ts
 </details>
 
 <details>
-<summary>想试一次错误</summary>
+<summary>试一次错误输入</summary>
 
 把客户端的 `name: 'welcome'` 改成 `name: 'missing'`，再运行。
 

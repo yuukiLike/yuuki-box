@@ -116,7 +116,7 @@ Pi 和 DeepSeek Harness 的内部字段采用分桶计数，`input` / `inputToke
 **这一站完成了：能读出 10,000 个输入中，8,000 个命中。** 可以先停下；下次看 [Harness 怎样组织这些请求](04-deepseek-harness.md)。下面保留实际研究时要查的细节。
 
 <details>
-<summary>选读：SSE 流式响应在哪里取 usage</summary>
+<summary>SSE 流式响应在哪里取 usage</summary>
 
 ### 流式响应在哪里取 usage
 
@@ -129,7 +129,7 @@ Pi 和 DeepSeek Harness 的内部字段采用分桶计数，`input` / `inputToke
 </details>
 
 <details>
-<summary>选读：回到 Yuuki 源码，找到请求与观测入口</summary>
+<summary>回到 Yuuki 源码，找到请求与观测入口</summary>
 
 ## 在 Yuuki 源码里读一次请求
 
@@ -163,7 +163,7 @@ Pi 和 DeepSeek Harness 的内部字段采用分桶计数，`input` / `inputToke
 </details>
 
 <details>
-<summary>准备动手时再展开：一次只改一个因素的 API 实验</summary>
+<summary>一次只改一个因素的 API 实验</summary>
 
 ## 准备一次有对照的 API 实验
 

@@ -2,23 +2,21 @@
 
 [专题入口](README.md) · [上一篇 DeepSeek 缓存规则](03-prefix-cache-and-yuuki.md) · [下一篇 Pi](05-pi.md)
 
-模型服务管理 KV，Harness 决定每次提交什么。研究 DeepSeek Harness（`dsh`）时，先追踪一件具体的事：**一次工具调用之后，下一次请求的前部还保留了多少原样内容？**
+模型服务管理 KV，Harness 组织请求。读 `dsh` 时只追一件事：**工具调用后，下一次请求保留了多少原样前缀？**
 
 
 ## 先从你写过的请求函数理解 Harness
 
-前端调用接口时，会准备请求数据、等待响应、处理错误，再把新结果写回状态。模型如果还要求读取文件，就需要有人执行工具，把结果放进历史，再发下一次请求。
-
-**Harness 可以先理解为把这些运行步骤串起来的外层程序。** 模型输出了 `read_file` 参数，只代表它提出了请求，文件读取仍由程序执行。
+Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，程序真正读取，再把结果加入下一轮。
 
 [![用户输入后，Harness 装配规则、历史和工具定义；模型提出 read_file；Harness 执行并把结果加入历史，再进行模型请求](../../site/public/diagrams/kv-cache/12-harness-loop.svg)](../../site/public/diagrams/kv-cache/12-harness-loop.svg)
 
-这里先认一个词：**装配上下文**就是决定这次发哪些消息、规则和工具定义。读图时，只追踪每一步新增了什么内容。
+**装配上下文**：决定本次发送的消息、规则与工具定义。
 
 **第一停点：模型提议，Harness 执行并接着组织请求，服务端判断缓存命中。** 分清三者之后，再看下面三个小选择。
 
 <details>
-<summary>想读源码时：先看一个判断，再沿五个入口追踪</summary>
+<summary>源码追踪：一个判断、五个入口</summary>
 
 ## 第一眼，先看“不需要更新”的分支
 
@@ -50,11 +48,11 @@
 
 ### 2. 动态上下文变化时，再留下新快照
 
-**快照**就是某个时刻的一份内容。在这里，程序比较前后两份动态说明，内容相同就不必再追加一份。**投影**则是从已有记录生成本次需要的表示；可以借用前端从 state 得到视图数据的经验理解。
+快照是某一刻的内容；投影从已有记录生成本次表示，类似从 state 生成视图数据。
 
 `RuntimeContextProjection.project` 比较当前内容与保留的快照，一致时不产生更新。系统提示的注册表也把进程相关路径、端点等列入 runtime context 的职责。[动态投影](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L151)、[context 分区](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/src/index.ts#L178)
 
-这里可以借鉴的原则是：先判断内容是否真的变化，再决定如何进入上下文。时间、工作区和环境变化仍需正确告知模型；为了缓存省略必要信息，会破坏任务语义。
+未变的内容不重复追加；时间、工作区等必要变化仍需告诉模型。
 
 ### 3. 支持历史内 system 更新的路由，才保留这种布局
 
@@ -62,7 +60,7 @@
 
 [![支持历史内 system 更新时，有效规则 S1 不变可以保留消息原位；把 S1 搬到开头会改变原有前缀](../../site/public/diagrams/kv-cache/13-prompt-move.svg)](../../site/public/diagrams/kv-cache/13-prompt-move.svg)
 
-图里文字的最终含义可以相同，输入顺序却变了。就像前端缓存的依赖变了，不能仅凭最后显示的一行文字相同，断言所有中间结果还有效。
+最终指令相同，不代表输入序列相同；移动位置也可能破坏前缀。
 
 `SystemPromptProjection` 根据路由的 `inHistory` 能力、当前提示与请求序列边界，选择追加、保持原位或重建头部。不能把“system 一律往后追加”作为所有接口通用的优化。
 
@@ -71,15 +69,15 @@
 **这一站完成了：工具顺序、动态快照和规则位置，都可能改变请求前缀。** 下次从 [Pi 怎样翻译接口用量](05-pi.md)继续。
 
 <details>
-<summary>选读：dsh 与 Pi 的关系，以及两个适配层的字段</summary>
+<summary>dsh 与 Pi 的关系，以及两个适配层的字段</summary>
 
 ## 与 Pi 的关系：模型适配层可以复用
 
-**适配器**可以先理解成一段「翻译接口」的代码：把应用的数据变成供应商需要的请求，再把响应变回应用使用的格式。
+适配器把应用数据转成供应商请求，再把响应转回。
 
 `@deepseek-ai/dsh-llm-pi-ai` 是 dsh 的模型适配包，声明依赖 `@earendil-works/pi-ai`；同仓也保留 `llm-deepseek` 专用实现。[适配包声明](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-pi-ai/package.json)
 
-这一关系允许我们沿接口继续读 Pi，但不能据此把整个 DeepSeek Harness 当作 Pi 的 Agent 循环。也不能认为这份 dsh 快照实际安装的 Pi 依赖，必然等于下一篇单独选取的 Pi 主干快照。
+复用 Pi 模型层不等于复用它的 Agent 循环；下一篇的独立快照也不代表 dsh 安装的依赖版本。
 
 `mapUsage` 的对应关系很直接：
 
@@ -98,7 +96,7 @@ dsh 的 [`TokenUsage` 契约](https://github.com/deepseek-ai/deepseek-harness/bl
 </details>
 
 <details>
-<summary>选读：上游测试、证据边界与带回 Yuuki 的小研究</summary>
+<summary>上游测试与 Yuuki 练习</summary>
 
 ## 上游怎样验证，本文验证到了哪一步
 

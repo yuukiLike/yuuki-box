@@ -193,6 +193,40 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
 .sl-markdown-content table { font-size: .875rem; line-height: 1.8; }
 .sl-markdown-content th { background: var(--yuuki-panel); }
 .sl-markdown-content th, .sl-markdown-content td { border-bottom-color: var(--yuuki-border); }
+/* Keep questions and optional depth available without interrupting the reading path. */
+.sl-markdown-content details {
+  --disclosure-color: var(--topic-sky);
+  padding: .55rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  border-radius: 0;
+  background: none;
+}
+.sl-markdown-content details.qa {
+  --disclosure-color: var(--topic-emerald);
+}
+.sl-markdown-content details + details { margin-top: 0; }
+.sl-markdown-content details > summary {
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+  color: var(--sl-color-gray-2);
+  font-size: .9375rem;
+  font-weight: 400;
+  line-height: 1.7;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.sl-markdown-content details > summary::before {
+  --sl-details-marker-size: 1rem;
+  margin-inline: 0 .25rem;
+  background-color: var(--disclosure-color);
+  opacity: .7;
+}
+.sl-markdown-content details[open] > summary {
+  margin-bottom: .65rem;
+  color: var(--disclosure-color);
+}
+.sl-markdown-content details > :last-child { margin-bottom: 0; }
 .pagination-links a { border-color: var(--yuuki-border); border-radius: .7rem; box-shadow: none; }
 .pagination-links a:hover { background: var(--yuuki-panel); border-color: var(--sl-color-accent); }
 footer .meta:empty { display: none; }

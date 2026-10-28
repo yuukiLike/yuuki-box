@@ -36,7 +36,7 @@ node docs/ai-communication/labs/05-failure.ts
 能解释 **“停止等待以后，还要通知真正做事的一方停止”**，就完成了。
 
 <details>
-<summary>想看代码与迟到的结果</summary>
+<summary>代码与迟到结果</summary>
 
 源码：[05-failure.ts](labs/05-failure.ts) · [rpc-client.ts](labs/rpc-client.ts) · [note-server.ts](labs/note-server.ts)。
 
@@ -55,8 +55,8 @@ node docs/ai-communication/labs/05-failure.ts
 
 </details>
 
-<details>
-<summary>选读：怎样把取消传下去</summary>
+<details class="qa">
+<summary>怎样把取消传下去？</summary>
 
 MCP 普通请求可用 `notifications/cancelled` 告知对方取消哪个请求。取消可能来晚，仍要处理迟到结果；任务增强请求另用 `tasks/cancel`。[取消规范](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/cancellation)
 

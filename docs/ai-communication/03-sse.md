@@ -43,7 +43,7 @@ data: {"text":"你好"}
 实验最后还演示了只有文字、没有完成标记就断开的情况。它会保留文字，完成状态仍为否。
 
 <details>
-<summary>想看代码与分片细节</summary>
+<summary>代码与分片细节</summary>
 
 源码：[03-sse.ts](labs/03-sse.ts) · [sse.ts](labs/sse.ts)。
 
@@ -58,7 +58,7 @@ SSE 用 UTF-8；多行 `data` 用换行拼接。教学解析器支持 LF/CRLF、
 </details>
 
 <details>
-<summary>以后再看：EventSource、fetch、WebSocket、WebRTC</summary>
+<summary>EventSource、fetch、WebSocket、WebRTC</summary>
 
 | 名字 | 先记这个用途 |
 | --- | --- |

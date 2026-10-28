@@ -22,7 +22,7 @@ AI 说修好了，你重新打开页面、找到入口、再走一遍，结果�
 这些材料提示，返工至少有三种原因：**原问题未修好、关联流程被改坏、体验仍未达到期待**。前两类适合让 AI 在交付前复现问题、运行回归测试并审查改动；第三类需要固定对照条件，方便你判断差异。新增的产品想法另行记录，避免把正常探索算成修复失败。
 
 <details>
-<summary>本次分析查阅了哪些本地材料</summary>
+<summary>本地材料</summary>
 
 - `for-job/tests/qa/chrome-10-rounds-2026-10-15/README.md` 与 `round-10/report.md`：历史验收、修复和实际导出记录。
 - `web-translate/AGENTS.md` 与 `test/unit/background-status.test.mjs`：当前验证限制与回归用例；结合 2026-10-21 的修复记录核对过程。

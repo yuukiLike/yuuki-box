@@ -11,11 +11,11 @@
 3. 查看请求方与权限说明，选择允许或拒绝。
 4. 回到 Codex，发送“用天气服务查一下上海现在的天气”。
 
-Token 的交换与携带由客户端处理。不要把复制 token、填写环境变量变成普通用户的安装步骤。开发者联调命令放在[第五课](05-connect-and-verify.md)。[Codex MCP 支持](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)、[插件连接配置](https://developers.openai.com/plugins/build/plugins)
+客户端负责交换和携带 token；用户只需连接与授权。开发者联调见[第五课](05-connect-and-verify.md)。[Codex MCP 支持](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)、[插件连接配置](https://developers.openai.com/plugins/build/plugins)
 
 [![浏览器中的天气服务授权页覆盖在 Codex 风格窗口前方，用户可允许或拒绝](../../../site/public/diagrams/weather-mcp/02-consent.svg)](../../../site/public/diagrams/weather-mcp/02-consent.svg)
 
-登录同意页属于你的网站；它不是在 Codex 对话里询问用户密码。图中的客户端名称只是示例，真实页面必须读取 Supabase 返回的授权请求详情。
+同意页属于你的网站，客户端名称应读取真实授权请求；用户密码不进入 Codex 对话。
 
 ## 登录与授权分别证明什么
 
@@ -57,11 +57,14 @@ Codex → 天气 MCP：带上 access token 再请求
 
 两个 HTTP 请求都可以出现 `Authorization: Bearer ...`，但其中装的是不同凭证。**用户 token 不转发给 Apple；Apple token 和私钥不返回给 Codex。**[Apple 请求认证](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
 
-## 为什么这里还有 Host
+<details class="qa" id="为什么这里还有-host">
+<summary>为什么还需要 Host？</summary>
 
-Codex 需要接收自然语言、调用模型、选择工具、展示回答。MCP Client 是它负责协议通信的那部分。你开发的是远程 Server，不需要再开发一个 Host，也不需要把 Client 放进你的天气服务交付包。
+Codex 组织对话、模型与展示，内置 Client 处理 MCP 通信。你只开发远程 Server。
 
-如果只想验证接口，可以用 MCP Inspector 或脚本作为客户端；那时不必引入模型。先验证接口，再验证 Codex 的实际体验。
+联调可先用 Inspector 或脚本，不必接模型；接口通过后再验收 Codex 体验。
+
+</details>
 
 ## 用户拒绝、令牌过期与额度用完
 

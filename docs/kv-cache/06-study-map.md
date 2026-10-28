@@ -21,7 +21,7 @@
 后面那些词是回查入口。当前的问题解释通，就可以停下，记录下一次从哪一节继续。
 
 <details>
-<summary>遇到陌生词时：用前端语言回查基础词汇</summary>
+<summary>基础词汇对照</summary>
 
 | 词 | 先这样理解 | 再注意一个边界 |
 | --- | --- | --- |
@@ -43,7 +43,7 @@
 </details>
 
 <details>
-<summary>选读：完整知识地图与一手资料</summary>
+<summary>知识地图与一手资料</summary>
 
 ## 知识之间怎样连接
 
@@ -64,8 +64,8 @@ MLA 这一行指向 DeepSeek-V2 的具体设计。不要把旧模型论文中的
 
 </details>
 
-<details>
-<summary>选读：这些东西都叫缓存，保存的却是什么？</summary>
+<details class="qa">
+<summary>不同缓存分别保存什么？</summary>
 
 ## 容易混在一起的几种“缓存”
 

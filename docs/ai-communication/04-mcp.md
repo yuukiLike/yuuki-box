@@ -6,11 +6,9 @@
 
 [上一课](03-sse.md) · [目录](README.md) · [下一课](05-failure.md)
 
-**这一课的目的：把“先问有哪些工具，再按约定调用”对应到代码和协议消息。**
+复用[MCP 演示](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 
-复用[第一个 MCP 演示](../ai-from-scaling/00-minimal-mcp.md)。这次重点看两个方法：`tools/list` 返回工具名称和输入规则，`tools/call` 发送具体工具名与参数。前者发现的是已连接服务提供的工具，不是扫描电脑或搜索互联网来寻找 MCP 服务；服务启动命令在 `client.ts` 中已经指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
-
-**你来做：看输出 → 顺时序找代码 → 对照一次调用的名称、参数和结果。**
+**看输出 → 找代码 → 对照名称、参数与结果。**
 
 ## 先分清：你、Host、Client、Server
 
@@ -22,12 +20,12 @@
 | **Server：能力提供程序** | 提供工具、资源或提示模板；收到调用后访问实际文件、浏览器或业务 API | 你安装、连接或自己编写的 MCP 服务 |
 | 模型（LLM） | 根据上下文提出工具调用，收到结果后继续回答 | Host 通过模型接口联系它；图中紫色连接表示模型 API，绿色连接表示 MCP |
 
-**一个 Host 可以管理多个 Client，每个 Client 负责一条 Server 连接；同一个远程 Server 可以同时服务多个平台的 Client。** 这些是角色分工：本机运行的程序也可以是 Server。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
+**Host 可管理多个 Client，每个 Client 连接一个 Server。远程 Server 可服务多个平台；本机程序也可以是 Server。**[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
 
-平时大家也会把整个 Codex 或 Zed 叫作“MCP 客户端”。这是从使用者角度说“它能接 MCP”；严格拆开内部结构时，整个应用是 Host，负责协议连接的组件是 Client。
+日常说 Codex 是“MCP 客户端”，指它能接 MCP；按内部职责，它是 Host。
 
-<details>
-<summary>图里的四个平台，分别怎样接入 MCP？</summary>
+<details class="qa">
+<summary>Codex、Zed、Warp、Raycast 怎样接入？</summary>
 
 以下支持方式核对于 **2026-10-26**，指各平台自己的 AI / Agent 功能接入外部 Server。
 
@@ -38,14 +36,14 @@
 | [Warp](https://docs.warp.dev/agents/capabilities/mcp/) | Settings → Agents → MCP servers；添加启动命令或 URL | 本地命令、Streamable HTTP，也兼容 SSE 连接；此处指 Warp 应用内的本地 Agent |
 | [Raycast](https://manual.raycast.com/ai/model-context-protocol) | `Install MCP Server` / `Manage MCP Servers`；在 AI Chat、Quick AI 等入口使用 | 桌面支持 stdio 和 HTTP，HTTP 支持 OAuth；iOS 只支持 HTTP |
 
-复用同一个 Server 时，各平台分别管理配置、登录授权和会话。能否连接还取决于双方支持的传输、认证和具体功能。比如把 GitHub MCP 接到 Codex 和 Raycast，意味着两边各有自己的连接，可以访问授权范围内的 GitHub 数据。
+各平台分别配置、授权和连接。能否复用 Server，取决于双方的传输、认证与功能支持。
 
 “在 Warp 终端里运行 Codex CLI”时，直接连接 MCP 的是 Codex；使用 Warp 自己的 Agent 时，则由 Warp 管理连接。Zed 的内置 Agent、外部 Agent 和终端线程也有各自的配置路径，详见上表官方文档。
 
 </details>
 
-<details>
-<summary>图中常见的 MCP Server，各自提供什么？</summary>
+<details class="qa">
+<summary>常见 MCP Server 提供什么？</summary>
 
 以下按用途举例，不是热度排行榜。服务提供的 Tools、Resources、Prompts，以及平台能使用其中哪些功能，都以双方实际支持为准。
 
@@ -58,7 +56,7 @@
 | [Sentry MCP](https://mcp.sentry.dev/) | 查询错误、性能与项目问题 | 授权范围内的 Sentry 项目 |
 | [Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) | 读写允许目录中的文件 | 本机文件系统；这是 MCP 的参考实现之一 |
 
-你自己的「接着做」也处在 **Server** 的位置：Host 里的 Client 调用 `save_checkpoint` / `resume`，服务端代码读写 Markdown。接入 Codex 时，这个 Client 由 Codex 提供；下面独立演示里的 `client.ts` 则是为了让你看见连接过程而单独写的。
+「接着做」是 Server，负责读写 Markdown。Codex 提供 Client；独立演示的 `client.ts` 用于观察连接过程。
 
 </details>
 
@@ -72,7 +70,7 @@
 pnpm --dir examples/minimal-mcp demo
 ```
 
-看到 `[MCP] tools/list → save_checkpoint, resume`，说明客户端拿到了清单；随后两次 `tools/call` 分别调用保存和读取工具，`[结果]` 显示各自的执行结果。重启后仍能取回原文，是工具读写同一份 Markdown 文件的效果；MCP 负责调用，不自动保存记录。演示由代码填写参数，安装依赖后离线运行，不需要模型。
+核对输出：`tools/list` 列出工具，两次 `tools/call` 保存和读取，`[结果]` 显示执行结果。重启后可取回，是因为读取同一份文件。演示离线运行，由脚本填参数。
 
 **完成标志：** 你能从输出中分出“发现工具”和“执行工具”两个阶段。
 
@@ -80,7 +78,7 @@ pnpm --dir examples/minimal-mcp demo
 
 [![2026-07-28 版极简 MCP 时序：SDK 查询服务信息，客户端发现和调用工具；重建连接后再查服务信息，调用取回并读取同一磁盘文件](../../site/public/diagrams/ai-communication/04-mcp-sequence.svg)](../../site/public/diagrams/ai-communication/04-mcp-sequence.svg)
 
-图按本例实际协商的 **2026-07-28** 版本画出逻辑交互，省略请求 ID、`_meta` 和 SDK 用于版本探测的短暂服务进程。`client.ts` 的 `versionNegotiation: { mode: 'auto' }` 让 SDK 先发送 `server/discover`，查询服务身份、支持的版本和能力；这与随后查询具体工具的 `tools/list` 是两件事。[服务发现规范](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
+图按 **2026-07-28** 交互绘制，省略 ID、`_meta` 和版本探测进程。`auto` 模式先用 `server/discover` 查服务与版本，再用 `tools/list` 查工具。[服务发现规范](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
 
 **你来做：** 在源码中沿三条线找位置：
 
@@ -88,7 +86,7 @@ pnpm --dir examples/minimal-mcp demo
 2. [client.ts](../../examples/minimal-mcp/src/client.ts) 的 `client.callTool({ name, arguments: args })` 对应发送调用。
 3. [server.ts](../../examples/minimal-mcp/src/server.ts) 的 `writeFile()` / `readFile()` 对应真正的文件操作。
 
-`demo.ts` 两次使用同一个目录，因此新服务能读回文件；整个演示结束后才清理临时目录。第二次连接仍由 SDK 查询服务信息，但调用方代码已经知道 `resume` 的名称与参数，所以直接调用它，没有再次执行 `listTools()`。
+两次服务共用目录，结束后才清理。第二次仍查询服务信息，但脚本已知 `resume` 参数，因此直接调用，不再查工具清单。
 
 **完成标志：** 你能指出哪条箭头跨过进程，以及哪条箭头真正改变了文件。
 
@@ -105,7 +103,7 @@ pnpm --dir examples/minimal-mcp demo
 - `project`：工具参数，决定读取哪份记录。
 - `id`：把请求与响应配对；这里的 `7` 是示意值。
 
-`resume`、`project`、`found` 和 `note` 都是本例定义的工具名或业务字段。换成 Blender 工具，会传 `modelId`，返回几何信息；协议方法仍是 `tools/call`。客户端检查 `structuredContent` 中的真实数据后，才把原文交给演示打印。终端的 `[MCP]`、`[结果]` 是日志标签，不是报文字段。
+`resume`、`project`、`found`、`note` 由业务定义；换工具后，协议方法仍可用 `tools/call`。客户端校验 `structuredContent` 后再显示结果。`[MCP]`、`[结果]` 只是日志标签。
 
 **完成标志：** 你能把工具名、参数、执行函数和返回原文连起来。
 
@@ -115,8 +113,8 @@ pnpm --dir examples/minimal-mcp demo
 
 ## 选读与参考
 
-<details>
-<summary>接上模型后，谁提出、谁安排、谁执行</summary>
+<details class="qa">
+<summary>接上模型后，谁提出、谁执行？</summary>
 
 [![接上模型后的分工：模型提出调用，应用检查并发出 MCP 请求，工具程序执行后返回结果](../../site/public/diagrams/ai-communication/04-mcp.svg)](../../site/public/diagrams/ai-communication/04-mcp.svg)
 
@@ -147,8 +145,8 @@ tools/call                  调用工具
 
 </details>
 
-<details>
-<summary>选读：MCP 与 SSE 的关系</summary>
+<details class="qa">
+<summary>MCP 与 SSE 有什么关系？</summary>
 
 这里引用的规范提供 stdio 和 Streamable HTTP 两种标准传输。前者按行发送 JSON-RPC；后者可以返回 JSON，也可以使用 SSE。[传输规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
 

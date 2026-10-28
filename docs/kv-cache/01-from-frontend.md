@@ -50,7 +50,7 @@ const formatted = useMemo(
 
 [![useMemo 依赖变化时重新调用整个计算；计算内部若自行保留兼容前缀状态，就可以复用前三项，只新算第四项](../../site/public/diagrams/kv-cache/05-cache-granularity.svg)](../../site/public/diagrams/kv-cache/05-cache-granularity.svg)
 
-图上半部分是整个返回值的缓存；下半部分是计算自己实现的前缀复用。先问「缓存的单位是什么」，再问「它省了哪些工作」。React 的依赖数组使用 `Object.is` 比较；模型缓存还要判断模型输入与计算配置，不能把两者的有效条件直接画等号。
+上半部缓存整个返回值，下半部自行复用前缀。React 用 `Object.is` 比较依赖；模型缓存还需检查输入与计算配置，有效条件不同。
 
 ## 只跑一个小实验
 
@@ -62,10 +62,10 @@ node docs/kv-cache/labs/prefix-cache.mjs
 
 先只找「末尾追加」一行：复用 3 项，新算 1 项。再看「修改第 2 项」一行：只复用第一项，从第二项开始重算。
 
-**这一站完成了：能解释为什么后面的输入没变，结果却可能变。** 今天可以停下；下次从[Q/K/V 是什么](02-attention-and-kv.md)接着读。
+**输入没变，依赖变了，结果也可能变。** 下一步：[Q/K/V](02-attention-and-kv.md)。
 
 <details>
-<summary>选读：并非所有数组计算都适合前缀复用</summary>
+<summary>并非所有数组计算都适合前缀复用</summary>
 
 | 计算 | 依赖什么 | 末尾追加 | 修改中间 |
 | --- | --- | --- | --- |
@@ -73,12 +73,12 @@ node docs/kv-cache/labs/prefix-cache.mjs
 | 累计和 | 到当前位置为止的前缀 | 旧结果有效 | 重算受影响后缀 |
 | 每项除以整个数组总和 | 依赖所有输入 | 旧结果也可能变化 | 所有结果都可能变化 |
 
-所以「追加了」本身不能证明缓存有效。固定宽度的独立消息行，和依赖全文的布局、引用解析、统计，也需要分别判断。[流式输出与渲染](../learning/rendering-performance.md)
+追加本身不能证明缓存有效，要检查独立消息行、全文布局、引用解析各自的依赖。[流式输出与渲染](../learning/rendering-performance.md)
 
 </details>
 
 <details>
-<summary>选读：缓存键还要考虑配置；完整实验数据</summary>
+<summary>缓存键还要考虑配置；完整实验数据</summary>
 
 实验的规则是 `total = previousTotal + currentInput * scale`。`scale` 是倍率配置；它变化时，即使输入相同，旧结果也必须失效。
 
@@ -99,7 +99,7 @@ node docs/kv-cache/labs/prefix-cache.mjs
 </details>
 
 <details>
-<summary>选做：故意让配置失效判断漏掉一个条件</summary>
+<summary>练习：故意让配置失效判断漏掉一个条件</summary>
 
 在[实验脚本](labs/prefix-cache.mjs)的副本里，把相同配置判断 `previous?.scale === scale` 改成仅检查 `previous` 是否存在。配置改变一行会触发断言，因为旧结果仍按倍率 1 保存。改回条件，检查结果恢复一致。
 

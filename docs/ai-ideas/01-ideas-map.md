@@ -15,7 +15,7 @@
 点击图片可打开 SVG 原图放大。各方向的来源、时间和小实验见[故障驱动、自动实验、模拟验收、规格驱动与知识整理](02-five-new-directions.md)。
 
 <details>
-<summary>展开可编辑的 Mermaid 源码</summary>
+<summary>Mermaid 源码</summary>
 
 ```mermaid
 mindmap

@@ -1,12 +1,10 @@
 # Apple 天气 MCP：从查询天气到安排出门
 
-**这一课的目标：把你的 Apple WeatherKit 权限接进一个日常能用的 MCP，让 AI 根据真实天气回答“要不要带伞”“什么时候适合出门”，并给出数据时间和判断依据。**
-
-你已经理解了 `new McpServer(...)` 声明服务、`registerTool(...)` 注册工具。这一课从这里继续：接真实 API、保护认证信息、整理有单位的数据、定义可解释的筛选规则，最后接入已有 AI 客户端。MCP 结构只回顾一次。
+把 WeatherKit 接进 MCP，查询真实天气，再按你的条件筛选出门时段。结果保留时间、单位与判断依据。
 
 配套实现：[examples/weatherkit-mcp](../../examples/weatherkit-mcp/README.md)。需要 Node.js ≥ 22.22、pnpm 11.14。离线部分不需要 Apple 密钥；真实查询需要有效的 Apple Developer Program 会员与网络。
 
-可以分三次做：先用 20 分钟看样本和改条件，再用 20–30 分钟配置 Apple 并取得真实天气，最后接入客户端并核对回答。当前没有密钥，也能完成前两节。
+分三次做：样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端。没有密钥可先做前两节。
 
 ## 先确定它能帮你做什么
 
@@ -16,9 +14,7 @@
 | 今天找两小时散步，别太热、风别太大 | 连续两小时逐项满足阈值的时段，以及每小时原始数值 | 本地函数执行筛选，模型转述理由 |
 | 周末去另一个城市，温差大吗？ | 两个配置地点的逐日最高/最低温和降雨概率 | 模型对照相同日期的数据 |
 
-服务提供三个工具：`list_locations`、`get_weather`、`find_outdoor_windows`。第一版使用你配置的常用地点；它不会凭城市名猜坐标，也不会把示例城市当成你的所在地。
-
-**天气数据来自 Apple；“适合我”的阈值来自你。** Apple WeatherKit 不会直接给出“建议你下午三点散步”这个结论。我们为这个决策整理了必要数据，并写出可核对的规则。
+三个工具：`list_locations`、`get_weather`、`find_outdoor_windows`。只查询你配置的地点。**Apple 提供天气，你设阈值，本地函数筛选时段。**
 
 ## 1. 跑通离线样本，先看一份有用的结果
 
@@ -41,7 +37,7 @@ pnpm --dir examples/weatherkit-mcp demo
 2026-10-26 16:00 起 2 小时 | 最大降雨概率 10%
 ```
 
-这是一份人工编写的数据，不是天气实况。`demo.ts` 使用 SDK 的内存传输连接客户端和服务端，真实执行工具发现与调用，但 HTTP 响应被明确替换成样本；没有语言模型参与。后面的真实入口不提供这种替换选项。
+这是人工样本，不能用于今天的安排。`demo.ts` 通过内存传输执行 MCP 调用，用样本替换 HTTP 响应，没有模型参与；真实入口不支持替换。
 
 打开 [demo.ts](../../examples/weatherkit-mcp/src/demo.ts)，找到对 `find_outdoor_windows` 的调用。它传入的是：
 
@@ -55,7 +51,7 @@ pnpm --dir examples/weatherkit-mcp demo
 
 默认规则还包括：降雨概率不超过 30%、风速不超过 20 km/h、体感温度在 5–32°C、UV 不超过 5、只选白天、活动在当地 07:00–22:00 内。它们是本项目的默认偏好，可以修改。
 
-**完成标志：** 你能指出结果用了哪个地点、哪个时区、多久的连续时段，以及 `mode=fixture` 为什么不能用于今天的安排。
+核对地点、时区、连续时长与 `mode=fixture`。
 
 ## 2. 改一个条件，理解“有用”来自哪里
 
@@ -67,9 +63,9 @@ maxRainChancePercent: 90,
 
 重新运行 `pnpm --dir examples/weatherkit-mcp demo`。
 
-**你要看到：** 当天结果变成从 09:00、11:00、13:00、15:00 开始的四个两小时时段。样本里 10:00 和 13:00 的降雨概率为 80%；之前这些小时切断了连续时段，现在更宽松的规则会接纳它们。18:00 起样本为夜间，默认仍然排除。
+结果应为 09:00、11:00、13:00、15:00 起的四个两小时时段。10:00 与 13:00 的 80% 降雨概率现在被接纳；18:00 后仍因夜间被排除。
 
-再把 `maxWindKph` 设为 `0`，保持 `durationHours: 2`，重新运行。样本风速为 12 km/h，所以没有时段被打印出来。这里的空结果表示**已有预报中没有符合条件的连续时段**，不是接口失败，也不是模型没回答。
+再设 `maxWindKph: 0`，保持两小时。样本风速 12 km/h，因此返回空时段：有预报，但没有匹配。
 
 打开 [forecast.ts](../../examples/weatherkit-mcp/src/forecast.ts)，找 `findWindows()`：
 
@@ -81,7 +77,7 @@ maxRainChancePercent: 90,
 
 **亲手检查一处边界：** 在 [fixtures/weather.ts](../../examples/weatherkit-mcp/fixtures/weather.ts) 里制造一个缺失小时，或把某小时的 `daylight` 改成 `undefined`。缺口不能拼成连续时段；要求白天时，未知值不能当作 `true`。修改样本以后先观察 `demo`；运行正式测试前恢复练习改动，因为测试使用同一份基准样本。
 
-这一步没有修改任何 MCP 协议代码。改动发生在参数和业务规则中：**MCP 让规则可以被客户端调用，规则本身决定返回结果是否有用。**
+**MCP 负责调用，业务规则决定筛选结果。**
 
 ## 3. 准备你的 Apple 配置
 
@@ -135,7 +131,7 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 
 使用 WGS84 经纬度，纬度在 -90 到 90、经度在 -180 到 180 之间；不同地图坐标系统不能直接混用。名称保持唯一，最多配置 20 个。时区采用 `Asia/Shanghai` 这样的 IANA 名称，旅行地点按当地时区填写。修改地点后重启服务。
 
-**完成标志：** 你有五项配置，私钥仍只保存在本机；能说明 Team ID 标识团队、Key ID 标识密钥、Service ID 标识服务。
+核对五项配置：Team ID 是团队，Key ID 是密钥，Service ID 是服务；私钥仅留本机。
 
 ## 4. 取回一份真实天气，再解释认证和缓存
 
@@ -145,9 +141,7 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 pnpm --dir examples/weatherkit-mcp live
 ```
 
-先确认三个工具和地点清单。此时程序已经读取配置、导入私钥并连接本地 stdio 服务，但**还没有请求 Apple**，因此不能据此宣布 Apple 认证成功。
-
-接着执行：
+这里只查工具与地点，**尚未请求 Apple**。继续执行才验证真实认证：
 
 ```bash
 pnpm --dir examples/weatherkit-mcp live 上海
@@ -174,13 +168,18 @@ pnpm --dir examples/weatherkit-mcp live 上海
 | [forecast.ts](../../examples/weatherkit-mcp/src/forecast.ts) | 统一结果单位和当地日期，计算连续时段 |
 | [stdio.ts](../../examples/weatherkit-mcp/src/stdio.ts) | 将服务接到客户端启动的进程标准输入/输出 |
 
-Apple 要求 JWT 使用 `ES256`，头部包含 `kid` 与 `TeamID.ServiceID` 形式的 `id`；载荷包含 `iss`、`sub`、`iat` 和 `exp`。本例用 `jose` 负责签名，令牌有效期设为 30 分钟，在到期前一分钟续签。这些是 Apple 认证与本项目的生命周期选择，和 MCP 的工具发现是两层。[Apple 认证说明](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
+<details class="qa">
+<summary>Apple 认证和天气缓存怎样工作？</summary>
 
-天气缓存最长五分钟，也不超过 Apple 返回的最早失效时间。`get_weather` 和 `find_outdoor_windows` 共享同一服务进程的缓存；首次还会读取署名资源。命中时保持原来的 `fetchedAt`，并返回 `cacheHit: true`。`refresh: true` 强制取新数据。失败不自动重试，不把过期缓存伪装成新天气。
+JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/exp`。本例由 `jose` 签名，有效 30 分钟，提前一分钟续签。[Apple 认证](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
 
-`pnpm live 上海` 每次都新建进程，所以两次单独运行不会共享缓存；连接同一 MCP 服务后连续追问，才会观察到复用。缓存不写到磁盘。
+同进程的两个天气工具共享内存缓存，最长五分钟且不超过 Apple 失效时间。命中保留原 `fetchedAt`，标记 `cacheHit: true`；`refresh: true` 强制刷新。失败不自动重试，不冒充新数据。
 
-**完成标志：** 你实际拿到一次 `mode=live` 的结果，并能解释天气发生时间、获取时间、缓存状态三者的区别。尚未准备密钥时，在这里停下，不把离线结果当成这一步通过。
+每次 `pnpm live 上海` 都新建进程，连续两次运行不会共享缓存。
+
+</details>
+
+拿到 `mode=live` 后，核对天气时间、获取时间与缓存状态。没有密钥则留待补做。
 
 ## 5. 接入已有客户端，让它帮助安排一天
 
@@ -213,13 +212,13 @@ Apple 要求 JWT 使用 `ES256`，头部包含 `kid` 与 `TeamID.ServiceID` 形�
 标注数据时间与来源，不把某个城市的结果套到另一个城市。
 ```
 
-此处由模型选择工具和填写参数。模型负责理解问题与解释结果，本地程序负责访问 API 和执行筛选。**不需要为每个 AI 客户端重新写 Apple 的认证和数据整理代码，这就是本例的 MCP 收益。**
+模型选择工具并解释结果，本地程序访问 API、执行筛选。同一服务可以复用到不同客户端。
 
 ### 检查最终展示，而不只看 JSON
 
 Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链接。[官方署名要求](https://developer.apple.com/weatherkit/#apple-weather-and-third-party-attribution)
 
-工具返回的 `source.attribution.logoLight`、`logoDark` 来自署名接口，`legalUrls` 来自天气元信息。验收时确认客户端最终回答显示合适的官方标识和可点击的来源链接，不能只在隐藏的工具结果里保留字段。纯文本终端不能显示标识时，不能宣称已经完成展示验收；面向其他用户发布前，要在能呈现署名的宿主界面完成这一步。样本中的标识路径是占位数据，不用于展示。
+最终回答须显示 `logoLight/logoDark` 对应标识及 `legalUrls` 来源链接；仅隐藏在工具结果中不算通过。纯文本终端无法完成标识展示验收，发布前应在支持的宿主检查。样本标识只是占位。
 
 本例只处理当前、逐小时和逐日天气，没有分钟级降水、天气预警和空气质量。符合散步阈值只是筛选结果，不是户外安全保证；这些边界会随结果返回。
 
@@ -242,7 +241,7 @@ Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链�
 pnpm --dir examples/weatherkit-mcp check
 ```
 
-检查涵盖真实 JWT 签名与验签、stdio 工具发现、无效输入、认证和限流错误、超时/取消、缓存、概率单位、时区日期、预报缺口和未知 daylight。测试的密钥临时生成，不使用你的个人凭据；模拟 HTTP 证明的是代码如何处理约定响应，不证明 Apple 已接受你的账号配置。
+检查覆盖 JWT、stdio、输入与上游错误、取消、缓存、单位、时区与预报缺口。使用临时密钥和模拟 HTTP，不证明 Apple 接受了你的账号配置。
 
 ## 到这里，怎样判定学会了
 
@@ -250,6 +249,6 @@ pnpm --dir examples/weatherkit-mcp check
 
 课程交付验证记录（2026-10-26）：类型检查、自动化测试与离线演示通过，真实 stdio 发现/地点查询使用临时测试密钥验证。个人 Apple 凭据尚未配置，真实天气请求和最终客户端的署名展示留在第 4、5 步由你验收。
 
-后续真正用起来，再根据需要增加城市搜索、分钟级降雨或预警。每次先明确数据在该地区是否可用，以及缺失时应怎样回答。不要先注册一长串没有实现或无法验证的工具。
+后续按需增加城市搜索、分钟级降雨或预警，先确认地区支持与缺失时的回答。
 
 返回[课程总览](README.md) · 回查[极简 MCP](00-minimal-mcp.md) · 对照[MCP 官方天气教程](https://modelcontextprotocol.io/docs/develop/build-server)。

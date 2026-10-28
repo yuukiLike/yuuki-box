@@ -67,6 +67,7 @@ pnpm --dir site build
 ## 内容维护
 
 - 正文继续编辑仓库 `docs/**/*.md`；一级标题用作页面标题，正文渲染时去掉重复的一级标题。
+- 正文先给结论与必要操作；延伸问答用默认收起的 `<details class="qa">`，补充资料用 `<details>`。折叠行用常规字重、细分隔线，绿色与浅蓝色只点缀箭头和展开标题；展开后的文字也应精简。
 - `src/content.config.ts` 基于 Astro glob loader 直接读取这些文件，保留原生文件监听与内容处理。
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。

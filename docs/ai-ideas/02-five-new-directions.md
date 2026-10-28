@@ -21,7 +21,7 @@
 **你负责决定什么体验值得修，运行数据帮助 AI 发现具体问题。**
 
 <details>
-<summary>展开来源、接法和一个小实验</summary>
+<summary>来源、接入与实验</summary>
 
 **已有事实。** Sentry 在 2025-06-17 发布的 Seer 功能包括结合堆栈、追踪和代码分析根因、建议修复，以及自动创建 PR。[正式发布说明](https://sentry.io/changelog/seer-sentrys-ai-debugger-is-generally-available/)
 
@@ -45,7 +45,7 @@
 **你给一个可以测量的目标，AI 尝试不同改法，保留有证据的改进。**
 
 <details>
-<summary>展开来源、接法和一个小实验</summary>
+<summary>来源、接入与实验</summary>
 
 **已有事实。** Karpathy 的 autoresearch README 将项目置于 2026 年 3 月：Agent 修改训练代码，在固定的五分钟训练预算下比较验证指标，再保留或放弃改动。原项目围绕单 GPU 模型训练，评估与可修改代码有明确分工；这里没有将它描述成通用 Web 优化工具，也未认定具体首发日。[项目 README](https://github.com/karpathy/autoresearch)
 
@@ -67,7 +67,7 @@
 **先给 AI 一套能反复尝试的假接口和真实使用场景，再让它生成与修正代码。**
 
 <details>
-<summary>展开来源、接法和一个小实验</summary>
+<summary>来源、接入与实验</summary>
 
 **已有事实。** StrongDM 在 2026-02-06 介绍了 Software Factory：用规格和场景驱动开发，在第三方服务的行为克隆环境中验证。其 Digital Twin Universe 模拟了 Okta、Jira、Slack 等服务的 API、边界与可观察行为；文章也描述了将部分验收场景放在代码仓库之外的做法。[StrongDM 原文](https://factory.strongdm.ai/)
 
@@ -91,7 +91,7 @@
 **你维护几条重要的产品规则，AI 根据规则更新计划、代码和验收。**
 
 <details>
-<summary>展开来源、接法和一个小实验</summary>
+<summary>来源、接入与实验</summary>
 
 **已有事实。** GitHub 于 2025-09-02 介绍开源 Spec Kit，以 Specify、Plan、Tasks、Implement 的流程，让规格参与计划、任务划分与实现。它体现了用明确意图持续驱动 Agent 的做法；自然语言规格仍需要解释和验证，不能视为正确性证明。[发布文章](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 
@@ -114,7 +114,7 @@
 **夜间任务也可以只是读懂项目、整理经验，让下一次任务更容易开始。**
 
 <details>
-<summary>展开来源、接法和一个小实验</summary>
+<summary>来源、接入与实验</summary>
 
 **已有事实。** Letta 于 2025-04-21 发布 Sleep-time Compute：利用用户不等待回答的时段处理已有上下文，形成可复用资料；实现中将主 Agent 与负责整理记忆的 Agent 分开。论文与文章报告的评估范围，不等于个人编码项目已经获得相同收益。[研究与实现介绍](https://www.letta.com/blog/sleep-time-compute/)
 

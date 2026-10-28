@@ -33,7 +33,7 @@ JSON-RPC 约定了消息的写法。先记住这几个字段：
 能解释 **“靠 id 配对，回答可以换个顺序回来”**，就完成了。
 
 <details>
-<summary>再看：错误、通知和清理</summary>
+<summary>错误、通知和清理</summary>
 
 实验还会做两件事：
 
@@ -58,8 +58,8 @@ JSON-RPC 约定了消息的写法。先记住这几个字段：
 
 </details>
 
-<details>
-<summary>选读：JSON-RPC 与 JSONL</summary>
+<details class="qa">
+<summary>JSON-RPC 与 JSONL 有什么区别？</summary>
 
 JSON-RPC 约定消息的含义。JSONL 约定一行放一个 JSON。
 

@@ -189,13 +189,16 @@ export async function getCurrentWeather(city: City) {
 
 `weatherkit.ts` 的 import 映射在下一课 `deno.json` 中给出。这里先看懂数据经过哪里，不用现在就运行整段代码。
 
-## 4. 为什么不直接把 Apple JSON 原样交给模型
+<details class="qa" id="4-为什么不直接把-apple-json-原样交给模型">
+<summary>为什么要整理 Apple 返回的数据？</summary>
 
-我们只保留当前天气需要的字段，并把单位写进字段名：温度为摄氏度，湿度由 `0..1` 转为百分比，风速为 `km/h`。`conditionCode` 保留上游代码，避免把未知天气代码武断翻译为“晴”。`asOf` 是数据时间，不能替换成“本次请求的电脑时间”。[当前天气字段](https://developer.apple.com/documentation/weatherkitrestapi/currentweather/currentweatherdata)
+只保留所需字段，并在名称中明确单位：摄氏度、百分比、`km/h`。保留 `conditionCode` 与真实 `asOf`，避免猜天气或替换数据时间。[字段说明](https://developer.apple.com/documentation/weatherkitrestapi/currentweather/currentweatherdata)
 
-请求只取 `currentWeather`，带明确时区，不添加未在当前接口文档列出的 `units=si` 等参数。这里验证 `metadata.units === 'm'` 才使用公制单位；字段缺失、数据过期、上游不可用都作为失败处理，不返回假天气。[天气查询接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[响应元数据](https://developer.apple.com/documentation/weatherkitrestapi/metadata)
+只请求 `currentWeather`，带明确时区并验证 `metadata.units === 'm'`。缺字段、过期或上游失败都报错。[天气接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[元数据](https://developer.apple.com/documentation/weatherkitrestapi/metadata)
 
-教学版每次工具调用会请求**天气与标识两个 Apple 端点**。第二课的“20 次”是用户工具调用额度，不是精确的 Apple 请求计费数。优化前先看 Apple 开发者后台的实际用量；不要把一次工具调用等同于一次上游请求。
+每次工具调用会请求天气和标识两个端点；用户工具额度不等于 Apple 请求计数。
+
+</details>
 
 ## 5. 来源标识属于结果的一部分
 

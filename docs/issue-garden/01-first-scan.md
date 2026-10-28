@@ -70,11 +70,28 @@ jobs:
 
 `15 18 * * *` 使用默认 UTC 时间，对应北京时间每天 **02:15**。自动触发需要工作流存在于默认分支；GitHub 的调度可能延迟，不能把它当作精确到分钟的闹钟。[定时触发规则](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
 
-## 遇到问题时只看这里
+## 遇到问题
 
-- **找不到 Run workflow**：确认文件已在默认分支，且包含 `workflow_dispatch`。
-- **读取被拒绝**：确认目标是同一仓库、Issues 已开启、组织允许 Actions，且工作流声明了 `issues: read`。
-- **没有按时出现记录**：先手动运行；再检查 Actions 是否启用以及默认分支上的定时配置。公开仓库长期没有活动时，计划任务可能自动停用。
+<details class="qa">
+<summary>找不到 Run workflow？</summary>
+
+确认文件在默认分支，且包含 `workflow_dispatch`。
+
+</details>
+
+<details class="qa">
+<summary>读取 Issue 被拒绝？</summary>
+
+确认目标是同一仓库、Issues 与 Actions 已启用，且组织允许运行、工作流声明了 `issues: read`。
+
+</details>
+
+<details class="qa">
+<summary>定时任务没出现？</summary>
+
+先手动运行，再查默认分支的定时配置。调度可能延迟；公开仓库长期不活跃时，计划任务可能停用。
+
+</details>
 
 想再戳一下它：新增一个标题容易认出的练习 Issue，重新运行，看看清单是否更新；没有 Issue 时，也看一眼 `0` 的结果。这样就把“读到了什么”对上了。
 

@@ -99,11 +99,14 @@ import_music → create_photo_scene → inspect_scene
 
 MCP 提供工具契约；宿主负责选择参数，Three.js 负责渲染，FFmpeg 合成视频。`update_scene` 携带最新版本号，避免旧配置覆盖新调整。
 
-## 为什么导出不用录屏
+<details class="qa" id="为什么导出不用录屏">
+<summary>为什么逐帧导出？</summary>
 
-先保存场景配置快照，再按 `start + frame / fps` 逐帧渲染，从同一音乐起点截取音频。机器某一帧算得慢，也不会改变片段里的音乐时间。
+保存配置快照后，按 `start + frame / fps` 渲染，并从同一时间截音频。计算某帧较慢不会改变成片时间。
 
-MP4 使用 H.264 与 AAC，回执记录时长、帧数、场景版本和独听选择。导出限制为 0.5–20 秒、24/30fps；超过音乐范围明确拒绝。浏览器也能下载场景 JSON；跨机器恢复须同时复制音乐和图像素材，具体见[目录说明](../../examples/music-space-mcp/README.md#保存分享与恢复)。
+输出 H.264/AAC MP4，回执记录时长、帧数、版本与独听选择。限制 0.5–20 秒、24/30fps，不能超出音乐范围。跨机器恢复还需复制音乐与图片。[目录说明](../../examples/music-space-mcp/README.md#保存分享与恢复)
+
+</details>
 
 ## 亲手验证
 

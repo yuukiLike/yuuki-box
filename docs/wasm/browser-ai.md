@@ -21,7 +21,7 @@ Transformers.js 提供浏览器中使用模型的高层接口，可以执行多�
 
 Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计算；WebGPU 路径通过浏览器的 GPU 能力执行支持的工作。它们与模型运行时合作，页面还需负责加载、输入准备和结果显示。
 
-浏览器提供某个 API，只说明有一个能力入口。实际模型是否能执行、哪些算子走哪个后端，以及数值和内存需求，仍要运行验证。ONNX Runtime 的性能诊断文档把后端、线程和配置作为需要逐项检查的条件。[ONNX Runtime Web 性能诊断](https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html)
+浏览器支持 API 不代表模型一定可运行；还要验证算子、后端、数值与内存需求。[ONNX Runtime Web 性能诊断](https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html)
 
 ## 冷启动和热执行分别测量
 
@@ -33,7 +33,7 @@ Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计�
   处理输入 → 得到结果
 ```
 
-这是分析路径，具体阶段可能重叠。把下载、初始化与推理分开记录，才能理解用户第一次等待什么；保留一个已加载实例，也意味着它的资源仍在占用空间。
+分开记录下载、初始化与推理，阶段可能重叠。复用已加载实例会减少等待，也会持续占用资源。
 
 它与[缓存成本](../frontend-foundations/cache-cost.md)是一件连续的事：减少下次等待，往往需要保留结果、资源或运行实例，并为它们安排结束时机。
 
@@ -53,4 +53,4 @@ Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计�
 
 浏览器里运行自回归语言模型，同样会遇到历史状态、缓存布局和上下文长度。Wasm 或 GPU 改变执行与存储方式，模型本身需要保留什么，仍取决于架构与推理实现。
 
-先用[KV 容量实验](../../site/src/pages/labs/kv-memory.astro)理解量级，再用 Worker 与运行时实验理解这些资源由谁持有。两条学习线会在本地生成、长上下文和多任务调度处相遇。
+先用[KV 容量实验](../../site/src/pages/labs/kv-memory.astro)看量级，再检查 Worker 与运行时的资源归属。

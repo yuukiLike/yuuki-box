@@ -1,8 +1,6 @@
 # KV Cache 专题：从前端数组走到 DeepSeek、Harness 与 Pi
 
-你已经会写消息列表、拼请求、保存状态。我们就从这些熟悉的东西出发，一次只多走一步。
-
-每一站先看图，再看一个具体例子，最后留一个能停下的地方。公式、完整数据和源码入口放在「选读」中，需要时再展开。图都可以点开放大。
+从消息数组走到模型缓存。每篇先看图和一个例子，公式、数据与源码按需展开；图片可放大。
 
 更新日期：2026-10-24。阅读入口：[文档导航](../README.md) · [已有的渲染性能学习](../learning/rendering-performance.md)。应用篇核对官方文档与固定 commit 的源码；真实 API 命中、费用与延迟仍待实验。
 
@@ -10,7 +8,7 @@
 
 **[第一站：你发出一条消息，模型收到了什么？](00-first-request.md)**
 
-这一站只分清两件事：你保存的消息，和模型服务保存的计算结果。读到「这一站完成了」就可以结束今天这一轮。
+先分清客户端消息与服务端计算结果。
 
 [![从消息数组、前缀依赖和 Q/K/V，逐步走到 DeepSeek、Harness 与 Pi；共五站](../../site/public/diagrams/kv-cache/01-study-path.svg)](../../site/public/diagrams/kv-cache/01-study-path.svg)
 
@@ -20,10 +18,10 @@
 
 **KV Cache 保存模型已经算过的中间结果，让后续计算能接着做。**
 
-先不要求记住英文缩写。接下来会分别看它保存什么、为什么能接着用，以及应用怎么知道是否用上了。
+依次看：保存什么、何时有效、怎样观察命中。
 
 <details>
-<summary>展开完整目录：每一篇只带走一个问题</summary>
+<summary>完整目录</summary>
 
 如果想回补 key、Map 和内存，再打开[前端基础](../frontend-foundations/README.md)。
 
@@ -42,7 +40,7 @@
 </details>
 
 <details>
-<summary>选读：这几层各自做什么</summary>
+<summary>各层职责</summary>
 
 ## 先认清这几层各自做什么
 
@@ -59,7 +57,7 @@ DeepSeek Harness 既有专用模型适配器，也有 `pi-ai` 适配器。阅读
 </details>
 
 <details>
-<summary>想动手时：两个本地实验</summary>
+<summary>两个本地实验</summary>
 
 ## 第一局：改一个输入，看缓存从哪里失效
 
@@ -88,7 +86,7 @@ node docs/kv-cache/labs/attention-cache.mjs
 </details>
 
 <details>
-<summary>选读：每轮研究要留下什么</summary>
+<summary>每轮研究要留下什么</summary>
 
 ## 学习时持续追问的四件事
 
@@ -101,4 +99,4 @@ node docs/kv-cache/labs/attention-cache.mjs
 
 </details>
 
-今天的下一步仍只有一个：[从一条消息开始](00-first-request.md)。
+下一步：[从一条消息开始](00-first-request.md)。

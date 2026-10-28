@@ -2,7 +2,7 @@
 
 [学习入口](README.md) · [下一篇 缓存的成本](cache-cost.md)
 
-假设你有一万条消息，收到一条带着 `messageId` 的增量更新。第一个问题是：怎样找到要更新的对象？第二个问题才是：找到之后，要重新计算或渲染什么？
+收到消息增量时，先按 `messageId` 找对象，再判断要重算或重渲染什么。
 
 ## 数组查找和索引各做什么
 
@@ -21,7 +21,12 @@ console.log(foundByScan === foundByIndex); // true
 
 第一条路径按顺序检查条件；第二条先为整批数据建立索引，再按 ID 查找。是否值得建索引，取决于数据规模、查询次数和后续更新成本。[浏览器实验](../../site/src/pages/labs/lookup.astro)可以直接观察这两条路径。
 
-Map 规范要求平均访问时间相对元素数量为次线性，并没有要求所有引擎、所有操作都是严格的常数时间；实现可以采用哈希表或其他结构。[MDN Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+<details class="qa">
+<summary>Map 查找一定是 O(1) 吗？</summary>
+
+规范只要求平均访问时间为次线性，没有保证所有引擎、所有操作都是严格常数时间。[MDN Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
+</details>
 
 ## Object Map WeakMap 怎样选择
 
@@ -96,4 +101,11 @@ function read(key) {
 
 这个片段可以表达最近最少使用的淘汰顺序；内容版本、错误结果是否缓存，以及何时整体清空，仍是调用方需要明确的规则。淘汰解决空间上限，失效解决结果正确性，两者应一起考虑。
 
-先预测一次访问序列：容量为 2，依次写入 A、B，读取 A，再写入 C。被淘汰的是 B。接着读[缓存的成本](cache-cost.md)，看看多保存一份索引还影响了什么。
+<details class="qa">
+<summary>容量 2，写 A、B，读 A，再写 C，淘汰谁？</summary>
+
+B。读取 A 后它变为最近使用项，写 C 时淘汰 B。
+
+</details>
+
+下一步：[缓存的成本](cache-cost.md)。

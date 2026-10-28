@@ -61,7 +61,7 @@ const nextMessages = [
 下次直接从[前端数组：追加一项，哪些结果还有效](01-from-frontend.md)开始。
 
 <details>
-<summary>选读：四种消息角色，以及 JSON 与模型输入的区别</summary>
+<summary>四种消息角色，以及 JSON 与模型输入的区别</summary>
 
 | 角色 | 这个教程里的用途 |
 | --- | --- |
