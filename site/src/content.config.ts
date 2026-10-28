@@ -31,7 +31,7 @@ const repositoryDocs: Loader = {
           Object.assign(options.data, {
             sidebar: {
               ...sidebar,
-              attrs: { ...sidebar?.attrs, 'data-topic': metadata.color },
+              attrs: { ...sidebar?.attrs, 'data-topic': metadata.color, title },
             },
           });
         }

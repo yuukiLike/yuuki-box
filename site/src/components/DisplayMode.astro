@@ -1,4 +1,11 @@
-<script is:inline>
+---
+interface Props {
+  control?: 'focus' | 'directory';
+}
+const { control = 'focus' } = Astro.props;
+---
+
+{control === 'focus' && <script is:inline>
   // Read the preference before the directory and article are painted.
   (() => {
     let mode = 'lightweight';
@@ -9,22 +16,24 @@
     }
     document.documentElement.dataset.displayMode = mode;
   })();
-</script>
+</script>}
 
+{control === 'directory' ? (
 <button class="desktop-directory-toggle" type="button" aria-controls="starlight__sidebar" aria-expanded="false" aria-label="展开课程目录" title="展开课程目录" hidden>
   <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <rect x="3" y="4" width="18" height="16" rx="2" />
     <path d="M9 4v16m4-11h4m-4 4h4" />
   </svg>
 </button>
-
+) : (
 <button class="display-mode-toggle" type="button" aria-pressed="false" hidden>
   <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M20 4c0 9-4 14-10 14a6 6 0 0 1-6-6C4 6 11 4 20 4Z" />
     <path d="m4 21 10-11" />
   </svg>
-  <span>轻量模式</span>
+  <span>专注阅读</span>
 </button>
+)}
 
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('.display-mode-toggle');
@@ -44,16 +53,17 @@
   function resetDirectory() {
     setDirectoryOpen(false);
     if (directoryToggle) {
-      directoryToggle.hidden = document.documentElement.dataset.displayMode !== 'lightweight' || !desktop.matches || !sidebar;
+      directoryToggle.hidden = !desktop.matches || !sidebar;
     }
   }
+
+  resetDirectory();
 
   if (toggle) {
     function renderMode(button: HTMLButtonElement) {
       const lightweight = document.documentElement.dataset.displayMode === 'lightweight';
-      resetDirectory();
       button.setAttribute('aria-pressed', String(lightweight));
-      button.title = lightweight ? '已开启轻量模式，点击显示完整目录与侧栏' : '开启轻量模式，收起章节与侧栏';
+      button.title = lightweight ? '退出专注阅读，显示章节详情与页内大纲' : '开启专注阅读，收起章节详情与页内大纲';
       document.querySelectorAll<HTMLDetailsElement>('.directory-chapters').forEach((chapters) => {
         chapters.open = !lightweight;
       });
@@ -75,13 +85,16 @@
     });
 
     desktop.addEventListener('change', () => {
-      const focusInSidebar = sidebar?.contains(document.activeElement);
+      const focusInSidebar = sidebar?.contains(document.activeElement) || document.activeElement === directoryToggle;
       resetDirectory();
       if (focusInSidebar) toggle.focus();
     });
   }
 
   if (directoryToggle && sidebar) {
+    sidebar.querySelectorAll<HTMLElement>('summary').forEach((summary) => {
+      summary.title = summary.textContent?.trim() ?? '';
+    });
     directoryToggle.addEventListener('click', () => {
       const open = !document.documentElement.hasAttribute('data-directory-open');
       setDirectoryOpen(open);
@@ -114,7 +127,7 @@
     flex-shrink: 0;
     min-height: 2rem;
     padding: .3rem .55rem;
-    border: 1px solid var(--yuuki-border);
+    border: 1px solid transparent;
     border-radius: .5rem;
     color: var(--sl-color-gray-2);
     background: transparent;
@@ -125,25 +138,14 @@
   .desktop-directory-toggle[hidden],
   .display-mode-toggle[hidden] { display: none; }
   .desktop-directory-toggle {
-    position: fixed;
-    inset-block-start: calc(var(--sl-nav-height) + 1rem);
-    inset-inline-start: 0;
     width: 2rem;
-    min-height: 2.5rem;
     padding: 0;
-    border-inline-start: 0;
-    border-radius: 0 .4rem .4rem 0;
     color: var(--sl-color-gray-3);
-    background: var(--sl-color-bg);
-  }
-  :global(html[data-directory-open]) .desktop-directory-toggle {
-    inset-inline-start: var(--sl-sidebar-width);
   }
   .desktop-directory-toggle[aria-expanded='true'] { background: var(--yuuki-hover); }
   .display-mode-toggle[aria-pressed='true'] {
-    color: var(--sl-color-accent-high);
-    border-color: var(--sl-color-accent);
-    background: var(--sl-color-accent-low);
+    color: var(--sl-color-gray-1);
+    background: var(--yuuki-panel);
   }
   .desktop-directory-toggle:hover,
   .display-mode-toggle:hover { background: var(--yuuki-hover); }

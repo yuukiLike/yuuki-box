@@ -2,6 +2,7 @@
 /**
  * @typedef {Object} NavigationItem
  * @property {string} [label]
+ * @property {string} [sidebarLabel]
  * @property {string} [slug]
  * @property {string} [link]
  * @property {string} [color]
@@ -17,8 +18,8 @@ const topic = (text, slug) => {
   const [path, anchor] = slug.split('#');
   return { text, href: `/${path}/${anchor ? `#${anchor}` : ''}` };
 };
-/** @returns {NavigationItem} */
-const page = (slug, label, tags) => ({ slug, label, tags });
+/** @param {string} [sidebarLabel] @returns {NavigationItem} */
+const page = (slug, label, tags, sidebarLabel) => ({ slug, label, tags, sidebarLabel });
 
 // 首页、侧栏与阅读页共用主题信息。标签链接在章节收起时仍能直达具体内容。
 /** @type {NavigationItem[]} */
@@ -30,17 +31,17 @@ export const navigation = [
     description: '从 Codex 调用自己的 MCP 开始，训练字符模型、搭建 Harness，再连接天气、Blender 与 GitHub。',
     tags: [topic('Codex MCP', 'ai-from-scaling/00-codex-mcp'), topic('模型训练', 'ai-from-scaling/02-train-a-model'), topic('工具调用循环', 'ai-from-scaling/03-build-a-harness'), topic('天气查询', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender 建模', 'ai-from-scaling/05-blender-mcp'), topic('GitHub 修复验证', 'ai-from-scaling/06-github-lab-mcp')],
     items: [
-      page('ai-from-scaling/00-codex-mcp', 'Codex MCP：保存与取回项目记录', ['Codex', 'MCP']),
-      page('ai-from-scaling/00-minimal-mcp', '独立 MCP 演示：服务端、客户端与工具调用', ['JSON-RPC', 'stdio']),
-      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP']),
-      page('ai-from-scaling', '学习路线：MCP、模型训练与 Harness', ['课程总览']),
-      page('ai-from-scaling/01-understand-models', '1 · 模型学习：参数、概率与缩放定律', ['模型原理']),
-      page('ai-from-scaling/02-train-a-model', '2 · 训练字符语言模型：数据、损失与生成', ['模型训练']),
-      page('ai-from-scaling/03-build-a-harness', '3 · 搭建 Harness：模型与工具循环', ['Harness', '工具调用']),
-      page('ai-from-scaling/04-experiments', '4 · 接真实模型：工具选择与结果对照', ['模型 API', '对照实验']),
-      page('ai-from-scaling/extra-tool-use-story', '工具调用简史：ReAct、函数调用与 MCP', ['Agent 历史']),
-      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模']),
-      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证']),
+      page('ai-from-scaling/00-codex-mcp', 'Codex MCP：保存与取回项目记录', ['Codex', 'MCP'], 'Codex MCP · 项目记录'),
+      page('ai-from-scaling/00-minimal-mcp', '独立 MCP 演示：服务端、客户端与工具调用', ['JSON-RPC', 'stdio'], '独立 MCP 演示'),
+      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], 'Apple 天气 MCP'),
+      page('ai-from-scaling', '学习路线：MCP、模型训练与 Harness', ['课程总览'], '学习路线'),
+      page('ai-from-scaling/01-understand-models', '1 · 模型学习：参数、概率与缩放定律', ['模型原理'], '1 · 模型学习'),
+      page('ai-from-scaling/02-train-a-model', '2 · 训练字符语言模型：数据、损失与生成', ['模型训练'], '2 · 训练字符语言模型'),
+      page('ai-from-scaling/03-build-a-harness', '3 · 搭建 Harness：模型与工具循环', ['Harness', '工具调用'], '3 · 搭建 Harness'),
+      page('ai-from-scaling/04-experiments', '4 · 接真实模型：工具选择与结果对照', ['模型 API', '对照实验'], '4 · 接真实模型'),
+      page('ai-from-scaling/extra-tool-use-story', '工具调用简史：ReAct、函数调用与 MCP', ['Agent 历史'], '番外 · 工具调用简史'),
+      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
+      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
       {
         label: '音乐 MCP：MIDI 可视化与短片导出',
         tags: ['MIDI', '3D 可视化', '视频导出'],
@@ -271,10 +272,10 @@ export const navigation = [
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;
 
 export function starlightSidebar(items = navigation, inheritedColor = 'sky') {
-  return items.map(({ tags, description, color = inheritedColor, ...item }) => {
+  return items.map(({ tags, description, sidebarLabel, color = inheritedColor, ...item }) => {
     if (item.items) return { ...item, items: starlightSidebar(item.items, color) };
     if (item.autogenerate) return { ...item, autogenerate: { ...item.autogenerate, attrs: { 'data-topic': color } } };
-    return { ...item, attrs: { 'data-topic': color } };
+    return { ...item, label: sidebarLabel ?? item.label, attrs: { 'data-topic': color, title: item.label, 'aria-label': item.label } };
   });
 }
 

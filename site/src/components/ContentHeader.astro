@@ -21,15 +21,18 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
 ---
 
 <div class:list={['content-tools', { 'with-page-menu': Boolean(toc) }]} data-topic={sectionMetadata?.color}>
-  <a class="site-signature" href={siteTitleHref} aria-label="Yuuki 学习手记，返回文档目录" aria-current={isDirectory ? 'page' : undefined}>
-    <span class="site-wordmark" lang="en">
-      Yuuki
-      <svg class="signature-stroke" aria-hidden="true" viewBox="0 0 80 8" fill="none">
-        <path d="M3 5.5C22 1.5 49 1 76 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      </svg>
-    </span>
-    <span class="site-caption">学习手记</span>
-  </a>
+  <div class="content-brand">
+    <DisplayMode control="directory" />
+    <a class="site-signature" href={siteTitleHref} aria-label="Yuuki 学习手记，返回文档目录" aria-current={isDirectory ? 'page' : undefined}>
+      <span class="site-wordmark" lang="en">
+        Yuuki
+        <svg class="signature-stroke" aria-hidden="true" viewBox="0 0 80 8" fill="none">
+          <path d="M3 5.5C22 1.5 49 1 76 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </span>
+      <span class="site-caption">学习手记</span>
+    </a>
+  </div>
   <nav class="content-path" aria-label="当前位置">
     <a class="directory-return" href={siteTitleHref} aria-current={isDirectory ? 'page' : undefined}>目录</a>
     {section && <>
@@ -61,9 +64,15 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
     gap: .75rem;
     flex-shrink: 0;
     width: fit-content;
-    margin-inline-end: auto;
     color: var(--sl-color-white);
     text-decoration: none;
+  }
+  .content-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+    margin-inline-end: auto;
   }
   .site-wordmark {
     position: relative;

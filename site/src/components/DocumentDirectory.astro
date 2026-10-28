@@ -35,7 +35,7 @@ function firstLink(items: StarlightRouteData['sidebar']): Extract<StarlightRoute
       {entry.type === 'link' ? (
         <a class="directory-link" href={entry.href}>
           <span class="directory-link-copy">
-            <span class="directory-link-title">{entry.label}</span>
+            <span class="directory-link-title">{metadata?.sidebarLabel ? metadata.label : entry.label}</span>
             {metadata && <TopicTags tags={metadata.tags} color={metadata.color} />}
           </span>
           <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
@@ -55,7 +55,7 @@ function firstLink(items: StarlightRouteData['sidebar']): Extract<StarlightRoute
             <>
               {preview && <a class="directory-link directory-preview" href={preview.href}>
                 <span class="directory-link-copy">
-                  <span class="directory-link-title">{preview.label}</span>
+                  <span class="directory-link-title">{previewMetadata?.sidebarLabel ? previewMetadata.label : preview.label}</span>
                   {previewMetadata && <TopicTags tags={previewMetadata.tags.slice(0, 2)} color={previewMetadata.color} />}
                 </span>
                 <svg class="directory-link-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h9m-4-4 4 4-4 4" /></svg>
