@@ -17,13 +17,14 @@ node docs/ai-communication/labs/01-rpc.ts
 找到请求和回答里相同的 `id`，今天就到这里。
 
 <details>
-<summary>六课目录</summary>
+<summary>六课与 SSE 实战目录</summary>
 
 | 课 | 学什么 |
 | --- | --- |
 | [1 · RPC](01-rpc.md) | 请另一个程序做事 |
 | [2 · JSON-RPC](02-json-rpc.md) | 用编号找到对应结果 |
 | [3 · SSE](03-sse.md) | 一边接收，一边显示 |
+| [SSE 实战](03-sse-http.md) | 用真实 HTTP 观察断流、续接与完成 |
 | [4 · MCP](04-mcp.md) | 让应用调用外部工具 |
 | [5 · 取消与超时](05-failure.md) | 停止等待后，对方还在做吗 |
 | [6 · 接回 Yuuki](06-yuuki.md) | 在自己的代码里找到这些步骤 |
@@ -45,9 +46,10 @@ node docs/ai-communication/labs/01-rpc.ts
 
 ```bash
 node --test docs/ai-communication/labs/verify.test.mjs
+node --experimental-eventsource --test docs/ai-communication/labs/sse-http.test.mjs
 ```
 
-课程整理于 2026-10-25。本地实验已运行；SSE 使用模拟数据；真实模型调用和界面性能未测。第六课按当前源码讲解。
+课程整理于 2026-10-25，SSE 实战补充于 2026-10-30。本地实验已运行；SSE 入门模拟字节分片，实战使用真实 HTTP 与固定事件，验证自动重连和提前关闭。真实模型调用和界面性能未测。第六课按当前源码讲解。
 
 </details>
 

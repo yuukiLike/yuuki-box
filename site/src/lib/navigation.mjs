@@ -207,13 +207,14 @@ export const navigation = [
   {
     label: '应用通信',
     color: 'sky',
-    description: '用六课追踪请求、响应与流式事件：从跨进程读笔记，到 JSON-RPC、SSE、MCP，再处理超时与取消。',
+    description: '用六课与 SSE 实战追踪请求、响应与流式事件：从跨进程读笔记，到断流重连、MCP，再处理超时与取消。',
     tags: [topic('RPC', 'ai-communication/01-rpc'), topic('JSON-RPC', 'ai-communication/02-json-rpc'), topic('SSE', 'ai-communication/03-sse'), topic('MCP', 'ai-communication/04-mcp'), topic('超时与取消', 'ai-communication/05-failure')],
     items: [
       page('ai-communication', '通信课程总览：请求、流式响应与工具调用', ['协议课程']),
       page('ai-communication/01-rpc', '1 · RPC：跨进程读取笔记', ['RPC']),
       page('ai-communication/02-json-rpc', '2 · JSON-RPC：用 ID 匹配请求与响应', ['JSON-RPC']),
       page('ai-communication/03-sse', '3 · SSE：接收事件并逐步显示结果', ['SSE', '流式响应']),
+      page('ai-communication/03-sse-http', 'SSE 实战：HTTP、重连与结束状态', ['SSE', '断线重连']),
       page('ai-communication/04-mcp', '4 · MCP：发现工具与执行调用', ['MCP']),
       page('ai-communication/05-failure', '5 · 通信失败：超时、取消与远端执行', ['超时', '取消']),
       page('ai-communication/06-yuuki', '6 · Yuuki：在项目中追踪通信路径', ['代码追踪']),

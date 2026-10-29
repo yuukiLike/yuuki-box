@@ -4,7 +4,7 @@
 
 点击图可打开完整 SVG、放大查看；原图中的平台与服务卡片链接到官方资料。
 
-[上一课](03-sse.md) · [目录](README.md) · [下一课](05-failure.md)
+[上一课：SSE 实战](03-sse-http.md) · [目录](README.md) · [下一课](05-failure.md)
 
 复用[MCP 演示](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 

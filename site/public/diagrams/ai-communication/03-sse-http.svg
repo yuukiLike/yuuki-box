@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="530" viewBox="0 0 920 530" role="img" aria-labelledby="title desc">
+  <title id="title">断流后，带着进度接着读</title>
+  <desc id="desc">浏览器收到事件 1 和 2 后，响应中断。浏览器重连时发送 Last-Event-ID 2，服务端补发事件 3 到 5。收到 completed 后，客户端关闭订阅。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="920" height="530" rx="18" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
+    <text x="36" y="49" font-size="26" font-weight="600">断流后，带着进度接着读</text>
+    <rect x="80" y="78" width="230" height="52" rx="12" fill="#dcebdc" stroke="#72967b"/>
+    <rect x="610" y="78" width="230" height="52" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="195" y="112" text-anchor="middle" font-size="23">浏览器</text>
+    <text x="725" y="112" text-anchor="middle" font-size="23">HTTP 服务</text>
+    <g stroke="#a4b8aa" stroke-width="2" stroke-dasharray="5 7"><path d="M195 138V460"/><path d="M725 138V460"/></g>
+    <g fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)">
+      <path d="M205 175H715"/><path d="M715 230H205"/>
+      <path d="M205 330H715"/><path d="M715 390H205"/>
+    </g>
+    <text x="460" y="164" text-anchor="middle" font-size="21">GET /events</text>
+    <text x="460" y="219" text-anchor="middle" font-size="21">id: 1、2 → 显示「你好，」</text>
+    <rect x="310" y="253" width="300" height="36" rx="8" fill="#f1e5cc"/>
+    <text x="460" y="278" text-anchor="middle" font-size="20">响应中断，尚未完成</text>
+    <text x="460" y="318" text-anchor="middle" font-size="21">重新 GET · Last-Event-ID: 2</text>
+    <text x="460" y="378" text-anchor="middle" font-size="21">补发 3、4、5（completed）</text>
+    <rect x="62" y="420" width="266" height="38" rx="8" fill="#dcebdc"/>
+    <text x="195" y="447" text-anchor="middle" font-size="20">已完成 → close()</text>
+    <text x="36" y="500" font-size="22">能接着读，需要服务端保留历史并按游标补发。</text>
+  </g>
+</svg>
