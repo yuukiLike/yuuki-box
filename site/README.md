@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织十五个专题：MCP 入门、模型基础、模型推理与 KV Cache、Agent 工程、MCP 项目实战、远程 MCP 与授权、AI 开发实践、Issue 工作流、应用通信、前端性能、语音交互、AI 探索、架构研究、项目设计与计划、云端 Codex。四小时路线和前端与 AI 联读指南单独串联相关专题。
+以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织十六个专题：MCP 入门、模型基础、模型推理与 KV Cache、Agent 工程、MCP 项目实战、远程 MCP 与授权、AI 开发实践、Issue 工作流、应用通信、前端性能、语音交互、AI 探索、架构研究、项目设计与计划、云端 Codex、Windows 本地 AI。四小时路线和前端与 AI 联读指南单独串联相关专题。
 
 ## 本地运行
 

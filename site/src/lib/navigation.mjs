@@ -331,6 +331,17 @@ export const navigation = [
       page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
     ],
   },
+  {
+    label: 'Windows 本地 AI',
+    color: 'emerald',
+    description: '用 RTX 5060 Ti 16GB 运行 Qwen Image 与 ACE-Step：共用 ComfyUI，保存第一张图片，再生成一段本地配乐。',
+    tags: [topic('本地运行基础', 'windows-local-ai'), topic('Qwen Image 出图', 'windows-local-ai/01-qwen-image'), topic('ACE-Step 配乐', 'windows-local-ai/02-ace-step-music')],
+    items: [
+      page('windows-local-ai', 'Windows 本地 AI：图片与音乐生成', ['Windows', '本地模型'], 'Windows 本地 AI · 从这里开始'),
+      page('windows-local-ai/01-qwen-image', '1 · Windows 第一次运行 Qwen Image', ['Qwen Image', 'ComfyUI', 'RTX 5060 Ti'], '1 · Qwen Image 首次出图'),
+      page('windows-local-ai/02-ace-step-music', '2 · ACE-Step 1.5 Turbo：生成第一段配乐', ['ACE-Step', '音乐生成', 'ComfyUI'], '2 · ACE-Step 首次配乐'),
+    ],
+  },
 ];
 
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;

@@ -35,6 +35,7 @@
 | **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 | **云端 Codex** | [环境、任务与 for-safe 练习](codex-cloud/README.md) | 交出一个云端任务，分清自动检查与 Mac 真机验收 |
+| **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
 
 ### MCP 入门
 
@@ -114,7 +115,11 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 ### 云端 Codex
 
-最后一个专题从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果，再看[社区用法和真实历史截图](codex-cloud/02-community.md)。三页分别说明基础、操作和公开经验，保留新版与 Legacy、订阅额度与 API 余额、模拟测试与真机验证的边界。
+从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果，再看[社区用法和真实历史截图](codex-cloud/02-community.md)。三页分别说明基础、操作和公开经验，保留新版与 Legacy、订阅额度与 API 余额、模拟测试与真机验证的边界。
+
+### Windows 本地 AI
+
+最后一个专题从[本地运行基础](windows-local-ai/README.md)开始，按你的 RTX 5060 Ti 16GB、i5-10400F、16GB 内存配置，用 [Qwen Image 首次出图教程](windows-local-ai/01-qwen-image.md)安装 ComfyUI、下载量化模型并保存 PNG；最后一课用 [ACE-Step 1.5 Turbo](windows-local-ai/02-ace-step-music.md)生成 30 秒配乐。先完成单张小图和短音乐，再观察生成设置、显存和系统内存的关系。
 
 ## 已确认的产品方向
 
