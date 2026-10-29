@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="370" viewBox="0 0 960 370" role="img" aria-labelledby="title desc">
+  <title id="title">新版 Codex Cloud：从准备环境到第一条任务</title>
+  <desc id="desc">第一步选择 Work in、Cloud、Create environment，连接 GitHub。第二步让 Codex 准备并检查环境，点击 Publish。第三步等待 Environment published，点击 Start a new task，发送有明确范围的任务。此图为教程步骤图，不是产品截图。</desc>
+  <rect width="960" height="370" rx="24" fill="#f1f5f9"/>
+  <g font-family="system-ui, -apple-system, 'PingFang SC', sans-serif" fill="#0f172a">
+    <text x="32" y="43" font-size="23" font-weight="650">第一次用云端：准备一次，交出一个任务</text>
+    <text x="32" y="72" font-size="14" fill="#475569">新版 Codex Cloud · 教程步骤图 · 依据 2026-10-29 官方文档</text>
+    <g fill="#fff" stroke="#cbd5e1"><rect x="32" y="101" width="280" height="205" rx="16"/><rect x="340" y="101" width="280" height="205" rx="16"/><rect x="648" y="101" width="280" height="205" rx="16"/></g>
+    <g fill="#0369a1"><circle cx="61" cy="132" r="15"/><circle cx="369" cy="132" r="15"/><circle cx="677" cy="132" r="15"/></g>
+    <g fill="#fff" text-anchor="middle" font-size="16" font-weight="600"><text x="61" y="138">1</text><text x="369" y="138">2</text><text x="677" y="138">3</text></g>
+    <g font-size="19" font-weight="600"><text x="87" y="139">选择云端和仓库</text><text x="395" y="139">检查并发布环境</text><text x="703" y="139">发出第一条任务</text></g>
+    <g font-size="16"><text x="52" y="184">Work in → Cloud</text><text x="52" y="213">Select environment</text><text x="52" y="242">→ Create environment</text><text x="360" y="184">Get started → 准备对话</text><text x="360" y="213">检查报告、配置和文件</text><text x="360" y="242">保存 → Publish</text><text x="668" y="184">Environment published</text><text x="668" y="213">→ Start a new task</text><text x="668" y="242">目标 + 范围 + 完成条件</text></g>
+    <g font-size="14" fill="#475569"><text x="52" y="280">先把需要的文件推送到 GitHub</text><text x="360" y="280">发布的是可复用的工作环境</text><text x="668" y="280">回来核对产物与执行证据</text></g>
+    <text x="32" y="342" font-size="16" fill="#334155">for-safe 第一轮：读规格 → 区分云端 / Mac 验证 → 推荐一个小任务</text>
+  </g>
+</svg>

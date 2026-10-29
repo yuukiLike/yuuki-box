@@ -34,6 +34,7 @@
 | **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
 | **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
+| **云端 Codex** | [环境、任务与 for-safe 练习](codex-cloud/README.md) | 交出一个云端任务，分清自动检查与 Mac 真机验收 |
 
 ### MCP 入门
 
@@ -110,6 +111,10 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 ### 项目设计与计划
 
 [本地 Harness 提案](architecture/mac-local-harness.md)说明模块、进程、状态与恢复边界；[第一轮 Mac 闭环计划](plan/first-mac-loop.md)把它拆成可实施的阶段。本页下半部分保留产品方向与历史状态，阅读时按记录日期区分“已有实现”和“待验证方案”。
+
+### 云端 Codex
+
+最后一个专题从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果，再看[社区用法和真实历史截图](codex-cloud/02-community.md)。三页分别说明基础、操作和公开经验，保留新版与 Legacy、订阅额度与 API 余额、模拟测试与真机验证的边界。
 
 ## 已确认的产品方向
 

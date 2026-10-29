@@ -320,6 +320,17 @@ export const navigation = [
       { autogenerate: { directory: '../docs/plan' } },
     ],
   },
+  {
+    label: '云端 Codex',
+    color: 'sky',
+    description: '用 for-safe 练习把开发任务交给云端：创建环境、检查产物，再回到真实 Mac 验证权限与无线能力。',
+    tags: [topic('基础与额度', 'codex-cloud'), topic('第一次任务', 'codex-cloud/01-for-safe'), topic('社区与截图', 'codex-cloud/02-community')],
+    items: [
+      page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
+      page('codex-cloud/01-for-safe', '1 · 用 for-safe 发出第一条云端任务', ['for-safe', '动手练习']),
+      page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
+    ],
+  },
 ];
 
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;
