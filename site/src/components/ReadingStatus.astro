@@ -24,9 +24,10 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
 {!footer && <details class="reading-account print:hidden" data-reading-account data-pagefind-ignore>
   <summary>
     <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a5 5 0 1 1 .4-10A7 7 0 0 1 21 10a4 4 0 0 1-1 7.9M12 12v9m-3-3 3 3 3-3" /></svg>
-    <span data-reading-sync-label>阅读同步</span>
+    <span data-reading-sync-label>阅读同步（可选）</span>
   </summary>
   <div class="reading-account-panel">
+    <p>无需登录即可阅读并保存本地进度。Apple 登录仅用于跨设备同步。</p>
     <p data-reading-sync-message role="status" aria-live="polite">进度保存在当前浏览器，正在检查云同步状态。</p>
     <div class="reading-account-actions">
       <a class="apple-login" data-reading-login href="/api/reading/login" hidden>
@@ -83,18 +84,18 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
   function renderSync() {
     const messages = {
       checking: '正在检查 Apple 同步状态…',
-      local: '通过 Apple 登录，在其他设备同步阅读进度。首次登录会合并本地记录。',
+      local: '如需跨设备同步，可通过 Apple 登录。首次登录会合并本地记录。',
       disabled: '云同步尚未启用，进度保存在当前浏览器。',
       syncing: '正在同步到 Apple 账号…',
       pending: '进度已在本地记录，等待同步。',
       synced: '已同步。在其他设备登录同一 Apple 账号后，可继续阅读。',
-      expired: '登录已失效或账号已切换，请重新登录后同步。未同步的记录会保留。',
+      expired: 'Apple 登录已失效或账号已切换，可继续本地阅读。需要跨设备同步时再登录，未同步记录会保留。',
       error: '云同步暂时不可用，进度继续在本地记录，联网后将重试。',
       'logout-error': '退出未成功，请重试。进度仍保存在当前账号下。',
     };
     document.querySelectorAll<HTMLElement>('[data-reading-sync-message]').forEach((node) => { node.textContent = messages[sync.status]; });
     document.querySelectorAll<HTMLElement>('[data-reading-sync-label]').forEach((node) => {
-      node.textContent = sync.status === 'synced' ? '已同步' : sync.accountId ? 'Apple 同步' : '阅读同步';
+      node.textContent = sync.status === 'synced' ? '已同步' : sync.accountId ? 'Apple 同步' : '阅读同步（可选）';
     });
     document.querySelectorAll<HTMLAnchorElement>('[data-reading-login]').forEach((link) => {
       link.hidden = !sync.enabled || sync.authenticated;
