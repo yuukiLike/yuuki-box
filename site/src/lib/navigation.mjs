@@ -87,8 +87,8 @@ export const navigation = [
   {
     label: 'Agent 工程',
     color: 'pink',
-    description: '先跑通 Harness 与真实模型的工具循环，再按运行控制、MCP 接入、Skills 的顺序选做工程练习。',
-    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure')],
+    description: '先跑通模型与工具循环，再学习 Hooks、运行控制、MCP 接入与 Skills 复用。',
+    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure')],
     items: [
       page('agent-engineering', 'Agent 工程总览：从工具循环到运行控制', ['入门', '工程练习']),
       {
@@ -101,9 +101,10 @@ export const navigation = [
         ],
       },
       {
-        label: '运行控制：取消、恢复与报告',
-        tags: ['Harness', '运行控制'],
+        label: '运行控制：Hooks、取消与报告',
+        tags: ['Hooks', 'Harness', '运行控制'],
         items: [
+          page('agent-engineering/hooks', 'AI Hooks：Claude Code、DeepSeek Harness 与 Codex', ['Hooks', 'Claude Code', 'DeepSeek', 'Codex'], 'Hooks · 三家机制与动手实验'),
           page('agent-engineering/05-harness-vertical-slice', '运行控制：取消、崩溃恢复与终态', ['取消', '恢复']),
           page('agent-engineering/06-context-and-report', '运行报告：上下文装配、耗时与费用', ['Context', '用量统计']),
           page('agent-engineering/07-scenario-regression', '场景回归：重放故障并检查运行结果', ['故障演练', '回归']),

@@ -59,6 +59,8 @@
 
 准备使用 OpenAI API 额度，打开[额度、图片与语音指南](agent-engineering/openai-api.md)，查看官方入口、到期与续发规则，以及生图、TTS、转写和实时语音的模型选择。想找具体玩法，从[六个社区小实验](agent-engineering/openai-api.md#community-ideas)挑截图记忆库、口答复习卡、学习漫画或语音冒险。
 
+想让检查随着 Agent 运行自动触发，读 [AI Hooks：Claude Code、DeepSeek Harness 与 Codex](agent-engineering/hooks.md)，从记录工具调用开始，再做一次无害命令的拒绝实验。
+
 需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
 
 ### MCP 项目实战
