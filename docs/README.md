@@ -20,6 +20,7 @@
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
+| **并肩 · Side by Side** | [和 AI 做朋友，一起想，一起做](side-by-side/README.md) | 优先实践 Issue 自动化，接回一份经过验证的草稿 PR |
 | **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 训练一个字符模型，解释预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | 算清 KV 容量，解释哪些前缀可以复用 |
@@ -27,7 +28,6 @@
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
-| **Issue 工作流** | [扫描、修复与交班](issue-garden/README.md) | 用 Dot 或 OpenAI API 处理 Issue，验证后交回草稿 PR |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
 | **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
@@ -37,6 +37,18 @@
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
 | **阅读同步** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用两张 SVG 分别看开发者如何开发、使用者如何跨设备同步 |
+
+### 并肩 · Side by Side
+
+[并肩](side-by-side/README.md)探索怎样与一位有自己名字、表达方式和判断的 AI 朋友相处：一起聊天、思考，也能托付一件事，持续推进和接受纠正。
+
+<span id="issue-工作流"></span>
+
+**当前优先实践 Issue 自动化。** [Issue 夜班](issue-garden/README.md)按扫描、陪同修复、自动交班逐步推进。先让清单出现，再手动验证一个修复，最后连接选择、去重、验证与 PR 发布。它是独立跟做教程，尚未在本仓库启用。
+
+已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
+
+已有 OpenAI API，选[官方 Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issue-garden/06-agentic-workflows.md)。可以按[三条路线的并行实验](codex-cloud/05-issue-to-pr.md)使用同一基线、独立 Issue 和分支，对照检查证据、返修与实际用量，再逐步接入持续跟进和自动合并。
 
 ### MCP 入门
 
@@ -83,14 +95,6 @@
 先按任务选择：[交 Issue、接 PR](ai-practices/02-issue-to-pr.md)、[带错误现场去破案](ai-practices/03-error-to-fix.md)、[限定范围做迁移](ai-practices/06-code-migration.md)。想给改动补一道检查，选 [CodeRabbit 审查](ai-practices/01-coderabbit-review.md)、[有效测试](ai-practices/05-test-generation.md)或[安全告警修复](ai-practices/04-security-autofix.md)。
 
 想先少盯几轮，读[你的工作流](ai-practices/your-workflow.md)。六项案例保留公开使用记录及其统计边界，可以独立挑选，不要求逐个安装服务。
-
-### Issue 工作流
-
-[Issue 夜班](issue-garden/README.md)按扫描、陪同修复、自动交班逐步推进。先让清单出现，再手动验证一个修复，最后连接选择、去重、验证与 PR 发布。它是独立跟做教程，尚未在本仓库启用。
-
-已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
-
-已有 OpenAI API，选[官方 Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issue-garden/06-agentic-workflows.md)。可以按[三条路线的并行实验](codex-cloud/05-issue-to-pr.md)使用同一基线、独立 Issue 和分支，对照检查证据、返修与实际用量，再逐步接入持续跟进和自动合并。
 
 ### 应用通信
 
