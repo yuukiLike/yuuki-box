@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织十七个专题：并肩 · Side by Side、MCP 入门、模型基础、模型推理与 KV Cache、Agent 工程、MCP 项目实战、远程 MCP 与授权、AI 开发实践、应用通信、前端性能、语音交互、AI 探索、架构研究、项目设计与计划、云端 Codex、Windows 本地 AI、阅读同步。「并肩」探索与 AI 朋友一起思考和做事，排在首页与侧栏的第一个专题，当前优先实践 Issue 自动化。四小时路线和前端与 AI 联读指南单独串联相关专题；阅读同步作为最后一课，用两张 SVG 分别说明开发者如何开发、使用者如何跨设备同步。
+以 Astro 与 Starlight 浏览仓库的学习资料，按学习目标组织十七个专题：MCP 入门、AI 搭子（同行者）、模型基础、模型推理与 KV Cache、Agent 工程、MCP 项目实战、远程 MCP 与授权、AI 开发实践、应用通信、前端性能、语音交互、AI 探索、架构研究、项目设计与计划、云端 Codex、Windows 本地 AI、阅读同步。MCP 入门排在首页与侧栏的第一个专题；「AI 搭子（同行者）」以「Side by Side」为标语，探索一起思考和做事，排在第二，当前优先实践 Issue 自动化。四小时路线和前端与 AI 联读指南单独串联相关专题；阅读同步作为最后一课，用两张 SVG 分别说明开发者如何开发、使用者如何跨设备同步。
 
 ## 本地运行
 
@@ -150,7 +150,7 @@ pnpm --dir site exec wrangler pages dev dist
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。
 - `src/lib/navigation.mjs` 统一维护阅读顺序、具体标题、主题标签、专题颜色与总览描述；`astro.config.ts` 将其接入 Starlight，并监听导航文件触发配置重载。使用 TypeScript 配置让 Astro 经 Vite 重新加载导航依赖，避免开发服务只刷新正文标签却保留旧分组。首页、阅读页标题与页内大纲展示主题标签；侧栏使用同一阅读顺序，显示标题和阅读进度。浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
-- 导航按学习目标分类：「并肩 · Side by Side」作为第一个专题，Issue 自动化是其中优先实践的章节，原有教程继续使用 `docs/issue-garden/` 路由。MCP 入门、模型基础、MCP 项目实战、KV Cache、远程授权工程与项目设计各自独立，Harness 入门归入 Agent 工程。Agent 分为入门、运行控制、MCP、Skills、Computer Use 五段；前端性能保留查找缓存、浏览器计算与界面响应三段。三个浏览器实验各自放回对应专题。
+- 导航按学习目标分类：MCP 入门作为第一个专题，「AI 搭子（同行者）」排在第二，Issue 自动化是其中优先实践的章节，原有教程继续使用 `docs/issue-garden/` 路由。模型基础、MCP 项目实战、KV Cache、远程授权工程与项目设计各自独立，Harness 入门归入 Agent 工程。Agent 分为入门、运行控制、MCP、Skills、Computer Use 五段；前端性能保留查找缓存、浏览器计算与界面响应三段。三个浏览器实验各自放回对应专题。
 - 跨专题导读在首页介绍和侧栏顶部提供入口，专题卡片只列本专题内容。调整分组不移动已有 Markdown 文件和路由；正文中的前置要求、选读说明与下一步建议同步维护。
 - `README.md` 对应 `/guide/`，子目录的 `README.md` 对应该目录；其他 Markdown 文件名保留在路由中。
 

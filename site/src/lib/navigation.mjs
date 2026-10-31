@@ -28,28 +28,6 @@ export const navigation = [
   { ...page('ai-from-scaling', '四小时路线：模型基础与 Agent 入门', ['跨专题导读']), color: 'sky' },
   { ...page('learning/ai-frontend-intersections', '联读指南：前端与 AI 实验', ['跨专题导读']), color: 'sky' },
   {
-    label: '并肩 · Side by Side',
-    color: 'emerald',
-    description: '和 AI 做朋友，一起想，一起做。优先从 Issue 自动化开始，把一件事交给它，检查修复、返修与交付。',
-    tags: [topic('认识并肩', 'side-by-side'), topic('Issue 自动化', 'issue-garden'), topic('Dot 路线', 'issue-garden/04-dot-shift'), topic('API 路线', 'issue-garden/05-codex-api'), topic('Agentic Workflows', 'issue-garden/06-agentic-workflows')],
-    items: [
-      page('side-by-side', '并肩 · Side by Side', ['AI 朋友', '一起想', '一起做']),
-      {
-        label: '优先实践：Issue 自动化',
-        tags: ['Issue → PR', '持续跟进'],
-        items: [
-          page('issue-garden', 'Issue 自动化总览：扫描、修复与交班', ['流程设计', '工程跟做']),
-          page('issue-garden/01-first-scan', '1 · 扫描仓库问题并整理候选 Issue', ['问题发现']),
-          page('issue-garden/02-first-repair', '2 · 修复一个 Issue 并验证补丁', ['修复验证']),
-          page('issue-garden/03-night-shift', '3 · 安排夜间任务与保留交班记录', ['定时流程', '交班记录']),
-          page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
-          page('issue-garden/05-codex-api', 'API 路线 · 用 Codex Action 从 Issue 交付 PR', ['OpenAI API', 'Codex Action', '独立验证']),
-          page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
-        ],
-      },
-    ],
-  },
-  {
     label: 'MCP 入门',
     color: 'sky',
     description: '先让 Codex 调用自己的工具，再用独立客户端观察发现、调用与校验。TypeScript 工程基础按需补齐。',
@@ -62,6 +40,28 @@ export const navigation = [
         tags: ['Agent 历史'],
         items: [
           page('ai-from-scaling/extra-tool-use-story', '工具调用简史：ReAct、函数调用、MCP 与 Skills', ['Agent 历史', '选读'], '番外 · 工具调用简史'),
+        ],
+      },
+    ],
+  },
+  {
+    label: 'AI 搭子（同行者）',
+    color: 'emerald',
+    description: 'Side by Side · 和 AI 做朋友，一起想，一起做。优先从 Issue 自动化开始，把一件事交给它，检查修复、返修与交付。',
+    tags: [topic('认识 AI 搭子', 'side-by-side'), topic('Issue 自动化', 'issue-garden'), topic('Dot 路线', 'issue-garden/04-dot-shift'), topic('API 路线', 'issue-garden/05-codex-api'), topic('Agentic Workflows', 'issue-garden/06-agentic-workflows')],
+    items: [
+      page('side-by-side', 'AI 搭子（同行者）', ['一起想', '一起做', '持续跟进']),
+      {
+        label: '优先实践：Issue 自动化',
+        tags: ['Issue → PR', '持续跟进'],
+        items: [
+          page('issue-garden', 'Issue 自动化总览：扫描、修复与交班', ['流程设计', '工程跟做']),
+          page('issue-garden/01-first-scan', '1 · 扫描仓库问题并整理候选 Issue', ['问题发现']),
+          page('issue-garden/02-first-repair', '2 · 修复一个 Issue 并验证补丁', ['修复验证']),
+          page('issue-garden/03-night-shift', '3 · 安排夜间任务与保留交班记录', ['定时流程', '交班记录']),
+          page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
+          page('issue-garden/05-codex-api', 'API 路线 · 用 Codex Action 从 Issue 交付 PR', ['OpenAI API', 'Codex Action', '独立验证']),
+          page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
         ],
       },
     ],

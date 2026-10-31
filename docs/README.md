@@ -20,8 +20,8 @@
 
 | 现在想做什么 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **并肩 · Side by Side** | [和 AI 做朋友，一起想，一起做](side-by-side/README.md) | 优先实践 Issue 自动化，接回一份经过验证的草稿 PR |
 | **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
+| **AI 搭子（同行者）** | [Side by Side · 和 AI 做朋友](side-by-side/README.md) | 优先实践 Issue 自动化，接回一份经过验证的草稿 PR |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 训练一个字符模型，解释预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | 算清 KV 容量，解释哪些前缀可以复用 |
 | **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | 跑通 Harness，理解外部工具与界面自动化 |
@@ -32,15 +32,21 @@
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
 | **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
 | **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
-| **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
+| **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线实现对照](../examples/COMPARISON.md) | 说清一次技术取舍，以及什么证据会改变它 |
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
 | **阅读同步** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用两张 SVG 分别看开发者如何开发、使用者如何跨设备同步 |
 
-### 并肩 · Side by Side
+### MCP 入门
 
-[并肩](side-by-side/README.md)探索怎样与一位有自己名字、表达方式和判断的 AI 朋友相处：一起聊天、思考，也能托付一件事，持续推进和接受纠正。
+先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再做约 30 分钟的[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)。需要补齐工程知识时，按需阅读其中的 [TypeScript 技术栈](ai-from-scaling/00-minimal-mcp.md#typescript-stack)。
+
+想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
+
+### AI 搭子（同行者）
+
+[AI 搭子（同行者）](side-by-side/README.md)以「Side by Side」为标语，探索怎样与一位有自己名字、表达方式和判断的 AI 朋友相处：一起聊天、思考，也能托付一件事，持续推进和接受纠正。
 
 <span id="issue-工作流"></span>
 
@@ -49,12 +55,6 @@
 已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
 
 已有 OpenAI API，选[官方 Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issue-garden/06-agentic-workflows.md)。可以按[三条路线的并行实验](codex-cloud/05-issue-to-pr.md)使用同一基线、独立 Issue 和分支，对照检查证据、返修与实际用量，再逐步接入持续跟进和自动合并。
-
-### MCP 入门
-
-先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再做约 30 分钟的[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)。需要补齐工程知识时，按需阅读其中的 [TypeScript 技术栈](ai-from-scaling/00-minimal-mcp.md#typescript-stack)。
-
-想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
 
 <span id="模型基础与推理缓存"></span>
 
