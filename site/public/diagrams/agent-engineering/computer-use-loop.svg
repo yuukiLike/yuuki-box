@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="910" viewBox="0 0 800 910" role="img" aria-labelledby="title desc">
+  <title id="title">Computer Use：观察、执行、再观察</title>
+  <desc id="desc">模型根据任务和当前观察提出动作或代码。Harness 检查目标、参数与权限，工具运行时通过原生应用、浏览器或隔离桌面驱动执行。新的截图或结构化状态回到模型，完成后还要核对用户要求的实际结果。图中层次是教学归纳，不代表厂商内部进程结构。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#71839b" stroke-width="1.5"/></marker>
+  </defs>
+  <rect width="800" height="910" rx="18" fill="#fff"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="32" y="48" font-size="28" font-weight="650" fill="#20324d">Computer Use：观察、执行、再观察</text>
+    <text x="32" y="82" font-size="19" fill="#52657c">模型选择动作；运行环境执行；结果需要重新核对。</text>
+    <rect x="132" y="116" width="614" height="100" rx="12" fill="#edf3ff" stroke="#9fb7dd"/>
+    <text x="156" y="152" font-size="23" font-weight="600" fill="#2e5185">1 · 模型</text>
+    <text x="156" y="187" font-size="20" fill="#20324d">任务 + 当前观察 + 历史 → 动作或代码</text>
+    <path d="M439 216 V250" stroke="#71839b" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="132" y="260" width="614" height="100" rx="12" fill="#fff6e4" stroke="#d9b66a"/>
+    <text x="156" y="296" font-size="23" font-weight="600" fill="#76551d">2 · Harness 与工具运行时</text>
+    <text x="156" y="331" font-size="20" fill="#20324d">检查目标、参数与权限；执行、限额、记录</text>
+    <path d="M439 360 V394" stroke="#71839b" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="132" y="404" width="614" height="188" rx="12" fill="#f4f7fb" stroke="#cbd6e4"/>
+    <text x="156" y="441" font-size="23" font-weight="600" fill="#20324d">3 · 驱动访问实际环境</text>
+    <rect x="154" y="465" width="176" height="100" rx="10" fill="#fff" stroke="#cbd6e4"/>
+    <rect x="351" y="465" width="176" height="100" rx="10" fill="#fff" stroke="#cbd6e4"/>
+    <rect x="548" y="465" width="176" height="100" rx="10" fill="#fff" stroke="#cbd6e4"/>
+    <g text-anchor="middle" fill="#20324d">
+      <text x="242" y="502" font-size="22">原生应用</text>
+      <text x="242" y="536" font-size="18">AX / 截图 / 输入</text>
+      <text x="439" y="502" font-size="22">浏览器</text>
+      <text x="439" y="536" font-size="18">页面结构 / 截图</text>
+      <text x="636" y="502" font-size="22">隔离桌面</text>
+      <text x="636" y="536" font-size="18">抓图 / 输入驱动</text>
+    </g>
+    <path d="M439 592 V626" stroke="#71839b" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="132" y="636" width="614" height="100" rx="12" fill="#e9f6ef" stroke="#91bda4"/>
+    <text x="156" y="673" font-size="23" font-weight="600" fill="#275b40">4 · 返回新的观察</text>
+    <text x="156" y="708" font-size="20" fill="#20324d">截图 / 结构 / 执行回执 / 错误</text>
+    <path d="M132 686 H78 V166 H122" fill="none" stroke="#71839b" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="52" y="415" font-size="19" fill="#52657c" transform="rotate(-90 52 415)" text-anchor="middle">继续判断</text>
+    <rect x="32" y="776" width="714" height="96" rx="12" fill="#f4f7fb" stroke="#cbd6e4"/>
+    <text x="54" y="812" font-size="22" font-weight="600" fill="#20324d">完成条件：用户要求的结果已经成立</text>
+    <text x="54" y="847" font-size="19" fill="#52657c">“生成调用”“执行无报错”和“任务完成”需要分别判断。</text>
+  </g>
+</svg>

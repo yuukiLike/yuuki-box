@@ -174,6 +174,8 @@ MCP 解决的是重复集成问题。把每个 Host 与每个工具分别连接�
 
 到这一步，竞争点已经从“模型会不会调工具”变成“**系统能不能管住一个长循环**”。模型能力仍然重要，但 Harness 决定了它能不能安全地跑十分钟、一小时、一整天。
 
+想拆开 GUI 操作这条路线，读 [Computer Use：观察、执行与验证](../agent-engineering/computer-use.md)，再看 [Codex 的 cua_repl](../agent-engineering/cua-repl.md)与[同类工具对照](../agent-engineering/computer-use-ecosystem.md)。这些新篇按 2026-10-31 的资料说明当前接口，不把现行能力倒推为首发时就已具备。
+
 ## 2025 年 10 月：把做事方法封装成 Skills
 
 工具接好了，还有一件事要反复交代：**这类任务应该怎样做？** 比如每次整理 docs，都要说明先看目录、怎样拆章节、修改后检查哪些链接。这些做事方法也需要保存和复用。

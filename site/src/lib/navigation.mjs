@@ -87,10 +87,10 @@ export const navigation = [
   {
     label: 'Agent 工程',
     color: 'pink',
-    description: '先跑通模型与工具循环，再学习 Hooks、运行控制、MCP 接入与 Skills 复用。',
-    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure')],
+    description: '先跑通工具循环，再学习 Hooks、运行控制、MCP 与 Skills；用 Computer Use 理解 AI 怎样操作界面。',
+    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('Computer Use', 'agent-engineering/computer-use'), topic('cua_repl', 'agent-engineering/cua-repl')],
     items: [
-      page('agent-engineering', 'Agent 工程总览：从工具循环到运行控制', ['入门', '工程练习']),
+      page('agent-engineering', 'Agent 工程总览：工具循环与执行能力', ['入门', '工程练习', 'Computer Use']),
       {
         label: '入门：跑通模型与工具循环',
         tags: ['Harness', '可运行教程'],
@@ -124,6 +124,16 @@ export const navigation = [
         items: [
           page('agent-engineering/03-skills-structure', 'Skill 结构：保存可复用的任务流程', ['SKILL.md', '流程复用']),
           page('agent-engineering/04-skills-validation', 'Skill 验证：为完成条件设计验收', ['完成条件', '验证']),
+        ],
+      },
+      {
+        label: 'Computer Use：原理、接口与误区',
+        tags: ['Computer Use', 'cua_repl'],
+        items: [
+          page('agent-engineering/computer-use', 'Computer Use：模型怎样看界面、做动作、检查结果', ['执行原理', 'AX', 'DOM'], '1 · 界面操作原理'),
+          page('agent-engineering/cua-repl', 'Codex 与 cua_repl：接口、连接与状态', ['Codex', 'cua_repl', 'REPL'], '2 · Codex 与 cua_repl'),
+          page('agent-engineering/computer-use-ecosystem', '同类工具：Claude、Gemini、Playwright MCP 与浏览器 Agent', ['Claude', 'Gemini', '浏览器自动化'], '3 · 同类工具对照'),
+          page('agent-engineering/computer-use-misconceptions', 'Computer Use：理解误区与自测', ['理解误区', '状态', '验证'], '4 · 误区与自测'),
         ],
       },
     ],

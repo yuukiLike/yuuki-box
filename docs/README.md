@@ -23,7 +23,7 @@
 | **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 训练一个字符模型，解释预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | 算清 KV 容量，解释哪些前缀可以复用 |
-| **Agent 工程** | [从工具循环到运行控制](agent-engineering/README.md) | 跑通 Harness，再接真实模型与外部工具 |
+| **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | 跑通 Harness，理解外部工具与界面自动化 |
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
@@ -60,6 +60,8 @@
 准备使用 OpenAI API 额度，打开[额度、图片与语音指南](agent-engineering/openai-api.md)，查看官方入口、到期与续发规则，以及生图、TTS、转写和实时语音的模型选择。想找具体玩法，从[六个社区小实验](agent-engineering/openai-api.md#community-ideas)挑截图记忆库、口答复习卡、学习漫画或语音冒险。
 
 想让检查随着 Agent 运行自动触发，读 [AI Hooks：Claude Code、DeepSeek Harness 与 Codex](agent-engineering/hooks.md)，从记录工具调用开始，再做一次无害命令的拒绝实验。
+
+想理解 AI 怎样操作电脑，读 [Computer Use 四篇](agent-engineering/computer-use.md)：从截图、AX、DOM 与执行器走到 [Codex 的 cua_repl](agent-engineering/cua-repl.md)，再比较 [Claude、Gemini 与浏览器自动化工具](agent-engineering/computer-use-ecosystem.md)，用[误区自测](agent-engineering/computer-use-misconceptions.md)分清连接、权限与完成证据。
 
 需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
 
