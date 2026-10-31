@@ -34,7 +34,7 @@
 | **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 一个输入、输出与判定标准都清楚的小实验 |
 | **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线选择与推荐架构](../README.md) | 说清一次技术取舍，以及什么证据会改变它 |
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
-| **云端 Codex** | [环境、任务与 for-safe 练习](codex-cloud/README.md) | 交出一个云端任务，分清自动检查与 Mac 真机验收 |
+| **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
 
 ### MCP 入门
@@ -121,7 +121,7 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 ### 云端 Codex
 
-从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果，再看[社区用法和真实历史截图](codex-cloud/02-community.md)。三页分别说明基础、操作和公开经验，保留新版与 Legacy、订阅额度与 API 余额、模拟测试与真机验证的边界。
+从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果。已有代码的练习再选 [`for-job` 的备份恢复与导出回归](codex-cloud/03-for-job.md)，或 [`agent-symphony` 的事件与回放验证](codex-cloud/04-agent-symphony.md)；[社区用法和真实历史截图](codex-cloud/02-community.md)提供公开经验。每项都区分云端实际完成的检查与本地仍需补的证据。
 
 ### Windows 本地 AI
 

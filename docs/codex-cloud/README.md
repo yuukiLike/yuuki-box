@@ -2,15 +2,27 @@
 
 **把仓库和一个明确任务交给 Codex，让它在云端读文件、改代码、运行命令，再回来检查结果。你的电脑休眠后，云端任务仍能继续。** [官方概览](https://learn.chatgpt.com/docs/cloud)
 
-这一专题用 `for-safe` 做练习：先让 AI 拆出能在云端验证的工作，再把需要无线设备和 macOS 权限的部分留给真实 Mac。先完成一次小任务，就能开始你的「AI 尽可能接管开发流程」实验。
+这一专题从 `for-safe` 的规格拆分开始，再增加 `for-job` 和 `agent-symphony` 两个已有代码的项目：练习让云端检查简历编辑与导出，以及 Agent 事件记录与回放。每次交出一个小任务，观察 AI 实际接管了哪些工作、还缺哪些本地验收。
 
 | 阅读顺序 | 你会得到什么 |
 | --- | --- |
 | 本页 · 三个概念 | 分清环境、任务、PR，以及额度与硬件边界 |
 | [1 · 用 for-safe 开始](01-for-safe.md) | 创建环境、发布、发出第一条任务、检查交付 |
 | [2 · 社区怎么用](02-community.md) | 三种有公开来源的做法，两张真实历史界面截图 |
+| [3 · for-job](03-for-job.md) | 准备已有 Web 项目，验证备份恢复与实际导出 |
+| [4 · agent-symphony](04-agent-symphony.md) | 验证事件处理、观察服务与浏览器回归，区分模拟和真实接入 |
 
-产品规则核对于 **2026-10-29**。正文按新版 **Codex Cloud** 编写；官方仍保留 **Codex Cloud (Legacy)**。社区旧截图均单独标注，不能用旧版的缓存、联网或密钥规则解释新版。[新版与 Legacy 的入口](https://learn.chatgpt.com/docs/environments/cloud-environments)
+总览与 `for-safe` 操作中的产品规则核对于 **2026-10-29**，新增项目的核对日期见各页。正文按新版 **Codex Cloud** 编写；官方仍保留 **Codex Cloud (Legacy)**。社区旧截图均单独标注，不能用旧版的缓存、联网或密钥规则解释新版。[新版与 Legacy 的入口](https://learn.chatgpt.com/docs/environments/cloud-environments)
+
+## 三个项目怎样选
+
+| 项目 | 这次探索什么 | 第一份交付 | 本地继续验什么 |
+| --- | --- | --- | --- |
+| [for-safe](01-for-safe.md) | 从规格中拆出可验证的任务 | 有文件依据的任务划分 | macOS 权限、Wi-Fi、蓝牙与真实设备 |
+| [for-job](03-for-job.md) | 在已有产品中完成自动检查与小改动 | 当前提交的检查基线，再做备份恢复与导出回归 | 实际版式、字体、浏览器旧稿与 iPhone / iCloud 链路 |
+| [agent-symphony](04-agent-symphony.md) | 用事件样本验证观察结果是否可靠 | 事件、存储与 HTTP 检查，再做界面回归 | 本地宿主 Hooks 接入、真实声音与听感 |
+
+第一次用 Cloud，先走 `for-safe` 的环境创建步骤；已经会创建环境，可以直接进入另两项。建议每个项目先准备自己的环境，各跑一次基线，再交实现任务，方便定位依赖和失败来源。
 
 ## 先记三个词
 
@@ -53,4 +65,4 @@
 
 之前截图里的 **API credit balance** 是 API 侧余额，不是这里的云端任务额度。订阅赠送的 API credits 也不适用于通过 API key 使用 Codex。云端跟做使用 ChatGPT 登录，不需要把 API key 填进环境。[API 赠额适用范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
-**下一步：[用 for-safe 发出第一条云端任务 →](01-for-safe.md)**
+**下一步：[用 for-safe 发出第一条云端任务 →](01-for-safe.md)**；已有代码的练习可选 [for-job](03-for-job.md) 或 [agent-symphony](04-agent-symphony.md)。

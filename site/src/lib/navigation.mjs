@@ -336,12 +336,14 @@ export const navigation = [
   {
     label: '云端 Codex',
     color: 'sky',
-    description: '用 for-safe 练习把开发任务交给云端：创建环境、检查产物，再回到真实 Mac 验证权限与无线能力。',
-    tags: [topic('基础与额度', 'codex-cloud'), topic('第一次任务', 'codex-cloud/01-for-safe'), topic('社区与截图', 'codex-cloud/02-community')],
+    description: '用 for-safe、for-job 与 agent-symphony 练习云端任务：从规格拆分走到备份导出、事件与回放验证，再补本地验收。',
+    tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('社区与截图', 'codex-cloud/02-community')],
     items: [
       page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
       page('codex-cloud/01-for-safe', '1 · 用 for-safe 发出第一条云端任务', ['for-safe', '动手练习']),
       page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
+      page('codex-cloud/03-for-job', '3 · for-job 的云端检查与导出回归', ['for-job', '备份与导出']),
+      page('codex-cloud/04-agent-symphony', '4 · agent-symphony 的云端事件与回放验证', ['Agent Symphony', '事件与回放']),
     ],
   },
   {

@@ -60,3 +60,5 @@
 云端省掉了你持续盯着开发机器的负担，也提供了可复用的执行环境。`for-safe` 的无线验证条件仍需要你定义和准备；把这条边界写清楚，才知道 AI 实际接管了多少工作。
 
 继续做自己的 AI 实验时，可联读 [AI 探索](../ai-ideas/README.md)与 [Issue 修复、验证和交班](../issue-garden/README.md)。
+
+**已有代码的下一项练习：[for-job 的备份恢复与导出回归 →](03-for-job.md)**；也可选择 [agent-symphony 的事件与回放验证](04-agent-symphony.md)。
