@@ -57,6 +57,8 @@
 
 从[搭建 Harness](ai-from-scaling/03-build-a-harness.md)和[接真实模型](ai-from-scaling/04-experiments.md)两课开始。这两课提供可运行代码；后续依次选做[运行控制](agent-engineering/05-harness-vertical-slice.md)、[MCP 接入](agent-engineering/01-mcp-tool-source.md)和 [Skills 复用](agent-engineering/03-skills-structure.md)。后续七个工程练习属于实现建议，尚未接入本仓库 runtime。
 
+准备使用 OpenAI API 额度，打开[额度、图片与语音指南](agent-engineering/openai-api.md)，查看官方入口、到期与续发规则，以及生图、TTS、转写和实时语音的模型选择。想找具体玩法，从[六个社区小实验](agent-engineering/openai-api.md#community-ideas)挑截图记忆库、口答复习卡、学习漫画或语音冒险。
+
 需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
 
 ### MCP 项目实战

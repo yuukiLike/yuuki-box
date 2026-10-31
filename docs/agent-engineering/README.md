@@ -13,6 +13,8 @@
 
 这两课提供可运行的 [harness.mjs](../ai-from-scaling/labs/harness.mjs)。离线部分不需要 API key；真实调用需要自己的模型配置。只学习 Agent 时，第二课中的字符模型对照可以跳过。想同时理解训练原理，再跟随[四小时联读路线](../ai-from-scaling/README.md)。
 
+准备使用 OpenAI 订阅赠送的 API 额度，先读 [OpenAI API：额度、图片与语音](openai-api.md)，确认领取入口、到期时间和模型用途。上面第二课的现有脚本使用 DeepSeek；OpenAI 这篇提供独立的 API 平台入门。
+
 后续七个工程练习是实现建议，代码片段用于说明接口与边界，尚未接入本仓库的 runtime。先跑通入门代码，再按需求选做。MCP 与 Agent Skills 的规范仍在演进，具体字段和行为以当前官方文档为准。资料核对：2026-10-23。
 
 ## 能力分类：MCP 协议、Skill 流程与 Harness 执行

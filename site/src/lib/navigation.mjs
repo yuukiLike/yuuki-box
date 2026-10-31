@@ -88,7 +88,7 @@ export const navigation = [
     label: 'Agent 工程',
     color: 'pink',
     description: '先跑通 Harness 与真实模型的工具循环，再按运行控制、MCP 接入、Skills 的顺序选做工程练习。',
-    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure')],
+    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure')],
     items: [
       page('agent-engineering', 'Agent 工程总览：从工具循环到运行控制', ['入门', '工程练习']),
       {
@@ -97,6 +97,7 @@ export const navigation = [
         items: [
           page('ai-from-scaling/03-build-a-harness', 'Agent 入门 1：搭建工具调用 Harness', ['Harness', '工具调用'], '1 · 搭建 Harness'),
           page('ai-from-scaling/04-experiments', 'Agent 入门 2：接真实模型并对照结果', ['模型 API', '对照实验'], '2 · 接真实模型'),
+          page('agent-engineering/openai-api', 'OpenAI API：额度、图片与语音', ['API 额度', '图片生成', 'TTS', topic('社区妙用', 'agent-engineering/openai-api#community-ideas')], 'OpenAI API · 额度与妙用'),
         ],
       },
       {

@@ -12,6 +12,8 @@
 
 只想先听一句话，点[让 Yuuki 开口说第一句话](让-Yuuki-开口说第一句话.md)。
 
+已有 OpenAI API 额度，想试云端 TTS、录音转写或实时语音，读 [OpenAI API：额度、图片与语音](../agent-engineering/openai-api.md)。其中记录了赠额适用范围，以及旧 TTS 模型的停用与迁移安排。
+
 [![TTS 把文字变音频，VAD 找人声时间段，ASR 将录音转写为文字](../../site/public/diagrams/tts/speech-paths.svg)](../../site/public/diagrams/tts/speech-paths.svg)
 
 **先准备一次：Mac + 独立 Python 环境**
