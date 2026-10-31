@@ -29,6 +29,7 @@ export default defineConfig({
       components: {
         Header: './src/components/ContentHeader.astro',
         PageTitle: './src/components/PageTitle.astro',
+        Footer: './src/components/ReadingFooter.astro',
         TwoColumnContent: './src/components/ReadingFrame.astro',
         PageSidebar: '@astrojs/starlight/components/TableOfContents.astro',
       },

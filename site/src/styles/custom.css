@@ -176,9 +176,21 @@ site-search dialog::backdrop { background: #101c354d; }
 .sidebar-content ul ul li { border-inline-start-color: var(--yuuki-border); }
 .sidebar-pane { scrollbar-width: thin; scrollbar-color: var(--sl-color-gray-5) transparent; }
 
+.reading-badge {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  color: var(--topic-sky);
+  font: 500 .6875rem/1.6 var(--sl-font);
+  white-space: nowrap;
+}
+[data-reading-state='complete'] > .reading-badge { color: var(--topic-emerald); }
+.sidebar-content a[data-reading-state] { display: flex; align-items: center; gap: .25rem; }
+.sidebar-content a[data-reading-state] > span:first-child { min-width: 0; }
+.directory-link[data-reading-state] .directory-link-arrow { display: none; }
+
 /* Reading pages share the same spacing, quiet borders and focus states. */
 h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
-.page-topics { margin-top: .65rem; }
+.page-topics { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; margin-top: .65rem; }
 .page-description { margin: .7rem 0 0; color: var(--sl-color-gray-2); font-size: .875rem; line-height: 1.8; }
 .outline-topics { margin-bottom: .85rem; }
 .content-panel:first-child { padding-top: 1.25rem; padding-bottom: .5rem; }
