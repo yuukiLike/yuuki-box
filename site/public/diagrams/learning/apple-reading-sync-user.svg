@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1390" viewBox="0 0 960 1390" role="img" aria-labelledby="title desc">
+  <title id="title">使用者视角：阅读进度如何跨设备同步</title>
+  <desc id="desc">先在手机阅读，自动保存本地进度；需要跨设备时，打开顶部阅读同步，通过 Apple 登录，已有匿名记录归入账号并上传。电脑分别登录同一账号后拉取 40%，继续读到 70%，手机下一次同步也取得 70%。未登录仅本地保存，断网保留待同步记录，联网后重试。同步最高百分比，不自动恢复滚动位置。图为云同步开通后的预期流程，百分比仅为示意。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker>
+  </defs>
+  <rect width="960" height="1390" rx="20" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans CJK SC', sans-serif" fill="#243d30">
+    <text x="40" y="52" font-size="29" font-weight="600">使用者视角 · 阅读进度如何跨设备同步</text>
+    <text x="40" y="88" font-size="20" fill="#52695b">每台设备分别在本站登录同一 Apple 账号；不登录也能本地阅读。</text>
+
+    <rect x="40" y="124" width="420" height="144" rx="15" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="64" y="165" font-size="24" font-weight="600">1 · 在手机上先阅读</text>
+    <text x="64" y="206" font-size="20">进度自动留在当前浏览器。</text>
+    <text x="64" y="242" font-size="19">无需登录，也无需手动保存。</text>
+    <path d="M468 196H489" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="500" y="124" width="420" height="144" rx="15" fill="#dcebdc" stroke="#72967b"/>
+    <text x="524" y="165" font-size="24" font-weight="600">2 · 需要换设备时再登录</text>
+    <text x="524" y="206" font-size="20">顶部「阅读同步」→「通过 Apple 登录」</text>
+    <text x="524" y="242" font-size="19">本地匿名记录会归入登录的账号。</text>
+
+    <text x="40" y="310" font-size="20" fill="#52695b">登录后，打开同一个网站的同一篇文章：</text>
+    <rect x="40" y="336" width="220" height="88" rx="14" fill="#dcebdc" stroke="#72967b"/>
+    <rect x="370" y="336" width="220" height="88" rx="14" fill="#e3eef5" stroke="#87aabd"/>
+    <rect x="700" y="336" width="220" height="88" rx="14" fill="#dcebdc" stroke="#72967b"/>
+    <g text-anchor="middle">
+      <text x="150" y="372" font-size="24" font-weight="600">手机</text>
+      <text x="150" y="407" font-size="19">本站已登录账号 A</text>
+      <text x="480" y="372" font-size="24" font-weight="600">本站云端进度</text>
+      <text x="480" y="407" font-size="19">按账号、文章保存</text>
+      <text x="810" y="372" font-size="24" font-weight="600">电脑</text>
+      <text x="810" y="407" font-size="19">也在本站登录账号 A</text>
+    </g>
+    <g stroke="#a4b8aa" stroke-width="2" stroke-dasharray="5 8">
+      <path d="M150 436V920"/><path d="M480 436V920"/><path d="M810 436V920"/>
+    </g>
+    <g fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)">
+      <path d="M160 502H470"/><path d="M490 622H800"/>
+      <path d="M800 742H490"/><path d="M470 862H160"/>
+    </g>
+    <text x="315" y="485" text-anchor="middle" font-size="21">3 · 自动上传已读 40%</text>
+    <rect x="410" y="522" width="140" height="38" rx="9" fill="#e3eef5"/>
+    <text x="480" y="548" text-anchor="middle" font-size="20">云端 40%</text>
+    <text x="645" y="605" text-anchor="middle" font-size="21">4 · 登录后取得 40%</text>
+    <text x="645" y="725" text-anchor="middle" font-size="21">5 · 继续阅读，上传 70%</text>
+    <rect x="410" y="762" width="140" height="38" rx="9" fill="#e3eef5"/>
+    <text x="480" y="788" text-anchor="middle" font-size="20">云端 70%</text>
+    <text x="315" y="845" text-anchor="middle" font-size="21">6 · 下次同步显示 70%</text>
+    <text x="480" y="918" text-anchor="middle" font-size="20">始终保留较高百分比：回看或上传旧记录，70% 也不会退回 40%。</text>
+
+    <rect x="40" y="952" width="880" height="104" rx="15" fill="#e3eef5" stroke="#87aabd"/>
+    <text x="64" y="991" font-size="24" font-weight="600">什么时候同步？</text>
+    <text x="64" y="1030" font-size="20">新进度停止变化约 1.5 秒后上传；前台每 30 秒、聚焦或联网时同步。</text>
+
+    <rect x="40" y="1080" width="880" height="104" rx="15" fill="#f1e9d7" stroke="#b5a27a"/>
+    <text x="64" y="1119" font-size="24" font-weight="600">断网时会怎样？</text>
+    <text x="64" y="1158" font-size="20">已加载页面先记本地，联网后补传；遇到错误可在面板点「重试同步」。</text>
+
+    <rect x="40" y="1208" width="880" height="112" rx="15" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="64" y="1247" font-size="24" font-weight="600">同步后能看到什么？</text>
+    <text x="64" y="1286" font-size="20">共享已浏览百分比，打开文章时需自行滚动；不同账号各有独立记录。</text>
+    <text x="40" y="1358" font-size="19" fill="#52695b">流程与百分比均为示意；站点开通后，需在真实设备上验证。</text>
+  </g>
+</svg>

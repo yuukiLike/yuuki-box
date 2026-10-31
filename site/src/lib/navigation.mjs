@@ -88,7 +88,7 @@ export const navigation = [
     label: 'Agent 工程',
     color: 'pink',
     description: '先跑通工具循环，再学习 Hooks、运行控制、MCP 与 Skills；用 Computer Use 理解 AI 怎样操作界面。',
-    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('Computer Use', 'agent-engineering/computer-use'), topic('cua_repl', 'agent-engineering/cua-repl')],
+    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('语音与音乐项目', 'agent-engineering/openai-api-projects'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('Computer Use', 'agent-engineering/computer-use'), topic('cua_repl', 'agent-engineering/cua-repl')],
     items: [
       page('agent-engineering', 'Agent 工程总览：工具循环与执行能力', ['入门', '工程练习', 'Computer Use']),
       {
@@ -98,6 +98,7 @@ export const navigation = [
           page('ai-from-scaling/03-build-a-harness', 'Agent 入门 1：搭建工具调用 Harness', ['Harness', '工具调用'], '1 · 搭建 Harness'),
           page('ai-from-scaling/04-experiments', 'Agent 入门 2：接真实模型并对照结果', ['模型 API', '对照实验'], '2 · 接真实模型'),
           page('agent-engineering/openai-api', 'OpenAI API：额度、图片与语音', ['API 额度', '图片生成', 'TTS', topic('社区妙用', 'agent-engineering/openai-api#community-ideas')], 'OpenAI API · 额度与妙用'),
+          page('agent-engineering/openai-api-projects', 'OpenAI API 额度怎么用：语音、音乐与多模态小项目', ['语音项目', '音乐制作', '多模态', 'API 用量'], 'OpenAI API · 语音与音乐项目'),
         ],
       },
       {
@@ -361,12 +362,12 @@ export const navigation = [
     ],
   },
   {
-    label: '网站实战',
+    label: '阅读同步',
     color: 'emerald',
-    description: '以本站阅读进度为最后一课：配置 Apple 登录与 Cloudflare D1，部署接口，再用两台设备验证同步、离线恢复与账号隔离。',
-    tags: [topic('Apple 登录', 'learning/apple-reading-sync#apple-setup'), topic('Cloudflare D1', 'learning/apple-reading-sync#cloudflare-setup'), topic('同步验收', 'learning/apple-reading-sync#verify-sync')],
+    description: '用两张 SVG 看懂本站阅读同步：开发者如何串起本地进度、Apple 登录与云端接口，使用者如何在手机和电脑之间同步。',
+    tags: [topic('开发者视角', 'learning/apple-reading-sync#developer-view'), topic('使用者视角', 'learning/apple-reading-sync#user-view'), topic('Apple 登录', 'learning/apple-reading-sync#apple-setup')],
     items: [
-      page('learning/apple-reading-sync', '最后一课：为本站接入 Apple 登录与阅读同步', ['Apple 登录', 'Cloudflare D1', '阅读同步'], '最后一课 · Apple 登录与阅读同步'),
+      page('learning/apple-reading-sync', '最后一课：Apple 登录与阅读同步', ['开发者视角', '使用者视角', 'Apple 登录'], '最后一课 · Apple 登录与阅读同步'),
     ],
   },
 ];

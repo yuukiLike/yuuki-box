@@ -36,7 +36,7 @@
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
-| **网站实战** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用三张 SVG 追踪身份、数据与开通步骤，再在真实设备上验证同步 |
+| **阅读同步** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用两张 SVG 分别看开发者如何开发、使用者如何跨设备同步 |
 
 ### MCP 入门
 
@@ -59,6 +59,8 @@
 从[搭建 Harness](ai-from-scaling/03-build-a-harness.md)和[接真实模型](ai-from-scaling/04-experiments.md)两课开始。这两课提供可运行代码；后续依次选做[运行控制](agent-engineering/05-harness-vertical-slice.md)、[MCP 接入](agent-engineering/01-mcp-tool-source.md)和 [Skills 复用](agent-engineering/03-skills-structure.md)。后续七个工程练习属于实现建议，尚未接入本仓库 runtime。
 
 准备使用 OpenAI API 额度，打开[额度、图片与语音指南](agent-engineering/openai-api.md)，查看官方入口、到期与续发规则，以及生图、TTS、转写和实时语音的模型选择。想找具体玩法，从[六个社区小实验](agent-engineering/openai-api.md#community-ideas)挑截图记忆库、口答复习卡、学习漫画或语音冒险。
+
+想把语音、音乐与图片做成自己的小作品，读[额度怎么用：语音、音乐与多模态小项目](agent-engineering/openai-api-projects.md)。从三张语音灵感卡开始，或沿配乐草案、本地试听、封面与音乐短片完成一条创作路径。
 
 想让检查随着 Agent 运行自动触发，读 [AI Hooks：Claude Code、DeepSeek Harness 与 Codex](agent-engineering/hooks.md)，从记录工具调用开始，再做一次无害命令的拒绝实验。
 
@@ -130,9 +132,9 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 这个专题从[本地运行基础](windows-local-ai/README.md)开始，按你的 RTX 5060 Ti 16GB、i5-10400F、16GB 内存配置，用 [Qwen Image 首次出图教程](windows-local-ai/01-qwen-image.md)安装 ComfyUI、下载量化模型并保存 PNG；第二课用 [ACE-Step 1.5 Turbo](windows-local-ai/02-ace-step-music.md)生成 30 秒配乐。先完成单张小图和短音乐，再观察生成设置、显存和系统内存的关系。
 
-### 网站实战
+### 阅读同步
 
-[最后一课：为本站接入 Apple 登录与阅读同步](learning/apple-reading-sync.md)从本站的实际需求出发，用三张 SVG 说明 Apple 身份认证、Cloudflare 进度存储、后台配置与跨设备验收。登录保持可选；课程明确区分代码与模拟测试、线上接口状态，以及真实账号验证。
+[最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md)从两个视角说明本站的阅读同步：开发者怎样实现本地进度、登录与云端接口，再配置部署；使用者怎样登录、在手机和电脑之间同步，以及断网后恢复。两个视角各有一张 SVG，登录保持可选；课程明确区分代码与模拟测试、线上接口状态，以及真实账号验证。
 
 ## 已确认的产品方向
 

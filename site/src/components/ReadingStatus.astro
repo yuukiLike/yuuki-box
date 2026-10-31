@@ -298,6 +298,13 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
     border-color: color-mix(in srgb, var(--topic-emerald-tint) 40%, transparent);
     background: color-mix(in srgb, var(--topic-emerald-tint) 10%, var(--sl-color-bg));
   }
+  .reading-status:not(.reading-status-footer) .reading-progress {
+    min-height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
   .reading-track { opacity: .25; }
   .reading-ring { stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--reading-progress, 0)); transform: rotate(-90deg); transform-origin: center; }
   .reading-check { visibility: hidden; }

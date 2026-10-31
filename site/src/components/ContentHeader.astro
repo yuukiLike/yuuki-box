@@ -34,13 +34,11 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
       <span class="site-caption">学习手记</span>
     </a>
   </div>
-  <nav class="content-path" aria-label="当前位置">
-    <a class="directory-return" href={siteTitleHref} aria-current={isDirectory ? 'page' : undefined}>目录</a>
-    {section && <>
-      <span class="path-separator" aria-hidden="true">/</span>
+  <div class="content-path">
+    {section &&
       <a class="current-section" data-topic={sectionMetadata?.color} href={`${siteTitleHref}#directory-${sectionIndex + 1}`} title={section.label}>{section.label}</a>
-    </>}
-  </nav>
+    }
+  </div>
   <div class="content-actions">
     <div class="content-search"><Search /></div>
     <DisplayMode />
@@ -117,8 +115,6 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
   }
   .content-path a { color: var(--sl-color-gray-2); text-decoration: none; }
   .content-path a:hover { color: var(--sl-color-accent); }
-  .directory-return { flex-shrink: 0; }
-  .path-separator { color: var(--sl-color-gray-4); }
   .current-section {
     min-width: 0;
     overflow: hidden;

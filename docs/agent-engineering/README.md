@@ -15,6 +15,8 @@
 
 准备使用 OpenAI 订阅赠送的 API 额度，先读 [OpenAI API：额度、图片与语音](openai-api.md)，确认领取入口、到期时间和模型用途。上面第二课的现有脚本使用 DeepSeek；OpenAI 这篇提供独立的 API 平台入门。
 
+想挑一个具体用途，读[OpenAI API 额度怎么用：语音、音乐与多模态小项目](openai-api-projects.md)。从语音灵感卡、有声笔记、口答复习，到配乐草案、MIDI 讲解与音乐短片，按输入、API 调用和本地处理串起第一份成果。
+
 想让 Agent 在工具调用前后自动执行检查，读 [AI Hooks：Claude Code、DeepSeek Harness 与 Codex](hooks.md)。用同一条演示规则比较配置型 hook 与插件事件，并分清执行前拒绝、执行后反馈和 Stop 续跑。
 
 后续七个工程练习是实现建议，代码片段用于说明接口与边界，尚未接入本仓库的 runtime。先跑通入门代码，再按需求选做。MCP 与 Agent Skills 的规范仍在演进，具体字段和行为以当前官方文档为准。资料核对：2026-10-23。

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1440" viewBox="0 0 960 1440" role="img" aria-labelledby="title desc">
+  <title id="title">开发者视角：如何开发阅读同步</title>
+  <desc id="desc">从本地可用开始：ReadingStatus 计算正文进度，reading-progress 按文章路径存储；reading-sync 检查会话并上传、拉取；Pages Functions 与 reading.ts 校验 Apple 身份和站内会话；D1 按账号摘要与文章路径保存最高百分比。最后配置 Apple 与 Cloudflare，部署页面和接口，并完成真实设备验证。同步失败时保留本地记录。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker>
+  </defs>
+  <rect width="960" height="1440" rx="20" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans CJK SC', sans-serif" fill="#243d30">
+    <text x="40" y="52" font-size="29" font-weight="600">开发者视角 · 如何开发阅读同步</text>
+    <text x="40" y="88" font-size="20" fill="#52695b">先让本地阅读独立可用，再接入可选的账号与云端同步。</text>
+
+    <rect x="40" y="124" width="880" height="152" rx="15" fill="#dcebdc" stroke="#72967b"/>
+    <text x="64" y="165" font-size="25" font-weight="600">01 · 浏览器：计算并保存本地进度</text>
+    <text x="64" y="204" font-size="21">ReadingStatus.astro → reading-progress.ts → localStorage</text>
+    <text x="64" y="243" font-size="20">按文章路径记录最远浏览百分比；先验证刷新保留、回看不倒退。</text>
+
+    <path d="M480 284V317" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="328" width="880" height="152" rx="15" fill="#e3eef5" stroke="#87aabd"/>
+    <text x="64" y="369" font-size="25" font-weight="600">02 · 同步客户端：在本地记录上增加上传与拉取</text>
+    <text x="64" y="408" font-size="21">reading-sync.ts → /api/reading/session、/api/reading/progress</text>
+    <text x="64" y="447" font-size="20">登录后迁入匿名记录；维护待上传进度，失败时保留并提示重试。</text>
+
+    <path d="M480 488V521" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="532" width="570" height="178" rx="15" fill="#e3eef5" stroke="#87aabd"/>
+    <text x="64" y="573" font-size="25" font-weight="600">03 · 后端：确认账号，再处理进度</text>
+    <text x="64" y="614" font-size="20">functions/api/reading/[action].ts</text>
+    <text x="64" y="649" font-size="20">→ server/reading.ts：身份校验与站内会话</text>
+    <text x="64" y="684" font-size="20">按会话取得账号，校验文章路径与百分比。</text>
+    <path d="M620 621H658" fill="none" stroke="#547261" stroke-width="2.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <rect x="670" y="532" width="250" height="178" rx="15" fill="#fff" stroke="#a4b8aa"/>
+    <text x="795" y="575" text-anchor="middle" font-size="23" font-weight="600">Sign in with Apple</text>
+    <text x="795" y="619" text-anchor="middle" font-size="20">只确认用户身份</text>
+    <text x="795" y="660" text-anchor="middle" font-size="19">.p8 私钥仅后端使用</text>
+    <text x="795" y="691" text-anchor="middle" font-size="19">进度由本站保存</text>
+
+    <path d="M325 718V738H480V753" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="764" width="880" height="132" rx="15" fill="#f1e9d7" stroke="#b5a27a"/>
+    <text x="64" y="805" font-size="25" font-weight="600">04 · Cloudflare D1：保存会话与账号进度</text>
+    <text x="64" y="844" font-size="21">进度主键：账号摘要 × 文章路径；不同账号各自独立。</text>
+    <text x="64" y="877" font-size="20">同一条记录取较高百分比：max(本地, 云端)，避免旧进度覆盖新进度。</text>
+
+    <path d="M480 904V937" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="948" width="880" height="176" rx="15" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="64" y="989" font-size="25" font-weight="600">05 · 配置并部署，把开发路径接到正式域名</text>
+    <text x="64" y="1029" font-size="20">Apple：确认关联 App → Services ID → 登记域名与精确回调 → 后端凭证</text>
+    <text x="64" y="1066" font-size="20">Cloudflare：D1 绑定与迁移 → 环境变量与 Secrets → 页面和 Functions</text>
+    <text x="64" y="1101" font-size="19" fill="#52695b">正式源地址：https://box.yuuki.page；私钥与会话密钥不放进前端。</text>
+
+    <path d="M480 1132V1165" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="1176" width="880" height="132" rx="15" fill="#dcebdc" stroke="#72967b"/>
+    <text x="64" y="1217" font-size="25" font-weight="600">06 · 先验证代码，再验证真实使用</text>
+    <text x="64" y="1256" font-size="20">检查与构建 → session 接口 JSON → 真实 Apple 授权 → 两台设备同步</text>
+    <text x="64" y="1289" font-size="19">同时检查不同账号隔离、离线补传；enabled: true 仍需真实登录验证。</text>
+
+    <rect x="40" y="1340" width="880" height="64" rx="12" fill="#fff" stroke="#a4b8aa"/>
+    <text x="480" y="1380" text-anchor="middle" font-size="20">未登录、云端未启用或同步失败时，继续保留本地进度。</text>
+  </g>
+</svg>

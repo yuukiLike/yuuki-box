@@ -7,9 +7,16 @@ import { pageMetadata } from '../lib/navigation.mjs';
 const metadata = pageMetadata(Astro.url.pathname);
 ---
 
-<DefaultPageTitle />
-<div class="page-topics" data-topic={metadata?.color}>
-  {metadata && <TopicTags tags={metadata.tags} color={metadata.color} />}
+<div class="page-title-row">
+  <DefaultPageTitle />
   <ReadingStatus />
 </div>
+<div class="page-topics" data-topic={metadata?.color}>
+  {metadata && <TopicTags tags={metadata.tags} color={metadata.color} />}
+</div>
 {metadata?.description && <p class="page-description">{metadata.description}</p>}
+
+<style>
+  .page-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .9rem; }
+  .page-title-row :global(h1) { min-width: 0; margin: 0; }
+</style>

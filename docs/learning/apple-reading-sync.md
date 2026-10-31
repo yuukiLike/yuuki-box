@@ -1,14 +1,39 @@
-# 最后一课：为本站接入 Apple 登录与阅读同步
+# 最后一课：Apple 登录与阅读同步
 
-读到这里，可以拿本站做一次完整的网站实战：**在手机上读过一篇文章，再到电脑上登录同一个 Apple 账号，看到相同的阅读进度。** 从浏览器本地存储出发，接上身份认证、云端数据库、部署和真实设备验收。
+**在手机上读过一篇文章，再到电脑上登录同一个 Apple 账号，看到相同的阅读进度。** 本课用两张 SVG，从开发和使用两个视角说明这个功能。
 
-本课使用 `https://box.yuuki.page` 作为正式地址。登录始终可以跳过；不登录时照常阅读，进度留在当前浏览器。三张图均为 SVG，点击图片可打开原图放大。
+- [开发者视角：如何开发](#developer-view)——先实现本地进度，再串起登录、同步接口与数据库，最后配置、部署和验证。
+- [使用者视角：如何同步](#user-view)——从顶部「阅读同步」登录，在手机和电脑之间共享进度，了解断网后会发生什么。
 
-> **先记录起点。** 2026-10-31 检查时，本站 `/api/reading/session` 返回 HTTP 404 和站点的 HTML 错误页。仓库已有同步代码，但当时线上还没有正常提供这个接口；关联 App、Apple 凭证和两台设备的真实登录尚未验证。下面是接入步骤与预期结果，不能当作已经开通的证明。实际状态按第 6 节重新检查。
+本课使用 `https://box.yuuki.page` 作为正式地址。登录始终可以跳过；不登录时照常阅读，进度留在当前浏览器。点击图片可打开 SVG 原图放大。
 
-## 1 · 谁确认身份，谁保存进度
+> **先记录起点。** 2026-10-31 检查时，本站 `/api/reading/session` 返回 HTTP 404 和站点的 HTML 错误页。仓库已有同步代码，但当时线上还没有正常提供这个接口；关联 App、Apple 凭证和两台设备的真实登录尚未验证。下面是开发步骤与开通后的预期使用流程，不能当作已经开通的证明。实际状态按开发者视角的第 6 步重新检查。
 
-[![Apple 确认用户身份，本站 Pages Functions 建立会话，D1 按账号保存阅读百分比；跳过登录时只在本地保存](../../site/public/diagrams/learning/apple-reading-sync-architecture.svg)](../../site/public/diagrams/learning/apple-reading-sync-architecture.svg)
+<span id="developer-view"></span>
+
+## 开发者视角 · 如何开发阅读同步
+
+[![开发者从浏览器本地进度开始，实现同步客户端、Apple 身份校验与进度接口，再接上 D1，完成配置、部署与真实设备验证](../../site/public/diagrams/learning/apple-reading-sync-developer.svg)](../../site/public/diagrams/learning/apple-reading-sync-developer.svg)
+
+### 1 · 先保存本地进度，再接账号与同步
+
+按下面的顺序阅读和实现，能沿着一条进度记录追到云端：
+
+1. **浏览器先独立可用。** `ReadingStatus.astro` 计算正文到达的最远位置，交给 `reading-progress.ts` 按文章路径保存。刷新后能恢复百分比，回看不会倒退；存储失败时显示提示，当前页面仍可在内存中记录。
+2. **在本地记录上增加可选同步。** `reading-sync.ts` 先检查站内会话。登录后把匿名记录移入当前账号缓存，将待上传进度提交给接口，再把返回的较高进度写回本地。请求失败时保留待同步记录，界面显示状态和重试入口。
+3. **后端确认账号，再读写进度。** Pages Functions 接收 Apple 登录回调，由 `reading.ts` 校验身份、建立站内会话。进度接口从会话取得账号，检查文章路径和百分比，再向 D1 读写；同账号、同文章用最高百分比合并。
+
+| 文件 | 开发职责 |
+| --- | --- |
+| [ReadingStatus.astro](../../site/src/components/ReadingStatus.astro) | 计算与展示进度，提供登录面板，安排定时同步与状态提示 |
+| [reading-progress.ts](../../site/src/lib/reading-progress.ts) | 本地存储、匿名与账号缓存、文章路径和百分比校验 |
+| [reading-sync.ts](../../site/src/lib/reading-sync.ts) | 检查会话、迁入匿名记录、上传与拉取进度、保留失败待重试的数据 |
+| [api/reading/[action].ts](../../site/functions/api/reading/[action].ts) | Pages Functions 接口入口 |
+| [reading.ts](../../site/server/reading.ts) | Apple 回调校验、站内会话与数据库读写 |
+| [0001_reading_progress.sql](../../site/migrations/0001_reading_progress.sql) | 会话表与按账号、文章路径保存的进度表 |
+| [_routes.json](../../site/public/_routes.json) | 只让 `/api/reading/*` 进入 Functions |
+
+代码中的职责与配置由下面几方分担：
 
 | 参与者 | 负责什么 | 需要准备什么 |
 | --- | --- | --- |
@@ -28,9 +53,7 @@ Apple 登录的用户条件见 [Apple 使用说明](https://support.apple.com/en
 
 </details>
 
-## 2 · 先看完整开通路径
-
-[![从确认 Apple 接入条件，到注册网站、准备后端密钥、部署 Cloudflare D1 与 Functions，最后完成真实设备验收](../../site/public/diagrams/learning/apple-reading-sync-setup.svg)](../../site/public/diagrams/learning/apple-reading-sync-setup.svg)
+### 2 · 配置前先确认接入条件
 
 **开发者会员解决的是维护者的资格，关联 App 仍要单独确认。** Apple 当前文档要求：网站登录关联一个已在 App Store 上架、支持 Sign in with Apple 的 App。只有会员、App ID 或普通 Apple 账号，不能直接视为满足全部条件。[Apple 环境配置](https://developer.apple.com/documentation/signinwithapple/configuring-your-environment-for-sign-in-with-apple)
 
@@ -38,7 +61,7 @@ Apple 登录的用户条件见 [Apple 使用说明](https://support.apple.com/en
 
 <span id="apple-setup"></span>
 
-## 3 · 在 Apple 后台登记网站
+### 3 · 在 Apple 后台登记网站
 
 打开 [Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/identifiers/list)，选择拥有该 App 的开发者 Team。
 
@@ -60,11 +83,11 @@ Apple 登录的用户条件见 [Apple 使用说明](https://support.apple.com/en
 
 <span id="cloudflare-setup"></span>
 
-## 4 · 接上 Cloudflare Pages 与 D1
+### 4 · 接上 Cloudflare Pages 与 D1
 
 下列命令在仓库根目录执行。将 `YOUR_PAGES_PROJECT` 替换成**已绑定 `box.yuuki.page` 的 Pages 项目名**，不要把域名直接当作项目名。命令是配置指引，本课没有代替你创建云端资源或发布服务。
 
-### 找到现有项目，保留原配置
+#### 找到现有项目，保留原配置
 
 ```bash
 pnpm --dir site exec wrangler login
@@ -79,7 +102,7 @@ pnpm --dir site exec wrangler pages download config YOUR_PAGES_PROJECT
 
 生成的配置位于 `site/`，后面以 `site/wrangler.jsonc` 为例。**如果已有这份文件，先保留本地修改；下载命令会覆盖原配置。** 合并本课字段时保留已有环境变量、其他绑定与环境设置。使用 Wrangler 配置部署后，它会成为 Pages 设置的来源。[Pages 配置规则](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
-### 创建数据库并合并绑定
+#### 创建数据库并合并绑定
 
 还没有阅读进度数据库时创建一个；已经创建过则复用对应数据库：
 
@@ -122,7 +145,7 @@ pnpm --dir site exec wrangler d1 migrations apply yuuki-reading --remote
 
 确认目标是刚选择的阅读数据库，迁移清单与仓库的 [0001_reading_progress.sql](../../site/migrations/0001_reading_progress.sql) 一致。它创建会话表与阅读进度表；后者以账号和文章路径为联合主键。[D1 迁移说明](https://developers.cloudflare.com/d1/reference/migrations/)
 
-### 设置两个后端 Secret
+#### 设置两个后端 Secret
 
 ```bash
 pnpm --dir site exec wrangler pages secret put APPLE_PRIVATE_KEY --project-name YOUR_PAGES_PROJECT < /absolute/path/to/AuthKey_YOUR_KEY_ID.p8
@@ -133,7 +156,7 @@ pnpm --dir site exec wrangler pages secret put SESSION_SECRET --project-name YOU
 
 `APPLE_PRIVATE_KEY` 和 `SESSION_SECRET` 使用 Secret 保存，不放进 `vars`。后者需要至少 32 个字符，用于本站登录流程的校验。[Pages 环境变量与 Secrets](https://developers.cloudflare.com/pages/functions/bindings/#secrets)
 
-## 5 · 把接口和页面一起发布
+### 5 · 把接口和页面一起发布
 
 先完成本地检查：
 
@@ -151,21 +174,11 @@ pnpm docs:deploy --project-name YOUR_PAGES_PROJECT --branch YOUR_PRODUCTION_BRAN
 
 仓库的部署脚本先构建并校验页面资源，再从 `site/` 运行 `wrangler pages deploy dist`。这样同级的 `functions/` 会随页面一起编译发布。**仅在控制台拖拽上传 `dist/`，不会编译本项目的 `functions/` 目录**；使用 Git 集成时，也要让构建根目录与 Functions 路径正确对应。[Pages Functions 部署](https://developers.cloudflare.com/pages/functions/get-started/#deploy-your-function)、[Direct Upload 的 Functions 规则](https://developers.cloudflare.com/pages/get-started/direct-upload/#functions)
 
-可以沿着这几个文件检查实际路径：
-
-| 文件 | 作用 |
-| --- | --- |
-| [ReadingStatus.astro](../../site/src/components/ReadingStatus.astro) | 顶部同步面板、正文进度、定时同步与状态提示 |
-| [reading-sync.ts](../../site/src/lib/reading-sync.ts) | 获取站内会话，上传与拉取进度，保留失败待重试的数据 |
-| [api/reading/[action].ts](../../site/functions/api/reading/[action].ts) | Pages Functions 接口入口 |
-| [reading.ts](../../site/server/reading.ts) | Apple 回调校验、站内会话与数据库读写 |
-| [_routes.json](../../site/public/_routes.json) | 只让 `/api/reading/*` 进入 Functions |
-
 普通正文仍是静态页面。`pnpm docs:dev` 只运行内容站，不运行 Pages Functions；本地页面显示云同步未启用，不能据此判断线上配置失败。完整本地 Functions 指引见[站点维护说明](../../site/README.md#验收与本地开发)。
 
 <span id="verify-sync"></span>
 
-## 6 · 先检查接口，再检查真实登录
+### 6 · 先检查接口，再检查真实登录
 
 无需登录即可查看配置状态：
 
@@ -192,22 +205,7 @@ curl -i --max-time 15 https://box.yuuki.page/api/reading/session
 
 </details>
 
-## 7 · 用两台设备完成验收
-
-[![两台设备登录同一账号：设备一上传 40%，设备二拉取后读到 70%，设备一取得 70%；再检查离线补传和不同账号隔离，数字仅为示意](../../site/public/diagrams/learning/apple-reading-sync-verify.svg)](../../site/public/diagrams/learning/apple-reading-sync-verify.svg)
-
-找一篇尚未读完的文章，使用同一个正式域名逐项验证。图中的 40% 与 70% 是示意，以页面实际显示的整数为准。
-
-1. **先不登录。** 阅读一部分，刷新页面，确认本地进度还在；取消 Apple 授权后也应继续可读。
-2. **设备一登录账号 A。** 打开顶部「阅读同步」并授权。原匿名记录会移入当前账号缓存并上传；这一步会将该浏览器先前的阅读记录归入账号 A。
-3. **设备二也登录账号 A。** 打开同一篇文章，确认取得设备一的进度，再继续读到更高百分比。
-4. **回到设备一。** 聚焦页面或等待前台同步，确认进度提高。当前实现约在停止产生新进度 1.5 秒后上传，前台每 30 秒同步，也会在重新聚焦、联网时检查。它没有即时推送连接。
-5. **设备二离线后继续阅读。** 保持页面已加载，断网并滚动；恢复网络后确认待同步记录补传。此步骤不保证离线时还能打开从未缓存的文章。
-6. **用干净的浏览器环境登录另一个账号 B。** 不应取得账号 A 的云端记录。再退出，确认当前设备回到匿名记录模式，另一台设备的会话仍有效。退出会保留本地账号缓存，方便该账号下次登录。
-
-同步采用同账号、同文章的最高百分比，例如 `max(40, 70) = 70`。**回看不会降低进度；同步的是已浏览百分比，重新打开文章不会自动滚动到上次位置，也不能据此证明已经理解正文。**
-
-## 8 · 什么证据才算做完
+### 7 · 什么证据才算做完
 
 | 证据 | 能支持的结论 |
 | --- | --- |
@@ -218,4 +216,21 @@ curl -i --max-time 15 https://box.yuuki.page/api/reading/session
 
 把实际验收日期、所用域名、设备与失败现象记下来，再更新开通状态。只有前两项时，保留「尚未完成真实登录验证」的结论。
 
-这次练习把前面学过的浏览器存储、HTTP 请求、身份验证、数据库和失败恢复接回一个真实功能：从一条 `404` 开始，沿请求路径逐段验证，直到另一台设备确实拿到正确的阅读进度。
+完成开发与部署后，按下面的使用者流程做两台设备验收；另外用干净的浏览器环境登录账号 B，确认不会取得账号 A 的云端记录。
+
+<span id="user-view"></span>
+
+## 使用者视角 · 如何跨设备同步
+
+[![手机先记录本地进度，通过顶部阅读同步登录后上传 40%；电脑登录同一 Apple 账号取得 40%，继续读到 70%，手机下一次同步后也显示 70%；断网时先保留本地，联网后补传](../../site/public/diagrams/learning/apple-reading-sync-user.svg)](../../site/public/diagrams/learning/apple-reading-sync-user.svg)
+
+以下是站点开通云同步后的使用流程。普通阅读者使用自己的 Apple 账号即可，无需开发者会员或购买 iCloud+；每台设备都需要分别在本站登录。
+
+1. **在手机上先阅读。** 打开本站的一篇文章，进度会自动保存在当前浏览器，无需手动标记，也可以一直不登录。
+2. **需要换设备时，再登录。** 打开顶部「阅读同步」，选择「通过 Apple 登录」并完成授权。当前浏览器原有的匿名阅读记录会归入这个账号并上传；取消登录仍可继续本地阅读。
+3. **在电脑上登录同一个账号。** 访问同一网站，在电脑上再次完成 Apple 登录。打开同一篇文章，应该能看到手机已同步的百分比，例如 40%。
+4. **在电脑继续阅读，再回到手机。** 例如电脑读到 70%，同步后手机也显示 70%。当前实现约在停止产生新进度 1.5 秒后上传；页面在前台时每 30 秒同步，重新聚焦或联网时也会检查，因此两台设备上的数字可能稍后才一致。
+5. **断网时继续记本地进度。** 已加载的文章仍可阅读，待同步记录会保留。恢复网络后自动重试；遇到同步错误，也可以在顶部面板点「重试同步」。未缓存的文章不保证能离线打开。
+6. **不用账号时退出。** 顶部面板选择「退出登录」，当前设备恢复匿名记录，另一台设备的登录仍有效。本地会保留原账号缓存，方便下次登录；切换账号时各有独立记录。
+
+同步保留同账号、同文章的最高百分比，例如 `max(40, 70) = 70`。**回看不会降低进度；同步的是已浏览百分比，重新打开文章不会自动滚动到上次位置，也不能据此证明已经理解正文。** 图中的 40% 与 70% 是示意，实际以页面显示为准。

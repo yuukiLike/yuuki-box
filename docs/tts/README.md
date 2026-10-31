@@ -14,6 +14,8 @@
 
 已有 OpenAI API 额度，想试云端 TTS、录音转写或实时语音，读 [OpenAI API：额度、图片与语音](../agent-engineering/openai-api.md)。其中记录了赠额适用范围，以及旧 TTS 模型的停用与迁移安排。
 
+想挑一个用途开始，读[语音、音乐与多模态小项目](../agent-engineering/openai-api-projects.md)：先做语音灵感卡、有声笔记或五轮口答复习，再按需接上音乐与画面。
+
 [![TTS 把文字变音频，VAD 找人声时间段，ASR 将录音转写为文字](../../site/public/diagrams/tts/speech-paths.svg)](../../site/public/diagrams/tts/speech-paths.svg)
 
 **先准备一次：Mac + 独立 Python 环境**
