@@ -344,6 +344,7 @@ footer .meta:empty { display: none; }
 
 /* Native disclosure keeps every chapter reachable, including without JavaScript. */
 .directory-home .directory-intro { margin: 0 0 .85rem; color: var(--yuuki-muted); font-size: .8125rem; line-height: 1.65; }
+.directory-home .directory-intro a { white-space: nowrap; }
 .directory-home .directory-chapters { margin: .2rem 0 0; padding: 0; border: 0; background: none; }
 .directory-home .directory-chapters > summary {
   display: flex;
@@ -467,6 +468,9 @@ html[data-display-mode='lightweight'] .reading-frame.with-toc {
   site-search button[data-open-modal]:hover { border-color: var(--sl-color-accent); background: var(--sl-color-bg); }
   site-search button > kbd { padding: .05rem .35rem; border: 1px solid var(--yuuki-border); background: var(--sl-color-bg); }
   site-search dialog { margin-top: 4rem; border-radius: .9rem; box-shadow: 0 24px 80px #07132933; }
+}
+@container (min-width: 38rem) {
+  .directory-home .directory-intro { white-space: nowrap; }
 }
 @container (max-width: 38rem) {
   .directory-home .directory-sections { grid-template-columns: 1fr; }
