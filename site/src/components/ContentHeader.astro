@@ -4,6 +4,7 @@ import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import DisplayMode from './DisplayMode.astro';
+import ReadingStatus from './ReadingStatus.astro';
 import { navigationMetadata } from '../lib/navigation.mjs';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
@@ -43,6 +44,7 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
   <div class="content-actions">
     <div class="content-search"><Search /></div>
     <DisplayMode />
+    <ReadingStatus control="sync" />
   </div>
   {toc && <div class="content-page-menu"><MobileTableOfContents /></div>}
   <div class="content-preferences">
@@ -152,7 +154,7 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
     }
     .site-wordmark { font-size: 1.75rem; }
     .site-caption { font-size: .75rem; }
-    .content-actions { width: 100%; max-width: 27rem; margin-inline-start: auto; }
+    .content-actions { width: 100%; max-width: 31rem; margin-inline-start: auto; }
     .content-search { flex: 1; }
     .content-search :global(button[data-open-modal]) {
       justify-content: flex-start;
@@ -164,14 +166,17 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
   }
   @media (min-width: 72rem) {
     .content-tools, .with-page-menu {
-      grid-template-columns: var(--yuuki-brand-width, calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x))) minmax(0, 1fr) 24rem auto;
+      grid-template-columns: var(--yuuki-brand-width, calc(var(--sl-sidebar-width) - 2 * var(--sl-nav-pad-x))) minmax(0, 1fr) 31rem auto;
     }
     .content-path { display: flex; }
     .content-page-menu { display: none; }
     :global(html[data-display-mode='lightweight']) .with-page-menu {
-      grid-template-columns: auto minmax(0, 1fr) 24rem auto auto;
+      grid-template-columns: auto minmax(0, 1fr) 31rem auto auto;
     }
     :global(html[data-display-mode='lightweight']) .content-page-menu { display: block; }
+  }
+  @media (max-width: 71.999rem) {
+    .content-actions :global(.display-mode-toggle span) { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
   }
   @media (max-width: 23.5rem) {
     .site-caption { display: none; }
