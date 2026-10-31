@@ -8,6 +8,8 @@
 
 **已有 Dot、希望使用现有产品额度，可以直接从[用 Dot 接手 GitHub 开发任务](04-dot-shift.md)开始。** 这一条由 Dot 协调、Codex 执行，你在 Dot 对话里提目标和反馈，GitHub 保存任务与交付记录。
 
+**已有 OpenAI API，可以跟做[官方 Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)。** 想并行比较三条路线，先用[共同基线与对照记录](../codex-cloud/05-issue-to-pr.md)隔离 Issue、分支和结果，再分别运行。
+
 ## 先认识今晚的搭档
 
 | 角色 | 负责什么 | 像前端里的什么 |
@@ -40,6 +42,9 @@ PR（Pull Request）保存准备合并的改动，方便你检查和讨论。Git
 | 第二班：搭手修一次 | [搭一次班，修掉一个小问题](02-first-repair.md) | 看见一份自己能理解、能验证的 diff |
 | 第三班：试着交班 | [交班：让流程接着跑](03-night-shift.md) | 能说明时间、权限、去重与失败分别由谁处理 |
 | 已有 Dot，想让它接班 | [用 Dot 接手 GitHub 开发任务](04-dot-shift.md) | 配好 GitHub 与编码环境，试跑一个 Issue 并接回草稿 PR |
+| 已有 OpenAI API | [官方 Codex Action 的一次交付](05-codex-api.md) | 在独立 job 验证补丁，再发布草稿 PR |
+| 想试 Markdown 工作流 | [Agentic Workflows 与 API](06-agentic-workflows.md) | 编译配置，运行 Codex，再核对 safe output 与实际 CI |
+| 想并行比较产品与 API | [云端 Codex 与 Issue 到 PR](../codex-cloud/05-issue-to-pr.md) | 同一基线下比较正确性、返修、用量和人工介入 |
 | 想看看还有什么可能 | [AI 实践构想](../ai-ideas/README.md) | 看懂已有设想与五个新方向的关系 |
 | 想先看别人已经怎么做 | [已落地的 AI 开发实践](../ai-practices/README.md) | 看懂六项实践中的一个案例 |
 
@@ -56,4 +61,4 @@ PR（Pull Request）保存准备合并的改动，方便你检查和讨论。Git
 
 先记录清楚问题，再由你决定是否加上 `ai-ready`。学习材料是一组可以挑选的入口，不是需要全部清空的任务列表。
 
-Actions 教学资料核对：2026-10-21；Dot 路线补充：2026-10-27。本组包含教学示例与首版设计建议；尚未在这个仓库启用定时工作流或 Dot 开发循环，也没有由这些流程自动修改远端代码或创建 PR。
+Actions 基础资料核对：2026-10-21；Dot 路线补充：2026-10-27；API 与并行实验补充：2026-10-31。本组包含教学示例与首版设计建议；尚未在这个仓库启用定时工作流、API 运行或 Dot 开发循环，也没有由这些流程自动修改远端代码或创建 PR。

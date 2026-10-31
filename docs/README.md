@@ -27,7 +27,7 @@
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
-| **Issue 工作流** | [扫描、修复与交班](issue-garden/README.md) | 从 Issue 清单走到一份可交接的草稿 PR |
+| **Issue 工作流** | [扫描、修复与交班](issue-garden/README.md) | 用 Dot 或 OpenAI API 处理 Issue，验证后交回草稿 PR |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
 | **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
@@ -86,6 +86,8 @@
 [Issue 夜班](issue-garden/README.md)按扫描、陪同修复、自动交班逐步推进。先让清单出现，再手动验证一个修复，最后连接选择、去重、验证与 PR 发布。它是独立跟做教程，尚未在本仓库启用。
 
 已有 Dot、希望使用现有产品额度，直接看[用 Dot 接手 GitHub 开发任务](issue-garden/04-dot-shift.md)，准备 GitHub 连接和 Codex 云端环境，再试跑一个 Issue。
+
+已有 OpenAI API，选[官方 Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issue-garden/06-agentic-workflows.md)。可以按[三条路线的并行实验](codex-cloud/05-issue-to-pr.md)使用同一基线、独立 Issue 和分支，对照检查证据、返修与实际用量，再逐步接入持续跟进和自动合并。
 
 ### 应用通信
 

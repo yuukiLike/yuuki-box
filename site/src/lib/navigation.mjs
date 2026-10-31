@@ -206,14 +206,16 @@ export const navigation = [
   {
     label: 'Issue 工作流',
     color: 'emerald',
-    description: '先扫描问题，再修复一个 Issue，验证补丁后交付草稿 PR；需要时再加入定时任务与交班。',
-    tags: [topic('问题扫描', 'issue-garden/01-first-scan'), topic('修复与验收', 'issue-garden/02-first-repair'), topic('夜班交接', 'issue-garden/03-night-shift'), topic('Dot 路线', 'issue-garden/04-dot-shift')],
+    description: '从 Issue 走到草稿 PR：分别试 Dot、官方 Codex Action 与 Agentic Workflows，比较验证、返修和 API 用量，再接持续交班。',
+    tags: [topic('问题扫描', 'issue-garden/01-first-scan'), topic('夜班交接', 'issue-garden/03-night-shift'), topic('Dot 路线', 'issue-garden/04-dot-shift'), topic('API 路线', 'issue-garden/05-codex-api'), topic('Agentic Workflows', 'issue-garden/06-agentic-workflows')],
     items: [
       page('issue-garden', 'Issue 工作流总览：扫描、修复与交班', ['流程设计', '工程跟做']),
       page('issue-garden/01-first-scan', '1 · 扫描仓库问题并整理候选 Issue', ['问题发现']),
       page('issue-garden/02-first-repair', '2 · 修复一个 Issue 并验证补丁', ['修复验证']),
       page('issue-garden/03-night-shift', '3 · 安排夜间任务与保留交班记录', ['定时流程', '交班记录']),
       page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
+      page('issue-garden/05-codex-api', 'API 路线 · 用 Codex Action 从 Issue 交付 PR', ['OpenAI API', 'Codex Action', '独立验证']),
+      page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
     ],
   },
   {
@@ -336,14 +338,15 @@ export const navigation = [
   {
     label: '云端 Codex',
     color: 'sky',
-    description: '用 for-safe、for-job 与 agent-symphony 练习云端任务：从规格拆分走到备份导出、事件与回放验证，再补本地验收。',
-    tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('社区与截图', 'codex-cloud/02-community')],
+    description: '用三个项目练习云端任务，再接 Issue 到 PR：并行试产品与 API 路线，核对检查、交付和本地待验项。',
+    tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('Issue 到 PR', 'codex-cloud/05-issue-to-pr')],
     items: [
       page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
       page('codex-cloud/01-for-safe', '1 · 用 for-safe 发出第一条云端任务', ['for-safe', '动手练习']),
       page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
       page('codex-cloud/03-for-job', '3 · for-job 的云端检查与导出回归', ['for-job', '备份与导出']),
       page('codex-cloud/04-agent-symphony', '4 · agent-symphony 的云端事件与回放验证', ['Agent Symphony', '事件与回放']),
+      page('codex-cloud/05-issue-to-pr', '5 · 云端 Codex 与 Issue 到 PR 的并行实验', ['并行实验', 'Issue 到 PR', 'API 用量']),
     ],
   },
   {

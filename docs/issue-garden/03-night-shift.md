@@ -6,6 +6,8 @@
 
 本篇采用 GitHub Actions 加模型 API 的执行方式。已有 Dot、希望使用现有产品额度时，改走[用 Dot 接手 GitHub 开发任务](04-dot-shift.md)：先准备 GitHub 连接与 Codex 云端环境，再由 Dot 协调开发和返修。
 
+准备开始用 API 实跑时，先做[官方 Codex Action 的一次 Issue 到 PR](05-codex-api.md)，或 [Agentic Workflows](06-agentic-workflows.md)。两篇提供单次任务的完整配置；本篇继续说明定时、去重和失败交班。多路线同时尝试时，先固定[共同基线与隔离规则](../codex-cloud/05-issue-to-pr.md)。
+
 ## 一次只领一个 Issue
 
 每天扫描所有未关闭 Issue，然后按明确规则选一个：

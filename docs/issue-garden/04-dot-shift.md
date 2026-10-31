@@ -74,6 +74,8 @@ pnpm --dir site build
 
 ## 把第一班交给 Dot
 
+如果同时试 API 路线，按[并行实验](../codex-cloud/05-issue-to-pr.md)为 Dot 单独准备 `ai-route-dot` Issue、分支与共同基线 SHA，并追加其中的 A 路线指令。本节默认使用 `yuuki-box`；与 API 示例对照时，仓库改为 `for-job`，环境与验证命令改用 [for-job 项目教程](../codex-cloud/03-for-job.md)。不要让 Dot 接管另两条路线的实验 Issue 或 PR。
+
 先选一个复现和验收都清楚的小问题，确认没有关联的进行中任务或待验收 PR，再加 `ai-ready`。随后把下面的说明发到 Dot 对话里，替换仓库、Issue 链接和环境名称：
 
 ```text

@@ -11,6 +11,7 @@
 | [2 · 社区怎么用](02-community.md) | 三种有公开来源的做法，两张真实历史界面截图 |
 | [3 · for-job](03-for-job.md) | 准备已有 Web 项目，验证备份恢复与实际导出 |
 | [4 · agent-symphony](04-agent-symphony.md) | 验证事件处理、观察服务与浏览器回归，区分模拟和真实接入 |
+| [5 · Issue 到 PR 的并行实验](05-issue-to-pr.md) | 并行试 Dot / Cloud、Codex Action / API 与 Agentic Workflows / API |
 
 总览与 `for-safe` 操作中的产品规则核对于 **2026-10-29**，新增项目的核对日期见各页。正文按新版 **Codex Cloud** 编写；官方仍保留 **Codex Cloud (Legacy)**。社区旧截图均单独标注，不能用旧版的缓存、联网或密钥规则解释新版。[新版与 Legacy 的入口](https://learn.chatgpt.com/docs/environments/cloud-environments)
 
@@ -23,6 +24,8 @@
 | [agent-symphony](04-agent-symphony.md) | 用事件样本验证观察结果是否可靠 | 事件、存储与 HTTP 检查，再做界面回归 | 本地宿主 Hooks 接入、真实声音与听感 |
 
 第一次用 Cloud，先走 `for-safe` 的环境创建步骤；已经会创建环境，可以直接进入另两项。建议每个项目先准备自己的环境，各跑一次基线，再交实现任务，方便定位依赖和失败来源。
+
+要进一步减少手动交接，从[三条路线的并行实验](05-issue-to-pr.md)接到 Issue 工作流。已有 OpenAI API 时，可以同时试官方 Codex Action 与 Agentic Workflows；三条路线使用相同验收条件，分别记录交付、返修和实际用量。
 
 ## 先记三个词
 

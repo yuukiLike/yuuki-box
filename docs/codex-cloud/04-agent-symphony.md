@@ -103,4 +103,4 @@ Cloud 当前没有内置 computer / browser use；项目自带的 Playwright 能
 
 </details>
 
-返回[三个项目的选择](README.md#三个项目怎样选)，或对照 [for-job 的备份恢复与导出回归](03-for-job.md)。
+**下一项：[把项目练习接到 Issue 与 PR 的并行实验 →](05-issue-to-pr.md)**。也可返回[三个项目的选择](README.md#三个项目怎样选)，或对照 [for-job 的备份恢复与导出回归](03-for-job.md)。
