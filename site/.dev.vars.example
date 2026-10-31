@@ -1,0 +1,10 @@
+# Local Pages Functions settings. Never commit .dev.vars or a real .p8 key.
+# Apple requires an HTTPS domain callback; localhost cannot complete Apple login.
+SITE_ORIGIN="https://your-docs.example.com"
+APPLE_SERVICE_ID="com.example.docs.web"
+APPLE_TEAM_ID="YOUR_TEAM_ID"
+APPLE_KEY_ID="YOUR_KEY_ID"
+# Use literal \n between PEM lines, or a quoted multiline value.
+APPLE_PRIVATE_KEY=""
+# Generate locally with: openssl rand -base64 32
+SESSION_SECRET=""

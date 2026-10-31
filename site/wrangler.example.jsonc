@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Copy to wrangler.jsonc and use your existing Pages project name and D1 ID.
+  "name": "yuuki-learning-docs",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-26",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "SITE_ORIGIN": "",
+    "APPLE_SERVICE_ID": "",
+    "APPLE_TEAM_ID": "",
+    "APPLE_KEY_ID": ""
+  },
+  "secrets": {
+    "required": ["APPLE_PRIVATE_KEY", "SESSION_SECRET"]
+  },
+  "d1_databases": [
+    {
+      "binding": "READING_DB",
+      "database_name": "yuuki-reading",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}

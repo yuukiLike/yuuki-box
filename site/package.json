@@ -7,7 +7,9 @@
   "engines": { "node": ">=22.22.0" },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
-    "check": "astro check",
+    "check": "astro check && tsc --noEmit",
+    "check:functions": "wrangler pages functions build --outdir .wrangler/reading-build --compatibility-date 2026-10-26 --compatibility-flags nodejs_compat",
+    "types:reading": "wrangler types server/worker-configuration.d.ts --config wrangler.example.jsonc --env-interface ReadingEnv --include-runtime=false --strict-vars=false",
     "build": "astro build --force && node scripts/verify-build.mjs",
     "deploy": "pnpm build && wrangler pages deploy dist",
     "preview": "astro preview --host 127.0.0.1",
@@ -16,10 +18,12 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/starlight": "0.42.6",
-    "astro": "7.4.0"
+    "astro": "7.4.0",
+    "jose": "^6.2.14"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@cloudflare/workers-types": "^5.20261030.1",
     "@types/node": "^24.0.0",
     "typescript": "^6.0.0",
     "wrangler": "4.152.0"

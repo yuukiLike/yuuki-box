@@ -21,10 +21,32 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
   <span class="reading-storage-error" data-reading-error role="status" hidden></span>
 </div>}
 
+{!footer && <details class="reading-account print:hidden" data-reading-account data-pagefind-ignore>
+  <summary>
+    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a5 5 0 1 1 .4-10A7 7 0 0 1 21 10a4 4 0 0 1-1 7.9M12 12v9m-3-3 3 3 3-3" /></svg>
+    <span data-reading-sync-label>阅读同步</span>
+  </summary>
+  <div class="reading-account-panel">
+    <p data-reading-sync-message role="status" aria-live="polite">进度保存在当前浏览器，正在检查云同步状态。</p>
+    <div class="reading-account-actions">
+      <a class="apple-login" data-reading-login href="/api/reading/login" hidden>
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.75 3.08.81 1.18-.24 2.31-.94 3.57-.85 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09ZM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.57-2.33 4.5-3.74 4.25Z" /></svg>
+        通过 Apple 登录
+      </a>
+      <button type="button" data-reading-retry hidden>重试同步</button>
+      <button type="button" data-reading-logout hidden>退出登录</button>
+    </div>
+    <p class="reading-account-notice" data-reading-auth-notice role="status" hidden></p>
+    <p class="reading-storage-error" data-reading-error role="status" hidden></p>
+    <noscript>启用 JavaScript 后可记录和同步阅读进度。</noscript>
+  </div>
+</details>}
+
 <script>
-  const storagePrefix = 'yuuki-reading-progress:';
-  // Use the same route for encoded Chinese links, anchors and trailing slashes.
-  const pagePath = (url: URL) => decodeURIComponent(url.pathname).replace(/\/+$/, '') || '/';
+  import { activeAccountKey, createReadingStore, readingPath } from '../lib/reading-progress';
+  import { createReadingSync } from '../lib/reading-sync';
+
+  const pagePath = (url: URL) => readingPath(url.pathname);
   const currentPath = pagePath(new URL(window.location.href));
   const statuses = document.querySelectorAll<HTMLElement>('[data-reading-status]');
   const progressIndicators = document.querySelectorAll<HTMLElement>('[data-reading-progress]');
@@ -40,12 +62,60 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
       return { link, path, badge, label: link.getAttribute('aria-label') };
     });
 
+  let storageFailed = false;
   function showStorageError() {
+    storageFailed = true;
     document.querySelectorAll<HTMLElement>('[data-reading-error]').forEach((notice) => {
-      notice.textContent = '无法保存浏览进度，本页的新进度在刷新后会丢失。';
+      notice.textContent = '浏览器无法保存本地进度；未同步的新进度会在刷新后丢失。';
       notice.hidden = false;
     });
     document.querySelectorAll<HTMLElement>('.reading-storage-note').forEach((note) => { note.hidden = true; });
+  }
+
+  let browserStorage: Storage | null = null;
+  try { browserStorage = window.localStorage; } catch { showStorageError(); }
+  const store = createReadingStore(browserStorage, showStorageError);
+  const sync = createReadingSync(store, () => {
+    loadReadingStatus();
+    renderSync();
+  });
+
+  function renderSync() {
+    const messages = {
+      checking: '正在检查 Apple 同步状态…',
+      local: '通过 Apple 登录，在其他设备同步阅读进度。首次登录会合并本地记录。',
+      disabled: '云同步尚未启用，进度保存在当前浏览器。',
+      syncing: '正在同步到 Apple 账号…',
+      pending: '进度已在本地记录，等待同步。',
+      synced: '已同步。在其他设备登录同一 Apple 账号后，可继续阅读。',
+      expired: '登录已失效或账号已切换，请重新登录后同步。未同步的记录会保留。',
+      error: '云同步暂时不可用，进度继续在本地记录，联网后将重试。',
+      'logout-error': '退出未成功，请重试。进度仍保存在当前账号下。',
+    };
+    document.querySelectorAll<HTMLElement>('[data-reading-sync-message]').forEach((node) => { node.textContent = messages[sync.status]; });
+    document.querySelectorAll<HTMLElement>('[data-reading-sync-label]').forEach((node) => {
+      node.textContent = sync.status === 'synced' ? '已同步' : sync.accountId ? 'Apple 同步' : '阅读同步';
+    });
+    document.querySelectorAll<HTMLAnchorElement>('[data-reading-login]').forEach((link) => {
+      link.hidden = !sync.enabled || sync.authenticated;
+      const url = new URL('/api/reading/login', window.location.origin);
+      url.searchParams.set('returnTo', window.location.pathname + window.location.search + window.location.hash);
+      link.href = url.href;
+    });
+    document.querySelectorAll<HTMLButtonElement>('[data-reading-logout]').forEach((button) => { button.hidden = !sync.accountId; });
+    document.querySelectorAll<HTMLButtonElement>('[data-reading-retry]').forEach((button) => {
+      button.hidden = !['error', 'expired', 'logout-error'].includes(sync.status);
+    });
+    document.querySelectorAll<HTMLElement>('.reading-storage-note').forEach((note) => {
+      note.hidden = storageFailed;
+      note.textContent = sync.accountId ? messages[sync.status] : '浏览进度自动保存在当前浏览器';
+    });
+  }
+
+  let syncTimer = 0;
+  function scheduleSync() {
+    window.clearTimeout(syncTimer);
+    syncTimer = window.setTimeout(() => { void sync.flush(); }, 1500);
   }
 
   function progressLabel(progress: number) {
@@ -54,8 +124,7 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
   }
 
   function readSavedProgress(path: string) {
-    const progress = Number(localStorage.getItem(storagePrefix + path));
-    return Number.isInteger(progress) && progress >= 0 && progress <= 100 ? progress : 0;
+    return store.get(path);
   }
 
   function render() {
@@ -83,13 +152,7 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
   }
 
   function loadReadingStatus() {
-    try {
-      pageProgress.forEach((_, path) => {
-        pageProgress.set(path, readSavedProgress(path));
-      });
-    } catch {
-      showStorageError();
-    }
+    pageProgress.forEach((_, path) => { pageProgress.set(path, readSavedProgress(path)); });
     render();
   }
 
@@ -104,14 +167,12 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
       ? 100
       : Math.max(1, Math.min(99, Math.floor((window.innerHeight - top) / height * 100)));
     if (progress <= (pageProgress.get(currentPath) ?? 0)) return;
-    try {
-      progress = Math.max(progress, readSavedProgress(currentPath));
-      localStorage.setItem(storagePrefix + currentPath, String(progress));
-    } catch {
-      showStorageError();
-    }
+    progress = Math.max(progress, readSavedProgress(currentPath));
+    store.set(currentPath, progress);
     pageProgress.set(currentPath, progress);
     render();
+    sync.recorded(currentPath);
+    scheduleSync();
   }
 
   let frame = 0;
@@ -124,29 +185,98 @@ const isReadingPage = !['', 'index', '404'].includes(entry.id) && Astro.response
   }
 
   window.addEventListener('storage', (event) => {
-    if (event.key === null || event.key.startsWith(storagePrefix)) loadReadingStatus();
+    if (event.key === activeAccountKey) {
+      if (event.newValue === null) sync.signedOut();
+      else void sync.refresh();
+      return;
+    }
+    if (event.key === null) { void sync.refresh(); return; }
+    if (!event.key.startsWith(store.storagePrefix)) return;
+    loadReadingStatus();
+    if (event.newValue !== null) {
+      sync.recorded(event.key.slice(store.storagePrefix.length));
+      scheduleSync();
+    }
   });
   // Re-read when browser history restores a cached page.
   window.addEventListener('pageshow', (event) => {
-    if (event.persisted) loadReadingStatus();
+    if (event.persisted) { loadReadingStatus(); void sync.refresh(); }
     scheduleProgress();
   });
   if (article) {
     window.addEventListener('scroll', scheduleProgress, { passive: true });
     window.addEventListener('resize', scheduleProgress);
-    window.addEventListener('pagehide', recordProgress);
+    window.addEventListener('pagehide', () => { recordProgress(); void sync.flush(true); });
     document.addEventListener('visibilitychange', scheduleProgress);
     new ResizeObserver(scheduleProgress).observe(article);
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-reading-logout]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      await sync.logout();
+      button.disabled = false;
+      scheduleProgress();
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-reading-retry]').forEach((button) => {
+    button.addEventListener('click', () => { void (sync.status === 'logout-error' ? sync.logout() : sync.refresh()); });
+  });
+  document.querySelectorAll<HTMLDetailsElement>('[data-reading-account]').forEach((details) => {
+    details.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !details.open) return;
+      details.open = false;
+      details.querySelector('summary')?.focus();
+    });
+  });
+  window.addEventListener('online', () => { void sync.refresh(); });
+  window.addEventListener('focus', () => { void sync.refresh(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') void sync.flush(true);
+  });
+  window.setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    if (sync.authenticated) void sync.flush();
+    else if (sync.status === 'error') void sync.refresh();
+  }, 30000);
+
+  const loginResult = new URL(window.location.href);
+  const authResult = loginResult.searchParams.get('reading-auth');
+  if (authResult) {
+    const notice = document.querySelector<HTMLElement>('[data-reading-auth-notice]');
+    if (notice && ['failed', 'cancelled'].includes(authResult)) {
+      notice.textContent = authResult === 'cancelled' ? '已取消 Apple 登录，阅读进度仍在本地。' : 'Apple 登录未完成，请重试。现有阅读进度已保留。';
+      notice.hidden = false;
+      document.querySelector<HTMLDetailsElement>('[data-reading-account]')?.setAttribute('open', '');
+    }
+    loginResult.searchParams.delete('reading-auth');
+    window.history.replaceState(window.history.state, '', loginResult);
   }
   loadReadingStatus();
   statuses.forEach((status) => { status.hidden = false; });
   scheduleProgress();
+  void sync.refresh();
 </script>
 
 <style>
   .reading-status { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; }
   .reading-status[hidden], .reading-status [hidden] { display: none; }
   .reading-status-footer { margin-block: 2rem 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--yuuki-border); }
+  .reading-account { position: relative; margin: 0; font-size: .75rem; }
+  .reading-account summary { display: flex; align-items: center; gap: .35rem; width: fit-content; min-height: 2rem; cursor: pointer; color: var(--yuuki-muted); list-style: none; }
+  .reading-account summary::-webkit-details-marker { display: none; }
+  .reading-account summary:hover { color: var(--sl-color-accent-high); }
+  .reading-account-panel { position: absolute; inset-inline-start: 0; top: calc(100% + .25rem); z-index: 5; width: min(20rem, calc(100vw - 3rem)); padding: 1rem; border: 1px solid var(--yuuki-border); border-radius: .6rem; background: var(--sl-color-bg); box-shadow: 0 .4rem 1.2rem #0002; }
+  .reading-account-panel p { margin: 0 0 .75rem; line-height: 1.7; }
+  .reading-account-panel p:last-child { margin-bottom: 0; }
+  .reading-account-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
+  .reading-account-actions button { padding: .35rem .5rem; border: 1px solid var(--yuuki-border); border-radius: .35rem; color: var(--sl-color-text); background: transparent; font: inherit; cursor: pointer; }
+  .reading-account-actions .apple-login { display: inline-flex; justify-content: center; align-items: center; gap: .35rem; min-height: 2rem; padding: .3rem .75rem; border: 1px solid #fff; border-radius: .35rem; background: #000; color: #fff; font-size: .8125rem; text-decoration: none; }
+  .reading-account-actions [hidden], .reading-account-panel [hidden] { display: none; }
+  .reading-account-panel .reading-account-notice { margin-top: .75rem; color: var(--yuuki-muted); }
+  @media (max-width: 40rem) {
+    .reading-account[open] { width: 100%; }
+    .reading-account-panel { position: static; width: 100%; margin-block-start: .25rem; }
+  }
   .reading-progress {
     display: inline-flex;
     align-items: center;
