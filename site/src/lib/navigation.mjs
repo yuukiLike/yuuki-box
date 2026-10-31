@@ -360,6 +360,15 @@ export const navigation = [
       page('windows-local-ai/02-ace-step-music', '2 · ACE-Step 1.5 Turbo：生成第一段配乐', ['ACE-Step', '音乐生成', 'ComfyUI'], '2 · ACE-Step 首次配乐'),
     ],
   },
+  {
+    label: '网站实战',
+    color: 'emerald',
+    description: '以本站阅读进度为最后一课：配置 Apple 登录与 Cloudflare D1，部署接口，再用两台设备验证同步、离线恢复与账号隔离。',
+    tags: [topic('Apple 登录', 'learning/apple-reading-sync#apple-setup'), topic('Cloudflare D1', 'learning/apple-reading-sync#cloudflare-setup'), topic('同步验收', 'learning/apple-reading-sync#verify-sync')],
+    items: [
+      page('learning/apple-reading-sync', '最后一课：为本站接入 Apple 登录与阅读同步', ['Apple 登录', 'Cloudflare D1', '阅读同步'], '最后一课 · Apple 登录与阅读同步'),
+    ],
+  },
 ];
 
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;

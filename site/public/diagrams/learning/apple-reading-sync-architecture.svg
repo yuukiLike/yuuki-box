@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="920" viewBox="0 0 960 920" role="img" aria-labelledby="title desc">
+  <title id="title">Apple 确认身份，本站保存阅读进度</title>
+  <desc id="desc">两台设备分别在本站登录同一个 Apple 账号。Apple 只确认身份，Pages Functions 校验身份并建立站内会话，Cloudflare D1 按账号摘要和文章路径合并最高阅读百分比。跳过登录时仍在当前浏览器保存本地记录。图为架构示意。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="960" height="920" rx="20" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans CJK SC', sans-serif" fill="#243d30">
+    <text x="40" y="52" font-size="29" font-weight="600">Apple 确认身份，本站保存阅读进度</text>
+    <text x="40" y="87" font-size="19" fill="#52695b">每台设备都需要在本站自愿登录；用户无需开发者会员或 iCloud+。</text>
+    <rect x="296" y="124" width="368" height="112" rx="15" fill="#dcebdc" stroke="#72967b"/>
+    <text x="480" y="164" text-anchor="middle" font-size="25" font-weight="600">Sign in with Apple</text>
+    <text x="480" y="199" text-anchor="middle" font-size="20">用户同意 → 提供账号身份</text>
+    <g fill="none" stroke="#547261" stroke-width="2.5" marker-start="url(#arrow)" marker-end="url(#arrow)">
+      <path d="M480 247V322"/>
+      <path d="M264 406H286"/>
+      <path d="M674 406H696"/>
+      <path d="M480 489V553"/>
+    </g>
+    <text x="501" y="288" font-size="19">授权码 / 身份校验</text>
+    <rect x="40" y="334" width="216" height="142" rx="15" fill="#fff" stroke="#a4b8aa"/>
+    <text x="148" y="374" text-anchor="middle" font-size="24" font-weight="600">设备一 · 手机</text>
+    <text x="148" y="412" text-anchor="middle" font-size="20">本站登录账号 A</text>
+    <text x="148" y="446" text-anchor="middle" font-size="19">本地缓存 / 上传</text>
+    <rect x="296" y="334" width="368" height="142" rx="15" fill="#e3eef5" stroke="#87aabd"/>
+    <text x="480" y="374" text-anchor="middle" font-size="25" font-weight="600">Pages Functions</text>
+    <text x="480" y="412" text-anchor="middle" font-size="20">校验身份，建立站内会话</text>
+    <text x="480" y="446" text-anchor="middle" font-size="19">私钥仅后端使用 · 会话有效期 7 天</text>
+    <rect x="704" y="334" width="216" height="142" rx="15" fill="#fff" stroke="#a4b8aa"/>
+    <text x="812" y="374" text-anchor="middle" font-size="24" font-weight="600">设备二 · 电脑</text>
+    <text x="812" y="412" text-anchor="middle" font-size="20">本站登录账号 A</text>
+    <text x="812" y="446" text-anchor="middle" font-size="19">拉取 / 继续阅读</text>
+    <text x="501" y="526" font-size="19">读取 / 合并进度</text>
+    <rect x="296" y="565" width="368" height="126" rx="15" fill="#f1e9d7" stroke="#b5a27a"/>
+    <text x="480" y="603" text-anchor="middle" font-size="25" font-weight="600">Cloudflare D1</text>
+    <text x="480" y="638" text-anchor="middle" font-size="20">账号摘要 × 文章路径</text>
+    <text x="480" y="670" text-anchor="middle" font-size="19">保存进度与站内会话，账号之间隔离</text>
+    <text x="480" y="729" text-anchor="middle" font-size="21">同账号、同文章：保留较高百分比，例如 max(40, 70) = 70</text>
+    <rect x="40" y="765" width="880" height="109" rx="15" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="64" y="806" font-size="24" font-weight="600">跳过登录 → 只在当前浏览器保存</text>
+    <text x="64" y="844" font-size="20">未配置云端、断网或退出登录时，仍可继续阅读并记录本地进度。</text>
+  </g>
+</svg>

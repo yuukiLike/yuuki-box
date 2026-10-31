@@ -36,6 +36,7 @@
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
+| **网站实战** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用三张 SVG 追踪身份、数据与开通步骤，再在真实设备上验证同步 |
 
 ### MCP 入门
 
@@ -127,7 +128,11 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 ### Windows 本地 AI
 
-最后一个专题从[本地运行基础](windows-local-ai/README.md)开始，按你的 RTX 5060 Ti 16GB、i5-10400F、16GB 内存配置，用 [Qwen Image 首次出图教程](windows-local-ai/01-qwen-image.md)安装 ComfyUI、下载量化模型并保存 PNG；最后一课用 [ACE-Step 1.5 Turbo](windows-local-ai/02-ace-step-music.md)生成 30 秒配乐。先完成单张小图和短音乐，再观察生成设置、显存和系统内存的关系。
+这个专题从[本地运行基础](windows-local-ai/README.md)开始，按你的 RTX 5060 Ti 16GB、i5-10400F、16GB 内存配置，用 [Qwen Image 首次出图教程](windows-local-ai/01-qwen-image.md)安装 ComfyUI、下载量化模型并保存 PNG；第二课用 [ACE-Step 1.5 Turbo](windows-local-ai/02-ace-step-music.md)生成 30 秒配乐。先完成单张小图和短音乐，再观察生成设置、显存和系统内存的关系。
+
+### 网站实战
+
+[最后一课：为本站接入 Apple 登录与阅读同步](learning/apple-reading-sync.md)从本站的实际需求出发，用三张 SVG 说明 Apple 身份认证、Cloudflare 进度存储、后台配置与跨设备验收。登录保持可选；课程明确区分代码与模拟测试、线上接口状态，以及真实账号验证。
 
 ## 已确认的产品方向
 

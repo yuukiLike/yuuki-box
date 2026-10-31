@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1050" viewBox="0 0 960 1050" role="img" aria-labelledby="title desc">
+  <title id="title">两台设备怎样证明阅读同步已经生效</title>
+  <desc id="desc">预期验收流程：设备一登录账号 A 上传 40%，设备二登录同一个账号拉取 40%，继续阅读并上传 70%，设备一同步后得到 70%。另测断网时保留本地记录、恢复网络后补传，以及不同账号的云端记录隔离。数字仅为示意，图不代表真实设备已验证。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
+  <rect width="960" height="1050" rx="20" fill="#f6f8f5"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans CJK SC', sans-serif" fill="#243d30">
+    <text x="40" y="52" font-size="29" font-weight="600">验收：在另一台设备上，确实看到进度提高</text>
+    <text x="40" y="88" font-size="19" fill="#52695b">预期流程示意；两台设备分别登录同一账号、访问同一域名和同一文章。</text>
+    <rect x="50" y="124" width="220" height="83" rx="14" fill="#dcebdc" stroke="#72967b"/>
+    <rect x="370" y="124" width="220" height="83" rx="14" fill="#e3eef5" stroke="#87aabd"/>
+    <rect x="690" y="124" width="220" height="83" rx="14" fill="#dcebdc" stroke="#72967b"/>
+    <g text-anchor="middle"><text x="160" y="159" font-size="24" font-weight="600">设备一</text><text x="160" y="191" font-size="19">本站登录账号 A</text><text x="480" y="159" font-size="24" font-weight="600">本站 API + D1</text><text x="480" y="191" font-size="19">保留最高百分比</text><text x="800" y="159" font-size="24" font-weight="600">设备二</text><text x="800" y="191" font-size="19">本站登录账号 A</text></g>
+    <g stroke="#a4b8aa" stroke-width="2" stroke-dasharray="5 8"><path d="M160 219V709"/><path d="M480 219V709"/><path d="M800 219V709"/></g>
+    <g fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"><path d="M170 290H470"/><path d="M490 410H790"/><path d="M790 530H490"/><path d="M470 650H170"/></g>
+    <text x="320" y="273" text-anchor="middle" font-size="21">阅读后上传 40%</text>
+    <rect x="410" y="308" width="140" height="38" rx="9" fill="#e3eef5"/>
+    <text x="480" y="334" text-anchor="middle" font-size="20">云端 40%</text>
+    <text x="640" y="393" text-anchor="middle" font-size="21">登录后拉取 40%</text>
+    <text x="640" y="513" text-anchor="middle" font-size="21">继续阅读，上传 70%</text>
+    <rect x="410" y="548" width="140" height="38" rx="9" fill="#e3eef5"/>
+    <text x="480" y="574" text-anchor="middle" font-size="20">云端 70%</text>
+    <text x="320" y="633" text-anchor="middle" font-size="21">同步后显示 70%</text>
+    <text x="480" y="708" text-anchor="middle" font-size="20">回看或上传旧记录时，max(40, 70) 仍为 70。</text>
+    <rect x="40" y="746" width="880" height="105" rx="15" fill="#f1e9d7" stroke="#b5a27a"/>
+    <text x="64" y="786" font-size="24" font-weight="600">再测断网与恢复</text>
+    <text x="64" y="824" font-size="20">已加载页面可继续记本地进度；恢复网络后检查补传，不假定已经上传。</text>
+    <rect x="40" y="874" width="880" height="105" rx="15" fill="#e8eee8" stroke="#a4b8aa"/>
+    <text x="64" y="914" font-size="24" font-weight="600">再测另一个账号</text>
+    <text x="64" y="952" font-size="20">干净浏览器登录账号 B：不应取得账号 A 的云端记录。</text>
+    <text x="40" y="1020" font-size="19" fill="#52695b">40%、70% 只是示意数字；真实验收选择尚未读满的文章，记录实际结果。</text>
+  </g>
+</svg>
