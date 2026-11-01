@@ -1,4 +1,4 @@
-# Yuuki Box
+# Yuuki Box · 从一个问题开始
 
 AI 学习笔记、动手实验与个人 Agent 工作台。
 
@@ -36,3 +36,7 @@ pnpm docs:dev
 | `pnpm run` | 命令列表 |
 
 文档站与 MCP 示例分别安装依赖。详细配置见[文档站说明](site/README.md)与各示例文档。
+
+## 首页预览
+
+![从一个问题开始 · Yuuki 学习手记首页](site/public/images/readme-home.png)
