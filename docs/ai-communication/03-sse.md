@@ -36,20 +36,22 @@ data: {"text":"你好"}
 
 一次读取可能不足或超过一条事件，先拼完整再处理。[SSE 标准](https://html.spec.whatwg.org/multipage/server-sent-events.html#parsing-an-event-stream)
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 先拼事件、再更新文字；<mark class="caution">断流不等于完成</mark>。
 
 缺少完成标记时，即使保留文字也不标记完成。
 
-想亲眼看浏览器断线后接着收，继续 [SSE 实战：真实 HTTP、断线重连与结束状态](03-sse-http.md)。
+浏览器断线重连见 [SSE 实战：真实 HTTP、断线重连与结束状态](03-sse-http.md)。
 
 <details>
 <summary>代码与分片细节</summary>
 
 源码：[03-sse.ts](labs/03-sse.ts) · [sse.ts](labs/sse.ts)。
 
-`decoder.decode(chunk, { stream: true })` 接住拆开的 UTF-8 字节，再按空行组装事件。
+`decoder.decode(chunk, { stream: true })` 保留跨分片的 UTF-8 解码状态，再按空行组装事件。
 
 网络分片、SSE 事件、模型 token 是不同单位；一个事件可装多个 token 的文字。
 
@@ -62,10 +64,10 @@ SSE 用 UTF-8，多行 `data` 以换行拼接。教学解析器支持 LF/CRLF、
 <details>
 <summary>EventSource、fetch、WebSocket、WebRTC</summary>
 
-| 名字 | 先记这个用途 |
+| 接口 | 用途 |
 | --- | --- |
 | `EventSource` | 浏览器订阅 SSE 事件 |
-| `fetch` | 发请求，再自己读取响应流 |
+| `fetch` | 发请求，由应用解析响应流 |
 | WebSocket | 双方保持连接，持续发消息 |
 | WebRTC | 实时音视频通信 |
 

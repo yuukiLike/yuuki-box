@@ -6,14 +6,16 @@
 
 [![Codex 对话区旁的教程观察栏，展示用户 token 到 Supabase、开发者 token 到 Apple 的两段请求](../../../site/public/diagrams/weather-mcp/03-request.svg)](../../../site/public/diagrams/weather-mcp/03-request.svg)
 
-## 1. 先看完整目录
+<div class="heading-alias" id="1-先看完整目录" aria-hidden="true"></div>
+
+## 1. 项目目录
 
 在独立天气工程汇总前两课与本课文件：
 
 ```text
 weather-service/
 ├── web/
-│   └── consent.ts                 # 配套 HTML 见第二课，接入你的前端路由
+│   └── consent.ts                 # 配套 HTML 见第二课，接入前端路由
 └── supabase/
     ├── config.toml
     ├── migrations/
@@ -27,7 +29,7 @@ weather-service/
         └── index.ts
 ```
 
-按 Supabase 示例使用 SDK v2 `createMcpHandler`，每请求新建实例。SDK 处理协议、发现、参数和传输；我们处理身份与业务。[Supabase 自建 MCP 指南](https://supabase.com/docs/guides/ai-tools/byo-mcp)
+按 Supabase 示例使用 SDK v2 `createMcpHandler`，每请求新建实例。SDK 处理协议、发现、参数和传输；业务代码处理身份与权限。[Supabase 自建 MCP 指南](https://supabase.com/docs/guides/ai-tools/byo-mcp)
 
 `supabase/functions/weather-mcp/deno.json`：
 
@@ -268,10 +270,12 @@ WWW-Authenticate: Bearer resource_metadata="https://YOUR_PROJECT_REF.supabase.co
 
 HTTP `Authorization` 传身份，JSON-RPC body 传调用；`tools/list` 提供名称、说明与参数。HTTPS 负责传输，MCP 约定工具协议。
 
-`WWW-Authenticate` 指定元数据地址，无需修改域名根路由；别误填 Supabase 管理平台的 MCP 地址。[MCP 资源发现](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
+`WWW-Authenticate` 指定元数据地址，无需修改域名根路由；此处不是 Supabase 管理平台的 MCP 地址。[MCP 资源发现](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
 
 公开路径含 `/functions/v1`，内部路径以 `/weather-mcp` 开头；两者都识别，但 audience 与资源标识始终用公开 URL。[Supabase 函数路由](https://supabase.com/docs/guides/functions/routing)
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 找到身份、资格、额度三道门，再去[部署与验收](05-connect-and-verify.md)。

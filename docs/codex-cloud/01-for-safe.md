@@ -20,7 +20,7 @@
 
 选择仓库、完成连接，点 **Get started**；也可从 **Settings → Codex Cloud → Environments** 进入。 [官方操作说明与界面示意](https://learn.chatgpt.com/docs/environments/cloud-environments#create-and-publish-an-environment)
 
-在环境准备对话里直接说：
+环境准备指令：
 
 ```text
 这个仓库是 for-safe，目前处于规格阶段。
@@ -80,7 +80,7 @@
 保留给我审阅，不合并。
 ```
 
-检查结果只抓三件事：
+检查以下三项：
 
 1. **改对了吗？** diff 是否只包含约定的切片，是否改动了原本的验收标准。
 2. **真跑了吗？** 命令、退出结果和失败原因是否可查；「未运行」不能算通过。
@@ -103,7 +103,7 @@
 </details>
 
 <details class="qa">
-<summary>能在云端替我点应用、验收界面、一直跑服务吗？</summary>
+<summary>云端支持界面操作和长期服务吗？</summary>
 
 本次核对时 Cloud 无内置 computer／browser use；项目命令行浏览器测试需另行实测。 [当前限制](https://learn.chatgpt.com/docs/environments/cloud-environments)
 

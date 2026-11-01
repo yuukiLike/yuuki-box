@@ -32,7 +32,7 @@ console.log(foundByScan === foundByIndex); // true
 
 ## Object Map WeakMap 怎样选择
 
-| 结构 | 容易理解的使用场景 | 需要考虑什么 |
+| 结构 | 适用场景 | 约束 |
 | --- | --- | --- |
 | Object | 一份有字段含义的记录，例如 `{ id, title, status }` | 属性键和原型语义；动态字典可考虑 `Object.create(null)` |
 | Map | 动态索引、经常增删、需要直接读取 `size` 的键值集合 | 索引构建、键的相等规则、容量与更新同步 |
@@ -51,7 +51,9 @@ WeakMap 支持对象和符合条件的 Symbol 弱键，不因关联阻止对象�
 
 可为消息对象附加解析结果；对象不再被引用时允许回收。要明确限制 128 项，改用可管理容量的结构。
 
-## 同样叫 key 作用可能不同
+<div class="heading-alias" id="同样叫-key-作用可能不同" aria-hidden="true"></div>
+
+## 不同语境中的 key
 
 | 名称 | 用来解决什么问题 |
 | --- | --- |
@@ -79,7 +81,9 @@ const cacheKey = JSON.stringify([
 
 数组表达固定依赖；也可保存对象与版本或分层索引。分开判断消息身份与结果有效性。
 
-## 用 Map 理解一个有容量的缓存
+<div class="heading-alias" id="用-map-理解一个有容量的缓存" aria-hidden="true"></div>
+
+## Map 容量缓存
 
 Map 保留插入顺序，删除再插入可记录最近访问。以下只演示容量与访问顺序：
 

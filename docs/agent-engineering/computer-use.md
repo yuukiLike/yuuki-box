@@ -1,19 +1,21 @@
-# Computer Use：模型怎样看界面、做动作、检查结果
+# Computer Use：观察、执行与结果验证
 
 Computer Use 把界面接进工具循环：<mark class="key">观察 → 提出动作 → 执行 → 重新观察</mark>。模型、工具、连接与系统权限各有职责。
 
-按顺序读，或直接找对应问题：
+阅读顺序与主题：
 
-| 顺序 | 入口 | 读完能解释什么 |
+| 顺序 | 入口 | 核心内容 |
 | --- | --- | --- |
 | 1 | 本篇：执行原理 | 截图、AX、DOM、CDP 分别在哪一层；一次点击怎样发生 |
 | 2 | [Codex 与 cua_repl](cua-repl.md) | JavaScript 在哪里运行，变量怎样保留，桌面与浏览器怎样连接 |
 | 3 | [同类工具对照](computer-use-ecosystem.md) | Claude、Gemini、Playwright MCP、Browser Use、Stagehand 与 UI-TARS 各提供什么 |
 | 4 | [理解误区与自测](computer-use-misconceptions.md) | 为什么能看见却不能操作，调用成功却没完成，重试可能重复提交 |
 
-资料核对：**2026-10-31**。产品事实附官方来源，`cua_repl` 细节来自本次工具说明；图与分层为教学归纳。仅查阅清单和接口，未点击桌面、安装扩展或调用付费模型。
+资料核对：**2026-10-31**。产品事实附官方来源，`cua_repl` 细节依据当日工具契约；图与分层为教学归纳。仅查阅清单和接口，未点击桌面、安装扩展或调用付费模型。
 
-## 一次“把标题改为周计划”怎样完成
+<div class="heading-alias" id="一次把标题改为周计划怎样完成" aria-hidden="true"></div>
+
+## 标题修改示例
 
 [![Computer Use 闭环：模型提出动作，Harness 检查，驱动操作应用，再把截图或结构化状态送回模型](../../site/public/diagrams/agent-engineering/computer-use-loop.svg)](../../site/public/diagrams/agent-engineering/computer-use-loop.svg)
 
@@ -29,7 +31,9 @@ Computer Use 把界面接进工具循环：<mark class="key">观察 → 提出�
 
 合法调用、驱动无报错、目标成立是三种结果；<mark class="caution">前两个不能代替任务完成</mark>。
 
-## 先分清五层
+<div class="heading-alias" id="先分清五层" aria-hidden="true"></div>
+
+## 五层职责
 
 | 层 | 输入与输出 | 不应混淆的责任 |
 | --- | --- | --- |
@@ -62,7 +66,9 @@ UI-TARS 公开了动作解析与坐标后处理；它展示 GUI 专项训练，�
 
 </details>
 
-## 再往下：谁真正完成点击
+<div class="heading-alias" id="再往下谁真正完成点击" aria-hidden="true"></div>
+
+## 动作执行层
 
 **macOS 原生应用。** `AXUIElement` 可读取属性、设置受支持的值和执行动作；ScreenCaptureKit 可抓屏。录屏权限不等于操作权限。这是系统能力示例，未确认 Codex 使用了哪些函数。[Apple AXUIElement API](https://developer.apple.com/documentation/applicationservices/axuielement_h)、[ScreenCaptureKit 示例](https://developer.apple.com/documentation/screencapturekit/capturing-screen-content-in-macos)
 
@@ -96,7 +102,9 @@ UI-TARS 公开了动作解析与坐标后处理；它展示 GUI 专项训练，�
 
 公开指南同时提供代码执行与结构化动作，两者仍并存。[OpenAI 代码执行路线](https://developers.openai.com/api/docs/guides/tools-computer-use#use-code-execution)
 
-## 如果给 Yuuki 增加这种能力
+<div class="heading-alias" id="如果给-yuuki-增加这种能力" aria-hidden="true"></div>
+
+## Yuuki GUI 接入提案
 
 下面是与本仓库 Harness 对应的**设计建议，尚未实现**：
 

@@ -1,4 +1,4 @@
-# 让 JavaScript 请来一位 Wasm 外援
+# JavaScript 调用 WebAssembly
 
 先调用 Wasm 加法、试整数边界，再学 Worker、内存与模型运行时。
 
@@ -28,7 +28,7 @@ Wasm 通过模块、实例、导入导出和线性内存与 JS 协作，可复�
     i32.add))
 ```
 
-[模块字节与 JavaScript 封装](labs/wasm-add.mjs)随仓库提供。先改输入，再试 `2147483647 + 1`：<mark class="key">先猜答案，再查 i32 范围</mark>。
+[模块字节与 JavaScript 封装](labs/wasm-add.mjs)随仓库提供。修改输入后测试 `2147483647 + 1`：<mark class="key">核对 i32 整数范围</mark>。
 
 JS 调用并显示，Wasm 执行导出函数；换模型还需文件、张量、后端与任务状态。
 
@@ -44,11 +44,13 @@ JS 调用并显示，Wasm 执行导出函数；换模型还需文件、张量、
 
 小函数可能主要花在初始化与调用准备；大任务还需测内存、复制与算法。按完整流程比较 JavaScript 和 Wasm。
 
-## 接着看两个真正相交的地方
+<div class="heading-alias" id="接着看两个真正相交的地方" aria-hidden="true"></div>
+
+## 扩展：Worker 与浏览器 AI
 
 | 章节 | 从前端已有经验开始 | 连接到 AI 的问题 |
 | --- | --- | --- |
 | [Worker 与内存搬运](workers-and-memory.md) | 消息、ArrayBuffer、取消和过期结果 | 怎样让推理持续工作而界面仍可操作 |
 | [浏览器里的 AI 后端](browser-ai.md) | 异步初始化、资源加载与能力检测 | Wasm、WebGPU 和模型运行时各在哪一层 |
 
-先做一项 Worker 固定计算，弄清启动、取消、错误与数据归属，再接模型。其他方向见[AI 与前端的交织点](../learning/ai-frontend-intersections.md)。
+先以固定计算验证 Worker 的启动、取消、错误与数据归属，再接模型。其他方向见[AI 与前端的交织点](../learning/ai-frontend-intersections.md)。

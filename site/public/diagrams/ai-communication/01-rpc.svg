@@ -17,6 +17,6 @@
     <text x="460" y="144" text-anchor="middle" font-size="22">读 welcome · id 1</text>
     <path d="M638 252H282" fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="460" y="228" text-anchor="middle" font-size="22">笔记文字 · id 1</text>
-    <text x="36" y="340" font-size="22">PID 认出进程，id 认出这次请求。编号仅作示意。</text>
+    <text x="36" y="340" font-size="22">PID 标识进程，id 关联请求。编号仅为示意。</text>
   </g>
 </svg>

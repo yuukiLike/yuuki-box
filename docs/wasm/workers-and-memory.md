@@ -2,9 +2,11 @@
 
 [Wasm 入口](README.md) · [下一篇 浏览器 AI](browser-ai.md)
 
-计算移到 Worker 后，还要管好数据归属与旧任务结果。
+计算移到 Worker 后，仍须明确数据归属与旧任务结果处理。
 
-## Worker 给了什么边界
+<div class="heading-alias" id="worker-给了什么边界" aria-hidden="true"></div>
+
+## Worker 的执行边界
 
 Worker 通过消息协作，<mark class="caution">不能直接操作 DOM</mark>；页面管交互，Worker 管计算。[MDN 使用 Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
 
@@ -62,4 +64,4 @@ console.log(second[0]); // 3
 
 从 `loading/ready/running/completed/failed` 开始，按能力加取消状态；下载、初始化和执行分别报告进度。
 
-下一步进入[浏览器 AI 后端](browser-ai.md)，看看同样的任务协议如何包住 Wasm 或 WebGPU 计算。
+[浏览器 AI 后端](browser-ai.md)说明任务协议与 Wasm、WebGPU 的衔接。

@@ -2,14 +2,16 @@
 
 Hook（钩子）是<mark class="key">宿主在生命周期节点自动调用的程序</mark>，可在工具执行前检查、执行后记录、任务结束前核对验收。
 
-本课用同一个无害实验比较三家：记录调用，拒绝含 `HOOK_DEMO_BLOCK` 的演示命令。
+以调用记录与演示命令拒绝比较三种实现：记录调用，拒绝含 `HOOK_DEMO_BLOCK` 的命令。
 
 资料核对：**2026-10-31**。Claude Code、Codex 据官方文档，面向本地客户端；DeepSeek 指官方 Harness（`dsh`），固定于 [`ce7073d`](https://github.com/deepseek-ai/deepseek-harness/tree/ce7073d51254c26cd63b22a60835b8f948deb447)。示例未在本仓库启用。
 
-## 先看它插在什么位置
+<div class="heading-alias" id="先看它插在什么位置" aria-hidden="true"></div>
+
+## 触发位置
 
 ```text
-你发出任务
+用户提交任务
   → 宿主接收输入
   → 模型决定调用工具
   → 执行前 hook：检查参数，必要时拒绝
@@ -29,9 +31,11 @@ Hook 有三个要素：
 
 <mark class="caution">Matcher 匹配工具名，不检查命令内容</mark>。`Bash` 选中终端工具，handler 再查参数；各宿主的输入和输出格式不同。
 
-### Hook、Skill、MCP 怎么一起用？
+<div class="heading-alias" id="hookskillmcp-怎么一起用" aria-hidden="true"></div>
 
-| 机制 | 你在表达什么 | 在文档项目里的例子 |
+### Hook、Skill、MCP 的职责
+
+| 机制 | 职责 | 文档项目示例 |
 | --- | --- | --- |
 | Prompt / 项目指令 | 这次任务与长期约定是什么 | “修改文档后检查链接” |
 | Skill | 一类任务按什么步骤做 | 整理资料、写教程、验证、提交的流程 |
@@ -40,7 +44,9 @@ Hook 有三个要素：
 
 它们可组合，但提示词里的“请检查”不会注册 hook。背景：[Skills](03-skills-structure.md)、[MCP 工具源](01-mcp-tool-source.md)、[Harness](../ai-from-scaling/03-build-a-harness.md)。
 
-## 三家的机制先对齐
+<div class="heading-alias" id="三家的机制先对齐" aria-hidden="true"></div>
+
+## 宿主机制对照
 
 | 比较项 | Claude Code | DeepSeek Harness | Codex |
 | --- | --- | --- | --- |
@@ -59,7 +65,9 @@ Claude Code 支持 `command`、`http`、`mcp_tool`、`prompt`、实验性 `agent
 
 `tools/*` 由 Harness 运行时派发，仅调用 DeepSeek 模型 API 不会运行本地插件。参见[请求装配课](../kv-cache/04-deepseek-harness.md)。
 
-## 第一个实验：先读懂输入与输出
+<div class="heading-alias" id="第一个实验先读懂输入与输出" aria-hidden="true"></div>
+
+## 实验一：输入与输出
 
 两家的 command hook 均从 stdin 读取 JSON。最小样本如下，真实事件还含会话、目录等字段：
 
@@ -73,7 +81,9 @@ Claude Code 支持 `command`、`http`、`mcp_tool`、`prompt`、实验性 `agent
 
 脚本只检查待执行命令并回传决定，不执行 `echo`。[Claude 输入输出](https://code.claude.com/docs/en/hooks-guide#read-input-and-return-output) · [Codex PreToolUse](https://learn.chatgpt.com/docs/hooks#pretooluse)
 
-### 写一个两家都能理解的演示脚本
+<div class="heading-alias" id="写一个两家都能理解的演示脚本" aria-hidden="true"></div>
+
+### Claude Code 与 Codex 共用脚本
 
 用 Node.js 在练习目录创建 `hook-lab/demo-hook.mjs`，将事件、工具名和时间写到旁边的 `events.jsonl`，不记命令全文。
 
@@ -144,7 +154,9 @@ printf '%s\n' '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{
 
 核对两条命令的工具结果、拒绝理由和新增日志；日志只证明 hook 被调用，不证明命令执行。[Claude 排查入口](https://code.claude.com/docs/en/hooks-guide#set-up-your-first-hook)
 
-### Codex：复用演示，留意加载与信任
+<div class="heading-alias" id="codex复用演示留意加载与信任" aria-hidden="true"></div>
+
+### Codex：脚本复用、加载与信任
 
 将 `hooks` 合并到练习项目 `.codex/hooks.json`，保留脚本绝对路径。信任项目 `.codex` 配置层，再在 CLI `/hooks` 核对来源并信任定义；未审核的新建或变更非托管 hook 会被跳过。[信任流程](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)
 
@@ -208,17 +220,21 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml
 
 在 Web UI 选模型、练习工作区，用 `bash` 运行两条演示命令；工具缺失时先查 profile。核对终端 `[hook-demo] bash` 及 UI 结果和拒绝信息。[官方挂载教程](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/docs/user/develop/basic/index.md)
 
-### 继续认识三个有用的 DeepSeek 事件
+<div class="heading-alias" id="继续认识三个有用的-deepseek-事件" aria-hidden="true"></div>
+
+### DeepSeek 补充事件
 
 | 事件 | 适合什么 | 需要理解的边界 |
 | --- | --- | --- |
-| `agent/pre-step` | 在一次模型步骤进入前处理待接收消息 | 一个 turn 可能包含多个 step，别把它等同于“一条用户消息” |
+| `agent/pre-step` | 在一次模型步骤进入前处理待接收消息 | 一个 turn 可能包含多个 step，不能等同于“一条用户消息” |
 | `tools/execute` | 包裹工具执行过程，记录耗时或处理执行生命周期 | 它是中间件，要正确传递 `next()` 与取消信号 |
 | `tools/result` | 统计最终工具成功、失败与结果 | 用于观察冻结后的结果，不在这里改写结果 |
 
 事件顺序见 [Turn flow](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/docs/architecture.md#turn-flow)、[工具事件](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/docs/subsystems/tools.md#tools-events)。
 
-## Stop 最容易读反：拒绝停止，就会继续工作
+<div class="heading-alias" id="stop-最容易读反拒绝停止就会继续工作" aria-hidden="true"></div>
+
+## Stop：阻止停止与继续执行
 
 两家均有 `Stop`。返回以下决定表示<mark class="caution">阻止停止，继续工作</mark>：
 
@@ -235,13 +251,15 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml
 
 先完成观察与拒绝实验，再试 Stop，便于区分触发、决策和执行结果。
 
-## 可以为自己的项目做哪些事？
+<div class="heading-alias" id="可以为自己的项目做哪些事" aria-hidden="true"></div>
+
+## 项目接入场景
 
 以下练习**尚未接入本仓库**；先选一项，定义可观察结果。
 
 | 想解决的问题 | 可以用的入口 | 怎么判断确实有效 |
 | --- | --- | --- |
-| 等待我确认时提醒 | Claude `Notification`，筛通知类型 | 等待时通知一次，继续后不重复 |
+| 等待用户确认时提醒 | Claude `Notification`，筛通知类型 | 等待时通知一次，继续后不重复 |
 | 新会话补项目状态 | Claude / Codex `SessionStart`；`dsh` 消息装配 | 仅注入分支、环境等可核对事实 |
 | 区分模型与工具耗时 | 工具前后事件；`dsh` 包裹 `tools/execute` | 调用 ID 关联起止，分开统计等待、执行、失败 |
 | 改文件后格式化 | 编辑后事件或文件监听 | 仅处理目标文件，防止自身写入循环触发 |
@@ -267,10 +285,12 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml
 
 验证记录：JSON、shell 语法及 Node 的 5 个离线样本通过；DeepSeek 通过 TS 转译和 3 个模拟回调，验证拒绝与 `next()`。未做完整类型检查、真实客户端集成或启用示例。
 
-## 学会了没有：用三道题检查
+<div class="heading-alias" id="学会了没有用三道题检查" aria-hidden="true"></div>
+
+## 机制自测
 
 <details class="qa">
-<summary>1 · 我要求 AI 修改文件后运行测试，这已经是 hook 吗？</summary>
+<summary>1 · 要求 AI 修改文件后运行测试，是否构成 hook？</summary>
 
 不是。指令或 Skill 描述要求；注册事件及处理程序后才有 hook。
 
@@ -284,7 +304,7 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml
 </details>
 
 <details class="qa">
-<summary>3 · DeepSeek 的监听器不命中我的规则，为什么返回 next()，而不直接返回 allow？</summary>
+<summary>3 · DeepSeek 监听器未命中规则时，为什么返回 next() 而非 allow？</summary>
 
 `next()` 继续后续检查；直接返回决策会截断 waterfall。最终 guard 另行约束，普通 hook 不代表全部授权。
 

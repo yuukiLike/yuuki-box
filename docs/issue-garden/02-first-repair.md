@@ -1,4 +1,4 @@
-# 第二班：搭一次班，修掉一个小问题
+# 2 · 复现、修复与验证 Issue
 
 **挑一个稳定复现的小问题，<mark class="key">修复后按原步骤确认</mark>它已消失。**
 
@@ -25,7 +25,7 @@
 git switch -c ai/issue-12
 ```
 
-在 Codex 中打开这个仓库，粘贴 Issue 的内容，再给它下面的指令：
+在 Codex 中打开仓库，提交 Issue 内容与以下任务指令：
 
 ```text
 请修复下面这一个 Issue。
@@ -56,7 +56,7 @@ pnpm --dir site test
 pnpm --dir site build
 ```
 
-其他项目使用自己的检查命令；链接和交互仍需打开页面验证。
+其他项目使用对应检查命令；链接和交互仍需实际页面验证。
 
 只提交本次相关文件，推送分支并创建草稿 PR。正文可写：
 
@@ -70,12 +70,14 @@ Closes #12
 
 替换 `Closes #12` 编号；符合默认分支合并规则时，关联 Issue 才会关闭。 [关联 PR 与 Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue)
 
-## 这次搭班，顺手摸清交接条件
+<div class="heading-alias" id="这次搭班顺手摸清交接条件" aria-hidden="true"></div>
+
+## 交付条件
 
 先明确安装、复现与验收条件；定时任务也需要这些反馈。
 
 对照同一步骤的修复前后结果，说明 diff 为何有效。
 
-**改动能解释、实际验证通过即可。** 接着读[交班：让流程接着跑](03-night-shift.md)。
+**改动可解释、实际验证通过即完成。** 持续处理见[定时流程](03-night-shift.md)。
 
 这是操作教学；本次编写文档没有让 AI 实际执行远端 Issue 修复。

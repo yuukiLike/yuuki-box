@@ -4,7 +4,9 @@
 
 <mark class="key">位置数 × 层数 × K/V 头数</mark>，让小向量累积成大缓存。K/V 入门见[Attention 图解](02-attention-and-kv.md)。
 
-## 先想一份前端的派生数据
+<div class="heading-alias" id="先想一份前端的派生数据" aria-hidden="true"></div>
+
+## 前端派生数据类比
 
 原文短，解析树、布局或解码像素仍可能很大。
 
@@ -74,6 +76,6 @@ token 相同，位置或前缀不同仍会改变深层表示。[两层实验](la
 
 GQA 的 K/V 头共享机制见[原始论文](https://arxiv.org/abs/2305.13245)，缓存精度、窗口和卸载的取舍见[Transformers 缓存策略](https://huggingface.co/docs/transformers/en/kv_cache)，跨请求复用接着看[前缀缓存与 Yuuki](03-prefix-cache-and-yuuki.md)。
 
-先指出方案改变了哪个乘数，再评估收益。
+按方案改变的乘数评估空间收益。
 
 </details>

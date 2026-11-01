@@ -1,6 +1,6 @@
 # Zed、Raycast、Warp：Agent 工作台架构调研
 
-核实：2026-09-26。用途：为 Apple 生态 Agent 盒子的首轮 Mac 闭环提供架构依据。
+核实：2026-09-26。用途：为 Apple 平台 Agent 工作台的首轮 Mac 闭环提供架构依据。
 
 相关文档：[文档入口](../README.md) · [Mac 本地 Harness 架构](../architecture/mac-local-harness.md) · [渲染与性能](../learning/rendering-performance.md) · [第一个 Mac 闭环](../plan/first-mac-loop.md)。
 
@@ -8,7 +8,7 @@
 
 深入阅读：[简单、组合、复杂性](../deep/2026-09-26-simplicity-composition-complexity/README.md)比较操作单位与组合契约，加入 Grok Build、固定 Warp 源码及 Yuuki 变化链。
 
-先选一个问题：文本更新看 Zed，命令交互看 Raycast，结果与历史看 Warp。写下一条候选方案、来源和不适用条件即可。
+按主题选择研究入口：Zed 的文本更新、Raycast 的命令交互、Warp 的结果与历史。候选方案记录来源与不适用条件。
 
 ## 1. 结论与当前决策边界
 
@@ -35,7 +35,7 @@ Swift、Rust、UI 框架、模型供应商与存储均未定。Swift 只是建�
 
 本调研<mark class="caution">未做同机、同数据、同场景性能基准</mark>，引用数字仅保留其原有范围，不作绝对排名。`main/master` 会变化，阅读结论不等于固定提交的逐行审计。
 
-[![固定版本的研究证据提供候选方法，本项目的方案仍需通过自己的实验验证](../../site/public/diagrams/architecture/evidence-proposal.svg)](../../site/public/diagrams/architecture/evidence-proposal.svg)
+[![固定版本的研究证据提供候选方法，本项目方案仍需独立实验验证](../../site/public/diagrams/architecture/evidence-proposal.svg)](../../site/public/diagrams/architecture/evidence-proposal.svg)
 
 ## 3. 三种产品目标，三种工程压力
 
@@ -291,4 +291,4 @@ Security 页面称文件、网络与 Node 能力未进一步沙箱化，敏感�
 - [WarpUI 平台依赖](https://github.com/warpdotdev/warp/blob/master/crates/warpui/Cargo.toml)：确认自研框架及平台路径，不能单凭它推断性能。
 - [客户端开源公告](https://www.warp.dev/blog/warp-is-now-open-source)、[仓库 FAQ](https://github.com/warpdotdev/warp/blob/master/FAQ.md)：确认公开与专有部分的边界。
 
-下一步进入[第一个 Mac 闭环](../plan/first-mac-loop.md)，用运行结果补充决策，不为调研推迟实现。
+后续进入[第一个 Mac 闭环](../plan/first-mac-loop.md)，以运行结果补充决策。

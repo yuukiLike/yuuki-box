@@ -2,9 +2,11 @@
 
 调查日期：2026-09-26。先读[调查入口与版本边界](README.md)，具体实现见 [Zed](02-zed-architecture.md) 和 [PI-Desktop](03-pi-desktop.md)。
 
-## 1. 先把“推荐 Rust”还原成具体选择
+<div class="heading-alias" id="1-先把推荐-rust还原成具体选择" aria-hidden="true"></div>
 
-Zed 的数百 crate 属于同一产品，不是数百次独立推荐；PI、Raycast 则局部采用 Rust。应比较<mark class="key">想控制的成本与愿承担的工作</mark>。
+## 1. Rust 选型的实际范围
+
+Zed 的数百 crate 属于同一产品，不是数百次独立推荐；PI、Raycast 则局部采用 Rust。应比较<mark class="key">目标成本与维护责任</mark>。
 
 | 项目与证据范围 | Rust 承担的职责 | 明确动机 | 与其他技术的搭配 |
 |---|---|---|---|
@@ -17,7 +19,9 @@ Zed 的数百 crate 属于同一产品，不是数百次独立推荐；PI、Rayc
 
 ## 2. Zed：Rust 让高频路径可以共享一套数据和类型
 
-### 2.1 团队自己说了什么
+<div class="heading-alias" id="21-团队自己说了什么" aria-hidden="true"></div>
+
+### 2.1 团队公开陈述
 
 2024 年访谈将 Atom 难点归于内存/文本布局、GC 和 JS/C++ 边界。Rust 提供底层控制、共享快照、跨线程与 Cargo；团队也承认 C/C++ 可实现类似结果，且有编译/培训成本。这是团队经验，非跑分。[原访谈](https://zed.dev/blog/we-have-to-start-over)
 
@@ -35,7 +39,7 @@ Zed 的数百 crate 属于同一产品，不是数百次独立推荐；PI、Rayc
 
 ## 3. Rust 的六种收益，哪些成立到什么程度
 
-| 能力 | 能解决的问题 | 本次可见证据 | 仍需自己保证的事情 |
+| 能力 | 能解决的问题 | 本次可见证据 | 仍需保证的约束 |
 |---|---|---|---|
 | 所有权、借用和 RAII | 减少悬空引用，给资源指定生命周期 | GPUI Entity、Task、Subscription；Rust host 资源类型 | 引用环、忘记取消、业务层资源归属、操作系统进程清理 |
 | `Send` / `Sync` 等线程约束 | 阻止不符合线程安全要求的对象跨线程使用 | 后台 executor 与 snapshot | 逻辑竞态、过期结果、死锁、公平调度 |
@@ -71,7 +75,7 @@ Warp 2021 工程文分别讨论 PTY、ANSI、滚动和绘制：Rust/GPU 外，�
 
 ## 7. 对 Yuuki Box 的研究判断
 
-可直接沿 GPUI MVP 学 Rust，无需先证明 Swift/Web 失败。分别验证 GPUI 的状态/渲染/后台协作，以及 Rust 宿主的生命周期/持久化。
+GPUI MVP 用于验证状态、渲染与后台协作；独立 Rust 宿主用于验证生命周期与持久化。
 
 证据支持实验 Rust，不足以决定 UI、loop 和 Apple 接入全用 Rust。[搭配与验证](04-yuuki-box.md)。
 

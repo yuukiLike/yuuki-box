@@ -1,4 +1,4 @@
-# 第四章：看清 MCP 的发现与调用
+# 第四章：MCP 工具发现与调用
 
 [![MCP 全景：用户操作 Host，Host 内的 Client 连接 Server；Codex、Zed、Warp、Raycast 都可以作为 Host，外接 GitHub、Context7、Playwright 等服务](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
 
@@ -10,14 +10,16 @@
 
 <mark class="key">看输出 → 找代码 → 对照结果。</mark>
 
-## 先分清：你、Host、Client、Server
+<div class="heading-alias" id="先分清你hostclientserver" aria-hidden="true"></div>
 
-| 角色 | 负责什么 | 和你的关系 |
+## 用户、Host、Client、Server
+
+| 角色 | 职责 | 实例与位置 |
 | --- | --- | --- |
-| 用户 | 提出目标、选择应用、连接账号，按应用策略确认操作 | 你在应用里说话、查看调用与结果 |
-| **Host：宿主应用** | 管理对话、模型、工具准入与 Client | 你使用的 Codex、Zed、Warp、Raycast |
+| 用户 | 提出目标、选择应用、连接账号，按应用策略确认操作 | 操作界面，查看调用与结果 |
+| **Host：宿主应用** | 管理对话、模型、工具准入与 Client | Codex、Zed、Warp、Raycast |
 | **Client：连接组件** | 与一个 Server 发现、请求和接收结果 | 通常由 Host 内置 |
-| **Server：能力提供程序** | 提供工具、资源、提示模板，访问实际系统 | 你安装、连接或自己编写的 MCP 服务 |
+| **Server：能力提供程序** | 提供工具、资源、提示模板，访问实际系统 | 已安装或自行开发的 MCP 服务 |
 | 模型（LLM） | 根据上下文提出工具调用，收到结果后继续回答 | Host 通过模型接口联系它；图中紫色连接表示模型 API，绿色连接表示 MCP |
 
 Host 可有多个 Client，每个 Client 连一个 Server；远程 Server 可服务多个平台，本机程序也可提供服务。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
@@ -64,7 +66,7 @@ Warp 终端里的 Codex CLI 使用 Codex 配置，Warp Agent 使用 Warp 配置�
 
 ## 1. 运行：观察两种不同的请求
 
-已经跑过客户端实验，可以直接看下一步。首次使用先按[选修实验](../ai-from-scaling/00-minimal-mcp.md)安装依赖，再运行：
+依赖安装见[最简 demo](../ai-from-scaling/00-minimal-mcp.md)，随后运行：
 
 ```bash
 pnpm demo:mini-mcp
@@ -80,7 +82,7 @@ pnpm demo:mini-mcp
 
 图按 **2026-07-28** 绘制，省略 ID、`_meta`、版本探测。`auto` 先 `server/discover` 查服务和版本，再 `tools/list`。[服务发现规范](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
 
-**你来做：** 在源码中沿三条线找位置：
+**代码核对：** 对照三处调用：
 
 1. [demo.ts](../../examples/minimal-mcp/src/demo.ts) 的 `listTools()` 对应图中的查询清单。
 2. [client.ts](../../examples/minimal-mcp/src/client.ts) 的 `client.callTool({ name, arguments: args })` 对应发送调用。
@@ -107,9 +109,11 @@ pnpm demo:mini-mcp
 
 完成：串起工具名、参数、执行函数和结果。
 
-## 到这里完成
+<div class="heading-alias" id="到这里完成" aria-hidden="true"></div>
 
-用代码解释：客户端怎样知道服务端有什么工具，以及一个 `tools/call` 最终怎样读到文件。想观察调用没有正常结束的情况，继续[下一课](05-failure.md)。
+## 验收标准
+
+沿源码说明工具发现、`tools/call` 与文件读取的完整链路。调用异常见[下一课](05-failure.md)。
 
 ## 选读与参考
 

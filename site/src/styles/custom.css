@@ -196,6 +196,7 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
 .content-panel:first-child { padding-top: 1.25rem; padding-bottom: .5rem; }
 .content-panel + .content-panel { border-top: 0; padding-top: .5rem; }
 .sl-markdown-content { line-height: 1.85; }
+.heading-alias { scroll-margin-top: calc(var(--sl-nav-height) + 1rem); }
 .sl-markdown-content mark {
   --highlight-color: var(--topic-emerald);
   color: var(--highlight-color);

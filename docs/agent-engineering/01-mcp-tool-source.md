@@ -1,4 +1,4 @@
-# MCP：把外部工具接进 Harness
+# MCP：外部工具接入 Harness
 
 把外部工具接入运行流程，让<mark class="key">成功、拒绝和断连都有记录</mark>。
 
@@ -6,23 +6,25 @@
 
 **定位入口 → 接只读工具源 → 读取 → 中途断连。** 先学[运行状态与恢复](05-harness-vertical-slice.md)；连接过程不熟时，选修[客户端实验](../ai-from-scaling/00-minimal-mcp.md)。
 
-## 先看：正常返回与中途断连
+<div class="heading-alias" id="先看正常返回与中途断连" aria-hidden="true"></div>
+
+## 正常返回与中途断连
 
 [![待实现的 Harness 接入流程：模型提出请求，Harness 检查和记录，再经 MCP 调用外部服务；正常结果有界返回，已发出的请求断连时记录未知并停止自动重放](../../site/public/diagrams/agent-engineering/01-mcp-tool-source.svg)](../../site/public/diagrams/agent-engineering/01-mcp-tool-source.svg)
 
 `proposed`、`ready`、`unknown` 是本练习的内部状态。MCP 提供发现与调用协议，宿主负责策略、审批、记录和恢复。
 
-客户端发请求，服务读文件，Harness 检查权限并保存记录。`ToolSource` 是自定义适配接口；SDK 不会替你完成审批与恢复。
+客户端发请求，服务读文件，Harness 检查权限并保存记录。`ToolSource` 是自定义适配接口；审批与恢复由宿主实现。
 
 ## 1. 定位：先找到现有工具执行入口
 
-**你来做：** 打开 [Sources/main.swift](../../examples/shared/runtime/Sources/main.swift)，结合 [runtime 说明](../../examples/shared/runtime/README.md#代码如何读)，找到 `run`、`tool`、`workspacePath` 和 `saveSessions`。
+**操作：** 对照 [Sources/main.swift](../../examples/shared/runtime/Sources/main.swift) 与 [runtime 说明](../../examples/shared/runtime/README.md#代码如何读)，定位 `run`、`tool`、`workspacePath` 和 `saveSessions`。
 
 找出工具选择、工作区检查、意图与结果保存的位置；外部调用也必须经过它们。
 
 `saveSessions` 保存宿主会话与执行状态；MCP Markdown、Blender 模型、GitHub 实验目录由各服务保存。恢复会话不会撤销远端结果。
 
-**完成标志：** 你能在现有代码上指出外部调用应该接入的位置。
+**验收：** 在现有代码中定位外部调用接入点。
 
 ## 2. 实现：把发现和调用包成一个工具源
 
@@ -43,7 +45,7 @@ protocol ToolSource: Sendable {
 }
 ```
 
-**你来做：** 自备本地 filesystem 测试 server，再实现适配器。首版只提供 `list_directory`、`read_file`，读取临时目录并返回文本；仓库尚无该服务。
+**操作：** 准备本地 filesystem 测试 server，再实现适配器。首版只提供 `list_directory`、`read_file`，读取临时目录并返回文本；仓库尚无该服务。
 
 对照[极简客户端](../../examples/minimal-mcp/src/client.ts)适配连接、发现、调用与关闭。`discover()` 对应 `tools/list`，`call()` 对应 `tools/call`；SDK 用 `server/discover` 查询版本与能力。
 
@@ -59,17 +61,19 @@ protocol ToolSource: Sendable {
 列出练习目录，读取其中的 README.md，然后概括内容。
 ```
 
-**你来做：** 把图中的主线接完整：参数与权限检查 → 保存执行意图 → 发出调用 → 检查结果 → 保存回执 → 把有界内容交回模型。
+**操作：** 实现参数与权限检查 → 保存执行意图 → 发出调用 → 检查结果 → 保存回执 → 将有界内容交回模型。
 
 记录来源、工具名、参数摘要、开始时间、耗时、结果字节数与终态；摘要不含凭据原文。
 
 **完成标志：** 返回预期内容，输出能追溯到对应调用。
 
-## 4. 故障练习：在三个位置打断它
+<div class="heading-alias" id="4-故障练习在三个位置打断它" aria-hidden="true"></div>
 
-用你控制的测试 server 做以下实验，先写出预期，再运行：
+## 4. 故障验证：三个中断位置
 
-| 你制造的情况 | 必须观察到什么 |
+仅在受控测试 server 上运行以下实验，先记录预期：
+
+| 注入条件 | 预期结果 |
 | --- | --- |
 | 绕过展示清单，直接请求未授权工具 | 调用入口返回 `permission_denied`，不向 server 发出调用 |
 | 请求已发出，收到结果前终止测试 server | 记录断连；无法确认执行效果时标为 `unknown`，Run 进入 `interrupted` |
@@ -79,9 +83,11 @@ protocol ToolSource: Sendable {
 
 取消本地等待时，服务端可能已完成操作。stdio 用 `notifications/cancelled` 通知，迟到响应按已终止请求处理；通知不能撤回副作用。2026-07-28 Streamable HTTP 通过关闭请求响应流取消，不能照搬 stdio 步骤。[取消规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/cancellation)
 
-**完成标志：** 你能用记录解释“调用失败”“已发出但结果未知”和“用户取消等待”的差别。
+**验收：** 记录可区分调用失败、已发出但结果未知、用户取消等待。
 
-## 到这里完成
+<div class="heading-alias" id="到这里完成" aria-hidden="true"></div>
+
+## 验收标准
 
 实现并测试后，交出成功、拒绝、断连各一条记录，能对应请求与终态；恢复时不自动重放未知副作用。
 
@@ -116,4 +122,4 @@ protocol ToolSource: Sendable {
 
 </details>
 
-返回[总览](README.md) · 下一篇[MCP：决定哪些工具可以执行](02-mcp-policy.md)。
+返回[总览](README.md) · 下一篇[MCP：工具授权与结果限额](02-mcp-policy.md)。

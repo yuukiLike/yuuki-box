@@ -4,11 +4,13 @@
 
 用数组认识 Q/K/V 与因果复用；公式和完整实验按需展开。
 
-## 先把模型里的数据看成数组
+<div class="heading-alias" id="先把模型里的数据看成数组" aria-hidden="true"></div>
+
+## 模型数据的数组表示
 
 模型把 token ID 转成向量，再逐层处理。实验用 `A B C D` 和固定数组表示这个过程。
 
-| 名称 | 可以怎样理解它的数据形态 | 作用 |
+| 名称 | 数据形态 | 作用 |
 | --- | --- | --- |
 | token ID | 一个整数 | 指向词表中的一项 |
 | 隐藏向量 `h` | 一个数值数组 | 当前层对这个位置的表示 |
@@ -21,7 +23,7 @@
 
 ## Q K V 各自参与哪一步
 
-先记分工：<mark class="key">Q 发起读取，K 参与配权，V 被加权组合</mark>。
+分工：<mark class="key">Q 发起读取，K 参与配权，V 被加权组合</mark>。
 
 [![当前隐藏向量分别产生 Q/K/V；Q 与可见 K 计算分数，再把分数变成权重，对 V 加权组合](../../site/public/diagrams/kv-cache/06-qkv.svg)](../../site/public/diagrams/kv-cache/06-qkv.svg)
 
@@ -54,7 +56,7 @@ const score = q.reduce((sum, value, i) => sum + value * k[i], 0);
 
 单头先将隐藏向量线性投影为 Q/K/V；Q 与可见 K 点积、缩放、softmax 后，加权组合 V。[论文第 3.2 节](https://arxiv.org/html/1706.03762v7#S3.SS2)
 
-可以先按下面这段伪代码读公式：
+对应伪代码：
 
 ```js
 query = project(hidden, queryWeights);
@@ -108,7 +110,7 @@ B 改成 X 时，C 的 token、位置未变，可见前缀却变了，深层状�
 
 下面假设没有命中的跨请求前缀，使用普通的一次预测一个 token 的生成循环：
 
-| 阶段 | 这次送入模型的 token | 计算完成后的 KV | 根据输出选出下一个 token |
+| 阶段 | 本步输入 token | 计算完成后的 KV | 根据输出选出下一个 token |
 | --- | --- | --- | --- |
 | Prefill | A B C | A B C 的 K/V | D |
 | 第一次 Decode | D | A B C D 的 K/V | E |
@@ -137,7 +139,7 @@ node docs/kv-cache/labs/attention-cache.mjs
 
 实验使用固定二维向量、两层单头、残差与简单位置输入；不包含分词、训练、归一化、MLP 或词表采样。
 
-读代码时沿这三个函数走：
+函数职责：
 
 1. `fullForward` 在每层重新处理整个序列，作为数值基线。
 2. `appendToken` 只处理新 token，并在每层追加 K/V。

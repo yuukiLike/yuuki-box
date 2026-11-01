@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="588" viewBox="0 0 520 588" role="img" aria-labelledby="title desc">
-<title id="title">一条可以随时停下的路线</title>
+<title id="title">KV Cache 学习路径</title>
 <desc id="desc">从前端 messages 数组开始，经过前缀依赖和 Q/K/V，再研究 DeepSeek、Harness 和 Pi。每一站只解决一个问题。</desc>
 <style>
   .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
@@ -18,6 +18,6 @@
 </style>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
 <rect class="canvas" x="0" y="0" width="520" height="588" rx="16"/>
-<text x="28" y="43" class="title" text-anchor="start">一条可以随时停下的路线</text>
+<text x="28" y="43" class="title" text-anchor="start">KV Cache 学习路径</text>
 <rect x="28" y="76" width="464" height="74" rx="12" class="new"/><text x="48" y="107" class="bold" text-anchor="start">1  一条消息怎样变成请求</text><text x="48" y="135" class="small" text-anchor="start">从 messages 数组和 JSON 开始</text><path class="arrow" d="M260 154 L260 172"/><rect x="28" y="176" width="464" height="74" rx="12" class="panel"/><text x="48" y="207" class="bold" text-anchor="start">2  追加一项，哪些可以不重算</text><text x="48" y="235" class="small" text-anchor="start">用累计和看清前缀依赖</text><path class="arrow" d="M260 254 L260 272"/><rect x="28" y="276" width="464" height="74" rx="12" class="panel"/><text x="48" y="307" class="bold" text-anchor="start">3  模型留下什么中间结果</text><text x="48" y="335" class="small" text-anchor="start">认识数字向量、Q/K/V</text><path class="arrow" d="M260 354 L260 372"/><rect x="28" y="376" width="464" height="74" rx="12" class="panel"/><text x="48" y="407" class="bold" text-anchor="start">4  下一次请求能复用什么</text><text x="48" y="435" class="small" text-anchor="start">读取 DeepSeek 的命中用量</text><path class="arrow" d="M260 454 L260 472"/><rect x="28" y="476" width="464" height="74" rx="12" class="panel"/><text x="48" y="507" class="bold" text-anchor="start">5  Harness 和 Pi 管哪一段</text><text x="48" y="535" class="small" text-anchor="start">组织请求，再转换响应与统计</text>
 </svg>

@@ -1,8 +1,8 @@
-# 第一章：让一次函数调用跨过进程
+# 第一章：RPC 跨进程调用
 
 [目录](README.md) · [下一课](02-json-rpc.md)
 
-让<mark class="key">另一个进程读笔记</mark>并返回结果。
+通过 RPC 请求<mark class="key">另一个进程读取笔记</mark>并返回结果。
 
 这就是 RPC。本课在本机启动两个进程。
 
@@ -14,7 +14,7 @@
 node docs/ai-communication/labs/01-rpc.ts
 ```
 
-最后会看到：
+预期输出：
 
 ```text
 结果： 今天只追踪一次跨进程调用。
@@ -25,23 +25,25 @@ node docs/ai-communication/labs/01-rpc.ts
 
 [![两个进程各有自己的 PID，请求和回答使用同一个 id](../../site/public/diagrams/ai-communication/01-rpc.svg)](../../site/public/diagrams/ai-communication/01-rpc.svg)
 
-先分清两个编号：
+两类标识：
 
-| 编号 | 用来认出什么 |
+| 标识 | 用途 |
 | --- | --- |
 | `PID` | 哪个进程 |
 | `id` | 哪一次请求 |
 
 PID 区分进程；相同 id 配对请求与回答。
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
 
-能按 id 追踪一次请求和回答即可。
+## 验收标准
+
+按 id 追踪完整的请求与响应。
 
 <details>
 <summary>代码入口</summary>
 
-先只找两处：
+两个代码入口：
 
 - [01-rpc.ts](labs/01-rpc.ts)：`spawnSync()` 启动另一个进程，并发出请求。
 - [note-server.ts](labs/note-server.ts)：按 `message.method` 找到操作，`reply()` 返回结果。

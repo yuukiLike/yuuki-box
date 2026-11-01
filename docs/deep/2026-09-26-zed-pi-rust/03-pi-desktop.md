@@ -1,4 +1,4 @@
-# PI-Desktop：从真实混合系统抽出一个小型 Rust host 骨架
+# PI-Desktop：混合架构与 Rust 宿主骨架
 
 [调查入口](README.md) · [为什么选 Rust](01-why-rust.md) · [Zed 的组合方式](02-zed-architecture.md) · [对 yuuki-box 的启示](04-yuuki-box.md)
 
@@ -27,7 +27,9 @@ apps/packages 直接子包有 11 份 manifest，加根包、文档站、内置�
 
 **推断：**先在单二进制内按领域分模块，需独立生命周期的 Agent 才分进程；出现复用、依赖或编译需求再拆 crate。这不是作者长期计划，单 crate 也不代表只读一文件。
 
-## 2. 为什么把 Rust 放在这里
+<div class="heading-alias" id="2-为什么把-rust-放在这里" aria-hidden="true"></div>
+
+## 2. Rust 宿主的职责范围
 
 ADR 0010 为文件/命令、插件隔离、安全存储与长驻服务选 Rust，保留可行的 TypeScript main 思路，不重写 pi、loop 或 UI。0001 保留 Electron 的 Node/pi、打包和调试生态；0012 拒绝重写供应商 SDK。Rust 决策[^pi-10]、非目标[^pi-11]、Electron[^pi-12]、供应商[^pi-13]
 
@@ -58,7 +60,9 @@ Agent 以 `process.execPath`、`ELECTRON_RUN_AS_NODE=1` 使用 Electron Node，�
 
 三者可分别重启/刷新，代价是序列化、响应丢失、迟到通知和 pending 清理。进程隔离不等于 OS 沙箱，Rust 内存约束也不替代路径、权限和分派策略。
 
-## 4. 真实链一：用户 prompt 如何开始并结束
+<div class="heading-alias" id="4-真实链一用户-prompt-如何开始并结束" aria-hidden="true"></div>
+
+## 4. 源码链一：prompt 的启动与结束
 
 以下仅为 Desktop 本地会话。`native:` 转交 nativePiService，由原生 AgentSession 管 canonical JSONL；native.agent.event 直达 UI，不走 Desktop outbox/Host queue/turn。native 分支[^pi-21]、事件例外[^pi-22]
 
@@ -71,7 +75,9 @@ Agent 以 `process.execPath`、`ELECTRON_RUN_AS_NODE=1` 使用 Electron Node，�
 
 如取消 A 后启动 B，同 session 的旧终止事件不能结束 B。保存响应丢失后重发，消息 ID 稳定而 RPC ID 可变；会话、轮次、消息、传输请求四种身份不能混为一谈。
 
-## 5. 真实链二：assistant 回复如何变成可恢复历史
+<div class="heading-alias" id="5-真实链二assistant-回复如何变成可恢复历史" aria-hidden="true"></div>
+
+## 5. 源码链二：assistant 回复的持久化
 
 message_end 到 Main 后先处理 checkpoint，再进文件 outbox，保存队列后顺序 appendMessage。`session-message-outbox.json` 上限 1024 项，处理重复 ID、永久拒绝和孤立会话；是有界恢复，不保证永不丢失。消息处理[^pi-31]、outbox[^pi-32]
 
@@ -112,7 +118,9 @@ runtime 经 host.proxy 请求 tools.execute，Rust 按数据库会话绑定项�
 
 远端启动拒绝附件，共享包不证明插件 UI/OAuth 等价；未验证配对、断网或远程恢复。附件边界[^pi-56]
 
-## 8. 从现有系统抽出真正的小骨架
+<div class="heading-alias" id="8-从现有系统抽出真正的小骨架" aria-hidden="true"></div>
+
+## 8. 最小骨架的提取路径
 
 沿“一个 prompt、一个工具、一条最终消息”阅读：
 
@@ -123,7 +131,7 @@ runtime 经 host.proxy 请求 tools.execute，Rust 按数据库会话绑定项�
 
 教学示例可先留一个 Rust crate、Node Agent、薄编排层和 UI；显式 schema、session/turn/request ID 定义交接。outbox、双存储和远端按恢复/索引/访问需求加入；这是建议，不是已验证的独立 demo。
 
-检查四问：刷新后从哪恢复？谁批准写文件？取消先到怎么办？保存后丢回复如何去重？删目录不能代答。只展示一次请求、没有本地工具/长期数据时，也无需先做全套恢复。
+最小骨架仍需定义恢复来源、写入审批、取消顺序与消息幂等；不涉及本地工具或长期数据时，可按需求缩减恢复机制。
 
 收益是 Rust 集中数据/权限、Node 复用 pi、UI 协议解耦；成本是多进程发布、双语言契约、顺序、重启/重投、取消和 host 差异。源码仅证明机制存在，不证明吞吐、内存、安全或恢复完备；先迁移所有权和完整工作链，再按本地职责决定是否加 Rust。
 

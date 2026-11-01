@@ -1,4 +1,4 @@
-# Zed 与 Grok Build：可组合的核心，需要多明确的边界
+# Zed 与 Grok Build：核心组合与职责边界
 
 Zed 展示数据与交互组合，Grok Build 展示定义、工具和宿主分工；比较具体机制，不按语言、代码量或功能数排名。[调查入口](README.md) · [框架](01-framework.md) · [Raycast / Warp](02-raycast-warp.md) · [Yuuki](04-yuuki.md)
 
@@ -25,7 +25,9 @@ flowchart LR
 
 **分析：**收益来自<mark class="key">共享行为且保留身份</mark>，代价是维护片段、撤销、订阅、版本和坐标一致。Yuuki 先保留结果来源与产物身份，需要跨文件编辑时再引入复杂模型。
 
-### 显示变换增加层次，却减少混合责任
+<div class="heading-alias" id="显示变换增加层次却减少混合责任" aria-hidden="true"></div>
+
+### 显示变换的分层职责
 
 `DisplayMap` 分层组织 Inlay、Fold、Tab、Wrap、Block，并映射文本/屏幕坐标。折叠不删文本，软换行不改文件；实现仍须维护变换顺序与增量同步。[设计说明](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/display_map.rs#L1)
 
@@ -33,7 +35,9 @@ SumTree 共享、Rope 分块与 snapshot 让后台读取固定版本；回前台
 
 **分析：**固定版本与当前界面分开考虑，靠版本和生命周期规则衔接。删除快照/映射层，可能只把并发与坐标换算散给调用者。
 
-### 注册表让窗口知道“可打开的对象”，不必知道所有编辑器
+<div class="heading-alias" id="注册表让窗口知道可打开的对象不必知道所有编辑器" aria-hidden="true"></div>
+
+### 项目项注册与编辑器依赖
 
 Editor 向 `ProjectItemRegistry` 注册 Buffer 打开与视图构建方式；Workspace 经 trait/注册表调用，无需静态反向依赖 Editor。回调方向不等于编译依赖方向。[注册表](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/workspace/src/workspace.rs#L1050) · [Editor 注册](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/editor.rs#L364) · [项目项构建](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/editor/src/items.rs#L1568)
 
@@ -98,7 +102,9 @@ headless 分 plain、最终 JSON 与 streaming-json。ACP `grok agent stdio` 用
 
 本轮只确认这些处理存在，未审计全部路径或测试竞态。**推断：**单个停止按钮背后仍须明确任务、副作用与清理责任；Yuuki 单任务可减少并发，但不能省略身份与终态，也无需先做多代理调度。
 
-## 7. 两个项目真正可带走的东西
+<div class="heading-alias" id="7-两个项目真正可带走的东西" aria-hidden="true"></div>
+
+## 7. 两项目机制对照
 
 | 问题 | Zed 的具体答案 | Grok Build 的具体答案 |
 |---|---|---|

@@ -153,7 +153,9 @@ Set-Location 'C:\AI\ComfyUI_windows_portable'
 
 要恢复默认方式，停止该终端中的服务，再双击原来的 `run_nvidia_gpu.bat`。参数含义见 [ComfyUI 启动参数](https://github.com/Comfy-Org/ComfyUI/blob/v0.43.0/comfy/cli_args.py)。
 
-## 7 · 留下这次实验的结果
+<div class="heading-alias" id="7--留下这次实验的结果" aria-hidden="true"></div>
+
+## 7 · 保存实验结果
 
 保存 PNG 和工作流后，记下实际观察到的数值：
 
@@ -169,8 +171,8 @@ ComfyUI 版本：
 
 **不要把未改变任何输入时的缓存命中当作生成速度。** 比较耗时时，改提示词或 seed，并保持分辨率一致；首次加载和后续生成分开记录。
 
-已核对模型、节点、采样与 JSON 静态连接；**未在你的 Windows 实测，不保证耗时或峰值内存**。卡住时保留报错、工作流和记录。
+已核对模型、节点、采样与 JSON 静态连接；**未在 Windows 目标环境实测，不保证耗时或峰值内存**。失败时保留报错、工作流和记录。
 
-下一课：[用 ACE-Step 1.5 Turbo 生成第一段配乐 →](02-ace-step-music.md)
+选修：[用 ACE-Step 1.5 Turbo 生成配乐 →](02-ace-step-music.md)
 
 [返回 Windows 本地 AI 专题](README.md)。

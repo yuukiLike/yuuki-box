@@ -8,7 +8,7 @@
 
 <div class="learning-map-table" role="region" aria-label="实验分类与学习入口" tabindex="0">
 
-| 所属专题 | 你想拆开什么 | 先试哪一手 | 入口 |
+| 所属专题 | 实验对象 | 起步操作 | 入口 |
 | --- | --- | --- | --- |
 | 应用通信 | 请求与响应 | 请另一个程序读笔记，追踪结果怎样回来 | [RPC、SSE 与 Agent 小课](../ai-communication/README.md) |
 | 前端性能 | 查找与缓存 | 把目标从第一项换到最后一项，比较工作量与额外空间 | [前端缓存](../frontend-foundations/README.md)、[数组与 Map 实验](../../site/src/pages/labs/lookup.astro) |
@@ -18,7 +18,9 @@
 
 </div>
 
-## 想从一个小模块起步，就选 Wasm
+<div class="heading-alias" id="想从一个小模块起步就选-wasm" aria-hidden="true"></div>
+
+## Wasm 入门路线
 
 打开 [Wasm 实验](../../site/src/pages/labs/wasm-bridge.astro)，追踪一次 JavaScript → 模块 → 页面；再读 Worker，走通固定计算、状态和取消。
 
@@ -37,11 +39,15 @@
 
 最短三行：`改了什么 / 输出是否一致 / 工作与成本如何变化`。保留预测失误。
 
-## 想把实验接回真正的功能
+<div class="heading-alias" id="想把实验接回真正的功能" aria-hidden="true"></div>
+
+## 接入实际功能
 
 选做：[语音工具](../tts/README.md)检测人声并转写；[浏览器 AI](../wasm/browser-ai.md)比较关键字与语义查询；[Agent 工程实验](../agent-engineering/README.md)追踪启动、取消和恢复。
 
-## 现有资料怎样放回学习地图
+<div class="heading-alias" id="现有资料怎样放回学习地图" aria-hidden="true"></div>
+
+## 关联资料
 
 | 资料 | 在这张地图里的用途 |
 | --- | --- |

@@ -4,7 +4,9 @@
 
 按 **2026-10-31** 本机 `~/codex/for-job` 的清单、说明及测试配置整理；本页尚无云端执行结果。
 
-## 先认清现有能力
+<div class="heading-alias" id="先认清现有能力" aria-hidden="true"></div>
+
+## 现有能力与边界
 
 | 已有内容 | 云端可以先做什么 | 验收时保留什么边界 |
 | --- | --- | --- |
@@ -83,7 +85,9 @@ Cloud 无内置 computer／browser use；这里运行仓库自带 Playwright，�
 
 视觉导出另跑 `tests/e2e/export/visual-pdf.spec.ts` 等相关用例，查页面与文件；ATS／恢复测试不覆盖全部导出和编辑行为。
 
-## 怎样接回一次实现
+<div class="heading-alias" id="怎样接回一次实现" aria-hidden="true"></div>
+
+## 实现与交付
 
 明确修复范围与完成条件；按项目做实现、兼容自审，再审实页和 diff，写回 `TODO.md`。界面保留视口、长文本、多页与文件证据。
 
@@ -92,7 +96,7 @@ Cloud 无内置 computer／browser use；这里运行仓库自带 Playwright，�
 <details>
 <summary>本页对应的项目文件</summary>
 
-以下路径相对 `for-job` 根目录，跟做时以目标分支中的实际文件为准：
+以下路径相对 `for-job` 根目录，以目标分支中的实际文件为准：
 
 - `README.md`、`AGENTS.md`、`package.json`、`.github/workflows/ci.yml`：运行版本、检查与交付约定。
 - `tests/unit/resume-document-codec.test.ts`：文档与备份格式、旧稿保留等离线检查。

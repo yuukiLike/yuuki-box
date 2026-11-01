@@ -4,7 +4,9 @@
 
 路线：**入门 → 运行控制 → MCP → Skills → Computer Use。** 不必先学模型训练；Computer Use 可独立阅读。
 
-## 入门：先跑通两课
+<div class="heading-alias" id="入门先跑通两课" aria-hidden="true"></div>
+
+## 入门：工具调用与模型接入
 
 | 顺序 | 教程 | 做出什么 |
 | --- | --- | --- |
@@ -15,7 +17,7 @@
 
 使用 OpenAI 赠额前，读 [API：额度、图片与语音](openai-api.md)，确认领取、到期与用途。第二课脚本使用 DeepSeek，OpenAI 入门另列。
 
-想做语音笔记、口答复习或音乐草案，选[OpenAI API 小项目](openai-api-projects.md)，按输入、API 与本地处理完成第一份成果。
+语音笔记、口答复习与选修音乐案例见[OpenAI API 小项目](openai-api-projects.md)，按输入、API 与本地处理组织实验。
 
 调用前后自动检查见 [AI Hooks](hooks.md)：比较配置与插件事件，分清执行前拒绝、执行后反馈和 Stop 续跑。
 
@@ -44,19 +46,19 @@
 | 3 | [同类工具对照](computer-use-ecosystem.md) | Claude、Gemini、Playwright MCP、Browser Use、Stagehand、UI-TARS |
 | 4 | [理解误区与自测](computer-use-misconceptions.md) | 权限与连接、结果验证、取消、超时与重复提交 |
 
-电脑操控已开启却无法连接 Chrome，看第二篇；想比较产品能力，看第一、三篇。
+Chrome 连接故障见第二篇；产品能力比较见第一、三篇。
 
 ## 工程实验：运行恢复、上下文、MCP 权限与 Skills 验收
 
-| 你想试什么 | 实验入口 | 开始前需要 | 带走什么 |
+| 目标 | 实验入口 | 前置条件 | 验收产物 |
 | --- | --- | --- | --- |
-| 干到一半，取消、崩溃、再重启 | [Harness：把一次运行管到底](05-harness-vertical-slice.md) | Run/ToolCall 状态机 | 六个状态场景的终态与事件证据 |
-| 聊到第 100 轮，查清慢在哪、贵在哪 | [Harness：上下文与运行报告](06-context-and-report.md) | 事件已持久化 | 有界上下文与能解释开销的报告 |
-| 亲手制造断连、超时和迟到结果 | [Harness：故障演练场](07-scenario-regression.md) | fake model 与 fake server | 可在 CI 重复执行的场景 |
-| 让外部工具第一次进入自己的循环 | [MCP：把外部工具接进 Harness](01-mcp-tool-source.md) | runtime 已有工具与审批 | 一次成功调用、一次拒绝、一次断连处理 |
-| 决定哪些外部调用可以执行 | [MCP：调用策略与结果限额](02-mcp-policy.md) | 工具源可发现工具 | 列表和调用入口都检查；未授权请求拒绝；结果有界 |
-| 把反复解释的任务教一遍、存下来 | [Skills：结构与触发](03-skills-structure.md) | 一个稳定重复的任务 | 三次任务的触发与返工对照 |
-| 换个会话，检查它是否真的学会 | [Skills：校验与渐进加载](04-skills-validation.md) | 一个可执行检查命令 | 新会话跑通；坏 fixture 被抓住 |
+| 验证取消、崩溃与重启 | [Harness：取消、崩溃与恢复](05-harness-vertical-slice.md) | Run/ToolCall 状态机 | 六个状态场景的终态与事件证据 |
+| 测量长会话的上下文与开销 | [Harness：上下文与运行报告](06-context-and-report.md) | 事件已持久化 | 有界上下文与开销报告 |
+| 注入断连、超时和迟到结果 | [Harness：故障注入与场景回归](07-scenario-regression.md) | fake model 与 fake server | 可在 CI 重复执行的场景 |
+| 接入外部工具源 | [MCP：外部工具接入 Harness](01-mcp-tool-source.md) | runtime 已有工具与审批 | 成功、拒绝与断连记录 |
+| 限定外部调用权限 | [MCP：调用策略与结果限额](02-mcp-policy.md) | 工具源可发现工具 | 列表和调用入口检查；结果有界 |
+| 复用稳定任务流程 | [Skills：结构与触发](03-skills-structure.md) | 一个稳定重复的任务 | 三次任务的触发与返工对照 |
+| 验证跨会话复用 | [Skills：校验与渐进加载](04-skills-validation.md) | 一个可执行检查命令 | 新会话完成；坏 fixture 被拒绝 |
 
 ## 工程第一步：取消工具调用并检查终态
 

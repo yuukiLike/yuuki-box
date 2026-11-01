@@ -2,7 +2,7 @@
 
 依次练习文字发声、录音转写与人声检测。
 
-每工具一种安装、两个用法；先用 edge-tts <mark class="key">听见第一句话</mark>。
+每项工具提供安装命令与两个用例；先用 edge-tts <mark class="key">听见第一句话</mark>。
 
 | 工具 / 源码 | 做什么 | 费用与联网 |
 |---|---|---|
@@ -10,7 +10,7 @@
 | [whisper.cpp](https://github.com/ggml-org/whisper.cpp) | 声音 → 文字（转写） | 下载模型后，本地免费运行 |
 | [silero-vad](https://github.com/snakers4/silero-vad) | 找出人声与静音（VAD） | 安装后，本地免费运行 |
 
-只想先听一句话，点[让 Yuuki 开口说第一句话](让-Yuuki-开口说第一句话.md)。
+基础练习：[TTS 入门：合成并播放中文](让-Yuuki-开口说第一句话.md)。
 
 云端语音与赠额范围见 [OpenAI API：额度、图片与语音](../agent-engineering/openai-api.md)，含旧 TTS 迁移安排。
 
@@ -51,7 +51,7 @@ edge-tts --voice zh-CN-XiaoxiaoNeural --text "你好，我是 Yuuki。" --write-
 afplay hello.mp3
 ```
 
-用法 ②：文本文件 → 配音 + 字幕。把自己的 UTF-8 文本放进 `article.txt`，然后执行：
+用法 ②：文本文件 → 配音 + 字幕。将 UTF-8 文本放入 `article.txt`，然后执行：
 
 ```bash
 edge-tts --voice zh-CN-XiaoxiaoNeural --file article.txt --write-media article.mp3 --write-subtitles article.srt
@@ -70,7 +70,7 @@ curl -fL https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
 
 安装包不含模型，需要第二行单独下载。[Homebrew 安装说明](https://formulae.brew.sh/formula/whisper.cpp)、[官方模型说明](https://github.com/ggml-org/whisper.cpp/tree/master/models)
 
-将 `hello.mp3` 或自己的录音转为 16 kHz 单声道 WAV：
+将 `hello.mp3` 或其他录音转为 16 kHz 单声道 WAV：
 
 ```bash
 ffmpeg -i hello.mp3 -ar 16000 -ac 1 -c:a pcm_s16le audio.wav
@@ -132,7 +132,9 @@ PY
 
 `spans` 对应原录音；拼接后的 `speech.wav` 时间变短，给原视频做字幕须保留原时间或建立映射。
 
-## 串起来玩一次
+<div class="heading-alias" id="串起来玩一次" aria-hidden="true"></div>
+
+## 组合验证
 
 把 `hello.mp3` 转回文字，再打印人声时间；对照声音、转写和区间。接入工作台见[模型与语音基础](../architecture/ai-and-speech-foundation.md)。
 

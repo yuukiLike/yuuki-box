@@ -1,8 +1,10 @@
-# 回到 Yuuki：用一次变化看清简单、组合与复杂性
+# Yuuki：变更传播与复杂性分析
 
 <mark class="key">用一次变化检验共同能力的边界</mark>。五种 UI 已共用 runtime/helper，可观察换工具、识别后端或交互牵动什么，而非按语言/进程数选赢家。本章把[上轮调查](../2026-09-26-zed-pi-rust/README.md)与[分析框架](01-framework.md)用于当前项目。
 
-## 1. 先把观察时点说清楚
+<div class="heading-alias" id="1-先把观察时点说清楚" aria-hidden="true"></div>
+
+## 1. 观察时点与验证范围
 
 依据 2026-09-26 本地源码：当时无 Git 元数据，且实现同步变化，行号不是固定 commit。本轮已从旧基线推进到 `command → run → completion → tool`、会话保存和五 UI 集成，[文档入口](../../README.md)同步更新。[架构](../../architecture/ai-and-speech-foundation.md) · [runtime 源码](../../../examples/shared/runtime/Sources/main.swift)。
 
@@ -10,7 +12,9 @@ runtime 仅编译；真实 API、权限、竞态、恢复和工具边界未端�
 
 共用 Swift runtime 只能比较 UI、宿主和协议成本，不能比较 Swift/Rust Harness 性能。Rust/GPUI、自研 loop 仍是候选方向，未作最终选型。[语音基础](../../architecture/ai-and-speech-foundation.md) · [选型边界](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
 
-## 2. 共同运行时：少写五份规则，同时保留明确的时间语义
+<div class="heading-alias" id="2-共同运行时少写五份规则同时保留明确的时间语义" aria-hidden="true"></div>
+
+## 2. 共享运行时：规则复用与时间语义
 
 以下为数据与意图关系，进程拓扑随 UI 路线变化：
 
@@ -38,7 +42,9 @@ JSONL 之外还需顺序：先 state 中的消息，再 delta，终态给完整 
 
 ## 3. 共同语音协议：能够替换后端，不代表后端行为相同
 
-### 变化链 B：Apple Speech → Whisper，停止还能叫同一件事吗？
+<div class="heading-alias" id="变化链-bapple-speech--whisper停止还能叫同一件事吗" aria-hidden="true"></div>
+
+### 变化链 B：Apple Speech 与 Whisper 的停止语义
 
 helper 包含 Apple Speech/AVFoundation 与录音转换→whisper.cpp CLI 两条路径，共用 `speech.state/partial/final/error`；Whisper 先录后转、不产 partial，各 UI 共用转换/CLI 管理。[helper](../../../examples/shared/native/README.md)。
 
@@ -64,7 +70,9 @@ React reconciler 在 Node 生成树，Swift 映射 AppKit，动作按 ID 回传 
 
 对照 [Raycast / Warp](02-raycast-warp.md)：受控词汇便于常见组合，超出词汇则需平台开发。Yuuki 先观察重复限制，无需先做通用 renderer。
 
-## 5. 把复杂性放到一张实际可用的变更探针表里
+<div class="heading-alias" id="5-把复杂性放到一张实际可用的变更探针表里" aria-hidden="true"></div>
+
+## 5. 变更探针
 
 以下探针<mark class="caution">尚未实施或运行</mark>。每次选一行，记录改动、契约和失败，不将文件数当复杂度分数。
 
@@ -80,12 +88,14 @@ React reconciler 在 Node 生成树，Swift 映射 AppKit，动作按 ID 回传 
 
 基线见 [runtime](../../../examples/shared/runtime/README.md)、[helper](../../../examples/shared/native/README.md)、[原生桥](../../../examples/react-native-bridge/README.md)。内容增长还需遵守[性能比较口径](../../../examples/COMPARISON.md)，固定单行回放不代表完整聊天。
 
-## 6. 哪些复杂性值得承担，哪些可以等
+<div class="heading-alias" id="6-哪些复杂性值得承担哪些可以等" aria-hidden="true"></div>
+
+## 6. 复杂性分类与实施顺序
 
 任务身份、取消、副作用与恢复已进入语义；签名、权限、进程和输入法是平台约束；插件、多 Agent、同步和常驻可延后。分清三类，才知道是在删能力、集中重复，还是搬到别处。[范围](../../../examples/shared/runtime/README.md) · [五路线](../../../examples/COMPARISON.md)。
 
 Zed 可借鉴领域模型、注册、快照和版本；PI 可借鉴状态权威与故障边界，不必复制 crate、进程数量或完整编辑器。[Zed](../2026-09-26-zed-pi-rust/02-zed-architecture.md) · [PI](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
 
-五个示例仍是 Mac 样本：任务/事件和纯领域逻辑可复用，macOS helper、进程、Keychain 和 UI 生命周期不能直接搬到移动端。选一条愿维护的 UI，追一项变化的成败，再对照另一条成本，为未来 Rust runtime 保留共同问题。[目标与候选](../../README.md) · [验证建议](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
+五个示例仍是 Mac 样本：任务/事件和纯领域逻辑可复用，macOS helper、进程、Keychain 和 UI 生命周期不能直接搬到移动端。选择一条 UI 路线，记录具体变更的结果与维护成本，再与另一条对照，为后续 Rust runtime 保留共同问题。[目标与候选](../../README.md) · [验证建议](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
 
 返回[本轮调查入口](README.md) · 对照[Zed / Grok](03-zed-grok.md)。

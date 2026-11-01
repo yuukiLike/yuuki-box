@@ -130,7 +130,7 @@ pnpm demo:tiny-model --load "$AI_LAB_DIR/model.json"
 
 打开 JSON 指出参数，再在源码中找到语料。参数支持生成，不能按原句检索训练资料。
 
-留三行笔记再休息：
+记录三项结果：
 
 ```text
 我改变了：
@@ -138,4 +138,4 @@ pnpm demo:tiny-model --load "$AI_LAB_DIR/model.json"
 模型仍然会错在：
 ```
 
-模型基础到这里可以停。想继续研究推理，选读 [Attention 与 KV Cache](../kv-cache/README.md)；沿[四小时路线](README.md)联读，则进入 [Agent 入门：搭建 Harness](03-build-a-harness.md)。
+推理机制可选读 [Attention 与 KV Cache](../kv-cache/README.md)；沿[四小时路线](README.md)联读，则进入 [Agent 入门：搭建 Harness](03-build-a-harness.md)。

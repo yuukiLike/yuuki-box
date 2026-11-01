@@ -8,20 +8,22 @@
 
 按「运行 → 看剖面 → 改尺寸 → 对照」完成；初次接入看[Codex MCP 入门](00-codex-mcp.md)。需 Blender、Node.js ≥22.22、pnpm 11.14；已有记录用 Blender 5.2.3 LTS，其他版本与打印另验。
 
-## 先看：三个工具怎样接力
+<div class="heading-alias" id="先看三个工具怎样接力" aria-hidden="true"></div>
+
+## 三个工具的调用流程
 
 [![Blender 建模流程：输入形状，create_model 生成文件与 modelId，inspect_model 重新检查文件，export_stl 检查后导出；学习者运行、改尺寸并核对产物](../../site/public/diagrams/ai-from-scaling/05-blender-pipeline.svg)](../../site/public/diagrams/ai-from-scaling/05-blender-pipeline.svg)
 
 ## 1. 运行：找到真正生成的文件
 
-**你来做：** 在仓库根目录执行：
+在仓库根目录执行：
 
 ```bash
 pnpm install:blender-mcp
 pnpm demo:blender-mcp
 ```
 
-**你要看到：** 下面省略连接日志，用 `<modelId>` 和 `<模型目录>` 代替本次生成的值：
+预期输出省略连接日志，以 `<modelId>` 和 `<模型目录>` 代替本次生成的值：
 
 ```text
 [MCP] tools/list → create_model, inspect_model, export_stl
@@ -44,7 +46,7 @@ pnpm demo:blender-mcp
 
 ![此前生成的 80 × 50 × 12 mm 托盘](../../site/public/images/blender-mcp-practice-tray.png)
 
-**完成标志：** 找到本次 `.blend`、PNG、STL，核对终端尺寸。
+**验收：** 找到本次 `.blend`、PNG、STL，核对终端尺寸。
 
 ## 2. 看图：3 mm 的底和侧壁从哪里来
 
@@ -59,7 +61,7 @@ parts: [
 
 [![托盘的俯视与剖面：侧壁厚度是外尺寸与挖空尺寸之差的一半；实体从 Z=0 到 12，挖空盒子从 Z=3 到 15，因此留下 3 mm 底](../../site/public/diagrams/ai-from-scaling/05-blender-geometry.svg)](../../site/public/diagrams/ai-from-scaling/05-blender-geometry.svg)
 
-**你来做：** 对着图算三次：
+几何计算：
 
 - 左右侧壁：`(80 - 74) / 2 = 3 mm`。
 - 前后侧壁：`(50 - 44) / 2 = 3 mm`。
@@ -67,11 +69,11 @@ parts: [
 
 挖空顶部 Z=15 超过实体 Z=12，形成开口；材料表面仍围成闭合实体。
 
-**完成标志：** 你能说明两个 `position` 的 Z 值为什么分别是 6 和 9。
+**验收：** 说明两个 `position` 的 Z 值为何分别为 6 和 9。
 
 ## 3. 修改：把托盘加宽，保留 3 mm 侧壁
 
-**你来做：** 在 `demo.ts` 中把外盒宽度从 80 改成 100，同时把挖空宽度从 74 改成 94：
+在 `demo.ts` 中把外盒宽度从 80 改成 100，同时把挖空宽度从 74 改成 94：
 
 ```ts
 parts: [
@@ -84,7 +86,7 @@ parts: [
 
 **先预测：** 只改外盒，侧壁为 `(100 - 74) / 2 = 13 mm`；两处一起改才保持 3 mm。
 
-**完成标志：** 你看到了加宽的模型，并能用参数解释侧壁和底厚。
+**验收：** 新模型宽度符合修改值，侧壁与底厚仍可由参数解释。
 
 ## 4. 定位：哪个程序真正创建了几何
 
@@ -98,9 +100,11 @@ parts: [
 
 `modelId` 是业务编号，不是 JSON-RPC 请求 `id`；跨进程处理依赖编号和文件，文件删除就失败。MCP 不保存场景或自动选择上一个模型。
 
-**完成标志：** 你能指出“TS 发出调用”和“Python 创建几何”的位置，并说明三个工具为什么能接着处理同一个模型。
+**验收：** 定位 TS 调用、Python 建模及 `modelId` 关联代码。
 
-## 到这里完成
+<div class="heading-alias" id="到这里完成" aria-hidden="true"></div>
+
+## 验收标准
 
 用新模型说明 MCP 调用、尺寸计算和 `modelId` 定位；`.blend` 用于编辑、PNG 预览、STL 切片。
 
@@ -169,4 +173,4 @@ STL 无单位，本例按毫米解释；闭合检查仅查非流形边、零面�
 
 </details>
 
-返回[MCP 项目实战](../mcp-projects/README.md) · 选修[客户端与调用链实验](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。
+返回[MCP 项目实战](../mcp-projects/README.md) · [最简 demo 与客户端选读](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。

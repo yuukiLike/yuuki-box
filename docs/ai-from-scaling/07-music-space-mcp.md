@@ -1,8 +1,8 @@
-# 音乐 1：用 MCP 控制钢琴排练台
+# 选修 · 音乐 1：用 MCP 控制钢琴排练台
 
 [MCP 项目实战](../mcp-projects/README.md)的音乐选修，可独立开始；初次接入先看[Codex MCP 入门](00-codex-mcp.md)。
 
-今天<mark class="key">定位第八小节，独听第二声部</mark>，把音名对应到亮起的琴键，再对照实际 MCP 请求与结果。
+操作目标：<mark class="key">定位第八小节，独听第二声部</mark>，把音名对应到亮起的琴键，再对照实际 MCP 请求与结果。
 
 钢琴有 88 个独立琴键，可调琴盖、练习提示与机位。它与[舞台预演台](08-music-photo-mcp.md)共用场景、时间轴、播放与导出，独立于 music-eyes。
 
@@ -26,7 +26,9 @@ pnpm demo:music-space-mcp:preview
 
 **停点：** 说出小节、声部、定位结果，并找到一个音名对应的琴键。按钮用固定参数，不调用付费模型。
 
-## 这次调用做了什么
+<div class="heading-alias" id="这次调用做了什么" aria-hidden="true"></div>
+
+## 调用行为
 
 `sceneId` 换成当前场景返回的 UUID：
 
@@ -75,7 +77,7 @@ pnpm demo:music-space-mcp:preview
 
 ## 保存、重新打开与导出
 
-`scene.json` 自动保存；同目录重启可恢复，跨机需一起复制场景与音乐。`render_preview` 导出 PNG，`export_clip` 导出 H.264/AAC MP4，`export_model` 保留独立琴键、琴盖、材质与姿态，可交给 Blender 编辑。
+`scene.json` 自动保存；同目录重启可恢复，跨机需同时复制场景与音乐。`render_preview` 导出 PNG，`export_clip` 导出 H.264/AAC MP4，`export_model` 保留独立琴键、琴盖、材质与姿态，可交给 Blender 编辑。
 
 导出使用固定配置快照，独听同时作用于画面和混音。键盘对应 MIDI 21–108（A0–C8）；范围外音符仍参与音频和时间分析，但无对应琴键。模型不提供自动指法；基础合成音不代表专业钢琴音色。
 

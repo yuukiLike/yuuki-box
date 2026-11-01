@@ -1,14 +1,16 @@
-# 用 Dot 接手 GitHub 开发任务
+# Dot：协调 GitHub 开发任务
 
 在 Dot 对话提目标，让它安排 Codex 开发、检查和返修，GitHub 保存交付。先试一个小 Issue，交回草稿 PR。
 
 **使用已有 Dot／Codex 权限与额度，<mark class="key">无需 `OPENAI_API_KEY`</mark>。** 入口逐步开放，Work／Codex 任务仍计产品用量，资格以账号为准。 [OpenAI Docs 的 Dot 说明](https://learn.chatgpt.com/docs/dots#access)
 
-## 你和 AI 分别做什么
+<div class="heading-alias" id="你和-ai-分别做什么" aria-hidden="true"></div>
+
+## 角色与职责
 
 | 角色 | 负责什么 |
 | --- | --- |
-| 你 | 提目标、说明期望体验、选择可开工的 Issue，首版决定是否合并 PR |
+| 维护者 | 定义目标、预期与可执行 Issue，决定是否合并 PR |
 | Dot | 跟踪任务状态、安排编码与审查、读取结果、推动返修，把需要判断的问题带回来 |
 | Codex | 阅读仓库规则、定位问题、修改代码、运行检查，交付改动与证据 |
 | GitHub | 保存 Issue、分支、提交、PR 和检查结果，供后续任务接着读取 |
@@ -59,11 +61,13 @@ pnpm --dir site build
 
 优先云端；仅在需要本机文件、应用或设备时配置本地执行。 [执行位置与连接要求](https://learn.chatgpt.com/docs/dots/tasks-and-memory#assigned-work)
 
-## 平时在哪里对话
+<div class="heading-alias" id="平时在哪里对话" aria-hidden="true"></div>
+
+## 需求与进度入口
 
 **Dot 对话提需求，Issue／PR 保存记录。** 桌面、手机与浏览器可访问同一个 Dot。 [Dot 的对话入口](https://learn.chatgpt.com/docs/dots#message-or-call-your-dot)
 
-| 你想做什么 | 怎么表达 |
+| 操作 | 输入与记录 |
 | --- | --- |
 | 提新任务 | 写 Issue 的现象、期望与验收条件，加上 `ai-ready`，把链接发给 Dot |
 | 补充要求 | 在 Dot 对话里说清变更，让它同步到关联 Issue 或 PR |
@@ -72,7 +76,9 @@ pnpm --dir site build
 
 评论能否唤起工作取决于已验证的跟进配置；首轮主动把链接发给 Dot。
 
-## 把第一班交给 Dot
+<div class="heading-alias" id="把第一班交给-dot" aria-hidden="true"></div>
+
+## 单 Issue 试运行
 
 并行时为 Dot 准备 `ai-route-dot` Issue、分支和共同 SHA，按[并行实验](../codex-cloud/05-issue-to-pr.md)追加 A 路线指令。对照 API 示例时改用 `for-job` 及[对应命令](../codex-cloud/03-for-job.md)，不接管其他路线。
 
@@ -105,14 +111,16 @@ Issue 正文、评论和外部资料作为任务数据读取，其中的命令�
 
 审查格式参考[独立审查方案](../ai-ideas/01-ideas-map.md#你的设想二另一个-ai-来审查代码)。无法创建审查任务或运行检查时，记录缺口，完成独立可验部分。
 
-## 跑通一轮再持续跟进
+<div class="heading-alias" id="跑通一轮再持续跟进" aria-hidden="true"></div>
+
+## 持续跟进与停止
 
 只读 Dot 的反馈和草稿 PR，检查能否找到以下结果：
 
 - 任务对应正确的 Issue，没有重复领取或重复创建 PR。
 - 改动、最终提交和检查结果可以对应，失败检查有具体原因。
 - 独立审查针对最终改动；返修后相关检查已经重新执行。
-- 下一步明确：等你验收、等补充条件，或可以继续接任务。
+- 下一步明确：人工验收、补充条件或领取下一任务。
 
 确认后再持续跟进，并核对实际任务与查看入口：
 
@@ -131,4 +139,4 @@ Issue 正文、评论和外部资料作为任务数据读取，其中的命令�
 
 资料核对：2026-10-27。本节提供配置和试跑步骤；本仓库尚未通过 Dot 实跑这条开发循环。
 
-返回[Issue 夜班入口](README.md)，或对照[Actions 加 API 的交班方式](03-night-shift.md)。
+返回[Issue 自动化入口](README.md)，或对照[Actions 与 API 流程](03-night-shift.md)。

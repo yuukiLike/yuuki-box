@@ -8,7 +8,9 @@ MCP 提供调用，工具实现搜索、下载、断言与报告。演示内置�
 
 按「运行 → 读报告 → 补断言 → 核对」完成。需 Node.js ≥22.22、pnpm 11.14、Git 和 GitHub 网络；代码在 [examples/github-lab-mcp](../../examples/github-lab-mcp/README.md)。
 
-## 先看：一份断言，三个版本
+<div class="heading-alias" id="先看一份断言三个版本" aria-hidden="true"></div>
+
+## 同一断言验证三个版本
 
 [![同一份回归断言分别检查基线、候选与官方参考；基线目标断言失败且当前候选通过才能判定候选有效，测试或源码改变后要重新检查](../../site/public/diagrams/ai-from-scaling/06-github-experiment.svg)](../../site/public/diagrams/ai-from-scaling/06-github-experiment.svg)
 
@@ -23,7 +25,7 @@ pnpm install:github-lab-mcp
 pnpm demo:github-lab-mcp
 ```
 
-**你要看到：** 下面节选关键日志，工具名列表、编号和路径作了缩写：
+**预期：** 下面节选关键日志，工具名列表、编号和路径作了缩写：
 
 ```text
 [MCP] tools/list → 9 个工具：discover_projects, find_experiments, …
@@ -43,13 +45,13 @@ pnpm demo:github-lab-mcp
 
 打开 `report.md`；脚本获取固定版本、写断言、应用补丁、对照官方，不调用 LLM。公开 API 可匿名读取，额度不足再配置只读 `GITHUB_TOKEN`。
 
-案例来自 [PR #124](https://github.com/developit/mitt/pull/124) 和 [Issue #123](https://github.com/developit/mitt/issues/123)。原问题涉及组件卸载后仍保留事件监听器，我们用 `off(type)` 的行为来验证它。
+案例来自 [PR #124](https://github.com/developit/mitt/pull/124) 和 [Issue #123](https://github.com/developit/mitt/issues/123)。原问题涉及组件卸载后仍保留事件监听器，实验通过 `off(type)` 的行为验证修复。
 
-**完成标志：** 你能区分工具发现与 GitHub 搜索，并找到基线、候选和参考三个目标的检查记录。
+**验收：** 区分工具发现与 GitHub 搜索，找到三个目标的检查记录。
 
 ## 2. 读报告：找出支持结论的证据
 
-**你来做：** 对照报告检查三处：
+**检查：** 对照报告检查三处：
 
 1. 基线结果是 `assertion_failed`，并能从 `runs/` 中对应的日志找到目标断言。
 2. 候选和参考的结果是 `passed`，三者使用同一个测试指纹。
@@ -61,9 +63,11 @@ pnpm demo:github-lab-mcp
 
 `run_check` 返回 `assertion_failed` 表示执行了但未通过，本例基线正应如此。`outcome`、`candidate_verified`、`reference_checked` 是实验状态，不是 MCP 正确性保证。
 
-**完成标志：** 你能指出“旧错误被抓住”和“当前候选通过”的两份回执，而不仅是终端最后一句话。
+**验收：** 找到基线失败与当前候选通过的两份回执。
 
-## 3. 修改：亲手补一条断言
+<div class="heading-alias" id="3-修改亲手补一条断言" aria-hidden="true"></div>
+
+## 3. 修改：增加回归断言
 
 打开 [demo.ts](../../examples/github-lab-mcp/src/demo.ts)，找到 `const source` 中的回归函数，在函数末尾补上：
 
@@ -73,17 +77,17 @@ assert.doesNotThrow(() => emitter.off('missing'));
 
 它检查“移除一个从未注册的事件，应当正常返回”。保存后重新运行 `pnpm demo:github-lab-mcp`。
 
-**你要看到：** 三版本结果不变，测试指纹与回执更新；原断言继续抓住基线，新断言补查候选与参考。
+**预期：** 三版本结果不变，测试指纹与回执更新；原断言继续抓住基线，新断言补查候选与参考。
 
-固定演示会恢复同一个实验并替换回归脚本。自己的独立修复练习，请使用单独的数据目录和宿主客户端，配置见下方选读。
+固定演示会恢复同一个实验并替换回归脚本。独立修复实验使用单独的数据目录和宿主客户端，配置见下方选读。
 
-**完成标志：** 你修改了检查内容，并能在新回执中找到这次运行使用的测试指纹。
+**验收：** 修改检查后，新回执记录对应的测试指纹。
 
 ## 4. 定位：谁修改代码，谁判定结果
 
 沿着三个文件找执行责任：
 
-- [demo.ts](../../examples/github-lab-mcp/src/demo.ts)：固定案例、断言字符串和候选修改都在这里。接入 AI 客户端后，这些选择由你与宿主 Agent 完成。
+- [demo.ts](../../examples/github-lab-mcp/src/demo.ts)：固定案例、断言字符串和候选修改都在这里。接入 AI 客户端后，这些选择由操作者与宿主 Agent 完成。
 - [server.ts](../../examples/github-lab-mcp/src/server.ts)：注册 `set_regression_test`、`run_check`、`reveal_solution`、`get_experiment` 等工具。
 - [lab.ts](../../examples/github-lab-mcp/src/lab.ts)：`run()` 保存检查回执，`report()` 根据当前测试和源码判定结果，`reveal()` 控制何时取回参考补丁。
 
@@ -91,11 +95,11 @@ assert.doesNotThrow(() => emitter.off('missing'));
 
 `reveal_solution` 只要求基线、候选各检查一次；候选失败也能揭示，揭示不代表修复通过。
 
-**完成标志：** 你能区分“修改代码”“执行断言”“根据回执判定”这三件事。
+**验收：** 区分修改代码、执行断言与回执判定。
 
 ## 遇到不同结果，下一步做什么
 
-| 观察到的结果 | 你的下一步 |
+| 结果 | 后续操作 |
 | --- | --- |
 | 基线 `assertion_failed`，当前候选 `passed` | 核对同一测试与当前源码，确认 `candidate_verified` |
 | 同一测试在参考版本也 `passed` | 对照两份修改，结论达到 `reference_checked` |
@@ -106,9 +110,11 @@ assert.doesNotThrow(() => emitter.off('missing'));
 
 这些结果只支持当前断言涵盖的行为，不代表跑完了 mitt 的上游测试集。
 
-## 到这里完成
+<div class="heading-alias" id="到这里完成" aria-hidden="true"></div>
 
-用报告说明行为、复现证据和当前代码/测试版本，再自行选小型 PR，或回到[课程总览](README.md)。
+## 验收标准
+
+用报告说明行为、复现证据和当前代码/测试版本，再选择小型 PR，或回到[课程总览](README.md)。
 
 ## 选读与参考
 
@@ -140,7 +146,7 @@ assert.doesNotThrow(() => emitter.off('missing'));
 </details>
 
 <details>
-<summary>交给 AI 客户端：自己选题、写断言和修复</summary>
+<summary>接入 AI 客户端：选题、回归与修复</summary>
 
 按[示例的 stdio 配置](../../examples/github-lab-mcp/README.md#接入-stdio-客户端)连接后，可以给宿主这样的任务：
 

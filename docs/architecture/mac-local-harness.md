@@ -8,7 +8,7 @@
 
 阅读入口：[文档导航](../README.md) · [产品实现调研](../research/zed-raycast-warp.md) · [渲染性能学习](../learning/rendering-performance.md) · [第一阶段计划](../plan/first-mac-loop.md) · [Agent 工程实践](../agent-engineering/README.md)。
 
-先看状态归属、调用授权与中断记录，画出“模型 → 校验与执行 → 结果回传”；协议和未来选型按需回查。
+阅读重点：状态归属、调用授权与中断记录；主线为“模型 → 校验与执行 → 结果回传”。
 
 ## 1. 已确认目标与当前范围
 
@@ -59,7 +59,9 @@ flowchart LR
 少量 actor/串行队列保护状态，协议与领域类型先同模块；依赖确有需要再拆 package。
 进程隔离提供崩溃边界，本身不提供文件或网络沙箱。
 
-## 4. Runner 生命周期：第一版必须说清楚
+<div class="heading-alias" id="4-runner-生命周期第一版必须说清楚" aria-hidden="true"></div>
+
+## 4. Runner 生命周期与退出语义
 
 完整闭环先由 App 启动 Runner，不注册常驻服务；M0 先用同进程模拟器。
 通过 [Process](https://developer.apple.com/documentation/foundation/process) 管理子进程，显式处理控制通道、退出与存活检查。控制句柄不可泄漏给工具子进程，否则 App 退出后可能收不到 EOF；进程树行为仍需验证。

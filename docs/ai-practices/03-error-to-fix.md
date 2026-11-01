@@ -1,4 +1,4 @@
-# 带着错误现场去破案：Sentry Seer
+# Sentry Seer：故障诊断与修复
 
 先提供堆栈、版本和操作轨迹，再让 AI 提出<mark class="key">可验证的根因假设</mark>。
 
@@ -12,7 +12,9 @@
 
 这是附截图的产品博客自述，积压清理也含其他 Agent 与人工调查。
 
-## 从现场走到补丁
+<div class="heading-alias" id="从现场走到补丁" aria-hidden="true"></div>
+
+## 从故障信息到补丁
 
 ```text
 线上错误与版本 → Seer 根因分析 → 修复 Agent 获得诊断上下文
@@ -23,7 +25,9 @@
 
 [![错误现场支持根因假设，复现与复查决定假设是否成立](../../site/public/diagrams/ai-practices/error-hypothesis.svg)](../../site/public/diagrams/ai-practices/error-hypothesis.svg)
 
-## 小挑战：让一个根因假设接受盘问
+<div class="heading-alias" id="小挑战让一个根因假设接受盘问" aria-hidden="true"></div>
+
+## 验证练习：检验根因假设
 
 选可复现错误，提供脱敏堆栈、版本、步骤与源码；让 AI 列原因、依据和验证方法，再问：“怎样再次触发？”先手动试，不必立即接 Sentry。
 
@@ -31,6 +35,6 @@
 
 也记录被证据推翻的假设。
 
-**这一局的成果：一个有运行证据支持的原因，或一条明确缺失的复现条件。**
+**验证结果：有运行证据支持的原因，或明确缺失的复现条件。**
 
 返回[实践目录](README.md)。

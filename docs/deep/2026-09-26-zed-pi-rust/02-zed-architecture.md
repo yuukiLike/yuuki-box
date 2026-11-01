@@ -1,4 +1,4 @@
-# Zed 深入源码：crate 如何组成一个编辑器
+# Zed：crate 协作与编辑器架构
 
 基线：`7ea077c78b865d17854cee812bb775dbe64a925a`，2026-09-26 工作树干净。源码固定此版，历史博客仅解释动机。
 
@@ -95,7 +95,9 @@ MultiBuffer → InlayMap → FoldMap → TabMap → WrapMap → BlockMap
 
 并非全应用零拷贝/无锁：共享节点修改仍复制，旧快照延长寿命，syntax map 也有 Mutex；优化的是工作量与共享范围。
 
-## 4. 真实调用链 A：打开一个本地文件
+<div class="heading-alias" id="4-真实调用链-a打开一个本地文件" aria-hidden="true"></div>
+
+## 4. 源码调用链 A：打开本地文件
 
 已核对的正常文本路径，省略错误和类型适配：
 
@@ -115,7 +117,7 @@ Workspace::open_path / open_path_preview / load_path
   → MultiBuffer::singleton
 ```
 
-| 步骤 | 值得注意的行为 | 精确阅读入口 |
+| 步骤 | 关键行为 | 精确阅读入口 |
 |---|---|---|
 | 窗口处理路径 | 选择项目对象处理者，再构建可打开的 view | [Workspace::open_path](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/workspace/src/workspace.rs#L5041)、[registry](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/workspace/src/workspace.rs#L1074) |
 | 项目委托 buffer store | 缓存、正在加载的任务去重、本地/远端分派 | [Project::open_buffer](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/project/src/project.rs#L3277)、[BufferStore](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/project/src/buffer_store.rs#L908) |
@@ -126,7 +128,9 @@ Project 组合 Worktree/Buffer/Lsp/Git/Dap/Task Store 与远程客户端；Works
 
 远程打开经 `RemoteBufferStore` 发 `proto::OpenBufferByPath`、等远端 buffer，不是本地读远程路径；未审计全部 SSH 启动。[远端分支](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/project/src/buffer_store.rs#L304)
 
-## 5. 真实调用链 B：输入、解析和诊断
+<div class="heading-alias" id="5-真实调用链-b输入解析和诊断" aria-hidden="true"></div>
+
+## 5. 源码调用链 B：输入、解析和诊断
 
 ### 5.1 用户输入先改变文本模型
 
@@ -203,7 +207,9 @@ Taffy 管布局，prepaint 管位置/hitbox，paint 填绘制数据，present �
 
 `gpui_tokio::init` 另建 Tokio runtime，两套 executor 并存；桥接 Task Drop 时 abort Tokio task，将其接入 GPUI 生命周期。[init](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/gpui_tokio/src/gpui_tokio.rs#L8)、[spawn](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/gpui_tokio/src/gpui_tokio.rs#L52)
 
-### 6.4 真实调用链 C：命令面板搜索
+<div class="heading-alias" id="64-真实调用链-c命令面板搜索" aria-hidden="true"></div>
+
+### 6.4 源码调用链 C：命令面板搜索
 
 1. `command_palette::init/register` 给 Workspace 注册 Toggle action，创建带 delegate 的 `Picker`。[注册](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/command_palette/src/command_palette.rs#L38)
 2. Picker 输入控件的 `BufferEdited` 进入 `update_matches`，委托 `CommandPaletteDelegate`。[输入事件](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/picker/src/picker.rs#L1177)
@@ -248,7 +254,9 @@ WasmHost 在 GPUI 后台编译 component，再切 Tokio 实例化 WASI/处理消
 
 这不是全部 host API 安全审计；扩展启动的外部程序仍需单独管理权限和生命周期。
 
-## 8. 能带走的设计与需要核对的版本
+<div class="heading-alias" id="8-能带走的设计与需要核对的版本" aria-hidden="true"></div>
+
+## 8. 可复用设计与版本约束
 
 可直接学习：快照、前后台边界、旧结果检查、typed event/action、item 注册、任务/订阅所有权及坐标分层。
 

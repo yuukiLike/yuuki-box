@@ -1,10 +1,12 @@
-# Yuuki Box：怎样搭配，下一步验证什么
+# Yuuki Box：技术搭配与验证计划
 
 本章仅为<mark class="caution">研究建议，非已定选型</mark>；本轮只增文档与证据，不改应用。
 
 相关：[调查入口](README.md) · [Rust 动机](01-why-rust.md) · [Zed 架构](02-zed-architecture.md) · [PI 实例](03-pi-desktop.md)。
 
-## 1. 接着已有实现学习
+<div class="heading-alias" id="1-接着已有实现学习" aria-hidden="true"></div>
+
+## 1. 现有实现与研究起点
 
 已有 [Rust/GPUI、Swift、React 原生桥、WKWebView、Electron 五个 MVP](../../../examples/README.md)。Rust/GPUI 是正式路线，早期“Swift 起步”不代表排除 Rust。
 
@@ -24,7 +26,9 @@
 
 可移植性取决于依赖：纯类型/状态易隔离，GPUI Context、Electron IPC、macOS helper 或进程管理需适配。尚无 iPhone/iPad 示例，不承诺直接复用移动 UI/后台执行。
 
-## 3. 从两个项目分别带走什么
+<div class="heading-alias" id="3-从两个项目分别带走什么" aria-hidden="true"></div>
+
+## 3. 两项目机制的应用范围
 
 | 需要解决的事 | Zed 可学的方式 | PI 可学的方式 | Yuuki 的最小落点 |
 |---|---|---|---|
@@ -35,7 +39,7 @@
 | 故障恢复 | snapshot/operation 与应用服务边界 | outbox、幂等消息 ID、重启与恢复 | 区分已接收、已写盘、已完成 |
 | 扩展/模型生态 | provider、Agent、扩展宿主各有接口 | pi-ai/Node 保留供应商支持 | 先用少量模型与工具，再按真实需求增加适配 |
 
-首版不必复制 CRDT、远端配对、插件 SDK 或全套恢复。用户要求自建 loop，PI 复用成熟 pi 仅供参考，不替换该方向。
+首版不必复制 CRDT、远端配对、插件 SDK 或全套恢复。本项目以自建 loop 为研究方向，PI 复用 pi 的方式仅供参考。
 
 ## 4. 对“极简”的具体定义
 
@@ -55,9 +59,9 @@ UI：输入、展示、发取消意图
 
 ## 5. 建议的源码阅读顺序
 
-1. **自己的输入与 Render。** 看 [GPUI MVP main.rs](../../../examples/rust-gpui/src/main.rs:350) 和 `uniform_list`，确认状态、可见索引与 notify 的关系。
-2. **自己的流任务。** 看 [start_ticker](../../../examples/rust-gpui/src/main.rs:145)，再对照 Zed [命令面板后台匹配](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/command_palette/src/command_palette.rs#L580)。关注线程、Task 的持有者与取消。Zed main 与发布版 GPUI API 不能混用。
-3. **自己的平台桥。** 看 [start_speech](../../../examples/rust-gpui/src/main.rs:246)、[stop_speech](../../../examples/rust-gpui/src/main.rs:285) 和 [Swift helper 协议](../../../examples/shared/native/README.md)。关注 stdout 分帧、EOF、停止和退出。
+1. **项目输入与 Render。** 看 [GPUI MVP main.rs](../../../examples/rust-gpui/src/main.rs:350) 和 `uniform_list`，确认状态、可见索引与 notify 的关系。
+2. **项目流任务。** 看 [start_ticker](../../../examples/rust-gpui/src/main.rs:145)，再对照 Zed [命令面板后台匹配](https://github.com/zed-industries/zed/blob/7ea077c78b865d17854cee812bb775dbe64a925a/crates/command_palette/src/command_palette.rs#L580)。关注线程、Task 的持有者与取消。Zed main 与发布版 GPUI API 不能混用。
+3. **项目平台桥。** 看 [start_speech](../../../examples/rust-gpui/src/main.rs:246)、[stop_speech](../../../examples/rust-gpui/src/main.rs:285) 和 [Swift helper 协议](../../../examples/shared/native/README.md)。关注 stdout 分帧、EOF、停止和退出。
 4. **PI 的持久化闭环。** 看 HostProcess[^pi-1] → RPC appendMessage[^pi-2] → append_record[^pi-3]。先理解请求、记录与索引，再读恢复。
 5. **Zed 的数据结构。** 按 SumTree → Rope → text::Buffer → language::Buffer 阅读。大量可编辑文本需要这些设计；普通 Agent 日志列表可以先把它们作为算法学习素材。
 
@@ -78,7 +82,9 @@ UI：输入、展示、发取消意图
 
 两个待测点：满容量后的 `Vec::remove(0)`/索引重建为 O(n)，语音期间 50 ms timer 持续轮询/通知。可对比环形存储和事件送达，尚非已证实故障。[移除事件](../../../examples/rust-gpui/src/main.rs:173)、[ticker](../../../examples/rust-gpui/src/main.rs:145)
 
-## 7. 这次调查支持的范围
+<div class="heading-alias" id="7-这次调查支持的范围" aria-hidden="true"></div>
+
+## 7. 调查结论与适用范围
 
 继续沿 Rust/GPUI 学习，以 PI 理解混合架构，先掌握状态权威、异步结果、取消和持久化。
 

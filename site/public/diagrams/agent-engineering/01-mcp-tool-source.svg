@@ -5,7 +5,7 @@
 <text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">外部调用：先记录，再发出</text>
 <text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">设计练习 · ToolSource 是待实现的宿主适配接口。</text>
 <rect x="32" y="118" width="736" height="77" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="52" y="153" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">你来做：接只读工具源 → 读取 README → 故意断连</text>
+<text x="52" y="153" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">实验：接入只读工具 → 读取 README → 模拟断连</text>
 <rect x="200" y="234" width="400" height="80" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
 <text x="220" y="269" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">模型提出一个工具调用</text>
 <polyline points="400,314 400,352" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>

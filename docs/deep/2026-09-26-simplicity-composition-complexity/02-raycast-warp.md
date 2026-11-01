@@ -1,4 +1,4 @@
-# Raycast 与 Warp：让操作可以组合，需要怎样的约束？
+# Raycast 与 Warp：操作组合的约束
 
 核实：**2026-09-26**。承接[第一轮研究](../../research/zed-raycast-warp.md)，转看操作、状态与责任的组合。[本轮入口](README.md) · [分析框架](01-framework.md) · [Zed / Grok](03-zed-grok.md) · [Yuuki](04-yuuki.md)。
 
@@ -6,7 +6,9 @@
 
 ## 1. Raycast：小而稳定的操作语法
 
-### 一次添加任务，如何由少量构件完成？
+<div class="heading-alias" id="一次添加任务如何由少量构件完成" aria-hidden="true"></div>
+
+### 添加任务的组件协作
 
 Todo 示例按 `List → Action.Push → Form → Action.SubmitForm → onCreate → pop` 运行：列表持数组、表单提交、父组件更新、导航返回。仅存内存，关闭后重进会丢失，不代表持久化。[Todo 示例](https://developers.raycast.com/examples/todo-list)
 
@@ -14,7 +16,9 @@ Todo 示例按 `List → Action.Push → Form → Action.SubmitForm → onCreate
 
 **推断。** 列表、表单、动作与导航各负其责，让键盘操作可迁移。扩展必须服从宿主词汇，并补持久化、校验和失败处理；单页也可能混杂责任。
 
-### 第二条链：让同一能力进入 AI 会话
+<div class="heading-alias" id="第二条链让同一能力进入-ai-会话" aria-hidden="true"></div>
+
+### AI 会话中的能力复用
 
 AI Extension 由 tools、instructions、evals 组成，可在同一会话组合。instructions 应聚焦本扩展，工具说明参数格式和前置 ID，不抢全局身份。[核心概念](https://developers.raycast.com/ai/learn-core-concepts-of-ai-extensions)、[最佳实践](https://developers.raycast.com/ai/follow-best-practices-for-ai-extensions)
 
@@ -22,7 +26,9 @@ AI Extension 由 tools、instructions、evals 组成，可在同一会话组合�
 
 **设计推演：** Yuuki 的表单与模型工具可共用 `createTask(input)`，集中写入、身份和错误，各保留输入方式。共享业务语义与规则才构成复用，React/JSON 本身不保证；这不代表所有 Raycast 扩展均如此实现。
 
-### 接得上，并不等于已经形成工作流
+<div class="heading-alias" id="接得上并不等于已经形成工作流" aria-hidden="true"></div>
+
+### 启动确认与业务完成
 
 `launchCommand()` 的 Promise 只确认<mark class="caution">启动，不确认完成</mark>。`await` 后启动 B，不保证得到 A 的最终结果；跨扩展还可能提示权限。[启动契约](https://developers.raycast.com/api-reference/command)
 
@@ -30,7 +36,9 @@ AI Extension 由 tools、instructions、evals 组成，可在同一会话组合�
 
 **推断。** 函数签名之外，还要查时间和资源语义：返回表示受理还是完成？谁存结果、谁能停止、停止后剩什么？
 
-## 2. Raycast 的简单，由谁维护？
+<div class="heading-alias" id="2-raycast-的简单由谁维护" aria-hidden="true"></div>
+
+## 2. Raycast 的宿主职责
 
 2023-05-31 的 v1 工程文描述 React reconciler、渲染树/补丁、Node→Swift 通信与原生显示。作者少写 UI，宿主维护更新顺序和一致性。[v1 实现](https://www.raycast.com/blog/how-raycast-api-extensions-work)
 
@@ -84,7 +92,9 @@ Code Review 可查看 diff、加行内意见，批量交回运行中的 Agent，
 
 **推断。** Warp 让结果便于理解和继续操作，Shell/工具适配仍需维护，未公开服务仍是边界。Yuuki 可保留反馈链，自行定义运行、审批、失败和取消状态。
 
-## 5. 并排看：简单的收益与代价落在哪里？
+<div class="heading-alias" id="5-并排看简单的收益与代价落在哪里" aria-hidden="true"></div>
+
+## 5. 组合收益与维护成本对照
 
 以下为本章归纳，不是两家共同的架构标准。
 

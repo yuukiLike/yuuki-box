@@ -6,7 +6,9 @@
 
 本课用真实 HTTP 和浏览器 `EventSource`，发送五条固定事件；无需模型或 API Key。
 
-## 先运行，再断一次
+<div class="heading-alias" id="先运行再断一次" aria-hidden="true"></div>
+
+## 运行与断流测试
 
 需 Node.js ≥22.22：
 
@@ -16,14 +18,14 @@ node docs/ai-communication/labs/03-sse-http.ts
 
 打开终端打印的 `http://127.0.0.1:端口`，点「模拟断流重连」。
 
-你会看到：
+预期流程：
 
 1. 第一次连接收到 `id=1`、`id=2`，页面显示「你好，」。
 2. 服务端提前结束响应。页面保留文字，显示「等待自动重连；尚未完成」。
 3. 浏览器重新连接，服务端补发 `id=3`、`id=4`、`id=5`。
 4. 页面显示「你好，SSE。」；收到 `completed` 后显示完成，并主动关闭订阅。
 
-浏览器开发者工具的 **Network → 第二次 `/events?mode=drop` 请求 → Request Headers** 中，应能找到 `Last-Event-ID: 2`。它告诉服务端上次读到了哪里。
+浏览器开发者工具的 **Network → 第二次 `/events?mode=drop` 请求 → Request Headers** 中，应包含 `Last-Event-ID: 2`，标识续接位置。
 
 再点「正常接收」，收到一段文字后点「停止接收」。已收到的文字会保留，状态应是「已停止接收；尚未确认完成」。终端按 `Ctrl+C` 退出服务。
 
@@ -35,11 +37,13 @@ node docs/ai-communication/labs/03-sse-http.ts
 
 `completed` 是本实验约定，SSE 没有通用的业务完成事件。
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
 
-只记住这三个状态：
+## 验收标准
 
-| 你观察到什么 | 本实验怎样显示 |
+区分三种状态：
+
+| 事件 | 页面状态 |
 | --- | --- |
 | 收到 `delta` | 追加文字，继续等待 |
 | 响应中途结束，正在重连 | 保留文字，尚未完成 |
@@ -116,14 +120,14 @@ data: {"text":"你好"}
 
 原生 `EventSource` 只接 URL 和凭据选项，不能自定义方法、请求体或请求头。[接口定义](https://html.spec.whatwg.org/multipage/server-sent-events.html#the-eventsource-interface)
 
-`fetch` 先查状态、`Content-Type`、响应体，再解析 SSE；失败可能返回 JSON/HTML。取消传 `signal`，续接需自己实现；重试 POST 先约定任务 ID 与幂等。[MDN：使用 Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+`fetch` 先查状态、`Content-Type`、响应体，再解析 SSE；失败可能返回 JSON/HTML。取消传 `signal`，续接由应用实现；重试 POST 前约定任务 ID 与幂等。[MDN：使用 Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 
 `/events` 仅支持 GET，POST 返回 `405`；未提供模型代理或鉴权。
 
 </details>
 
 <details>
-<summary>本地能逐字显示，上线后为什么变成一大块？</summary>
+<summary>代理缓冲与合批更新如何影响显示？</summary>
 
 沿“应用写入 → 代理 → 客户端 → 页面”检查。`flushHeaders()` 提前发头，`write()` 背压时等 `drain`；这些不保证远端已收到或显示。[Node HTTP：响应写入](https://nodejs.org/docs/latest-v24.x/api/http.html#responsewritechunk-encoding-callback)
 

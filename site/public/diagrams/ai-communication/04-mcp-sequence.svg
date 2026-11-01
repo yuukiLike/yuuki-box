@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="890" viewBox="0 0 760 890" role="img" aria-labelledby="title desc">
-<title id="title">MCP：一次调用怎样走到文件</title>
+<title id="title">MCP 调用与文件读写时序</title>
 <desc id="desc">2026-07-28 版本的逻辑调用时序。SDK 用 server/discover 查询版本与能力；客户端 tools/list 获取工具清单，tools/call 调用 save_checkpoint。服务重建后，SDK 再查服务信息，客户端调用 resume 读取同一磁盘文件。省略请求 ID、元数据和 SDK 的短暂版本探测进程。</desc>
 <rect width="760" height="890" rx="18" fill="#ffffff"/>
-<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP：一次调用怎样走到文件</text>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP 调用与文件读写时序</text>
 <text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">2026-07-28 · 实线是请求，虚线是返回。</text>
 <rect x="19" y="115" width="182" height="76" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
 <text x="110" y="146" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="middle">客户端</text>
@@ -51,5 +51,5 @@
 <polyline points="117.0,793.55 110,789 117.0,784.45" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="250.0" y="779" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#20324d" text-anchor="middle">found: true + note</text>
 <rect x="24" y="822" width="712" height="48" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="44" y="857" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="600" fill="#275b40" text-anchor="start">你来找：listTools → callTool → writeFile / readFile</text>
+<text x="44" y="857" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="600" fill="#275b40" text-anchor="start">代码路径：listTools → callTool → writeFile / readFile</text>
 </svg>

@@ -1,4 +1,4 @@
-# 第三班：交班，让流程接着跑
+# 3 · 定时 Issue 处理流程
 
 定时领取一个 Issue，修改、检查，再交回可验收的草稿 PR。
 
@@ -6,14 +6,14 @@
 
 本篇用 Actions + 模型 API。已有 Dot 与产品额度时，走[用 Dot 接手 GitHub 开发任务](04-dot-shift.md)。
 
-API 实跑先选[Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)；本篇补充定时、去重与失败交班。并行对照先固定[共同基线](../codex-cloud/05-issue-to-pr.md)。
+API 执行使用[Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)；本篇补充调度、去重与失败处理。并行对照须固定[共同基线](../codex-cloud/05-issue-to-pr.md)。
 
 ## 一次只领一个 Issue
 
 每天扫描所有未关闭 Issue，然后按明确规则选一个：
 
 ```text
-未关闭 + 你添加了 ai-ready
+未关闭 + 维护者添加 ai-ready
   → 检查是否已有进行中的任务或待验收 PR
   → 选择一个问题
   → 记录任务归属和本次默认分支的提交 SHA
@@ -69,13 +69,15 @@ API 实跑先选[Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agenti
 
 `timeout-minutes: 30` 只限单个 job 的运行时长；固定收工时间与多 job 总时长另算。 [定时调度](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、[任务超时](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idtimeout-minutes)
 
-## 首版规则可以很少
+<div class="heading-alias" id="首版规则可以很少" aria-hidden="true"></div>
+
+## 首版执行规则
 
 | 情况 | 建议行为 |
 | --- | --- |
 | 没有可处理的 Issue | 写一条运行摘要，正常结束 |
 | 上一次还没结束 | 用仓库内固定的 concurrency group 避免重叠执行 |
-| 已经有待验收 PR | 跳过同一个 Issue，等待你处理 |
+| 已经有待验收 PR | 跳过同一个 Issue，等待人工验收 |
 | 复现不了、测试失败、超过截止时间 | 留下运行记录，Issue 保持未解决，等待补充条件 |
 | AI 凭据无效或额度不足 | 停止并记录原因 |
 | 检查通过且确实有修改 | 创建一个关联 Issue 的草稿 PR |
@@ -84,10 +86,12 @@ concurrency 只限当前运行；跨天去重仍需查状态和关联 PR。 [Git
 
 首版每晚最多尝试一个 Issue；运行时限与费用控制分别设置。
 
-## 正式上夜班前，排练一次交接
+<div class="heading-alias" id="正式上夜班前排练一次交接" aria-hidden="true"></div>
+
+## 启用定时前的验证
 
 手动跑一个可复现问题，核对唯一草稿 PR 与检查证据；重跑应跳过已有任务。再验无任务、检查失败、超时，最后启用定时。
 
 只读 PR 与摘要，应能找出任务、改动、检查和下一步；缺项回到对应阶段补齐。
 
-**交付应让人看懂实际完成了什么。** 上述连接仍待目标仓库实现；本仓库未部署自动修复。
+**交付须列明实际完成项。** 上述连接仍待目标仓库实现；本仓库未部署自动修复。

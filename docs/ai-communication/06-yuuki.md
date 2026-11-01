@@ -1,4 +1,4 @@
-# 第六章：接回自己的 AI 工作台
+# 第六章：AI 工作台的请求与工具执行
 
 [上一课](05-failure.md) · [目录](README.md)
 
@@ -10,9 +10,11 @@
 
 runtime 安排模型和工具。当前仅执行内建工具；图中虚线 MCP 尚未接入。
 
-## 只找三处
+<div class="heading-alias" id="只找三处" aria-hidden="true"></div>
 
-| 打开哪里 | 找什么 |
+## 三个代码入口
+
+| 入口 | 职责 |
 | --- | --- |
 | [协议说明](../../examples/shared/runtime/PROTOCOL.md) | `run.start` 开始，`run.cancel` 取消 |
 | [completion()](../../examples/shared/runtime/Sources/main.swift:351) | 发请求，接收 SSE，拼接文字和工具参数 |
@@ -20,9 +22,11 @@ runtime 安排模型和工具。当前仅执行内建工具；图中虚线 MCP �
 
 一次模型回复结束，任务仍可能继续调用工具。
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
 
-指出上表三处调用即可。
+## 验收标准
+
+定位请求、SSE 接收与工具循环三处调用。
 
 <details>
 <summary>页面怎样收到变化</summary>
@@ -46,11 +50,11 @@ runtime 安排模型和工具。当前仅执行内建工具；图中虚线 MCP �
 <details>
 <summary>后续学习入口</summary>
 
-- 想自己写工具循环：[搭建 Harness](../ai-from-scaling/03-build-a-harness.md)。
-- 想接外部工具：[MCP 工具源](../agent-engineering/01-mcp-tool-source.md)。
-- 想提供自己的远程服务：[Supabase × Apple WeatherKit 天气 MCP](weather-mcp/README.md)。
-- 想知道模型缓存什么：[KV Cache](../kv-cache/00-first-request.md)。
-- 想查界面为什么卡：[渲染实验](../learning/rendering-performance.md)。
-- 想让它听见和开口：[语音工具](../tts/README.md)。
+- 工具循环：[搭建 Harness](../ai-from-scaling/03-build-a-harness.md)。
+- 外部工具：[MCP 工具源](../agent-engineering/01-mcp-tool-source.md)。
+- 远程服务：[Supabase × Apple WeatherKit 天气 MCP](weather-mcp/README.md)。
+- 模型缓存：[KV Cache](../kv-cache/00-first-request.md)。
+- 界面性能：[渲染实验](../learning/rendering-performance.md)。
+- 语音交互：[语音工具](../tts/README.md)。
 
 </details>

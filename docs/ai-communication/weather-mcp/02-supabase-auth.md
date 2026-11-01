@@ -1,4 +1,4 @@
-# 2 · 用 Supabase 登录、签发 token，并决定谁能查天气
+# 2 · Supabase 登录与天气访问授权
 
 [上一课](01-user-journey.md) · [目录](README.md) · [下一课：Apple WeatherKit](03-apple-weatherkit.md)
 
@@ -27,8 +27,8 @@ token `aud`、资源元数据、Codex 的 `WEATHER_MCP_URL` 必须完全一致�
 在 Supabase Dashboard 中：
 
 1. 打开 **Authentication → OAuth Server**，启用 OAuth Server。
-2. 启用 **Dynamic Client Registration**，用于这次 Codex 接入。
-3. 在 **URL Configuration** 中设置你前端的 Site URL。
+2. 启用 **Dynamic Client Registration**，用于 Codex 接入。
+3. 在 **URL Configuration** 中设置前端 Site URL。
 4. 把 Authorization Path 设为 `/oauth/consent`。
 5. 检查 JWT Signing Keys，使用 **ES256 或 RS256 非对称签名**。本教程后端用 JWKS 验证签名，不接受旧 HS256 项目密钥。
 
@@ -170,9 +170,11 @@ revoke execute on function public.weather_access_token_hook(jsonb)
 
 后端用服务器凭证访问专用表，不转发用户 OAuth token 当数据库会话；`service_role` 绕过 RLS，必须保留身份校验与固定查询。
 
-## 6. 做一个真正的登录同意页
+<div class="heading-alias" id="6-做一个真正的登录同意页" aria-hidden="true"></div>
 
-Supabase 提供协议端点；你在 `/oauth/consent` 提供登录同意页：
+## 6. 实现登录同意页
+
+Supabase 提供协议端点；前端在 `/oauth/consent` 提供登录同意页：
 
 ```html
 <main>
@@ -273,6 +275,8 @@ Auth Redirect URLs 允许 `/oauth/consent` 及授权参数。首轮同浏览器�
 
 仅跳转 Supabase 验证后返回的 `redirect_url`，不用任意 URL 参数；名称和 scope 用 `textContent` 显示。
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 核对发现文档、测试用户资格和 Hook 范围；[第五课](05-connect-and-verify.md) 验证登录与 audience，下一步准备 [Apple 凭证](03-apple-weatherkit.md)。

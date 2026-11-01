@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="920" viewBox="0 0 680 920" role="img" aria-labelledby="title desc">
-  <title id="title">选修：MCP 客户端与调用链实验</title>
-  <desc id="desc">四步教学流程及你的操作：一，运行 demo，区分 MCP 的工具发现与调用，以及工具实现的文件持久化；二，找到 callTool、writeFile 与 readFile；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。tools/list 展示工具发现；服务重启后读取同一 Markdown 文件，验证的是文件持久化，不是 MCP 自动记忆。</desc>
+  <title id="title">MCP 最简演示与调用链</title>
+  <desc id="desc">四步实验流程：一，运行 demo，区分 MCP 的工具发现与调用，以及工具实现的文件持久化；二，找到 callTool、writeFile 与 readFile；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。tools/list 展示工具发现；服务重启后读取同一 Markdown 文件，验证的是文件持久化，不是 MCP 自动记忆。</desc>
   <style>
     .canvas { fill: #ffffff; }
     .step { fill: #f4f6fa; stroke: #c9d1df; stroke-width: 1.5; }
@@ -16,10 +16,10 @@
   </style>
 
   <rect class="canvas" width="680" height="920" rx="16"/>
-  <text class="title" x="32" y="52">MCP 调用链实验（选修）</text>
-  <text class="body" x="32" y="88">MCP 负责发现与调用，工具负责文件读写。</text>
+  <text class="title" x="32" y="52">MCP 最简演示与调用链</text>
+  <text class="body" x="32" y="88">先运行 demo；调用链与文件实现按需阅读。</text>
   <text class="label" x="48" y="137">教学流程</text>
-  <text class="label" x="392" y="137">你来做</text>
+  <text class="label" x="392" y="137">实验步骤</text>
 
   <rect class="step" x="24" y="158" width="632" height="108" rx="12"/>
   <text class="heading" x="48" y="201">01  分清两种职责</text>
@@ -42,7 +42,7 @@
   <text class="body" x="48" y="534">输入改变，取回结果改变</text>
   <rect class="action" x="372" y="470" width="268" height="76" rx="8"/>
   <text class="action-title" x="392" y="501">改 next，再运行</text>
-  <text class="action-note" x="392" y="530">核对你写的文字</text>
+  <text class="action-note" x="392" y="530">核对输入与返回文字</text>
   <path class="arrow" d="M340 570 V592 M334 586 L340 592 L346 586"/>
 
   <rect class="step" x="24" y="602" width="632" height="108" rx="12"/>

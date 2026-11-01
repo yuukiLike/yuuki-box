@@ -4,7 +4,9 @@
 
 项目：**Agent Symphony**，目录 `~/explore/agent-symphony`，包名 `agent-symphony`。状态按 **2026-10-31** 本机工作树核对，云端步骤待执行。
 
-## 先把目标代码版本交给云端
+<div class="heading-alias" id="先把目标代码版本交给云端" aria-hidden="true"></div>
+
+## 代码版本与云端检出
 
 项目已有 Hooks 观察、dsh 适配、事件存储、回放与测试，部分仍未提交。**<mark class="key">先推送本轮文件</mark>，再核对云端实际 SHA 与目录。**
 
@@ -54,7 +56,7 @@ docs/implementation-contract.md、playwright.config.mjs 和 scripts/browser-serv
 最后推荐一个最小的回归或修复任务，先不扩展宿主、日志格式或执行能力。
 ```
 
-这轮仅查输入解释；本地另验宿主事件、观察配置和漏采记录。
+该检查仅验证输入解释；本地另验宿主事件、观察配置和漏采记录。
 
 ## 第二条任务运行界面与声音规则回归
 

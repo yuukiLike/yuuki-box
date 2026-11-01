@@ -39,7 +39,9 @@ Wasm 通常走 CPU，WebGPU 使用浏览器 GPU；模型运行时组织计算，
 
 如[缓存成本](../frontend-foundations/cache-cost.md)：保留结果、资源或实例节省等待，也需安排释放。
 
-## 可以从一个小任务开始
+<div class="heading-alias" id="可以从一个小任务开始" aria-hidden="true"></div>
+
+## 最小验证任务
 
 | 任务 | 为什么适合连接前端经验 | 第一次观察什么 |
 | --- | --- | --- |

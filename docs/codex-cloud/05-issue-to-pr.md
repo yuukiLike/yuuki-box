@@ -66,7 +66,7 @@ Cloud 各任务文件独立，不靠对话记忆传代码。 [OpenAI Docs 的环
 - Actions + Codex Action 按 API 项目计费，不扣 ChatGPT 订阅额度；Actions 用量另计。
 - 订阅赠额排除通过 API key 使用 Codex；其他赠额看活动条款。[官方范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits#what-the-credits-cover)
 - 在 GitHub Actions 配置 Secret `OPENAI_API_KEY`、Variable `CODEX_MODEL`；模型须在该 API 项目可用。
-- 想先试赠额，可用普通 Responses API 分析 Issue。[小实验](../agent-engineering/openai-api.md)
+- 普通 Responses API 可用于 Issue 分析实验。[额度与实验](../agent-engineering/openai-api.md)
 - 首轮只运行一次；预算告警、job 超时都不是硬性费用封顶。
 - 详细操作：[配置 API 与仓库](../issue-garden/05-codex-api.md#配置-api-与仓库)。
 

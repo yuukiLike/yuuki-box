@@ -1,12 +1,12 @@
 # 同类工具：Claude、Gemini、Playwright MCP 与浏览器 Agent
 
-先看工具<mark class="key">交付了哪一层</mark>：模型、动作接口、框架，还是包含环境与权限的产品。
+按工具<mark class="key">交付的层次</mark>比较：模型、动作接口、框架，或包含环境与权限的产品。
 
 核对：**2026-10-31**。仅比较公开机制，未做性能排名。前置：[共同原理](computer-use.md)、[cua_repl](cua-repl.md)。
 
 ## 一张对照表
 
-| 方案 | 交付的主要东西 | 观察 / 动作方式 | 执行环境由谁提供 |
+| 方案 | 主要能力 | 观察 / 动作方式 | 执行环境提供方 |
 | --- | --- | --- | --- |
 | Codex / ChatGPT 桌面 Computer Use | 产品中的工具、连接和访问控制 | 当前 `cua_repl` 可接原生应用与浏览器；支持方式由入口说明决定 | 桌面宿主连接用户授权的环境 |
 | OpenAI Responses Computer Use | API 动作契约及接入指导 | 结构化 computer actions；也有代码执行接法 | 在这些接法中，由接入方运行浏览器或桌面 |
@@ -22,7 +22,7 @@
 
 ## OpenAI：产品入口与开发者接法分开理解
 
-桌面产品提供发现、批准和操作入口，本次为 `cua_repl`；接 Responses API 则须自行执行动作、回传截图、管理环境。[桌面 Computer Use](https://learn.chatgpt.com/docs/computer-use)、[Responses 接入](https://developers.openai.com/api/docs/guides/tools-computer-use)
+桌面产品提供发现、批准和操作入口，文中接口为 `cua_repl`；接 Responses API 则须自行执行动作、回传截图、管理环境。[桌面 Computer Use](https://learn.chatgpt.com/docs/computer-use)、[Responses 接入](https://developers.openai.com/api/docs/guides/tools-computer-use)
 
 <mark class="caution">模型支持，不代表当前浏览器已连接</mark>。
 
@@ -40,7 +40,9 @@ Gemini 按截图生成动作，客户端执行并返回新观察。接入时由�
 
 迁移须核对 schema、坐标、调用 ID、回传、停止与权限；只换模型名不够。
 
-## Playwright MCP：给模型一组浏览器工具
+<div class="heading-alias" id="playwright-mcp给模型一组浏览器工具" aria-hidden="true"></div>
+
+## Playwright MCP：浏览器工具接口
 
 Playwright MCP 主要以可访问性快照和元素引用操作页面，无图像输入的模型也可参与；视觉检查仍需截图。[Playwright MCP](https://github.com/microsoft/playwright-mcp)
 
@@ -54,17 +56,21 @@ Browser Use 的 `Agent` 可配模型、浏览器、步骤、输出和视觉；�
 
 Stagehand 将自然语言动作、结构化提取、动作观察与 Playwright 风格 API 混用，由程序决定哪些步骤交给模型。[概览](https://docs.stagehand.dev/v4/first-steps/introduction)、[连接](https://docs.stagehand.dev/v4/configuration/browser)
 
-学习时可用 Browser Use 看任务循环，用 Stagehand 看模型嵌入流程；这是阅读角度，不是互斥边界。
+Browser Use 可用于研究任务循环，Stagehand 可用于研究模型嵌入流程；两者能力并非互斥。
 
 例如后台导航和数据校验写成代码，只让模型识别改版后的筛选器，不必每次点击都推理。
 
-## UI-TARS：看清模型训练和桌面应用的边界
+<div class="heading-alias" id="ui-tars看清模型训练和桌面应用的边界" aria-hidden="true"></div>
+
+## UI-TARS：模型训练与桌面应用
 
 UI-TARS 提供模型、动作解析和独立桌面项目入口；UI-TARS-1.5 公开了视觉语言模型、强化学习与动作后处理。[官方仓库](https://github.com/bytedance/UI-TARS)
 
 它适合研究 GUI 专项训练。下载权重后仍需截图、输入、权限、窗口绑定、记录和验证；不能据此推断闭源产品的训练方式。
 
-## 这些方案究竟新增了什么
+<div class="heading-alias" id="这些方案究竟新增了什么" aria-hidden="true"></div>
+
+## 各层的能力与限制
 
 下面是基于上述接口的工程归纳：
 

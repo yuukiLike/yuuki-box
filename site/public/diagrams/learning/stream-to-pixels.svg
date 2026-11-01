@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 410" role="img" aria-labelledby="title desc">
-<title id="title">收到一段数据，到看见一段文字</title>
-<desc id="desc">收到一段数据，到看见一段文字。收到事件、提交 UI、像素可见是三个时刻；UI 提交次数不等于 FPS。</desc>
+<title id="title">数据接收到像素呈现</title>
+<desc id="desc">数据接收到像素呈现。收到事件、提交 UI、像素可见是三个时刻；UI 提交次数不等于 FPS。</desc>
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
 <rect width="1040" height="410" rx="20" fill="#ffffff"/>
 <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
-<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">收到一段数据，到看见一段文字</text>
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">数据接收到像素呈现</text>
 <text x="40" y="94" font-size="20" fill="#455164" font-weight="400">按阶段定位耗时，避免把网络、解析与渲染混成一个数字。</text>
 <rect x="40" y="134" width="304" height="180" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">接收与解码</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">字节可能切开字符</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">先拼成完整协议事件</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">识别完成、错误与取消</text><path d="M348 224 L364 224" fill="none" stroke="#6c8196" stroke-width="2" marker-end="url(#arrow)"/><rect x="368" y="134" width="304" height="180" rx="16" fill="#fff0f6" stroke="#e9a4c3" stroke-width="1.5"/><text x="390" y="176" font-size="24" fill="#953959" font-weight="650">归约与发布</text><text x="390" y="216" font-size="20" fill="#455164" font-weight="400">事件更新正确的消息</text><text x="390" y="246" font-size="20" fill="#455164" font-weight="400">保留状态和事实</text><text x="390" y="276" font-size="20" fill="#455164" font-weight="400">文本展示可合并批次</text><path d="M676 224 L692 224" fill="none" stroke="#6c8196" stroke-width="2" marker-end="url(#arrow)"/><rect x="696" y="134" width="304" height="180" rx="16" fill="#edf8f2" stroke="#92cdb0" stroke-width="1.5"/><text x="718" y="176" font-size="24" fill="#23674a" font-weight="650">解析与呈现</text><text x="718" y="216" font-size="20" fill="#455164" font-weight="400">仅处理失效的内容</text><text x="718" y="246" font-size="20" fill="#455164" font-weight="400">布局、绘制与系统显示</text><text x="718" y="276" font-size="20" fill="#455164" font-weight="400">继续响应输入和滚动</text><text x="40" y="366" font-size="21" fill="#455164" font-weight="400">收到事件、提交 UI、像素可见是三个时刻；UI 提交次数不等于 FPS。</text>
 </g></svg>

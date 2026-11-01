@@ -1,10 +1,12 @@
 # Codex 与 cua_repl：接口、连接与状态
 
-`cua_repl` 是本次会话的 <mark class="key">JavaScript 工具运行环境</mark>：执行代码，经 `cua` 操作应用或浏览器并回传结果。它不是模型，也不是网页控制台自带对象。
+`cua_repl` 是宿主提供的 <mark class="key">JavaScript 工具运行环境</mark>：执行代码，经 `cua` 操作应用或浏览器并回传结果。它不是模型，也不是网页控制台自带对象。
 
-前置：[执行原理](computer-use.md)。产品资料核对于 **2026-10-31**；方法名和首次调用规则来自本次工具说明，后续以各次说明为准。
+前置：[执行原理](computer-use.md)。产品资料与接口契约核对于 **2026-10-31**；方法名和首次调用规则以实际工具说明为准。
 
-## 四个容易混在一起的名字
+<div class="heading-alias" id="四个容易混在一起的名字" aria-hidden="true"></div>
+
+## 四个相关术语
 
 | 名字 | 本篇中的含义 |
 | --- | --- |
@@ -17,7 +19,9 @@
 
 公开 API 的 computer tool、自建执行环境与桌面 `cua_repl` 是不同接法。[OpenAI Computer Use API](https://developers.openai.com/api/docs/guides/tools-computer-use)
 
-## JavaScript 到底在哪里运行
+<div class="heading-alias" id="javascript-到底在哪里运行" aria-hidden="true"></div>
+
+## JavaScript 执行位置
 
 当前契约中的调用关系：
 
@@ -37,9 +41,11 @@ cua API 访问被选中的桌面或浏览器入口
 
 接口仅确认原生应用、AX、截图和浏览器入口，不揭示宿主进程、语言或驱动源码。
 
-## 先分清桌面应用和浏览器连接
+<div class="heading-alias" id="先分清桌面应用和浏览器连接" aria-hidden="true"></div>
 
-本次工具的 `getState()` 返回的是入口清单：
+## 桌面应用与浏览器连接
+
+核对的接口中，`getState()` 返回入口清单：
 
 | 字段 | 能说明什么 | 不能直接说明什么 |
 | --- | --- | --- |
@@ -61,9 +67,11 @@ cua API 访问被选中的桌面或浏览器入口
 
 无读取错误且 `browsers` 为空，才是“当前未发现连接”。未指定目标的已授权桌面任务按清单选原生入口，不猜浏览器 ID。
 
-## 首次调用怎样选入口
+<div class="heading-alias" id="首次调用怎样选入口" aria-hidden="true"></div>
 
-以下是本次契约的示意用法，由 Agent 在 `cua_repl` 执行；分支互为替代，不连续运行。
+## 首次调用与入口选择
+
+以下为所核对契约的示意用法，由 Agent 在 `cua_repl` 执行；分支互为替代，不连续运行。
 
 ### 没有指定浏览器或标签页
 
@@ -85,7 +93,7 @@ let app = await cua.getApp("com.apple.TextEdit");
 
 明确指定目标时，直接按对应规则进入：
 
-| 已知目标 | 本次接口中的入口 |
+| 已知目标 | 对应接口 |
 | --- | --- |
 | 标签页 @-mention | `cua.getTab({ mention: tabMentionUrl })`，使用完整引用 |
 | 已知 URL 和浏览器 | `cua.getTab({ url }, { browser: browserId })` |
@@ -104,7 +112,9 @@ let app = await cua.getApp("com.apple.TextEdit");
 
 </details>
 
-## 观察与操作要形成一小段闭环
+<div class="heading-alias" id="观察与操作要形成一小段闭环" aria-hidden="true"></div>
+
+## 观察与操作闭环
 
 当前原生接口可以读取：
 
@@ -126,7 +136,7 @@ await app.setValue(42, "周计划");
 await app.getAXState();
 ```
 
-本次未执行此例；控件是否支持该方法须看实际结果。
+该示例未执行；控件是否支持该方法须以实际结果为准。
 
 当前工具有几条与原理直接相关的约定：
 
@@ -135,11 +145,11 @@ await app.getAXState();
 - **方法存在不等于入口支持。** DOM-only 快照可能没有数字编号，应按浏览器文档使用定位器，不套原生输入方法。
 - **观察方法自动输出。** `getState()`、`getAXState()` 和截图无需再包 `nodeRepl.write()`；自整理文字用它，额外图片用 `nodeRepl.emitImage()`。
 
-这些是本次运行时约定，并非通用 Computer Use 规范。
+以上是所核对的运行时约定，并非通用 Computer Use 规范。
 
 ## 持久 REPL 保存了什么
 
-REPL（Read–Eval–Print Loop）循环读取、执行和返回结果；本次绑定可跨调用保留，下一轮能继续用 `app`。
+REPL（Read–Eval–Print Loop）循环读取、执行和返回结果；该运行时的绑定可跨调用保留，后续调用可复用 `app`。
 
 | 状态 | 在哪里 | 重置时需要注意什么 |
 | --- | --- | --- |
@@ -155,11 +165,13 @@ REPL（Read–Eval–Print Loop）循环读取、执行和返回结果；本次�
 
 不能。脚本受宿主能力和权限检查约束。
 
-系统权限、应用批准、文件与 shell 沙箱分别生效；本次禁止操作 `com.openai.codex`，不能换入口绕过。终端及客户端自身另有自动化限制。[OpenAI 权限说明](https://learn.chatgpt.com/docs/computer-use)
+系统权限、应用批准、文件与 shell 沙箱分别生效；该契约禁止操作 `com.openai.codex`，不能换入口绕过。终端及客户端自身另有自动化限制。[OpenAI 权限说明](https://learn.chatgpt.com/docs/computer-use)
 
 </details>
 
-## 一个适合建立正确认识的任务描述
+<div class="heading-alias" id="一个适合建立正确认识的任务描述" aria-hidden="true"></div>
+
+## 任务描述示例
 
 ```text
 用 Computer Use 查看我指定的测试应用。

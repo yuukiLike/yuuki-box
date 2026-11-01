@@ -1,12 +1,14 @@
-# 五条路线，十五次性能拆招
+# 五条实现路线与十五个性能场景
 
 选一个场景，<mark class="key">同负载切换两条执行路径</mark>，同时打字、滚动、选字和取消，追踪重复解析、跨桥与迟到结果。
 
-日期：2026-09-26。五个应用的「场景实验」各有三个场景，保留原有 Agent、设置、会话、语音和回放；不需 DeepSeek、Whisper、工作区或外部服务。`terrible` 指可解释的糟糕实现，不是框架必然缺陷，也不靠额外忙等造结论。
+日期：2026-09-26。五个应用的「场景实验」各有三个场景，保留原有 Agent、设置、会话、语音和回放；不需 DeepSeek、Whisper、工作区或外部服务。`terrible` 表示可定位的低效实现，不是框架必然缺陷，也不通过额外忙等制造结论。
 
 当时只做实现、源码阅读与构建，未运行负载、打开应用、测性能或用 computer-use。五路线 `build-all.sh` 成功，Electron 调整取消生命周期后也重新打包；入口见 [examples](../../examples/README.md)。这是历史边界，不免除后续验证；指标初始为空或零，收益待实测。
 
-## 先操作，再判断
+<div class="heading-alias" id="先操作再判断" aria-hidden="true"></div>
+
+## 实验步骤
 
 1. 从 [examples](../../examples/README.md) 选应用，打开「场景实验」，无需 API Key。
 2. 选朴素路径，先用小预设或标明的固定上限；持续输入中文、选字、滚动、停止。
@@ -42,7 +44,9 @@
 
 同名优化仍有不同边界：Web Worker 移走 Web 主线程工作，Electron Worker 移走 main 工作；原生桥维护 AppKit 身份，GPUI 控制 Entity 与元素范围。
 
-## Swift：系统控件很好用，状态与线程仍由你负责
+<div class="heading-alias" id="swift系统控件很好用状态与线程仍由你负责" aria-hidden="true"></div>
+
+## Swift：状态与线程边界
 
 入口：[Swift 场景](../../examples/swift-native/README.md)、[ScenarioLabs.swift](../../examples/swift-native/Sources/ScenarioLabs.swift)。
 
@@ -58,11 +62,13 @@
 
 - **G1：** 同数据比全量与可见行构建；计数不等于 GPU 帧率，固定行高、身份和访问方式仍影响体验。
 - **G2：** 历史缓存和活动 Entity 缩小解析、通知范围，无额外合批。每次消费后均等 16 ms；慢处理自然拖后续，不是固定墙钟推送。
-- **G3：** 共用索引函数，后台 executor 仍需协作取消、单作业上限和过期校验；所有权不替你选择线程或设计恢复。
+- **G3：** 共用索引函数，后台 executor 仍需协作取消、单作业上限和过期校验；所有权不决定执行线程或恢复策略。
 
 维护练习：G1 改成可展开多行，或让 G3 立即替换旧查询，检查布局、所有权与结果回传。
 
-## React → 原生：最重要的边界在 React 树和原生对象之间
+<div class="heading-alias" id="react--原生最重要的边界在-react-树和原生对象之间" aria-hidden="true"></div>
+
+## React → 原生：组件树与原生对象的桥接边界
 
 入口：[React 原生桥场景](../../examples/react-native-bridge/README.md)。路径为 React 状态 → renderer → JSONL → Swift → AppKit。
 
@@ -72,7 +78,9 @@
 
 维护练习：新增目录选择字段，追踪 props、wire、patch、控件、回传、销毁。这是教学桥，不是 Raycast renderer 复刻。
 
-## WKWebView：省下随包浏览器，不会省下 DOM 与 JavaScript 的工作
+<div class="heading-alias" id="wkwebview省下随包浏览器不会省下-dom-与-javascript-的工作" aria-hidden="true"></div>
+
+## WKWebView：DOM、脚本与后台计算
 
 入口：[WKWebView 场景](../../examples/react-webview/README.md)。真实 ReactDOM；W3 由固定打包源码创建 Blob Worker，CSP 允许 `worker-src blob:`，不依赖本地 file URL Worker。
 
@@ -92,7 +100,9 @@ E2 每 150 ms 发控制探针，最多一个未完成请求。main 同步忙时�
 
 维护练习：E1 加审批终态、E2 加大回传、E3 改可变高度，分别检查背压、传输与测量。
 
-## 指标要回答哪个问题
+<div class="heading-alias" id="指标要回答哪个问题" aria-hidden="true"></div>
+
+## 指标与解释范围
 
 | 页面上的数字 | 能支持的判断 | 不能支持的判断 |
 |---|---|---|
@@ -106,7 +116,9 @@ E2 每 150 ms 发控制探针，最多一个未完成请求。main 同步忙时�
 
 计数、指纹与文案也有开销；教学负载和绝对耗时不代表生产容量。
 
-## 让维护成本也可以亲手感受到
+<div class="heading-alias" id="让维护成本也可以亲手感受到" aria-hidden="true"></div>
+
+## 维护成本实验
 
 以下是源码可指出的责任，不是工时估计；精确入口见路线 README。
 

@@ -1,10 +1,12 @@
 # AI 应用通信：从 RPC、SSE 到 Agent 工具调用
 
-从读笔记开始，追踪请求、响应、流式事件和失败。
+以笔记读取为例，追踪请求、响应、流式事件与失败状态。
 
-每课<mark class="key">一张图、一个动作</mark>，看懂就停。
+每课包含<mark class="key">一张流程图、一项实验</mark>。
 
-## 今天只学第一课
+<div class="heading-alias" id="今天只学第一课" aria-hidden="true"></div>
+
+## 入门实验
 
 打开[第一课](01-rpc.md)，运行：
 
@@ -14,7 +16,7 @@ node docs/ai-communication/labs/01-rpc.ts
 
 [![一个程序发出读笔记请求，另一个程序返回结果，两条消息带着相同的 id](../../site/public/diagrams/ai-communication/01-rpc.svg)](../../site/public/diagrams/ai-communication/01-rpc.svg)
 
-找到请求和回答里相同的 `id`，今天就到这里。
+验收：按相同 `id` 关联请求与响应。
 
 <details>
 <summary>六课与 SSE 实战目录</summary>
@@ -26,14 +28,16 @@ node docs/ai-communication/labs/01-rpc.ts
 | [3 · SSE](03-sse.md) | 一边接收，一边显示 |
 | [SSE 实战](03-sse-http.md) | 用真实 HTTP 观察断流、续接与完成 |
 | [4 · MCP](04-mcp.md) | 让应用调用外部工具 |
-| [5 · 取消与超时](05-failure.md) | 停止等待后，对方还在做吗 |
-| [6 · 接回 Yuuki](06-yuuki.md) | 在自己的代码里找到这些步骤 |
+| [5 · 取消与超时](05-failure.md) | 区分停止等待与停止执行 |
+| [6 · Yuuki 运行时](06-yuuki.md) | 定位请求、流式接收与工具执行 |
 
 </details>
 
-## 学完后选做：让 Codex 查询 Apple 天气
+<div class="heading-alias" id="学完后选做让-codex-查询-apple-天气" aria-hidden="true"></div>
 
-选做[远程 MCP 与授权](weather-mcp/README.md)：用 Supabase 登录，调用 Apple WeatherKit；不是六课的必修续篇。
+## 远程天气 MCP
+
+[远程 MCP 与授权](weather-mcp/README.md)使用 Supabase 登录并调用 Apple WeatherKit，可独立开展。
 
 <details>
 <summary>运行环境与检查</summary>

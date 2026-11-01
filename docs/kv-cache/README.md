@@ -1,14 +1,16 @@
 # KV Cache 专题：从前端数组走到 DeepSeek、Harness 与 Pi
 
-从消息数组理解模型缓存；先看图与例子，公式、数据和源码按需展开。
+从消息数组理解模型缓存；公式、实验数据与源码按需展开。
 
 本专题研究模型推理状态，借前端数组解释依赖与复用。先分清参数、上下文与生成，必要时回补[模型基础](../ai-from-scaling/01-understand-models.md)；可独立阅读，不是 Agent 入门前置。
 
 更新：2026-10-24。[文档导航](../README.md) · [渲染性能](../learning/rendering-performance.md)。应用篇已查官方文档与固定 commit；真实 API 命中、费用、延迟待测。
 
-## 今天只从这一页开始
+<div class="heading-alias" id="今天只从这一页开始" aria-hidden="true"></div>
 
-**[第一站：你发出一条消息，模型收到了什么？](00-first-request.md)**
+## 阅读起点
+
+**[消息请求与模型输入](00-first-request.md)**
 
 先分清客户端消息与服务端计算结果。
 
@@ -16,7 +18,9 @@
 
 图中的顺序就是正文顺序。容量计算留到理解 K/V 之后再看。
 
-## 走丢了，就回来看这一句
+<div class="heading-alias" id="走丢了就回来看这一句" aria-hidden="true"></div>
+
+## 核心概念
 
 <mark class="key">KV Cache 保留已算状态，供后续计算复用</mark>。
 
@@ -25,7 +29,7 @@
 <details>
 <summary>完整目录</summary>
 
-如果想回补 key、Map 和内存，再打开[前端基础](../frontend-foundations/README.md)。
+key、Map 和内存基础见[前端基础](../frontend-foundations/README.md)。
 
 | 章节 | 从前端的哪个问题开始 | 读完能解释什么 |
 | --- | --- | --- |
@@ -44,7 +48,9 @@
 <details>
 <summary>各层职责</summary>
 
-## 先认清这几层各自做什么
+<div class="heading-alias" id="先认清这几层各自做什么" aria-hidden="true"></div>
+
+## 各层职责
 
 | 对象 | 在本专题中的职责 | 研究入口 |
 | --- | --- | --- |
@@ -61,7 +67,9 @@ Harness 有专用与 `pi-ai` 两条适配路径，需分别追踪；应用不直
 <details>
 <summary>两个本地实验</summary>
 
-## 第一局：改一个输入，看缓存从哪里失效
+<div class="heading-alias" id="第一局改一个输入看缓存从哪里失效" aria-hidden="true"></div>
+
+## 实验一：输入变化与缓存失效
 
 在仓库根目录执行，使用 Node.js 18 或更高版本：
 
@@ -73,7 +81,9 @@ node docs/kv-cache/labs/prefix-cache.mjs
 
 每位置依赖此前输入：末尾追加不改旧位置，中间修改可能影响整个后缀。[第一篇](01-from-frontend.md)解释它与 KV 的关系。
 
-## 第二局：让两层小模型给出对照
+<div class="heading-alias" id="第二局让两层小模型给出对照" aria-hidden="true"></div>
+
+## 实验二：两层模型对照
 
 第二个实验真正计算因果 Attention，使用固定权重的两层小模型：
 
@@ -90,14 +100,16 @@ node docs/kv-cache/labs/attention-cache.mjs
 <details>
 <summary>每轮研究要留下什么</summary>
 
-## 学习时持续追问的四件事
+<div class="heading-alias" id="学习时持续追问的四件事" aria-hidden="true"></div>
+
+## 四项分析维度
 
 1. **保存什么：** 过滤列表、解析树，或各层 K/V。
 2. **依赖什么：** 内容、位置、配置与可见范围。
 3. **变化传多远：** 由计算依赖决定复用范围。
 4. **还有什么成本：** 匹配、历史读取与新输出计算。
 
-第一轮能解释旧 K/V 的复用与新 Q 的历史读取即可；应用篇再定位 Harness / Pi 的前缀、用量转换和 Yuuki 观测缺口。
+基础部分覆盖旧 K/V 复用与新 Q 的历史读取；应用篇定位 Harness / Pi 的前缀、用量转换和 Yuuki 观测缺口。
 
 </details>
 

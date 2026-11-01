@@ -3,7 +3,7 @@
 <desc id="desc">MCP 传递请求，Lab 实现测试与报告；固定演示的断言和候选补丁由脚本提供。同一个 regression.mts 测试分别运行在 baseline、candidate 和显式揭示后的 reference。固定案例预期旧版本目标断言失败，候选通过，官方参考通过。判定还要求当前代码与检查回执匹配。基线和候选各检查过一次即可揭示，候选失败也可以。</desc>
 <rect width="800" height="930" rx="18" fill="#ffffff"/>
 <text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">GitHub：一份断言，对照三个版本</text>
-<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">固定演示：脚本提供断言与补丁；你补断言、核对回执。</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">固定演示提供断言与补丁；练习补充断言并核对回执。</text>
 <rect x="140" y="124" width="520" height="94" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
 <text x="160" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">同一份 regression.mts</text>
 <text x="160" y="191" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">比较时，测试指纹必须一致</text>

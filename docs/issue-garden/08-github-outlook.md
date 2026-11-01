@@ -9,7 +9,7 @@
 1. [Settings → Emails](https://github.com/settings/emails)：添加并验证 Outlook 地址。
 2. [Settings → Notifications](https://github.com/settings/notifications)：Watching／Participating 启用 **Email**，默认通知邮箱选 Outlook。
 3. 仓库 **Watch → Custom**：勾选 **Issues、Pull requests**。
-4. 自己的操作也要提醒：启用 **Your own updates**。
+4. 包含当前账号的操作：启用 **Your own updates**。
 
 原生 PR 更新包含合并，也会有评论、评审；没有「仅合并」开关。[官方设置](https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications)
 

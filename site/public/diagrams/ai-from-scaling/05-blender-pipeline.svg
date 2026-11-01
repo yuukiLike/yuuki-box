@@ -5,9 +5,9 @@
 <text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">Blender：三个工具，一份模型</text>
 <text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">客户端传 modelId；服务端按编号读取模型文件。</text>
 <rect x="32" y="117" width="696" height="80" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="52" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">你来做：运行 → 看剖面 → 改尺寸 → 核对文件</text>
+<text x="52" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">实验：运行 → 检查剖面 → 修改尺寸 → 核对文件</text>
 <text x="48" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">每次调用 → 新启 Blender</text>
-<text x="448" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">你能检查的产物</text>
+<text x="448" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">可检查产物</text>
 <rect x="32" y="252" width="332" height="114" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
 <text x="52" y="287" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">01  create_model</text>
 <text x="52" y="319" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">形状参数 → 建模与保存</text>

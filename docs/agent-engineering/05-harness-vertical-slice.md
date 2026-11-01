@@ -1,14 +1,16 @@
-# Harness：按下取消，再故意让它崩一次
+# Harness：取消、崩溃与恢复
 
-中途取消、审批时崩溃、重启后对账：先亲手验证一次运行怎样收场。
+通过中途取消、审批期崩溃和重启对账，验证运行终态与恢复行为。
 
 加 MCP 与 Skills 前，先做<mark class="key">能取消、能恢复、可解释的 Run</mark>。
 
 实现建议，状态名沿用 [Mac 本地 Harness](../architecture/mac-local-harness.md)。runtime 已有部分工具与审批，尚未通过全部恢复验收。核对：2026-10-23。
 
-## 最值得拆穿的「能跑了」
+<div class="heading-alias" id="最值得拆穿的能跑了" aria-hidden="true"></div>
 
-有按钮、有调用，还需核对：
+## 运行链路验证
+
+检查完整运行链路：
 
 - 取消发生在流式输出中间，UI 还会不会收到迟到的 delta？
 - 审批超时后，模型能不能继续回答？
@@ -68,7 +70,9 @@ fake model: "调用 list_files"
 - 副作用前保存 intent，尝试后保存结果事件。
 - 取消不证明撤销；已发生的写入、请求、计费仍保留。
 
-## 小挑战：让六种结局各发生一次
+<div class="heading-alias" id="小挑战让六种结局各发生一次" aria-hidden="true"></div>
+
+## 六类状态实验
 
 1. 用 fake model 和内存 Store 跑通成功路径，确认事件顺序。
 2. 在流式输出中触发取消，检查是否还有 delta。

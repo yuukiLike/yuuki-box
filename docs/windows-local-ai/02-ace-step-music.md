@@ -1,12 +1,14 @@
-# ACE-Step 1.5 Turbo：在 Windows 生成第一段配乐
+# 选修 · ACE-Step 1.5 Turbo：Windows 配乐生成
 
 用 ACE-Step 1.5 Turbo 为竹林画面<mark class="key">生成 30 秒钢琴配乐</mark>，保存可剪辑素材。
 
-继续使用你的 **RTX 5060 Ti 16GB、i5-10400F、16GB 系统内存**和上一课的 ComfyUI Windows 便携版。完成后保存一份音频和一份工作流 JSON。
+参考配置为 **RTX 5060 Ti 16GB、i5-10400F、16GB 系统内存**和上一课的 ComfyUI Windows 便携版。完成后保存一份音频和一份工作流 JSON。
 
 [返回专题总览](README.md) · [上一课：Qwen Image 首次出图](01-qwen-image.md)
 
-## 1 · 为什么推荐它
+<div class="heading-alias" id="1--为什么推荐它" aria-hidden="true"></div>
+
+## 1 · 模型与输出范围
 
 ComfyUI 原生支持 ACE-Step 1.5，按风格和可选歌词生成音乐；本课 **1.5 Turbo AIO** 将模型、文本组件和 VAE 整合一份。[ComfyUI 官方教程](https://docs.comfy.org/tutorials/audio/ace-step/ace-step-v1-5)
 
@@ -101,7 +103,9 @@ C:\AI\ComfyUI_windows_portable\ComfyUI\output\audio\
 
 </details>
 
-## 5 · 听出变化，再尝试自己的歌词
+<div class="heading-alias" id="5--听出变化再尝试自己的歌词" aria-hidden="true"></div>
+
+## 5 · 对比参数与歌词
 
 固定 30 秒和 seed 42，将 `soft bamboo flute accents` 改为 `soft acoustic guitar accents`，保存第二份并比较；同 seed 不保证其他编曲不变。
 
@@ -126,7 +130,9 @@ warm and hopeful, 80 BPM, D major, 4/4, sparse arrangement.
 
 先试 30～60 秒，核对吐字与对齐；提前唱完、重复或含混时，记录并调整时长、歌词密度或 seed。[ACE-Step 官方模型说明](https://huggingface.co/ACE-Step/Ace-Step1.5)
 
-## 6 · 这台机器上优先排查什么
+<div class="heading-alias" id="6--这台机器上优先排查什么" aria-hidden="true"></div>
+
+## 6 · 资源与运行问题排查
 
 | 现象 | 处理顺序 |
 | --- | --- |
@@ -140,12 +146,14 @@ warm and hopeful, 80 BPM, D major, 4/4, sparse arrangement.
 
 规划卡住时，可将 `generate_audio_codes` 设为 `false` 试短片段；跳过规划会改变结果，但 **AIO 不变小，也不保证加载内存减少**，并非通用修复。[节点参数说明](https://github.com/Comfy-Org/ComfyUI/blob/v0.43.0/comfy_extras/nodes_ace.py)
 
-## 7 · 把这次实验接到你的项目
+<div class="heading-alias" id="7--把这次实验接到你的项目" aria-hidden="true"></div>
+
+## 7 · 保存产物与项目集成
 
 保存两份音频/工作流和一句听感对照；首次加载与改提示后耗时分开记，未改输入的缓存命中不算生成测速。
 
-音频可给[光之剧场](../ai-from-scaling/08-music-photo-mcp.md)驱动灯光和镜头；[声部之结](../ai-from-scaling/07-music-space-mcp.md)需 MIDI 逐音符数据，不能用混音代替。
+音频可给[舞台预演台（选修）](../ai-from-scaling/08-music-photo-mcp.md)驱动灯光和镜头；[钢琴排练台（选修）](../ai-from-scaling/07-music-space-mcp.md)需 MIDI 逐音符数据，不能用混音代替。
 
-模型、节点、模板核对日期 **2026-10-29**；仅做静态连接检查，**未在你的 Windows 实测生成、听感或峰值内存**。
+模型、节点、模板核对日期 **2026-10-29**；仅做静态连接检查，**未在 Windows 目标环境实测生成、听感或峰值内存**。
 
 [返回 Windows 本地 AI 专题](README.md)。

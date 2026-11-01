@@ -65,24 +65,24 @@
   </style>
 
   <rect class="canvas" width="1200" height="2080" rx="24"/>
-  <text class="title" x="44" y="65">MCP 全景：你、AI 应用与外部能力</text>
-  <text class="body muted" x="44" y="104">先认清谁负责什么，再看 Codex、Zed、Warp、Raycast 放在哪里。</text>
+  <text class="title" x="44" y="65">MCP 全景：用户、应用与外部能力</text>
+  <text class="body muted" x="44" y="104">Host、Client、Server 的职责与平台接入。</text>
   <rect class="band" x="44" y="132" width="1112" height="66" rx="14"/>
-  <text class="heading blue" x="600" y="175" text-anchor="middle">你说目标 · Host 安排 · Client 连接 · Server 执行</text>
+  <text class="heading blue" x="600" y="175" text-anchor="middle">用户提供目标 · Host 调度 · Client 连接 · Server 执行</text>
 
   <text class="section" x="44" y="252">01 · 角色与连接：Client 在 Host 里面</text>
   <text class="body muted" x="44" y="288">这里画一个 Host 接入三个 Server；Server 可以运行在本机，也可以运行在远程。</text>
 
   <!-- Host is an application boundary, not a separate machine or an LLM. -->
   <rect class="host" x="280" y="320" width="510" height="680" rx="20"/>
-  <text class="heading blue" x="308" y="364">Host · 你使用的 AI 应用</text>
+  <text class="heading blue" x="308" y="364">Host · AI 应用</text>
   <text class="body muted" x="308" y="402">管理对话、模型、权限与工具调用</text>
   <rect class="card" x="308" y="434" width="454" height="102" rx="12"/>
   <text class="label" x="330" y="474">应用的工具调度</text>
   <text class="body muted" x="330" y="510">接收调用建议，检查后安排执行</text>
 
   <rect class="card" x="44" y="434" width="186" height="184" rx="16"/>
-  <text class="heading" x="64" y="477">用户 · 你</text>
+  <text class="heading" x="64" y="477">用户</text>
   <text class="small muted" x="64" y="515">提出目标与要求</text>
   <text class="small muted" x="64" y="551">连接账号与授权</text>
   <text class="small muted" x="64" y="587">查看调用和结果</text>
@@ -133,19 +133,19 @@
   <text class="small muted" x="962" y="810">执行 → GitHub API</text>
   <rect class="server" x="944" y="854" width="212" height="104" rx="14"/>
   <text class="small green" x="962" y="882">Server C · 本机进程</text>
-  <text class="label" x="962" y="914">你的「接着做」</text>
+  <text class="label" x="962" y="914">「接着做」服务</text>
   <text class="small muted" x="962" y="942">执行 → 本地笔记</text>
 
   <rect class="note" x="44" y="714" width="186" height="186" rx="14"/>
-  <text class="small muted" x="64" y="751">这次写哪一块？</text>
+  <text class="small muted" x="64" y="751">主要开发范围</text>
   <text class="body" x="64" y="790">通常写 Server</text>
-  <text class="small muted" x="64" y="828">Client 由你选择的</text>
-  <text class="small muted" x="64" y="860">平台提供和管理</text>
+  <text class="small muted" x="64" y="828">Client 由接入平台</text>
+  <text class="small muted" x="64" y="860">提供与管理</text>
   <text class="body muted" x="44" y="1040">Server 是提供 MCP 接口的程序；实际操作发生在它连接的文件、浏览器或业务系统中。</text>
 
   <line class="rule" x1="44" y1="1078" x2="1156" y2="1078"/>
   <text class="section" x="44" y="1130">02 · 这四个平台：都可以作为 Host 接入 MCP</text>
-  <text class="body muted" x="44" y="1166">「支持 MCP」在这里表示：应用带有 Client，能连接你配置的 Server。</text>
+  <text class="body muted" x="44" y="1166">「支持 MCP」在这里表示：应用带有 Client，能连接已配置的 Server。</text>
 
   <!-- Platform links can be followed when the SVG is opened on its own. -->
   <a href="https://learn.chatgpt.com/docs/extend/mcp">
@@ -227,6 +227,6 @@
   </a>
 
   <rect class="band" x="44" y="1972" width="1112" height="64" rx="14"/>
-  <text class="body blue" x="600" y="2013" text-anchor="middle">结果回到 Host → 交给模型继续回答 → 由应用展示给你</text>
+  <text class="body blue" x="600" y="2013" text-anchor="middle">结果回到 Host → 交给模型继续回答 → 由应用展示结果</text>
   <text class="small muted" x="44" y="2062">概念图 · 平台支持核对于 2026-10-26 · 原图中的平台与服务卡片可点击查看官方资料</text>
 </svg>

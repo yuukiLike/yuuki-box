@@ -1,4 +1,4 @@
-# 第一班：让 Issue 自己来报到
+# 1 · 扫描与汇总 Issue
 
 **先手动运行，取得一份 <mark class="key">Actions 运行摘要</mark>；不需要 AI Key。**
 
@@ -59,7 +59,7 @@ jobs:
 
 | 配置 | 在这个实验里的含义 |
 | --- | --- |
-| `workflow_dispatch` | 允许你先手动点击运行 |
+| `workflow_dispatch` | 手动触发工作流 |
 | `schedule` | 之后按时间自动运行 |
 | `runs-on: ubuntu-latest` | 使用 GitHub 提供的 Linux 执行环境 |
 | `issues: read` | 本次任务只需要读取 Issue |
@@ -95,6 +95,6 @@ Issues API 也返回 PR，需过滤 `pull_request`。`github.token` 通过 `GH_T
 
 新增练习 Issue 后重跑，核对清单变化；无 Issue 时应显示 `0`。
 
-**摘要出现清单即可停止。** 下一次再来[搭手修一个小问题](02-first-repair.md)。
+**摘要生成清单即完成。** 后续进行[单次修复](02-first-repair.md)。
 
 示例状态：已在本地检查 YAML、Shell 语法与固定数据的过滤逻辑；尚未提交到远端运行。

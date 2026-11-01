@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="840" viewBox="0 0 1000 840" role="img" aria-labelledby="map-title map-description">
-  <title id="map-title">人类定目标，AI 参与开发：两项已有设想与五个新方向</title>
-  <desc id="map-description">已有设想是 Issue 夜班和独立 AI review。新增方向是运行数据驱动开发、按目标自动做实验、在数字孪生环境中构建、用规格驱动实现、利用空闲时间整理项目知识。人负责目标、证据判断与最终合并。</desc>
+  <title id="map-title">人工定义目标，AI 参与开发：两项已有设想与五个新方向</title>
+  <desc id="map-description">已有设想是 Issue 定时处理和独立 AI review。新增方向是运行数据驱动开发、按目标自动做实验、在数字孪生环境中构建、用规格驱动实现、利用空闲时间整理项目知识。人负责目标、证据判断与最终合并。</desc>
   <style>
     .canvas { fill: #ffffff; }
     .branch { fill: none; stroke: #c6cfdb; stroke-width: 2; }
@@ -29,34 +29,34 @@
   <path class="branch" d="M460 155 C486 155 484 100 510 100 M460 155 C486 155 484 200 510 200" />
   <path class="branch" d="M460 535 C486 535 484 340 510 340 M460 535 C486 535 484 440 510 440 M460 535 C486 535 484 540 510 540 M460 535 C486 535 484 640 510 640 M460 535 C486 535 484 740 510 740" />
   <rect class="root" x="36" y="360" width="194" height="100" rx="18" />
-  <text class="title" x="133" y="399" text-anchor="middle">人类定目标</text>
+  <text class="title" x="133" y="399" text-anchor="middle">人工定义目标</text>
   <text class="label" x="133" y="431" text-anchor="middle">AI 参与开发</text>
   <rect class="group" x="280" y="120" width="180" height="70" rx="14" />
-  <text class="label" x="370" y="150" text-anchor="middle">你的两个设想</text>
+  <text class="label" x="370" y="150" text-anchor="middle">两个协作场景</text>
   <text class="detail" x="370" y="174" text-anchor="middle">开发与交叉检查</text>
   <rect class="group" x="280" y="500" width="180" height="70" rx="14" />
   <text class="label" x="370" y="530" text-anchor="middle">新增五个方向</text>
-  <text class="detail" x="370" y="554" text-anchor="middle">选一个感兴趣的</text>
+  <text class="detail" x="370" y="554" text-anchor="middle">按目标选择实验</text>
   <rect class="leaf" x="510" y="60" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="93">Issue 的夜班</text>
-  <text class="detail" x="534" y="120">你记问题 → AI 定时修改 → 草稿 PR</text>
+  <text class="title" x="534" y="93">Issue 定时处理</text>
+  <text class="detail" x="534" y="120">记录问题 → AI 定时修复 → 草稿 PR</text>
   <rect class="leaf" x="510" y="160" width="454" height="80" rx="14" />
   <text class="title" x="534" y="193">独立 AI review</text>
   <text class="detail" x="534" y="220">另一个会话检查改动 → 提供可核实的问题</text>
   <rect class="leaf new" x="510" y="300" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="333">让真实故障发起任务</text>
+  <text class="title" x="534" y="333">故障驱动任务</text>
   <text class="detail" x="534" y="360">运行数据 → 根因线索 → 候选修复任务</text>
   <rect class="leaf" x="510" y="400" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="433">给目标，让 AI 自动做实验</text>
+  <text class="title" x="534" y="433">目标驱动实验</text>
   <text class="detail" x="534" y="460">固定评估 → 尝试方案 → 保留有证据的改进</text>
   <rect class="leaf" x="510" y="500" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="533">在模拟世界里先造一遍</text>
+  <text class="title" x="534" y="533">模拟环境构建与验收</text>
   <text class="detail" x="534" y="560">数字孪生接口 → 故障场景 → 行为验收</text>
   <rect class="leaf" x="510" y="600" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="633">把意图写成长期规格</text>
+  <text class="title" x="534" y="633">规格驱动开发</text>
   <text class="detail" x="534" y="660">规则 → 计划与实现 → 对照验收</text>
   <rect class="leaf" x="510" y="700" width="454" height="80" rx="14" />
-  <text class="title" x="534" y="733">让 AI 下班后整理知识</text>
-  <text class="detail" x="534" y="760">已验证的经验 → 候选规则 → 你确认后复用</text>
+  <text class="title" x="534" y="733">经验整理与复用</text>
+  <text class="detail" x="534" y="760">已验证经验 → 候选规则 → 人工确认后复用</text>
   <text class="caption" x="36" y="812">绿色分支含近两个月的产品更新；日期与证据边界见正文 · 核对于 2026-10-21</text>
 </svg>

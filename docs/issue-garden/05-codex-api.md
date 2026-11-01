@@ -10,7 +10,7 @@
 
 | 类型 | 名称 | 值与用途 |
 | --- | --- | --- |
-| Secret | `OPENAI_API_KEY` | 你准备给本次实验使用的项目 API key |
+| Secret | `OPENAI_API_KEY` | 实验所用 API 项目的密钥 |
 | Variable | `CODEX_MODEL` | 该项目实际可用的 Codex 模型 ID，参照官方模型说明与账号权限 |
 
 密钥只放 Actions Secret；[费用与赠额范围](../codex-cloud/05-issue-to-pr.md#openai-api-先确认费用来源)另行核对。

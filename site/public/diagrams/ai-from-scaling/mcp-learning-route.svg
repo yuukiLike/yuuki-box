@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="770" viewBox="0 0 800 770" role="img" aria-labelledby="title desc">
-<title id="title">MCP：下一步想看清哪件事</title>
-<desc id="desc">极简 MCP 是起点。Blender 用参数与模型文件练习外部软件调用；GitHub 用相同断言对照三个版本练习结果验证。通信课复用演示，ToolSource 和权限两课需要另行实现。</desc>
+<title id="title">MCP 学习路线：演示后优先天气</title>
+<desc id="desc">最简 MCP 演示后优先实现天气查询。Blender、GitHub 和音乐为选修案例；通信课程复用演示，ToolSource 与权限练习需另行实现。</desc>
 <rect width="800" height="770" rx="18" fill="#ffffff"/>
-<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP：下一步想看清哪件事</text>
-<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">先选一个问题，再进入对应实验。</text>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP 学习路线：演示后优先天气</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">最简演示 → 天气查询；其他案例按需选择。</text>
 <rect x="210" y="124" width="380" height="104" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="230" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">起点：极简 MCP</text>
+<text x="230" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">起点：最简 MCP 演示</text>
 <text x="230" y="191" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">发现与调用 / 文件持久化</text>
 <polyline points="400,228 400,258 208,258 208,294" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="212.55,287.0 208,294 203.45,287.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="400,258 592,258 592,294" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="596.55,287.0 592,294 587.45,287.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="32" y="300" width="352" height="172" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="52" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">Blender：让参数变成模型</text>
-<text x="52" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">看尺寸与剖面，核对生成文件</text>
+<text x="52" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">优先：天气查询</text>
+<text x="52" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">离线样本 → WeatherKit → 客户端</text>
 <rect x="48" y="401" width="320" height="54" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="64" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">你做：改尺寸，再检查模型</text>
+<text x="64" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">练习：查询天气与筛选时段</text>
 <rect x="416" y="300" width="352" height="172" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="436" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">GitHub：核对修复证据</text>
-<text x="436" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">同一份断言，对照三个版本</text>
+<text x="436" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">选修：Blender / GitHub</text>
+<text x="436" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">参数建模 / 修复结果验证</text>
 <rect x="432" y="401" width="320" height="54" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="448" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">你做：补断言，核对新回执</text>
+<text x="448" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">按需选择一个案例</text>
 <polyline points="32,514 768,514" fill="none" stroke="#d2dce8" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="32" y="550" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">想接回自己的 Agent</text>
+<text x="32" y="550" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">扩展 Agent 工具能力</text>
 <text x="32" y="580" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">先看通信，再实现工具源与调用策略。</text>
 <rect x="32" y="610" width="224" height="102" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
 <text x="52" y="645" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">发现与调用</text>
@@ -37,5 +37,5 @@
 <polyline points="275.0,656.45 282,661 275.0,665.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="518,661 538,661" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="531.0,656.45 538,661 531.0,665.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="32" y="747" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">Blender 与 GitHub 可独立选择；两篇工程练习尚未接入 runtime。</text>
+<text x="32" y="747" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">天气优先；其他案例与音乐选修，工程练习尚未接入 runtime。</text>
 </svg>

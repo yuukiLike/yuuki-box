@@ -1,4 +1,4 @@
-# 给升级划条线，再让 AI 动手：借鉴 Amazon Q
+# Amazon Q：限定范围的代码迁移
 
 <mark class="key">固定目标版本</mark>与升级前检查结果，再让 AI 逐项处理迁移错误。
 
@@ -10,7 +10,7 @@
 
 **企业记录：** AWS 报告 Amazon 借 Q Developer 将数万生产应用从 Java 8／11 迁至 17。 [AWS 工程文章](https://aws.amazon.com/blogs/devops/amazon-q-developer-just-reached-a-260-million-dollar-milestone/)
 
-节省工时与成本为企业估算，不用于预测个人收益。
+节省工时与成本为企业估算，不用于预测其他项目的收益。
 
 ## 把升级拆成一条能回查的路径
 
@@ -25,7 +25,9 @@
 
 [![迁移比较旧环境与目标环境中的同一组检查，区分原有失败与新增失败](../../site/public/diagrams/ai-practices/migration-baseline.svg)](../../site/public/diagrams/ai-practices/migration-baseline.svg)
 
-## 小挑战：带着同一张检查单完成一次升级
+<div class="heading-alias" id="小挑战带着同一张检查单完成一次升级" aria-hidden="true"></div>
+
+## 验证练习：固定检查集的升级
 
 确需升级时，在独立分支记录版本与基线，给 AI 目标版本、官方迁移说明和必须保持的行为。
 

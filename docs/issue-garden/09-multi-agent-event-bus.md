@@ -4,9 +4,11 @@
 
 [![Webhook 接收事件，协调器持久化并调度多个 AI，结果按任务版本核对后交付](../../site/public/diagrams/issue-garden/multi-agent-event-bus.svg)](../../site/public/diagrams/issue-garden/multi-agent-event-bus.svg)
 
-## 用前端经验理解
+<div class="heading-alias" id="用前端经验理解" aria-hidden="true"></div>
 
-| 熟悉的概念 | 多 AI 系统中对应什么 |
+## 概念映射
+
+| 前端概念 | 多 AI 系统中的对应职责 |
 | --- | --- |
 | 外部回调 | Webhook：接 GitHub、聊天或告警 |
 | `emit / on` | 进程内 EventBus：唤醒订阅者 |
@@ -26,7 +28,9 @@ Webhook 是入口；EventBus 是通知；重启后的恢复依据是数据库。
 
 Agent 交结果，协调器核对再推进；按类型和状态路由，回写不重复开任务。
 
-## 首版怎样落地
+<div class="heading-alias" id="首版怎样落地" aria-hidden="true"></div>
+
+## 首版实现
 
 **Node 协调器 + SQLite + 独立 Worker 进程**，先做单机、小并发。
 
@@ -37,7 +41,7 @@ Worker 经本地 HTTP 或 IPC 领取、回传；协调器定期扫描过期任�
 - 结果先核对轮次与租约；编码核对领取时的 base 后登记新 head，审查与测试只认该 head。
 - 发布前按任务、固定分支查已有 PR；失败重试更新原交付，避免重复创建。
 
-一条结果事件可以很小：
+结果事件示例：
 
 ```json
 {
@@ -50,7 +54,9 @@ Worker 经本地 HTTP 或 IPC 领取、回传；协调器定期扫描过期任�
 
 `id` 去重，`causeId` 串因果，`workId` 定子任务，`artifact` 指补丁；B/H2 保存完整 SHA。数据库事务不能保证远端副作用仅发生一次。
 
-## 怎样让它逐步演进
+<div class="heading-alias" id="怎样让它逐步演进" aria-hidden="true"></div>
+
+## 规则迭代
 
 失败样本做回归，有效做法存候选规则；通过回归、人工确认后版本化，任务记录所用版本。
 

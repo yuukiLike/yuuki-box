@@ -4,11 +4,13 @@
 
 实现：[examples/weatherkit-mcp](../../examples/weatherkit-mcp/README.md)。需 Node.js ≥22.22、pnpm 11.14；离线无需密钥，真实查询需 Apple 开发者会员与网络。
 
-分三次做：样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端。没有密钥可先做前两节。
+学习顺序：[最简 demo](00-minimal-mcp.md) → 本篇天气实现 → 其他案例。样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端；离线部分无需密钥。
 
-## 先确定它能帮你做什么
+<div class="heading-alias" id="先确定它能帮你做什么" aria-hidden="true"></div>
 
-| 你的问题 | 工具提供的事实 | 由谁决定 |
+## 功能范围
+
+| 查询需求 | 工具事实 | 决策方式 |
 | --- | --- | --- |
 | 要带伞吗？ | 当前天气与逐小时降雨概率 | 模型结合出门时间解释，概率不是保证 |
 | 找两小时散步 | 连续满足阈值的时段和逐小时数据 | 本地筛选，模型解释 |
@@ -16,7 +18,9 @@
 
 工具为 `list_locations`、`get_weather`、`find_outdoor_windows`，只查配置地点：<mark class="key">Apple 给天气，本地按阈值筛选</mark>。
 
-## 1. 跑通离线样本，先看一份有用的结果
+<div class="heading-alias" id="1-跑通离线样本先看一份有用的结果" aria-hidden="true"></div>
+
+## 1. 离线样本验证
 
 在仓库根目录执行：
 
@@ -25,7 +29,7 @@ pnpm install:weatherkit-mcp
 pnpm demo:weatherkit-mcp
 ```
 
-**你要看到：**
+**预期输出：**
 
 ```text
 [离线演示] 人工样本：上海 2026-10-26 08:30；不访问 Apple，不代表真实天气。
@@ -37,7 +41,7 @@ pnpm demo:weatherkit-mcp
 2026-10-26 16:00 起 2 小时 | 最大降雨概率 10%
 ```
 
-<mark class="caution">人工样本不能用于今天安排</mark>。`demo.ts` 经内存 MCP 调用替换 HTTP 响应，无模型参与，真实入口不支持替换。
+<mark class="caution">人工样本不能用于实际出行</mark>。`demo.ts` 经内存 MCP 调用替换 HTTP 响应，无模型参与，真实入口不支持替换。
 
 打开 [demo.ts](../../examples/weatherkit-mcp/src/demo.ts)，找到对 `find_outdoor_windows` 的调用。它传入的是：
 
@@ -79,7 +83,9 @@ maxRainChancePercent: 90,
 
 **MCP 负责调用，业务规则决定筛选结果。**
 
-## 3. 准备你的 Apple 配置
+<div class="heading-alias" id="3-准备你的-apple-配置" aria-hidden="true"></div>
+
+## 3. 准备 Apple 配置
 
 Apple 开发者会员含 WeatherKit，各应用与服务共享每月 50 万次 API 调用；以账户和官方政策为准。[WeatherKit 官方说明](https://developer.apple.com/weatherkit/)
 
@@ -120,7 +126,7 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 
 替换占位符，使用绝对路径，空格加双引号；对 `.env` 与私钥执行 `chmod 600`。
 
-编辑 `locations.json`。下面的城市中心坐标只用于演示，替换成你要查询的位置：
+编辑 `locations.json`。下面的城市中心坐标只用于演示，替换为目标位置：
 
 ```json
 [
@@ -158,9 +164,11 @@ pnpm demo:weatherkit-mcp:live 上海
 
 字段依据：[天气接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[逐小时字段](https://developer.apple.com/documentation/weatherkitrestapi/hourweatherconditions)、[数据元信息](https://developer.apple.com/documentation/weatherkitrestapi/metadata)。不发送 `units=si`，在返回时转换单位。
 
-### 顺着代码走一次
+<div class="heading-alias" id="顺着代码走一次" aria-hidden="true"></div>
 
-| 文件 | 这次需要理解的责任 |
+### 代码职责
+
+| 文件 | 职责 |
 | --- | --- |
 | [server.ts](../../examples/weatherkit-mcp/src/server.ts) | 注册三个工具；MCP 参数校验成功后执行回调，失败转成 `isError` |
 | [config.ts](../../examples/weatherkit-mcp/src/config.ts) | 读取本机配置，使用 `jose` 导入 `.p8` 并签发 JWT |
@@ -181,7 +189,9 @@ JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/
 
 拿到 `mode=live` 后，核对天气时间、获取时间与缓存状态。没有密钥则留待补做。
 
-## 5. 接入已有客户端，让它帮助安排一天
+<div class="heading-alias" id="5-接入已有客户端让它帮助安排一天" aria-hidden="true"></div>
+
+## 5. 客户端接入
 
 按[示例 README 的 Codex 或 Claude Desktop 配置](../../examples/weatherkit-mcp/README.md#接入客户端)启动 `dist/src/stdio.js`：Node 绝对路径、`--env-file`，保留已有配置。
 
@@ -222,9 +232,11 @@ Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链�
 
 仅含当前、逐小时、逐日天气，不含分钟降水、预警或空气质量；匹配时段不是安全保证，边界随结果返回。
 
-## 6. 故意制造失败，确认它没有编造答案
+<div class="heading-alias" id="6-故意制造失败确认它没有编造答案" aria-hidden="true"></div>
 
-| 你做的实验 | 应观察到的结果 |
+## 6. 故障验证
+
+| 实验 | 预期结果 |
 | --- | --- |
 | 输入未配置的地点 | 提示先列地点或编辑配置；不请求 Apple |
 | 把小时数设为 1000，或把最低体感设得比最高还高 | MCP 输入校验拒绝；不请求 Apple |
@@ -241,9 +253,11 @@ Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链�
 pnpm check:weatherkit-mcp
 ```
 
-检查覆盖 JWT、stdio、输入与上游错误、取消、缓存、单位、时区与预报缺口。使用临时密钥和模拟 HTTP，不证明 Apple 接受了你的账号配置。
+检查覆盖 JWT、stdio、输入与上游错误、取消、缓存、单位、时区与预报缺口。使用临时密钥和模拟 HTTP，不证明 Apple 已接受实际账号配置。
 
-## 到这里，怎样判定学会了
+<div class="heading-alias" id="到这里怎样判定学会了" aria-hidden="true"></div>
+
+## 验收标准
 
 完成三件事：查真实天气、改阈值解释变化、定位 MCP/认证/业务规则代码。
 

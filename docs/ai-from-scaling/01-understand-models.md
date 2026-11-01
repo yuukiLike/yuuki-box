@@ -60,7 +60,7 @@ Chinchilla 进一步指出：固定计算预算下，应搭配参数规模与数
 
 [![训练更新参数，生成读取参数并追加上下文，两种循环分开理解](../../site/public/diagrams/ai-from-scaling/training-generation.svg)](../../site/public/diagrams/ai-from-scaling/training-generation.svg)
 
-哪栏需要真实目标、改写分数表？下一课去代码里核对。
+下一课从代码核对真实目标与参数更新的位置。
 
 ## 第二十五到三十五分钟 上下文与 Transformer
 
@@ -89,7 +89,7 @@ Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)�
 
 推理时增加步骤、尝试和检查，也可能改善表现；收益取决于模型、任务与计算方式。[Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/)
 
-| 你采取的动作 | 直接改变什么 |
+| 操作 | 直接改变内容 |
 | --- | --- |
 | 训练或微调 | 模型参数 |
 | 补充背景、例子与要求 | 本次输入的上下文 |
@@ -110,7 +110,7 @@ Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)�
 
 这就是 Harness；[Agent 入门](03-build-a-harness.md)将实现循环、审批与错误处理，可独立开始。
 
-休息前，试答三题：
+概念检查：
 
 <details class="qa">
 <summary>loss 下降，就代表任务一定成功吗？</summary>

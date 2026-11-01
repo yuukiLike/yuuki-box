@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="920" height="380" viewBox="0 0 920 380" role="img" aria-labelledby="title desc">
-  <title id="title">谁提出，谁安排，谁执行</title>
+  <title id="title">模型、宿主与工具的职责</title>
   <desc id="desc">接上模型后的概念图：模型提出要读笔记，应用检查并通过 MCP 调用工具，工具执行后返回结果。课程的 MCP 演示本身没有模型参与。</desc>
   <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#547261"/></marker></defs>
   <rect width="920" height="380" rx="18" fill="#f6f8f5"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" fill="#243d30">
-    <text x="36" y="49" font-size="26" font-weight="600">谁提出，谁安排，谁执行</text>
+    <text x="36" y="49" font-size="26" font-weight="600">模型、宿主与工具的职责</text>
     <rect x="36" y="127" width="220" height="112" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
     <text x="146" y="171" text-anchor="middle" font-size="26">模型</text>
     <text x="146" y="210" text-anchor="middle" font-size="21">提出想做什么</text>
@@ -13,7 +13,7 @@
     <text x="460" y="210" text-anchor="middle" font-size="21">检查并安排调用</text>
     <rect x="664" y="127" width="220" height="112" rx="12" fill="#e8eee8" stroke="#a4b8aa"/>
     <text x="774" y="171" text-anchor="middle" font-size="26">工具程序</text>
-    <text x="774" y="210" text-anchor="middle" font-size="21">真正读取笔记</text>
+    <text x="774" y="210" text-anchor="middle" font-size="21">执行笔记读取</text>
     <g fill="none" stroke="#547261" stroke-width="2.5" marker-end="url(#arrow)"><path d="M270 173H336"/><path d="M584 173H650"/><path d="M774 254V286H460V254"/></g>
     <text x="302" y="111" text-anchor="middle" font-size="20">请求</text>
     <text x="618" y="111" text-anchor="middle" font-size="20">MCP 调用</text>

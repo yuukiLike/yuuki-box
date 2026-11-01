@@ -4,22 +4,26 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 核对：**2026-10-31**。`$40` 是费用抵扣额，调用量取决于模型与实际用量。
 
-## 官方入口：领取后先试一次
+<div class="heading-alias" id="官方入口领取后先试一次" aria-hidden="true"></div>
 
-| 现在要做什么 | 官方入口 |
+## 官方入口与首次调用
+
+| 操作 | 官方入口 |
 | --- | --- |
 | 登录 API 平台 | [OpenAI Platform](https://platform.openai.com/) |
 | 领取订阅赠额、查看余额 | [Billing](https://platform.openai.com/settings/organization/billing/) |
 | 在网页里试文字与看图请求 | [Responses Playground](https://platform.openai.com/chat/) |
 | 查看模型与调用方式 | [模型目录](https://developers.openai.com/api/docs/models/all)、[API 入门](https://developers.openai.com/api/docs/quickstart) |
 
-1. 用订阅对应的邮箱登录 API 平台，选择自己拥有的 API 组织。
+1. 用订阅对应的邮箱登录 API 平台，选择有所有权的 API 组织。
 2. 在 Billing 找到 API credits 福利，选择符合资格的订阅或 Business 工作区，确认关联。
 3. 核对余额与到期时间，在该组织试一次 Playground；应用使用该组织的项目 Key。
 
 资格、模型权限与速率限制以所选组织为准。[领取说明](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
-## 本期没用完，下期还有吗？
+<div class="heading-alias" id="本期没用完下期还有吗" aria-hidden="true"></div>
+
+## 赠额有效期与续发
 
 月度赠额在账单周期结束时失效、不结转；首次激活后，福利与订阅资格仍有效时随续费自动发放，无需重领。[到期与续发](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
@@ -39,13 +43,15 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 </details>
 
-## 可以调用哪些模型？
+<div class="heading-alias" id="可以调用哪些模型" aria-hidden="true"></div>
+
+## 可用模型与接口
 
 分类、选型与停用计划见[模型附录](../appendix/openai-api-models.md)。
 
 图片、TTS、转写与实时语音可使用同一笔赠额，费用随模型和用量变化。[覆盖范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
-| 想做什么 | 模型示例 | 调用入口 |
+| 用途 | 模型示例 | 调用入口 |
 | --- | --- | --- |
 | 聊天、写代码、理解图片 | `gpt-6-astra`、`gpt-6.1-sol`、`gpt-6.1-terra`、`gpt-6-luna` | Responses API |
 | 生成或修改图片 | `gpt-image-2.5-sunburst`、`gpt-image-2.5-flare` | Images API，或 Responses 的图片生成工具 |
@@ -66,7 +72,9 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 </details>
 
-## 使用时确认三件事
+<div class="heading-alias" id="使用时确认三件事" aria-hidden="true"></div>
+
+## 费用核对
 
 - **组织：** 仅抵扣关联组织的 API，用其项目 Key。
 - **Codex：** <mark class="caution">不支持 API Key 调用 Codex</mark>，也不增加 ChatGPT / 登录态 Codex 限额。
@@ -74,21 +82,23 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 <span id="community-ideas"></span>
 
-## 社区里的六个妙用
+<div class="heading-alias" id="社区里的六个妙用" aria-hidden="true"></div>
+
+## 六类社区案例
 
 来源为 HN、Reddit 与 OpenAI 社区，检索于 **2026-10-31**。“实作”是作者自述，“建议”是尚未运行的本仓库实验。老帖说明玩法，接入用当前 API；其他供应商费用不计入 OpenAI 赠额。
 
-| 想得到什么 | 可以先试多小 | 用到的能力 |
+| 目标 | 最小实验 | 所需能力 |
 | --- | --- | --- |
 | 问一句话，找回以前存的截图 | 20 张截图，返回匹配原图 | 看图理解、文本检索 |
 | 离开屏幕，开口复习技术概念 | 一篇文档、5 张口答卡 | 文本、TTS、转写 |
-| 把自己的教程变成通勤播客 | 一篇笔记、一段约 3 分钟的音频 | 文本、TTS |
+| 将教程转为学习播客 | 一篇笔记、一段约 3 分钟的音频 | 文本、TTS |
 | 查出转接头放在哪个抽屉 | 3 张照片、手动指定存放位置 | 看图理解、字段提取 |
 | 用同一个角色连载学习漫画 | 一张角色参考图、3 格故事 | 文本、生图、图片编辑 |
-| 玩一个有存档的语音冒险 | 一个场景、一个 NPC、5 个回合 | 文本、语音、应用保存状态 |
+| 实现带存档的语音冒险 | 一个场景、一个 NPC、5 个回合 | 文本、语音、应用保存状态 |
 
 <details>
-<summary>1 · 截图记忆库：找回「那张我明明存过的图」</summary>
+<summary>1 · 截图记忆库：按描述检索原图</summary>
 
 **实作：** Trickle 在 2023 Show HN 展示截图收藏、检索与提问，当时使用 OCR + 文本 GPT-4，非原生看图模型。[原帖](https://news.ycombinator.com/item?id=37432793)
 
@@ -110,7 +120,7 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 </details>
 
 <details>
-<summary>3 · 私人播客：把今天的学习笔记装进耳机</summary>
+<summary>3 · 学习播客：笔记转音频</summary>
 
 **实作：** Podcastfy 在 2024 年展示网页、PDF、图片转双人音频，支持多家 TTS。[作者介绍](https://news.ycombinator.com/item?id=41852401) 另有“网页 → TTS → 音频与 RSS → Apple Podcasts”流程。[用户实作](https://news.ycombinator.com/item?id=50069680)
 
@@ -153,7 +163,9 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 </details>
 
-## 接着试什么
+<div class="heading-alias" id="接着试什么" aria-hidden="true"></div>
+
+## 实验入口
 
 语音与音乐方案见[额度怎么用](openai-api-projects.md)：灵感卡、笔记、复习、配乐、MIDI 与短片。
 
@@ -161,4 +173,4 @@ Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="ke
 
 本页仅查阅官方与社区资料，未付费调用；金额、到期与权限仍须后台确认。
 
-想先了解语音链路，读[语音交互：合成、转写与人声检测](../tts/README.md)。想搭自己的工具循环，回到 [Agent 工程总览](README.md)。
+语音链路见[语音交互：合成、转写与人声检测](../tts/README.md)；工具循环见 [Agent 工程总览](README.md)。

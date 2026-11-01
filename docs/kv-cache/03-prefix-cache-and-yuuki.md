@@ -113,7 +113,7 @@ DeepSeek 的 `prompt_tokens = hit + miss`：例中输入 10,000、命中率 80%�
 
 Pi / Harness 分桶计数，`input` / `inputTokens` 是未缓存输入，缓存读取另列；此例为 `input=2000`、`cacheRead=8000`，见[Pi 转换](05-pi.md)。`miss` 不等于 `cacheWrite`，是否写入及报告写入另判。
 
-能读出 10,000 输入中 8,000 命中即可停下，下次看 [Harness 请求组织](04-deepseek-harness.md)。细节按需展开。
+基本验收：确认 10,000 输入中 8,000 命中。后续见 [Harness 请求组织](04-deepseek-harness.md)，细节按需展开。
 
 <details>
 <summary>SSE 流式响应在哪里取 usage</summary>
@@ -146,7 +146,9 @@ DeepSeek 在 `[DONE]` 前的最后完成 chunk 报告整次 usage，仍有一个
 
 `history` 是消息，K/V 是推理状态。当前仍发完整 `system + history`，供应商缓存不补齐遗漏对话。
 
-## 下一次接入观测时记录什么
+<div class="heading-alias" id="下一次接入观测时记录什么" aria-hidden="true"></div>
+
+## 观测接入指标
 
 先按单次请求理解数据，避免把多轮 Agent 总耗时和一次模型请求混在一起：
 
@@ -169,7 +171,7 @@ DeepSeek 在 `[DONE]` 前的最后完成 chunk 报告整次 usage，仍有一个
 
 以下尚未付费实测。固定模型、端点、账号和配置，准备资料 P 与问题 Q/R/S。
 
-| 请求 | 只改变什么 | 想检验什么 |
+| 请求 | 变量 | 验证目标 |
 | --- | --- | --- |
 | `P + Q` | 首次提交 | 建立基线；不要假定服务端一定是冷缓存 |
 | `P + Q` | 输入保持相同 | 已持久化的完整前缀是否被复用 |

@@ -1,6 +1,6 @@
-# 抓住让界面卡住的那一步：渲染与性能实验
+# 渲染性能：工作范围与测量方法
 
-让模型输出、中文输入与滚动同时发生，再定位卡在哪一步。本文连接 Zed、Raycast、Warp 的公开资料、五份 UI 样例和四组后续实验。
+在模型输出、中文输入与滚动并发时定位瓶颈。本文结合 Zed、Raycast、Warp 公开资料，提供五份 UI 样例和四组后续实验。
 
 研究日期：2026-09-26。五份样例已在本机构建，<mark class="caution">运行性能仍未测量</mark>。可从 GPUI、Swift、React 原生桥、WKWebView 或 Electron 任一入口开始。
 
@@ -8,7 +8,9 @@
 
 第一轮选[场景 W2 或 G2](harness-scenario-lab.md)：同一历史与最终文本，比较解析次数，同时输入中文。先确认输出一致，再解释减少了哪些工作。
 
-## 当前可以动手的五份样例
+<div class="heading-alias" id="当前可以动手的五份样例" aria-hidden="true"></div>
+
+## 五条实现路线
 
 | 路线 | 已实现路径 | 入口 |
 | --- | --- | --- |
@@ -24,7 +26,9 @@
 
 GPUI 当前是 dev/debug。公平比较需统一 Release、负载和呈现能力；现有布局、行高、控件并不完全一致，不能直接排名。
 
-## 1. 先理解「流畅」是哪一种感觉
+<div class="heading-alias" id="1-先理解流畅是哪一种感觉" aria-hidden="true"></div>
+
+## 1. 界面响应指标
 
 输入延迟、帧间隔、布局稳定和预加载分别测。平均 FPS 无法解释打开面板时的一次停顿；Apple 区分交互延迟与运动 hitch。[界面响应模型](https://developer.apple.com/documentation/xcode/understanding-user-interface-responsiveness/)
 
@@ -67,9 +71,13 @@ GPU 不会加速业务遍历；文本解析、shaping、栅格化与绘制是不
 
 SwiftUI、AppKit、Metal、WKWebView 可以共存。比较前固定工作量、文本、窗口、更新频率、效果和输入行为，不能只比语言名。
 
-## 4. 从三个产品分别学什么
+<div class="heading-alias" id="4-从三个产品分别学什么" aria-hidden="true"></div>
 
-### Zed：昂贵结果复用，比语言标签更值得先学
+## 4. 产品架构参考
+
+<div class="heading-alias" id="zed昂贵结果复用比语言标签更值得先学" aria-hidden="true"></div>
+
+### Zed：复用昂贵结果
 
 2023 年 GPUI 资料描述自定义 primitive/shader、系统文本 API、shaping 缓存和字形图集。先复用不变历史、代码块和 diff，再考虑 shader；公开帧率不是本项目承诺。[GPUI 图形与文本](https://zed.dev/blog/videogame)
 
@@ -81,7 +89,9 @@ v1 扩展由 React reconciler 描述受控 UI，经通信交给 Swift/AppKit；R
 
 2026 年 v2 已是 Swift/AppKit、WKWebView React/TypeScript、Node 与 Rust 混合架构，不能沿用“全 AppKit”归因。还需预绘、节流和窗口优化；官方内存自述不是独立基准。[新版技术说明](https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast)
 
-### Warp：活跃数据和历史数据不必付同一种成本
+<div class="heading-alias" id="warp活跃数据和历史数据不必付同一种成本" aria-hidden="true"></div>
+
+### Warp：分离活动数据与历史数据
 
 BlockList 将活跃 GridStorage、紧凑历史 FlatStorage 和 alt screen 分开。Agent UI 也可只让生成中的消息承担编辑成本；不必采用 WarpUI 才能实践。[Warp Block Model](https://www.warp.dev/blog/block-model-behind-warps-agentic-development-environment)
 
@@ -100,7 +110,9 @@ List/Table 的 identity、行内容影响工作量。[Demystify SwiftUI performa
 
 [![网络接收、状态归约、解析与画面呈现分别发生，需分阶段测量](../../site/public/diagrams/learning/stream-to-pixels.svg)](../../site/public/diagrams/learning/stream-to-pixels.svg)
 
-## 6. 流式输出：先稳住数据，再稳住像素
+<div class="heading-alias" id="6-流式输出先稳住数据再稳住像素" aria-hidden="true"></div>
+
+## 6. 流式输出：数据处理与界面发布
 
 网络 chunk 不等于 token、字符或 Markdown block。解码、归约、解析与 UI 发布分层；<mark class="key">显示可合批，事实事件要完整</mark>，不能丢工具完成、审批、错误或取消。
 
@@ -166,13 +178,15 @@ GPU idle 也不能直接说明无瓶颈。[Metal 性能](https://developer.apple
 
 `windowReady`、body 完成不证明像素已显示；需对齐呈现 trace 或录像，报告采样精度与录制开销。
 
-## 10. 实验一：只有一个 Mac 启动面板
+<div class="heading-alias" id="10-实验一只有一个-mac-启动面板" aria-hidden="true"></div>
+
+## 10. 实验一：Mac 启动面板
 
 在任一样例增加输入框、固定命令列表、选择与打开/隐藏；Swift 可接 AppKit，GPUI 沿窗口、焦点、输入 API。固定本地数据，不混入网络或模型响应。
 
 先预热，再固定间隔采 100 次热唤起，冷启动另列。覆盖英文、中文组合、方向键、Escape 和再次唤起的焦点。
 
-验收功能、端点与原始样本；初始目标 p95 < 100 ms。交付环境表、操作、延迟样本与 trace。当前仅基础样例已构建，完整面板和测量未完成。追问：慢在窗口、激活、布局、加载还是显示等待？
+验收功能、端点与原始样本；初始目标 p95 < 100 ms。交付环境表、操作、延迟样本与 trace，区分窗口、激活、布局、加载和显示等待。当前仅基础样例已构建，完整面板和测量未完成。
 
 ## 11. 实验二：固定长历史，加一条持续生成的消息
 
@@ -180,7 +194,7 @@ GPU idle 也不能直接说明无瓶颈。[Metal 性能](https://developer.apple
 
 新增 120 秒流，分别以 10/50/100 事件每秒回放。固定操作：底部 → 上翻 → 输入 → 缩放 → 回底 → 取消 → 重开。时刻可受调度影响，逻辑顺序与最终内容须一致。
 
-验收不丢终态、正文一致、锚点稳定且可操作；交付 CPU、内存、队列、延迟与 trace。当前富文本、120 秒多速率与性能记录未完成。追问：追加一个字符的成本是否随历史增长？
+验收不丢终态、正文一致、锚点稳定且可操作；交付 CPU、内存、队列、延迟与 trace，检查单字符追加成本是否随历史增长。当前富文本、120 秒多速率与性能记录未完成。
 
 ## 12. 实验三：一次只改变一种优化
 
@@ -199,12 +213,14 @@ trace 再决定是否比 List、LazyVStack、AppKit，不同时更换多项。�
 
 `runtime_shaders` 绕过本机构建时缺 Metal 编译工具的问题，但把编译移到运行时，启动成本未测。记录版本、feature、构建及可访问性/中文输入差距。[路线对照](../../examples/COMPARISON.md)
 
-正式对照需统一机器、fixture、窗口、字体、行高、历史、流速与操作；增加 Markdown、输入框、高亮时保持相同工作量。先对齐行为再比性能，缺能力就记差距。当前 MVP 已实现并构建，交互、性能、等负载报告未完成。追问：收益与新增维护责任分别是什么？
+正式对照需统一机器、fixture、窗口、字体、行高、历史、流速与操作；增加 Markdown、输入框、高亮时保持相同工作量。先对齐行为再比性能，分别记录能力差距、收益和维护责任。当前 MVP 已实现并构建，交互、性能、等负载报告未完成。
 
-## 14. 学完之后，什么算有收获
+<div class="heading-alias" id="14-学完之后什么算有收获" aria-hidden="true"></div>
+
+## 14. 验收与复用
 
 能沿“事件 → 状态 → 更新 → 昂贵工作 → 可复用结果”解释一次操作，保存可回放负载，区分感受、代理指标、trace 与可见结果。接 Harness 后，把模型/工具耗时与客户端表现分开统计。
 
 按兴趣任选路线，添加同一种状态或行展示，再去另一条路线复现；按问题选实验一到三。Raycast 两代架构、Warp 数据模型与[路线对照](../../examples/COMPARISON.md)用于参照。
 
-现在只做：打开 GPUI 项目，追踪一条模拟事件怎样变成画面中的一行，再改动它。
+起步操作：打开 GPUI 项目，追踪一条模拟事件到界面行的更新路径，再修改该路径。

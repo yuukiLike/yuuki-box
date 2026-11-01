@@ -30,36 +30,17 @@ export const navigation = [
   {
     label: 'MCP 入门',
     color: 'sky',
-    description: '先在 Codex 中接入自己编写的 MCP Server，再进入工具实战。客户端与调用链实验按需选修。',
-    tags: [topic('Codex 接入', 'ai-from-scaling/00-codex-mcp'), topic('客户端实验（选修）', 'ai-from-scaling/00-minimal-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack'), topic('工具调用简史', 'ai-from-scaling/extra-tool-use-story')],
+    description: '最简 demo → 本地天气 MCP。Codex 接入与客户端实现按需阅读。',
+    tags: [topic('最简 demo', 'ai-from-scaling/00-minimal-mcp'), topic('天气 MCP', 'ai-from-scaling/07-weatherkit-mcp'), topic('Codex 接入', 'ai-from-scaling/00-codex-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack')],
     items: [
-      page('ai-from-scaling/00-codex-mcp', 'Codex MCP：保存与取回项目记录', ['Codex', 'MCP'], 'Codex MCP · 项目记录'),
-      page('ai-from-scaling/00-minimal-mcp', '选修：MCP 客户端与调用链实验', ['选修', 'Client', 'stdio'], '选修 · 客户端与调用链'),
+      page('ai-from-scaling/00-minimal-mcp', 'MCP 最简 demo：工具调用与文件读写', ['MCP', 'Client', 'stdio'], '1 · MCP 最简 demo'),
+      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], '2 · Apple 天气 MCP'),
+      page('ai-from-scaling/00-codex-mcp', 'Codex MCP：服务接入与记录保存', ['Codex', 'MCP', '选读'], '选读 · Codex 接入'),
       {
         label: '选读：工具调用简史',
         tags: ['Agent 历史'],
         items: [
           page('ai-from-scaling/extra-tool-use-story', '工具调用简史：ReAct、函数调用、MCP 与 Skills', ['Agent 历史', '选读'], '番外 · 工具调用简史'),
-        ],
-      },
-    ],
-  },
-  {
-    label: 'MCP 项目实战',
-    color: 'emerald',
-    description: '从入门接着做一个想用的工具：天气查询、Blender 建模、GitHub 修复验证或音乐可视化。客户端实验不作前置。',
-    tags: [topic('项目怎么选', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐可视化', 'ai-from-scaling/07-music-space-mcp')],
-    items: [
-      page('mcp-projects', 'MCP 实战总览：按兴趣选择一个工具项目', ['选做', '项目入口']),
-      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], 'Apple 天气 MCP'),
-      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
-      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
-      {
-        label: '音乐：MIDI 可视化与短片导出',
-        tags: ['MIDI', '3D 可视化', '视频导出'],
-        items: [
-          page('ai-from-scaling/07-music-space-mcp', 'MIDI 钢琴排练台：定位、独听与模型导出', ['MIDI', 'Three.js']),
-          page('ai-from-scaling/08-music-photo-mcp', '舞台预演台：音频、机位与短片导出', ['舞台布局', '视频导出']),
         ],
       },
     ],
@@ -79,12 +60,31 @@ export const navigation = [
     ],
   },
   {
-    label: 'AI 搭子（同行者）',
+    label: 'MCP 项目实战',
     color: 'emerald',
-    description: 'Side by Side · 和 AI 做朋友，一起想，一起做。优先从 Issue 自动化开始，把一件事交给它，检查修复、返修与交付。',
-    tags: [topic('认识 AI 搭子', 'side-by-side'), topic('Issue 自动化', 'issue-garden'), topic('Dot 路线', 'issue-garden/04-dot-shift'), topic('API 路线', 'issue-garden/05-codex-api'), topic('Agentic Workflows', 'issue-garden/06-agentic-workflows')],
+    description: '天气主线之后的扩展案例：Blender 建模、GitHub 修复验证与选修音乐工作台。',
+    tags: [topic('项目选择', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐选修', 'ai-from-scaling/07-music-space-mcp')],
     items: [
-      page('side-by-side', 'AI 搭子（同行者）', ['一起想', '一起做', '持续跟进']),
+      page('mcp-projects', 'MCP 实战总览：工具项目与验证目标', ['选做', '项目入口']),
+      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
+      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
+      {
+        label: '选修：音乐 MCP',
+        tags: ['选修', 'MIDI', '视频导出'],
+        items: [
+          page('ai-from-scaling/07-music-space-mcp', '选修 1：MIDI 钢琴排练台', ['选修', 'MIDI', 'Three.js']),
+          page('ai-from-scaling/08-music-photo-mcp', '选修 2：舞台预演台', ['选修', '舞台布局', '视频导出']),
+        ],
+      },
+    ],
+  },
+  {
+    label: 'AI 协作（Side by Side）',
+    color: 'emerald',
+    description: '围绕 Issue 处理、独立审查、有限返修与持续交付组织 AI 协作。',
+    tags: [topic('AI 协作', 'side-by-side'), topic('Issue 自动化', 'issue-garden'), topic('Dot 路线', 'issue-garden/04-dot-shift'), topic('API 路线', 'issue-garden/05-codex-api'), topic('Agentic Workflows', 'issue-garden/06-agentic-workflows')],
+    items: [
+      page('side-by-side', 'AI 协作（Side by Side）', ['任务协作', '审查反馈', '持续交付']),
       {
         label: '优先实践：Issue 自动化',
         tags: ['Issue → PR', '持续跟进'],
@@ -106,7 +106,7 @@ export const navigation = [
   {
     label: '模型基础',
     color: 'gold',
-    description: '用两课理解参数、预测与训练，再亲手训练一个字符模型，比较训练前后的输出。',
+    description: '理解参数、预测与训练，运行字符模型并比较训练前后的输出。',
     tags: [topic('模型原理', 'ai-from-scaling/01-understand-models'), topic('字符模型训练', 'ai-from-scaling/02-train-a-model')],
     items: [
       page('ai-from-scaling/01-understand-models', '模型基础 1：参数、概率与缩放定律', ['模型原理'], '1 · 模型学习'),
@@ -157,7 +157,7 @@ export const navigation = [
           page('ai-from-scaling/03-build-a-harness', 'Agent 入门 1：搭建工具调用 Harness', ['Harness', '工具调用'], '1 · 搭建 Harness'),
           page('ai-from-scaling/04-experiments', 'Agent 入门 2：接真实模型并对照结果', ['模型 API', '对照实验'], '2 · 接真实模型'),
           page('agent-engineering/openai-api', 'OpenAI API：额度、图片与语音', ['API 额度', '图片生成', 'TTS', topic('社区妙用', 'agent-engineering/openai-api#community-ideas')], 'OpenAI API · 额度与妙用'),
-          page('agent-engineering/openai-api-projects', 'OpenAI API 额度怎么用：语音、音乐与多模态小项目', ['语音项目', '音乐制作', '多模态', 'API 用量'], 'OpenAI API · 语音与音乐项目'),
+          page('agent-engineering/openai-api-projects', '选修：OpenAI 语音、音乐与多模态项目', ['选修', '语音项目', '音乐制作', '多模态', 'API 用量'], '选修 · OpenAI 多模态项目'),
         ],
       },
       {
@@ -308,7 +308,7 @@ export const navigation = [
         ...page('ai-ideas', '探索总览：故障驱动、自动实验、模拟、规格与记忆', ['故障驱动', '自动实验', '模拟验收', '规格驱动', '知识整理', '待验证']),
         description: '按任务来源、解法搜索、验收环境、产品规格与经验复用分类，选择一个输入和判定标准清楚的小实验。',
       },
-      page('ai-ideas/01-ideas-map', '协作构想：Issue 夜班、独立 AI 审查与配套流程', ['协作流程', '构想地图']),
+      page('ai-ideas/01-ideas-map', '协作构想：Issue 定时处理、独立 AI 审查与配套流程', ['协作流程', '构想地图']),
       page('ai-ideas/02-five-new-directions', '探索方案：Seer、autoresearch、模拟验收、Spec Kit 与 Letta', ['Seer', 'autoresearch', 'StrongDM', 'Spec Kit', 'Letta']),
     ],
   },
@@ -369,7 +369,7 @@ export const navigation = [
     items: [
       page('windows-local-ai', 'Windows 本地 AI：图片与音乐生成', ['Windows', '本地模型'], 'Windows 本地 AI · 从这里开始'),
       page('windows-local-ai/01-qwen-image', '1 · Windows 第一次运行 Qwen Image', ['Qwen Image', 'ComfyUI', 'RTX 5060 Ti'], '1 · Qwen Image 首次出图'),
-      page('windows-local-ai/02-ace-step-music', '2 · ACE-Step 1.5 Turbo：生成第一段配乐', ['ACE-Step', '音乐生成', 'ComfyUI'], '2 · ACE-Step 首次配乐'),
+      page('windows-local-ai/02-ace-step-music', '选修 · ACE-Step 1.5 Turbo：配乐生成', ['选修', 'ACE-Step', '音乐生成', 'ComfyUI'], '选修 · ACE-Step 配乐'),
     ],
   },
   {

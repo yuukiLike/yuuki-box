@@ -1,6 +1,6 @@
-# Skills：给「做完了」出一道验收题
+# Skills：确定性验收与渐进加载
 
-给 Skill 放一个故意坏掉的链接，检查它能否准确报错。
+使用坏链接 fixture，验证 Skill 能否准确报告错误。
 
 <mark class="key">模型解释，脚本判定</mark>；自然语言步骤不能证明输出正确。
 
@@ -77,9 +77,11 @@ tests/fixtures/docs-restructure/
 
 <mark class="caution">坏输入也通过，检查器就无效</mark>。
 
-## 接进自己的 Harness
+<div class="heading-alias" id="接进自己的-harness" aria-hidden="true"></div>
 
-自己的 runtime 按需加载 Skill：
+## 接入 Harness
+
+runtime 按需加载 Skill：
 
 1. **扫描目录**：只读取 `name`、`description`、路径和版本。
 2. **注入元数据**：把 name + description 放进系统提示或工具表。
@@ -90,7 +92,9 @@ tests/fixtures/docs-restructure/
 
 `load_skill` 只提供上下文；删除仍须经过工具策略与审批。
 
-## 小挑战：把坏样本藏进新会话
+<div class="heading-alias" id="小挑战把坏样本藏进新会话" aria-hidden="true"></div>
+
+## 跨会话负例实验
 
 1. 给一个真实 skill 加上 `scripts/validate` 和一个坏 fixture。
 2. 在新会话里只凭 `SKILL.md` 完成任务。
@@ -110,7 +114,7 @@ tests/fixtures/docs-restructure/
 - **脚本不是沙箱：** 先读代码，必要时用只读挂载或独立用户。
 - **下载后先审查：** 检查 `SKILL.md`、`scripts/` 与依赖，不自动运行。
 - **通过仅证明已检查项：** 体验、意图与取舍仍由人判断。
-- **一起版本化：** 命令、路径或依赖变化后重查负例。
+- **同步版本化：** 命令、路径或依赖变化后重查负例。
 - **fixture 不含凭据：** 使用占位符与临时目录。
 
 返回[上一篇](03-skills-structure.md) · [总览](README.md) · 深入[Mac 本地 Harness 完整设计](../architecture/mac-local-harness.md)。

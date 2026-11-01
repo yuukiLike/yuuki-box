@@ -79,9 +79,9 @@ schema 描述输入契约；程序仍要检查工具名、参数 JSON、字段�
 
 | 工具 | 实际行为 | 谁提供能力 |
 | --- | --- | --- |
-| `read_plan` | 返回源码内置的活动计划 | 我们编写的函数 |
-| `calculate_total` | 计算花费、余额和是否超预算 | 我们编写的函数 |
-| `save_note` | 请求向启动时指定的路径创建摘要 | 我们编写的函数与审批逻辑 |
+| `read_plan` | 返回源码内置的活动计划 | 本地函数 |
+| `calculate_total` | 计算花费、余额和是否超预算 | 本地函数 |
+| `save_note` | 请求向启动时指定的路径创建摘要 | 本地函数与审批逻辑 |
 
 模型提议，客户端执行并返回结果。[Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)
 
@@ -102,7 +102,7 @@ schema 描述输入契约；程序仍要检查工具名、参数 JSON、字段�
 
 `arguments` 是 JSON 字符串，要解析并校验，不能作为代码执行。[Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion/)
 
-在 `runHarness()` 里找到这几步，自己写一遍：
+`runHarness()` 的结果回传步骤：
 
 ```js
 messages.push({
@@ -121,7 +121,7 @@ for (const call of calls) {
 }
 ```
 
-先追加调用，再按 `tool_call_id` 追加结果。下一轮一起发给模型，它才能看到执行结果。
+先追加调用，再按 `tool_call_id` 追加结果；下一轮将两者同时发给模型。
 
 最多请求模型 4 次，每轮最多 4 个工具调用，拒绝重复 ID；文本须以 `stop`、工具须以 `tool_calls` 结束，截断等异常记为失败。
 
@@ -169,7 +169,7 @@ JS
 
 下表只作接口对照，本课未引入框架依赖。
 
-| 框架与官方入口 | 自己能写的逻辑 | 对照本课 |
+| 框架与官方入口 | 扩展逻辑 | 对照本课 |
 | --- | --- | --- |
 | [LangChain 自定义中间件](https://docs.langchain.com/oss/javascript/langchain/middleware/custom) | `createMiddleware` 定义模型与工具钩子 | 包装 `complete`、`runTool` |
 | [Vercel AI SDK 模型中间件](https://ai-sdk.dev/docs/ai-sdk-core/middleware) | `wrapLanguageModel` 包装参数与回复 | 本例仅实现非流式调用 |
@@ -179,7 +179,9 @@ JS
 
 </details>
 
-## 第三十到四十分钟 让保存经过你的决定
+<div class="heading-alias" id="第三十到四十分钟-让保存经过你的决定" aria-hidden="true"></div>
+
+## 第三十到四十分钟 保存审批
 
 默认拒绝保存，`save_note` 返回 `permission_denied`，模型据此继续回答。
 
@@ -196,9 +198,9 @@ pnpm demo:harness --write-to "$AI_HARNESS_DIR/summary.md"
 cat "$AI_HARNESS_DIR/summary.md"
 ```
 
-你应该读到总花费 780 元、余额 20 元。再运行并允许保存到同一路径，已有文件会被拒绝覆盖。
+预期总花费 780 元、余额 20 元。再运行并允许保存到同一路径，已有文件会被拒绝覆盖。
 
-`--write-to` 固定路径，模型只提交文本；非交互终端拒绝审批，只允许创建你选定的新文件。
+`--write-to` 固定路径，模型只提交文本；非交互终端拒绝审批，只允许创建指定的新文件。
 
 ## 最后十分钟 分清终态和任务结果
 

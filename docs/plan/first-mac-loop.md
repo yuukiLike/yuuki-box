@@ -1,6 +1,6 @@
 # 第一轮 Mac 闭环开发计划
 
-实现记录：2026-09-26。五路线已接入 Agent 与 Whisper，包含 DeepSeek、固定工具、审批、取消和持久会话；统一构建、打包、本地签名成功（build-all.sh 退出码 0）。当时按要求跳过测试与 computer-use，<mark class="caution">未打开应用、调用 API、识别语音或测量性能</mark>，不代表后续也跳过验证。
+实现记录：2026-09-26。五路线已接入 Agent 与 Whisper，包含 DeepSeek、固定工具、审批、取消和持久会话；统一构建、打包、本地签名成功（build-all.sh 退出码 0）。当时未执行测试与 computer-use，<mark class="caution">未打开应用、调用 API、识别语音或测量性能</mark>，不代表后续也跳过验证。
 
 使用与边界见 [AI 与语音基础](../architecture/ai-and-speech-foundation.md) 和 [runtime README](../../examples/shared/runtime/README.md)。下文是完整产品里程碑，实现与运行验收分开记录。
 
@@ -8,9 +8,11 @@
 
 相关文档：[五路线 examples 入口](../../examples/README.md) · [阅读入口](../README.md) · [产品架构调研](../research/zed-raycast-warp.md) · [Harness 提案](../architecture/mac-local-harness.md) · [渲染实验](../learning/rendering-performance.md)。
 
-先选一条路线，追踪“输入任务 → 收到事件 → 更新一行”。找到状态变化和停止信号的接收者，再进入模型或工具部分。
+起始验证路径为“输入任务 → 收到事件 → 更新一行”；核对状态变化与停止信号的接收者，再扩展模型或工具。
 
-## 1. 这轮开发的结果
+<div class="heading-alias" id="1-这轮开发的结果" aria-hidden="true"></div>
+
+## 1. 首轮交付目标
 
 完整闭环应支持选择工作目录、提交任务、查看结构化进度、按策略授权、取消，以及重开后的可信记录。
 
@@ -34,7 +36,9 @@
 
 初次 `xcodebuild` 仅说明未选中完整 Xcode；本轮未切换目录或安装 Xcode。<mark class="key">CLT 已能构建这些 Mac 示例</mark>：原生窗口、WKWebView、React 原生桥、Apple Speech helper，以及无需构建期 Metal 工具的 GPUI 路径。
 
-### 五个已经生成的应用包
+<div class="heading-alias" id="五个已经生成的应用包" aria-hidden="true"></div>
+
+### 已生成应用包
 
 | 路线 | 已生成的本机包 | 学习重点 |
 |---|---|---|
@@ -46,7 +50,9 @@
 
 五路线包采用本机架构和 ad-hoc 签名，未公证，不是正式分发版。构建与打开见 [examples](../../examples/README.md)。GPUI 默认 dev/debug、Swift 优化编译，不能直接排名性能。
 
-### 以后需要完整 Xcode 时
+<div class="heading-alias" id="以后需要完整-xcode-时" aria-hidden="true"></div>
+
+### 可选 Xcode 环境
 
 需要 Xcode 工程、Instruments 或 iOS/iPadOS 时，再从 [Apple 下载入口](https://developer.apple.com/xcode/resources/)安装或找到 Xcode，完成首次启动并选择开发目录。下面是可选命令，本轮未执行：
 
@@ -54,7 +60,7 @@
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 ```
 
-不必为此推迟开工。开发目录与命令行工具见 [TN2339](https://developer.apple.com/library/archive/technotes/tn2339/_index.html)。
+开发目录与命令行工具说明见 [TN2339](https://developer.apple.com/library/archive/technotes/tn2339/_index.html)。
 
 ## 3. 已开始的第一项任务：五路线 Mac 窗口实验
 
@@ -72,7 +78,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 ### M0 尚未完成的内容与以后可选的观察
 
-当时跳过测试与 computer-use，以下均未验收；后续按改动选择检查：
+当时未执行测试与 computer-use，以下均未验收；后续按改动选择检查：
 
 - 追加事件、切换状态不丢输入。
 - 会话输出按身份落位，不串到当前会话。
@@ -117,7 +123,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 验收：成功、无效输入、权限拒绝、待授权时取消、命令失败/超时、大输出及模型处理结构化错误。
 
-### M3：让记录可信
+<div class="heading-alias" id="m3让记录可信" aria-hidden="true"></div>
+
+### M3：状态持久化与恢复
 
 <mark class="key">执行意图先落盘</mark>，结果返回后状态与事件一起提交。大输出存受限文件或产物，UI/模型按需读取。
 
@@ -127,7 +135,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 验收：执行前/中/结果落盘前崩溃、重复提交、重启恢复显示和大日志保留/清理。
 
-### M4：把生命周期与响应落实
+<div class="heading-alias" id="m4把生命周期与响应落实" aria-hidden="true"></div>
+
+### M4：生命周期与响应性
 
 分别定义关窗口、退出 App、停 Runner 和系统重启；能启动子进程不代表有独立可靠生命周期。
 
@@ -154,7 +164,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 | 模型用量尚未知 | 显示未知或暂估状态，不记录为确定零成本 | 记录层测试 |
 | 应用闲置 | 没有无意义的持续轮询或高频重绘 | Instruments 与进程观察 |
 
-## 6. 什么现在决定，什么等到需要时再决定
+<div class="heading-alias" id="6-什么现在决定什么等到需要时再决定" aria-hidden="true"></div>
+
+## 6. 分阶段决策
 
 | 时点 | 要明确的事项 | 暂缓依据 |
 |---|---|---|
@@ -166,7 +178,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 | 分发前 | 最低 macOS、签名、更新、分发方式 | 本机开发版本不等于产品部署策略 |
 | 远程阶段前 | 主机身份、认证、撤销配对、传输和断线补发 | 本地界面与运行时边界先验证 |
 
-## 7. 当前学习范围与暂缓能力
+<div class="heading-alias" id="7-当前学习范围与暂缓能力" aria-hidden="true"></div>
+
+## 7. 当前实施范围与暂缓能力
 
 本轮用 GPUI 创建 Rust 应用，布局、绘制、窗口与 Metal 接入由框架提供。可立即读源码、改应用；暂缓的是从零自研绘制框架。
 
@@ -186,7 +200,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -version
 
 首版先保证边界、状态和验证；新增机制需对应真实问题。
 
-## 8. 停止继续调研的条件
+<div class="heading-alias" id="8-停止继续调研的条件" aria-hidden="true"></div>
+
+## 8. 实现阶段的调研边界
 
 M0 已有五条可改路线，不必等长期选型定稿。继续工作只需明确：
 
@@ -215,4 +231,4 @@ M0 已有五条可改路线，不必等长期选型定稿。继续工作只需�
 下一项最小工作：
 ```
 
-下一步任选路线配置 DeepSeek 与练习目录，追踪“任务 → 模型工具循环 → 审批 → 结果”；Whisper 文件备好再填设置。共用 runtime，可直接从 Rust/GPUI 开始，按使用结果选优化目标，不给未测路线排名。
+后续从任一路线接入 DeepSeek 与练习目录，验证“任务 → 模型工具循环 → 审批 → 结果”；Whisper 文件就绪后再配置。各路线共用 runtime，优化与性能结论以实际运行结果为准。

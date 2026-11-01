@@ -1,6 +1,6 @@
-# Harness：把故障搬进自己的演练场
+# Harness：故障注入与场景回归
 
-指定断连、超时或取消竞态，反复检查 Agent 怎样收场。
+注入断连、超时与取消竞态，验证 Agent 终态与恢复行为。
 
 用 fake model 与 fake MCP server 做<mark class="key">可重复的故障测试</mark>，无需真实模型或网络。
 
@@ -53,7 +53,9 @@ Fake 只生成确定输入，不复制生产策略。
 - 重复提交不会产生两个执行同一任务的 Run。
 - 重启后能从事件重建状态，不执行历史工具调用。
 
-## 小挑战：安排六次事故，再重演一遍
+<div class="heading-alias" id="小挑战安排六次事故再重演一遍" aria-hidden="true"></div>
+
+## 六类场景回归
 
 先做六个场景，全部使用 fake model 和 fake MCP server：
 
@@ -86,4 +88,4 @@ Fake 只生成确定输入，不复制生产策略。
 - 当前协议：[PROTOCOL.md](../../examples/shared/runtime/PROTOCOL.md)
 - UI 场景实验的计量与维护练习：[十五个 Harness 场景](../learning/harness-scenario-lab.md)
 
-返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[MCP：把外部工具接进 Harness](01-mcp-tool-source.md)。
+返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[MCP：外部工具接入 Harness](01-mcp-tool-source.md)。

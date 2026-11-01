@@ -1,33 +1,37 @@
 ---
 next:
-  link: /mcp-projects/
-  label: MCP 项目实战
+  link: /ai-from-scaling/07-weatherkit-mcp/
+  label: Apple 天气 MCP
 ---
 
-# 选修：MCP 客户端与调用链实验
+# MCP 最简 demo：工具调用与文件读写
 
 脚本安排调用、Client 发请求、Server 执行工具；MCP 通信与文件读写真实发生，<mark class="caution">未接入模型</mark>。
 
-**只开发 Server 可跳过。** Codex 等应用提供 Host 与 Client，直接沿[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)继续。
+主线：最简 demo → 本地天气 MCP → 其他案例。后续可用[Codex 接入](00-codex-mcp.md)连接服务，案例总览见[MCP 项目实战](../mcp-projects/README.md)。
 
-需要写客户端或查通信错误时再做。
+先运行本页 demo；客户端实现与错误校验按需选读。
 
 用 `save_checkpoint` 保存 Markdown，再用 `resume` 取回。先分清两件事：
 
-| 你看到的过程 | 它在说明什么 |
+| 过程 | 验证内容 |
 | --- | --- |
 | `tools/list` → `tools/call` → 结果 | MCP 发现与调用 |
 | 保存 → 重启 → 读同一文件 | 工具用 Markdown 持久化；MCP 不自动保存业务数据 |
 
-**约 30 分钟：运行 → 找代码 → 改文字 → 试错误输入。**
+**最简运行只需本页第一节；完整实验约 30 分钟。**
 
-## 教学流程与你的操作
+<div class="heading-alias" id="教学流程与你的操作" aria-hidden="true"></div>
 
-[![选修实验流程：运行 demo，区分 MCP 发现与调用和文件持久化；定位代码，修改 next，再验证错误输入](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
+## 实验流程
 
-## 1. 运行：先看到完整结果
+[![实验流程：运行 demo，核对 MCP 调用与文件持久化；客户端实现、修改 next 与错误校验为选读](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
 
-**你来做：** 使用 Node.js 22.22 或更高版本、pnpm 11.14，在仓库根目录执行：
+<div class="heading-alias" id="1-运行先看到完整结果" aria-hidden="true"></div>
+
+## 1. 运行与结果
+
+使用 Node.js ≥22.22、pnpm 11.14，在仓库根目录执行：
 
 ```bash
 pnpm install:mini-mcp
@@ -69,11 +73,14 @@ pnpm demo:mini-mcp
 [清理] 演示临时目录已删除。
 ```
 
-核对三处：`tools/list` 列出工具，`saved=true` 表示保存成功，重启后的 `found=true` 返回同一文件原文。
+核对 `tools/list`、`saved=true` 与重启后的 `found=true`，确认返回同一文件原文。最简 demo 验证完成后，继续[本地 Apple 天气 MCP](07-weatherkit-mcp.md)；以下实现细节为选读。
 
 `demo.ts` 固定工具名和参数，依次保存、重启、读取；安装后可离线运行。`next` 来自 `checkpoint` 对象，改源码即改输出。
 
 客户端 `console.log()` 展示真实过程；方括号是日志标签，`saved/found/path` 是业务字段。
+
+<details>
+<summary>选读：客户端实现、内容修改与错误校验</summary>
 
 ## 2. 定位：谁调用，谁真正读写文件
 
@@ -104,9 +111,11 @@ const note = await readFile(path, 'utf8');
 
 `resume` 是业务读取工具；<mark class="key">协议调用，工具持久化</mark>。
 
-## 3. 修改：让取回的内容变成你写的文字
+<div class="heading-alias" id="3-修改让取回的内容变成你写的文字" aria-hidden="true"></div>
 
-**你来做：** 在 [demo.ts](../../examples/minimal-mcp/src/demo.ts) 的 `checkpoint` 对象里，只修改 `next` 的值，例如：
+## 3. 修改：替换记录内容
+
+在 [demo.ts](../../examples/minimal-mcp/src/demo.ts) 的 `checkpoint` 对象里，只修改 `next` 的值，例如：
 
 ```ts
 next: '我改了这句话，重启后还能读到。',
@@ -118,18 +127,18 @@ next: '我改了这句话，重启后还能读到。',
 pnpm demo:mini-mcp
 ```
 
-**你要看到：** `resume 返回的 Markdown` 中的对应内容变成：
+预期 `resume 返回的 Markdown` 包含：
 
 ```text
 ## 下一步
 我改了这句话，重启后还能读到。
 ```
 
-`demo` 会先编译，再保存并读回。确认结果包含你改的文字。
+`demo` 先编译，再保存并读回；结果应包含修改后的文字。
 
 ## 4. 验证：给一次错误输入
 
-**你来做：** 运行：
+运行：
 
 ```bash
 pnpm demo:mini-mcp --invalid
@@ -139,13 +148,17 @@ pnpm demo:mini-mcp --invalid
 
 在 [contracts.ts](../../examples/minimal-mcp/src/contracts.ts) 找到 `projectSchema.regex()`，再对照 `server.ts` 注册时的 `inputSchema`：SDK 按它拒绝非法输入。
 
-## 到这里完成
+<div class="heading-alias" id="到这里完成" aria-hidden="true"></div>
 
-能定位编排、通信、文件读写与校验，就完成本课。
+## 选读验收
 
-接下来按目标选择：[MCP 项目实战](../mcp-projects/README.md)做一个工具，[应用通信](../ai-communication/README.md)追踪请求，或 [Agent 入门](03-build-a-harness.md)理解模型怎样选择和执行工具。想研究训练原理，再进入[模型基础](01-understand-models.md)。
+能够定位编排、通信、文件读写与校验，即完成选读实验。
+
+应用案例见[MCP 项目实战](../mcp-projects/README.md)；消息流见[应用通信](../ai-communication/README.md)，工具决策见 [Agent 入门](03-build-a-harness.md)，训练原理见[模型基础](01-understand-models.md)。
 
 编译、契约、异步与进程通信见 [TypeScript 技术栈与学习顺序](#typescript-stack)。
+
+</details>
 
 ## 选读与参考
 
@@ -289,9 +302,9 @@ claude mcp get yuuki-continue
 用 yuuki-continue 取回 algorithm-box 上次留下的记录，先展示原文。
 ```
 
-`claude mcp remove yuuki-continue` 只移除连接，保留记录；范围见 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。本章仅验证参考客户端，未验你的配置。
+`claude mcp remove yuuki-continue` 只移除连接，保留记录；范围见 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。本章仅验证参考客户端，实际客户端配置另行验收。
 
-服务本身不联网。接到云端模型后，取回的文字会进入该模型的对话上下文；只留下你愿意交给当前客户端的内容。
+服务本身不联网。接到云端模型后，取回的文字会进入该模型的对话上下文；记录内容应符合当前客户端的数据使用范围。
 
 </details>
 
@@ -304,7 +317,7 @@ claude mcp get yuuki-continue
 | [OpenAI 文档查询](https://developers.openai.com/api/docs/guides/tools-connectors-mcp) | `server_url`、工具发现和 `mcp_call` | 连接现有远程服务，需要 API 凭据并产生用量 |
 | [Claude Code GitHub 审查](https://code.claude.com/docs/en/mcp#example-connect-to-github-for-code-reviews) | 服务地址、授权、实际工具调用 | GitHub 远程服务；本课是本地 stdio |
 
-本课用 SDK v2，其他案例保留自己的依赖与导入。[Claude API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)同样连接远程 HTTP，不能直接填写本地 stdio 入口。
+本课用 SDK v2，其他案例使用各自固定的依赖与导入。[Claude API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)同样连接远程 HTTP，不能直接填写本地 stdio 入口。
 
 </details>
 
@@ -449,7 +462,7 @@ mcp-publisher login github
 mcp-publisher publish
 ```
 
-查询名称和版本，确认元数据可见。Registry 不运行你的程序，也不替客户端建立连接。[官方教程](https://modelcontextprotocol.io/registry/quickstart)
+查询名称和版本，确认元数据可见。Registry 不运行程序，也不替客户端建立连接。[官方教程](https://modelcontextprotocol.io/registry/quickstart)
 
 </details>
 

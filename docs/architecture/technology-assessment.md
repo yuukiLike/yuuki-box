@@ -89,7 +89,9 @@ assessment-results/
 
 固定场景可用内部回放参数驱动，无需 computer-use；键盘、输入法、焦点和滚动仍需真实交互证据。
 
-## 5. 架构：统计你需要维护的边界
+<div class="heading-alias" id="5-架构统计你需要维护的边界" aria-hidden="true"></div>
+
+## 5. 架构：维护边界评估
 
 源码复杂度看函数/文件，架构复杂度看职责、通信与生命周期，分别展示。
 
@@ -148,7 +150,7 @@ WKWebView 的回放计时器与普通 UI 状态在 Web 侧；Electron 由主进�
 
 先做静态清单和成本模板：代码量排除依赖目录、`target/build/dist`、生成物及锁文件，依赖另读锁文件。共享 helper 全仓只计一次，各路线标明使用关系。
 
-再统一回放与事件标记，接运行采集。此前本机使用 CLT，完整 Instruments/xctrace 尚待配置；本轮未重查或安装。
+再统一回放与事件标记，接运行采集。原记录环境仅安装 CLT，完整 Instruments/xctrace 尚待配置；本轮未重查或安装。
 
 最后按瓶颈增加语言/引擎分析或 Perfetto/CodeCharta 视图。首版不设任意加权总分，积累数据与偏好后再讨论权重。
 

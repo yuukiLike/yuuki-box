@@ -9,7 +9,9 @@
 | 内存 | 上限 32 GiB |
 | 磁盘 | 约 63 GiB，当时可用约 59.7 GiB |
 
-## 在自己的对话里复查
+<div class="heading-alias" id="在自己的对话里复查" aria-hidden="true"></div>
+
+## 环境资源复查
 
 ```text
 只读查询 CPU 配额、内存上限、磁盘和项目 Git 状态。
@@ -25,7 +27,7 @@
 <details class="qa">
 <summary>两个对话会共用电脑吗？</summary>
 
-独立任务有各自状态；让两个对话查询 `environment_id`，相同才是同一实例。
+独立任务有各自状态；分别查询 `environment_id`，相同才是同一实例。
 </details>
 
 <details class="qa">

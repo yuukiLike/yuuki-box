@@ -6,9 +6,11 @@
 
 [![Codex 风格对话中显示上海当前天气、数据时间和来源，所有天气值均为示例](../../../site/public/diagrams/weather-mcp/04-result.svg)](../../../site/public/diagrams/weather-mcp/04-result.svg)
 
-## 1. 把代码放进自己的练习工程
+<div class="heading-alias" id="1-把代码放进自己的练习工程" aria-hidden="true"></div>
 
-需 Supabase CLI 和用于类型检查的 Deno；以下命令在自己的天气工程执行，教程未代跑云端操作。
+## 1. 准备独立天气工程
+
+需 Supabase CLI 和用于类型检查的 Deno；以下命令在独立天气工程执行，教程未执行云端操作。
 
 ```bash
 mkdir weather-service
@@ -63,10 +65,10 @@ supabase db push
 
 托管环境默认提供 `SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY`；后者绕过 RLS，只能用于验身份后的固定后端查询，不进前端或 Codex。[Supabase Secrets](https://supabase.com/docs/guides/functions/secrets)
 
-macOS 编码后复制到剪贴板，再粘到 Dashboard Secret：
+macOS 替换为实际私钥路径，编码后复制到剪贴板，再粘到 Dashboard Secret：
 
 ```bash
-base64 -i /你的本地私密目录/AuthKey_KEYID.p8 | tr -d '\n' | pbcopy
+base64 -i /absolute/path/AuthKey_KEYID.p8 | tr -d '\n' | pbcopy
 ```
 
 Base64 仍是私钥；保存后清空剪贴板，文件留在私密目录。
@@ -116,7 +118,9 @@ codex mcp login weather --scopes openid
 
 核对城市、时间、单位，再检查最终回答；工具成功与展示正确分别验收。
 
-## 6. 验证几种会真的遇到的失败
+<div class="heading-alias" id="6-验证几种会真的遇到的失败" aria-hidden="true"></div>
+
+## 6. 验证失败分支
 
 在独立测试项目中逐项操作，测试结束后恢复测试用户配置。不要把生产 token 发到在线 JWT 解码网站。
 
@@ -135,7 +139,9 @@ codex mcp login weather --scopes openid
 
 额度按尝试计，重试也扣；未实现无限重试。上线前另加全服务预算、网关限流和监控。
 
-## 7. 让普通用户不用输入命令
+<div class="heading-alias" id="7-让普通用户不用输入命令" aria-hidden="true"></div>
+
+## 7. 打包插件连接入口
 
 CLI 用于开发联调；服务通过后，将名称、说明、MCP URL、OAuth 配置打包为插件，后端不变。
 
@@ -171,9 +177,11 @@ CLI 用于开发联调；服务通过后，将名称、说明、MCP URL、OAuth 
 
 Host 若不能稳定显示标识，需补展示界面并重验；工具 description 不能保证展示。[Apple 展示要求](https://developer.apple.com/weatherkit/)
 
-## 本次文档交付的验证记录
+<div class="heading-alias" id="本次文档交付的验证记录" aria-hidden="true"></div>
 
-本节记录的是这份仓库教程的检查，不是你的云端服务验收。整理日期：2026-10-26。
+## 文档验证记录
+
+以下为仓库教程的检查记录，不代表实际云端服务验收。整理日期：2026-10-26。
 
 | 项目 | 状态 |
 | --- | --- |
@@ -187,6 +195,8 @@ Host 若不能稳定显示标识，需补展示界面并重验；工具 descript
 
 检查在临时目录运行，未加天气依赖或读取账号凭据；缺 `site` 的既有警告仅跳过 sitemap。
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 先让获准用户经浏览器授权查到上海当前天气、时间和来源，再验失败分支，最后扩展预报与城市搜索。

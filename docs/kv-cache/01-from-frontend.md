@@ -2,11 +2,11 @@
 
 [上一站 一条消息的旅程](00-first-request.md) · [专题入口](README.md) · [下一站 因果 Attention](02-attention-and-kv.md)
 
-用三个数字理解：<mark class="key">末尾追加后，哪些旧结果还能用</mark>？
+三个数值说明<mark class="key">末尾追加后的旧结果复用</mark>。
 
 ## 第一步：区分输入和算出来的结果
 
-你有三个输入，想显示「从开头累计到这里」的数字：
+三个输入及对应累计和：
 
 ```js
 const inputs = [3, 5, 2];
@@ -15,7 +15,7 @@ const totals = [3, 8, 10]; // 3；3 + 5；3 + 5 + 2
 
 `inputs` 是输入，`totals` 是派生结果；过滤列表和 Markdown 解析结果也属于派生数据。
 
-现在往末尾加一个 `4`。旧的 `3、8、10` 不需要改变，只要接着算：
+末尾追加 `4`，保留旧结果 `3、8、10`，继续计算：
 
 ```js
 const nextTotal = totals.at(-1) + 4; // 10 + 4 = 14
@@ -35,7 +35,9 @@ const nextTotal = totals.at(-1) + 4; // 10 + 4 = 14
 
 若位置只依赖自身与前缀，末尾追加就不改变旧位置；模型的条件见[下一站](02-attention-and-kv.md)。
 
-## 第三步：再回头看 useMemo
+<div class="heading-alias" id="第三步再回头看-usememo" aria-hidden="true"></div>
+
+## 第三步：useMemo 的复用粒度
 
 假设格式化每条消息的函数只依赖该消息的内容：
 
@@ -52,7 +54,9 @@ const formatted = useMemo(
 
 上图缓存整个返回值，下图自行复用前缀。React 比较 `Object.is`；模型缓存检查输入与配置，条件不同。
 
-## 只跑一个小实验
+<div class="heading-alias" id="只跑一个小实验" aria-hidden="true"></div>
+
+## 前缀复用实验
 
 在仓库根目录执行：
 
@@ -99,7 +103,7 @@ node docs/kv-cache/labs/prefix-cache.mjs
 </details>
 
 <details>
-<summary>练习：故意让配置失效判断漏掉一个条件</summary>
+<summary>回归练习：遗漏配置依赖</summary>
 
 在[脚本](labs/prefix-cache.mjs)副本中，把 `previous?.scale === scale` 改为仅检查 `previous`。配置变化时旧倍率 1 触发断言；恢复条件后应通过。
 

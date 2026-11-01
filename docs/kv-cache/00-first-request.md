@@ -1,12 +1,14 @@
-# 第一站：你发出一条消息，模型收到了什么？
+# 消息请求与模型输入
 
 [专题入口](README.md) · [下一站 前端数组与前缀](01-from-frontend.md)
 
-先分清<mark class="key">消息是什么、KV 在哪里</mark>；术语按需展开。
+本篇区分<mark class="key">客户端消息与服务端 KV</mark>。
 
-## 第一步：先看你认识的消息数组
+<div class="heading-alias" id="第一步先看你认识的消息数组" aria-hidden="true"></div>
 
-聊天页面里可以有这样一份数据：
+## 1. 客户端消息数组
+
+客户端消息示例：
 
 ```js
 const messages = [
@@ -23,9 +25,11 @@ const messages = [
 
 消息数组在客户端，托管模型 KV 在服务端。
 
-## 第二步：下一轮，仍然把需要的历史发过去
+<div class="heading-alias" id="第二步下一轮仍然把需要的历史发过去" aria-hidden="true"></div>
 
-模型回答之后，你可以组织下一轮消息：
+## 2. 后续请求中的历史
+
+模型返回回答后，客户端构造后续消息：
 
 ```js
 const nextMessages = [
@@ -41,24 +45,28 @@ const nextMessages = [
 
 Yuuki 的 Chat Completions 路径发送完整 `system + history`；服务端缓存减计算，不能补回未发送的历史。[请求入口](../../examples/shared/runtime/Sources/main.swift:351)
 
-## 第三步：文字进入模型后，会变成数字
+<div class="heading-alias" id="第三步文字进入模型后会变成数字" aria-hidden="true"></div>
 
-先认两个新词就够了：
+## 3. 文本到数值表示
+
+基本术语：
 
 - **token**：模型处理序列中的一个单位；不固定等于一个字或一个单词。
-- **向量**：这里先把它看成一个数字数组，例如 `[0.2, -0.1]`。
+- **向量**：可表示为数字数组，例如 `[0.2, -0.1]`。
 
 [![角色与文字经聊天模板、分词变为 token ID，再转成数字向量，经模型各层产生 Q/K/V；数字仅作示意](../../site/public/diagrams/kv-cache/03-token-vector.svg)](../../site/public/diagrams/kv-cache/03-token-vector.svg)
 
 ID 与数组仅示意；实际角色边界和控制标记随模型而变。[聊天模板](https://huggingface.co/docs/transformers/en/chat_templating)
 
-模型各层产生可复用数字状态，KV Cache 保存其中的 K/V。下一站先用累计和理解旧结果复用。
+模型各层产生数值状态，KV Cache 保存其中可复用的 K/V；后续以累计和说明复用条件。
 
-## 这一站完成了
+<div class="heading-alias" id="这一站完成了" aria-hidden="true"></div>
 
-分清“应用保存消息、模型服务保存推理缓存”，就可停下。
+## 完成条件
 
-下次直接从[前端数组：追加一项，哪些结果还有效](01-from-frontend.md)开始。
+区分应用保存的消息与模型服务保存的推理缓存。
+
+后续：[前端数组与前缀复用](01-from-frontend.md)。
 
 <details>
 <summary>四种消息角色，以及 JSON 与模型输入的区别</summary>

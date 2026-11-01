@@ -6,7 +6,7 @@
 
 ## 类型速查
 
-| 类型 | 想得到什么 | 优先试哪个 |
+| 类型 | 目标产物 | 推荐模型 |
 | --- | --- | --- |
 | 通用推理与编程 | 想法、任务、代码与 Issue | GPT-6.1 Sol |
 | 视觉理解与电脑操作 | 理解截图、检查界面、操作应用 | GPT-6.1 Terra |
@@ -30,7 +30,7 @@
 
 | 模型 | 主要特点 | 适合本项目的用法 | 输入／输出 |
 | --- | --- | --- | ---: |
-| [gpt-6.1-sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) | 复杂编程、电脑与专业工作 | 默认主脑：想法、拆任务、Issue | $2／$10 |
+| [gpt-6.1-sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) | 复杂编程、电脑与专业工作 | 通用处理：想法、任务拆分、Issue | $2／$10 |
 | [gpt-6.1-terra](https://developers.openai.com/api/docs/models/gpt-6.1-terra) | 视觉、电脑操作与自然写作 | 截图、界面检查、课程文案 | $1／$5 |
 | [gpt-6-luna](https://developers.openai.com/api/docs/models/gpt-6-luna) | 明确、批量、成本敏感任务 | Issue 分类、提取、转写整理、标签 | $0.10／$0.50 |
 | [gpt-6-astra](https://developers.openai.com/api/docs/models/gpt-6-astra) | 最困难的推理、研究、编程 | 疑难、复杂架构与深入比较 | $10／$50 |
@@ -105,7 +105,7 @@ Embedding 找相关内容；应用仍须保存记忆、任务状态，并将检�
 
 | 模型 | 主要特点 | 适合本项目的用法 |
 | --- | --- | --- |
-| [gpt-oss-20b](https://developers.openai.com/api/docs/models/gpt-oss-20b) | 低延迟、本地／专用，支持微调 | 本地搭子、定制；需推理环境 |
+| [gpt-oss-20b](https://developers.openai.com/api/docs/models/gpt-oss-20b) | 低延迟、本地／专用，支持微调 | 本地助手、定制；需推理环境 |
 | [gpt-oss-120b](https://developers.openai.com/api/docs/models/gpt-oss-120b) | 更大模型，官方标注单张 H100 可容纳 | 有算力时比较自部署／托管的效果与成本 |
 
 两者为 Apache 2.0，自行或第三方部署；费用主要是硬件与托管服务。
@@ -126,7 +126,7 @@ Embedding 找相关内容；应用仍须保存记忆、任务状态，并将检�
 | [gpt-5.4-pro](https://developers.openai.com/api/docs/models/gpt-5.4-pro) | 重推理，与 5.5 Pro 同价；按任务选择 | $30／$180 |
 | [gpt-5.4-mini](https://developers.openai.com/api/docs/models/gpt-5.4-mini) | 编程、电脑、大量小任务的对照组 | $0.75／$4.50 |
 | [gpt-5.2](https://developers.openai.com/api/docs/models/gpt-5.2) | 较早专业主力；比 6.1 Sol 输入便宜、输出贵，按实耗比较 | $1.75／$14 |
-| [gpt-5.2-pro](https://developers.openai.com/api/docs/models/gpt-5.2-pro) | 较早重推理；成本、等待不适合作默认搭子 | $21／$168 |
+| [gpt-5.2-pro](https://developers.openai.com/api/docs/models/gpt-5.2-pro) | 较早重推理；成本与等待不适合默认助手 | $21／$168 |
 
 ## 已弃用但尚未停用
 
@@ -170,15 +170,17 @@ Embedding 找相关内容；应用仍须保存记忆、任务状态，并将检�
 
 Sora 2／Videos API 于 2026-09-24、GPT-Image-1 于 2026-10-23 停用；旧 Deep Research、computer-use-preview 及部分 Codex／Chat／音频快照亦已停用。 [完整停用记录](https://developers.openai.com/api/docs/deprecations)
 
-## 试做方案 开工搭子
+<div class="heading-alias" id="试做方案-开工搭子" aria-hidden="true"></div>
 
-**首版只做口述到草稿。** 录下一个想加、但不知从何开始的项目想法。
+## 试做方案：语音生成 Issue 草稿
+
+**首版范围：语音输入 → Issue 草稿。**
 
 1. 录下约 30 秒想法，由 GPT-Transcribe 转成文字。
 2. 将文字交给 GPT-6.1 Sol，整理出 Issue 标题、现象、期望和完成条件。
-3. 单独突出一个可以立刻开始的动作，写明做到哪里就可以停。
+3. 列出一个可执行动作及完成条件。
 4. 核对草稿；确认需要提交后，再由接入的 GitHub 工具创建 Issue。
 
-**拿到可修改 Issue 草稿与明确动作即停。** 方案待实现；需要自然交谈时再接 Live，复杂任务交后端 Sol。
+**交付：可修改的 Issue 草稿与明确动作。** 方案待实现；需要自然交谈时再接 Live，复杂任务交后端 Sol。
 
 准备实际接入时，按需查阅[API 额度与调用入口](../agent-engineering/openai-api.md)、[语音与多模态小项目](../agent-engineering/openai-api-projects.md)和[Issue 自动化](../issue-garden/README.md)。

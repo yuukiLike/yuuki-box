@@ -5,7 +5,9 @@
 服务端管理 KV，Harness 组织请求。读 `dsh` 时追踪<mark class="key">工具调用后保留了多少原样前缀</mark>。
 
 
-## 先从你写过的请求函数理解 Harness
+<div class="heading-alias" id="先从你写过的请求函数理解-harness" aria-hidden="true"></div>
+
+## 从请求函数理解 Harness
 
 模型提出 `read_file`，Harness 执行并把结果加入下一轮请求。
 
@@ -13,16 +15,18 @@
 
 **装配上下文**：决定本次发送的消息、规则与工具定义。
 
-先分清：模型提议、Harness 执行与装配、服务端判断命中，再看三个工程选择。
+职责划分：模型提议、Harness 执行与装配、服务端判断缓存命中。
 
 <details>
 <summary>源码追踪：一个判断、五个入口</summary>
 
-## 第一眼，先看“不需要更新”的分支
+<div class="heading-alias" id="第一眼先看不需要更新的分支" aria-hidden="true"></div>
+
+## 文本未变化时的投影分支
 
 打开 [`SystemPromptProjection.project`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L88)，找文本一致时返回空更新的分支，再查新请求序列条件。
 
-解释：system 文本相同，为何移到首条仍可能损失缓存？前缀身份包含内容、位置和序列，最终指令相同不等于输入序列相同。
+前缀身份包含内容、位置和序列；system 文本相同，移动位置仍可能损失缓存。
 
 ## 沿五个入口读一次请求
 
@@ -38,7 +42,9 @@
 
 </details>
 
-## 三处值得拆开的工程选择
+<div class="heading-alias" id="三处值得拆开的工程选择" aria-hidden="true"></div>
+
+## 三项工程选择
 
 ### 1. 给工具一个确定的顺序
 
@@ -110,7 +116,9 @@ dsh [`TokenUsage`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee37
 
 旧测试注释不替代[当前持久化规则](https://api-docs.deepseek.com/guides/kv_cache/)；稳定请求仍受构建、淘汰与尽力命中影响。
 
-## 带回 Yuuki 的下一项小研究
+<div class="heading-alias" id="带回-yuuki-的下一项小研究" aria-hidden="true"></div>
+
+## Yuuki 的观测扩展
 
 在 Yuuki [`completion`](../../examples/shared/runtime/Sources/main.swift:351) 定位 system、tools、history、usage 与缓存字段缺口；先实现单次原始缓存用量，验收后再调布局和摘要。
 

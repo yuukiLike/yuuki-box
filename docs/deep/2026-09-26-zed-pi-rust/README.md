@@ -24,7 +24,7 @@
 3. **GPUI 需区分版本/平台。** 此 checkout：macOS→Metal，Linux Wayland/X11→wgpu，Windows→Direct3D 11；不能因同名 0.2.2 与 crates.io 版混用 API。
 4. **PI 并非小型实现。** 一个 Rust crate、11 个直接应用/库包；可提炼四个角色及 Main→Rust host、Main→Node Agent 两条通道。
 5. **PI 选择混合生态。** Rust 宿主保留 Electron UI、pi TypeScript/provider；Agent 用 Electron Node，Desktop 正文存 JSONL、索引存 SQLite，native Pi 另有路径。
-6. **Rust 值得继续实验。** 尚无全 Rust 选型或某路线性能最佳的证据。
+6. **Rust 仍需实验验证。** 尚无全 Rust 选型或某路线性能最佳的证据。
 
 源码/ADR 锚点见各章；历史动机见[团队访谈](https://zed.dev/blog/we-have-to-start-over)、[GPUI 重写](https://zed.dev/blog/why-the-big-rewrite)。
 

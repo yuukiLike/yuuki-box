@@ -13,8 +13,8 @@ MCP 与 Agent 共用选读：工具循环、function calling、MCP、Harness、S
 | 零件 | 解决的问题 | 后来的代表 |
 | --- | --- | --- |
 | 循环 | 模型怎样连续行动，而不是答一句就停 | ReAct、agent loop |
-| 动作接口 | 模型怎样把“我想做什么”说成程序能执行的东西 | function calling |
-| 执行机构 | 谁真正动手，以及怎样保证它不闯祸 | Code Interpreter、Harness |
+| 动作接口 | 模型如何输出可执行的结构化动作 | function calling |
+| 执行机构 | 动作执行方与权限边界 | Code Interpreter、Harness |
 | 发现协议 | 工具怎样被找到、被调用，而不必一家家写适配器 | MCP |
 | 流程复用 | 同类任务怎样复用步骤、脚本与参考资料 | Skills |
 
@@ -57,7 +57,7 @@ Thought: 看到了 server.ts
 
 留下**工具使用训练**；同年 function calling 提供结构化接口，但不据此推断采用了同一训练方法。
 
-同一时期还有几个容易被忽略的实验：[HuggingGPT](https://arxiv.org/abs/2303.17580) 让 LLM 当调度器，把任务分给不同的模型；[Gorilla](https://arxiv.org/abs/2305.15334) 练习从大量 API 里检索出正确的那一个；[Voyager](https://arxiv.org/abs/2305.16291) 在 Minecraft 里把代码当动作，还攒下可复用的技能库。它们分别预演了后来的多工具路由、工具发现和 Skills。
+同一时期还有几个容易被忽略的实验：[HuggingGPT](https://arxiv.org/abs/2303.17580) 让 LLM 当调度器，把任务分给不同的模型；[Gorilla](https://arxiv.org/abs/2305.15334) 练习从大量 API 里检索出正确的那一个；[Voyager](https://arxiv.org/abs/2305.16291) 在 Minecraft 里把代码当动作，并积累可复用的技能库。它们分别预演了后来的多工具路由、工具发现和 Skills。
 
 ### AutoGPT：产品幻觉与失败清单
 
@@ -145,7 +145,7 @@ MCP：             Host 内的 Client ↔ 工具 Server
 - **确定性图**：人画好“先查天气，再判断，再发邮件”，可审计、可复现。
 - **概率性路由**：模型运行时决定走哪条边，灵活但不可预测。
 
-今天所有 workflow 产品都在两者之间找平衡。n8n 的 AI Agent 节点、Dify 的 Agent 节点，本质上是“在确定性的图里开一个概率性的洞”。
+n8n、Dify 等工作流将模型决策接入预设流程，在确定性步骤与模型选择之间分配职责。
 
 留下**可视化 Harness 与分发渠道**，降低 API 使用门槛。
 
@@ -188,7 +188,7 @@ MCP 接工具，Skills 保存复现/修改/验证步骤，Harness 执行与控�
 
 **2025 年 12 月 18 日，Agent Skills 成为开放标准**。这与首次推出是两个节点；Voyager 等更早研究已探索技能复用。[官方更新说明](https://claude.com/resources/articles/skills)
 
-留下的零件：**可复用的任务流程、按需加载的知识与可分享的技能目录。** 想动手时，再读 [Skills：结构与触发](../agent-engineering/03-skills-structure.md)。
+留下的零件：**可复用的任务流程、按需加载的知识与可分享的技能目录。** 实现方式见 [Skills：结构与触发](../agent-engineering/03-skills-structure.md)。
 
 ## 一张零件表
 
@@ -211,11 +211,13 @@ MCP 接工具，Skills 保存复现/修改/验证步骤，Harness 执行与控�
 | 2025.10.16 | Agent Skills 正式推出 | 任务流程封装、渐进加载 |
 | 2025.12.18 | Agent Skills 发布为开放标准 | 跨平台复用技能格式 |
 
-## 回到你的项目
+<div class="heading-alias" id="回到你的项目" aria-hidden="true"></div>
+
+## 对照示例实现
 
 回到 [`server.ts`](../../examples/codex-continue-mcp/src/server.ts) 对应职责；下表是教学归纳，不是产品溯源：
 
-| 你的设计 | 现在实际负责什么 |
+| 设计项 | 实际职责 |
 | --- | --- |
 | `stopWhen` | 保存“做到哪里就停”的文字；不会主动停止 Agent 循环 |
 | `readOnlyHint` 与 `destructiveHint` | 提供行为提示；不能替代真正的权限检查 |
@@ -226,17 +228,19 @@ MCP 接工具，Skills 保存复现/修改/验证步骤，Harness 执行与控�
 | `.describe()` | 为字段补充用途说明，帮助调用方填写参数 |
 | `z.strictObject` | 拒绝不符合 schema 的输入；不能证明动作可行或已获授权 |
 
-## 为什么像故事
+<div class="heading-alias" id="为什么像故事" aria-hidden="true"></div>
+
+## 历史整理的边界
 
 因为这里选择了一条便于学习的叙事线，把不同项目放回它们处理的问题：
 
-- ReAct 想证明“提示词也能行动”
-- Plugins 探索让 ChatGPT 连接第三方服务
-- Code Interpreter 想让人在聊天框里做数据分析
-- AutoGPT 想做一个全自动 Agent
-- MCP 想少写几遍适配器
-- Skills 想把做事方法保存下来，供同类任务复用
+- ReAct：交替进行推理与动作。
+- Plugins：为 ChatGPT 连接第三方服务。
+- Code Interpreter：在对话中执行代码与数据分析。
+- AutoGPT：探索自主循环任务。
+- MCP：统一外部能力的发现与调用。
+- Skills：封装可复用的任务流程。
 
 这条线是**事后叙事**：真实项目并行、反复；Plugins 与 function calling 只隔三个月，Code Interpreter 从插件变内置，MCP 前也有协议尝试。它更像零件重组，而非必然演化。
 
-下次看到一个新的 Agent 产品，可以先问：**它发明了新零件，还是重新组装了旧零件？**
+评估 Agent 产品时，先区分新机制与已有组件的组合。

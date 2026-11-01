@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="640" viewBox="0 0 520 640" role="img" aria-labelledby="title desc">
-<title id="title">模型提议，Harness 把循环跑起来</title>
+<title id="title">Harness 模型与工具调用循环</title>
 <desc id="desc">用户请求进入 Harness，由它装配规则、历史和工具定义。模型提议 read_file，Harness 执行工具并把结果加入历史，再请求模型。服务端根据请求决定缓存命中。</desc>
 <style>
   .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
@@ -18,6 +18,6 @@
 </style>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
 <rect class="canvas" x="0" y="0" width="520" height="640" rx="16"/>
-<text x="28" y="43" class="title" text-anchor="start">模型提议，Harness 把循环跑起来</text>
-<rect x="28" y="76" width="464" height="82" rx="12" class="new"/><text x="48" y="107" class="bold" text-anchor="start">你：帮我读一份笔记</text><text x="48" y="135" class="small" text-anchor="start">用户输入进入消息历史</text><path class="arrow" d="M260 162 L260 180"/><rect x="28" y="188" width="464" height="82" rx="12" class="panel"/><text x="48" y="219" class="bold" text-anchor="start">Harness：装配本次请求</text><text x="48" y="247" class="small" text-anchor="start">规则 + 历史 + 工具定义</text><path class="arrow" d="M260 274 L260 292"/><rect x="28" y="300" width="464" height="82" rx="12" class="panel"/><text x="48" y="331" class="bold" text-anchor="start">模型：提出 read_file 调用</text><text x="48" y="359" class="small" text-anchor="start">模型输出参数，还没读到文件</text><path class="arrow" d="M260 386 L260 404"/><rect x="28" y="412" width="464" height="82" rx="12" class="reuse"/><text x="48" y="443" class="bold" text-anchor="start">Harness：执行并追加结果</text><text x="48" y="471" class="small" text-anchor="start">工具结果进入历史，再请求模型</text><text x="28" y="566" class="small" text-anchor="start">下一次带上历史；服务端决定能否命中。</text><text x="28" y="604" class="small" text-anchor="start">工具定义要稳定，调用与结果要配对。</text>
+<text x="28" y="43" class="title" text-anchor="start">Harness 模型与工具调用循环</text>
+<rect x="28" y="76" width="464" height="82" rx="12" class="new"/><text x="48" y="107" class="bold" text-anchor="start">用户：帮我读一份笔记</text><text x="48" y="135" class="small" text-anchor="start">用户输入进入消息历史</text><path class="arrow" d="M260 162 L260 180"/><rect x="28" y="188" width="464" height="82" rx="12" class="panel"/><text x="48" y="219" class="bold" text-anchor="start">Harness：装配本次请求</text><text x="48" y="247" class="small" text-anchor="start">规则 + 历史 + 工具定义</text><path class="arrow" d="M260 274 L260 292"/><rect x="28" y="300" width="464" height="82" rx="12" class="panel"/><text x="48" y="331" class="bold" text-anchor="start">模型：提出 read_file 调用</text><text x="48" y="359" class="small" text-anchor="start">模型输出参数，还没读到文件</text><path class="arrow" d="M260 386 L260 404"/><rect x="28" y="412" width="464" height="82" rx="12" class="reuse"/><text x="48" y="443" class="bold" text-anchor="start">Harness：执行并追加结果</text><text x="48" y="471" class="small" text-anchor="start">工具结果进入历史，再请求模型</text><text x="28" y="566" class="small" text-anchor="start">下一次带上历史；服务端决定能否命中。</text><text x="28" y="604" class="small" text-anchor="start">工具定义要稳定，调用与结果要配对。</text>
 </svg>

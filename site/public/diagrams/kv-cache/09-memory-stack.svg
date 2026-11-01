@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="640" viewBox="0 0 520 640" role="img" aria-labelledby="title desc">
-<title id="title">一层层乘起来，空间就变大了</title>
+<title id="title">KV Cache 容量计算</title>
 <desc id="desc">假设每头 128 维、每元素两字节、八个 K/V 头和三十二层。一个位置需要 128 KiB，4096 个位置需要 512 MiB，四条独立序列需要 2 GiB。排除其他内存。</desc>
 <style>
   .canvas{fill:#fff}.panel{fill:#f4f6fa;stroke:#c9d1df}
@@ -18,6 +18,6 @@
 </style>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#71809a"/></marker></defs>
 <rect class="canvas" x="0" y="0" width="520" height="640" rx="16"/>
-<text x="28" y="43" class="title" text-anchor="start">一层层乘起来，空间就变大了</text>
+<text x="28" y="43" class="title" text-anchor="start">KV Cache 容量计算</text>
 <rect x="28" y="76" width="464" height="74" rx="12" class="new"/><text x="48" y="107" class="bold" text-anchor="start">一个位置、一个 K/V 头</text><text x="48" y="135" class="small" text-anchor="start">2 份 × 128 个数 × 2 B = 512 B</text><path class="arrow" d="M260 155 L260 171"/><rect x="28" y="177" width="464" height="74" rx="12" class="panel"/><text x="48" y="208" class="bold" text-anchor="start">乘上这一层的 8 个 K/V 头</text><text x="48" y="236" class="small" text-anchor="start">512 B × 8 = 4 KiB</text><path class="arrow" d="M260 256 L260 272"/><rect x="28" y="278" width="464" height="74" rx="12" class="panel"/><text x="48" y="309" class="bold" text-anchor="start">再乘 32 层</text><text x="48" y="337" class="small" text-anchor="start">4 KiB × 32 = 128 KiB / 位置</text><path class="arrow" d="M260 357 L260 373"/><rect x="28" y="379" width="464" height="74" rx="12" class="panel"/><text x="48" y="410" class="bold" text-anchor="start">再保存 4096 个位置</text><text x="48" y="438" class="small" text-anchor="start">128 KiB × 4096 = 512 MiB</text><path class="arrow" d="M260 458 L260 474"/><rect x="28" y="480" width="464" height="74" rx="12" class="panel"/><text x="48" y="511" class="bold" text-anchor="start">四条独立序列，没有共享</text><text x="48" y="539" class="small" text-anchor="start">512 MiB × 4 = 2 GiB</text><text x="28" y="605" class="small" text-anchor="start">假设配置；只数 KV 有效数据。</text>
 </svg>

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="960" viewBox="0 0 760 960" role="img" aria-labelledby="title desc">
-<title id="title">托盘的 3 mm，从哪里来</title>
+<title id="title">托盘壁厚与底厚：3 mm</title>
 <desc id="desc">俯视外盒 80 乘 50，挖空区域 74 乘 44，因此四周各 3 毫米。剖面外盒中心 Z=6 高12，范围0至12；挖空盒中心 Z=9 高12，范围3至15，留下3毫米底并穿出顶部。加宽到100时，将挖空宽度同时改为94可保持3毫米侧壁。</desc>
 <rect width="760" height="960" rx="18" fill="#ffffff"/>
-<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">托盘的 3 mm，从哪里来</text>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">托盘壁厚与底厚：3 mm</text>
 <text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">两只长方体：外盒保留材料，内盒挖出空间。</text>
 <rect x="24" y="120" width="712" height="342" rx="12" fill="#f4f7fb" stroke="#d2dce8" stroke-width="1.5"/>
 <text x="44" y="155" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#20324d" text-anchor="start">俯视：四周的厚度由两组尺寸共同决定</text>
@@ -37,7 +37,7 @@
 <text x="571" y="660" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="30" font-weight="600" fill="#275b40" text-anchor="start">3 mm</text>
 <text x="44" y="743" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="400" fill="#20324d" text-anchor="start">挖空盒子的底部：9 − 12 ÷ 2 = 3 mm</text>
 <rect x="24" y="810" width="712" height="104" rx="12" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="44" y="845" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">你来改：外宽 100 mm，挖空宽度 94 mm</text>
+<text x="44" y="845" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#275b40" text-anchor="start">参数实验：外宽 100 mm，挖空宽度 94 mm</text>
 <text x="44" y="877" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#275b40" text-anchor="start">两处一起加宽 20 mm，左右侧壁仍为 3 mm。</text>
 <text x="32" y="943" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">尺寸由示例参数推导；剖面横纵比例不同，按标注读数。</text>
 </svg>

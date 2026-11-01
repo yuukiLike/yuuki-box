@@ -1,14 +1,14 @@
-# Yuuki Box：把好奇心变成一次动手
+# Yuuki Box：Agent 工程与实践
 
-选一个好奇的问题：交 AI 修 bug、拆模型缓存，或让 Yuuki 开口；做出可见、可听、可运行的结果。
+覆盖 AI 任务执行、模型缓存与语音交互，以可验证产物为交付。
 
 目标是在 Mac 自建 Agent 工作台，掌握模型与工具循环，保持交互及时，再扩展到 Apple 多设备。
 
-先记主线：**训练提供能力，<mark class="key">上下文提供依据</mark>，工具执行动作。**
+核心关系：**训练提供能力，<mark class="key">上下文提供依据</mark>，工具执行动作。**
 
-反复追问：
+评估维度：
 
-> **需要知道什么？信息可靠吗、过时了吗？执行后反馈什么？**
+> **信息需求、可信度、时效与执行反馈。**
 
 据此学习 Prompt、上下文与 MCP：追踪信息、执行与反馈。
 
@@ -16,16 +16,16 @@
 
 用 [Astro 目录](../site/src/pages/index.astro)浏览。根目录 `pnpm i` 后运行 `pnpm docs:dev`；`pnpm run` 查演示脚本。[安装说明](../site/README.md#本地运行)。全文搜索需生产构建或 preview。
 
-首页提供目录与继续阅读；文章的“本章目标”默认收起。点“开始”才选择任务，查资料不替换；完成后可停。
+首页提供目录与继续阅读，章节目标默认折叠。点击“开始”选择任务，浏览其他章节不替换任务，点击“完成”结束。
 
-**最快云端体验选 for-safe 只读小结。** MCP 按入门、实战、授权学习。
+**MCP 主线：最简 demo → 本地天气 → 其他案例；音乐选修。** 云端入门可选 for-safe 只读练习。
 
 | 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md) | Server 保存与取回记录 |
+| **MCP 入门** | [最简 demo](ai-from-scaling/00-minimal-mcp.md) → [本地天气](ai-from-scaling/07-weatherkit-mcp.md) | 工具发现、调用与天气查询 |
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 一个兴趣项目及工具产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 凭证、登录、权限与天气查询 |
-| **AI 搭子（同行者）** | [Side by Side · 和 AI 做朋友](side-by-side/README.md) | Issue 自动化与已验证草稿 PR |
+| **AI 协作** | [Side by Side · 任务协作](side-by-side/README.md) | Issue 自动化与已验证草稿 PR |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 字符模型、预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | KV 容量与前缀复用 |
 | **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | Harness、工具与界面自动化 |
@@ -43,29 +43,31 @@
 
 ### MCP 入门
 
-先做 [Codex 接入](ai-from-scaling/00-codex-mcp.md)，写 Server 保存与取回记录，再选 [MCP 实战](mcp-projects/README.md)。
+先运行[最简 demo](ai-from-scaling/00-minimal-mcp.md)，再实现[本地天气 MCP](ai-from-scaling/07-weatherkit-mcp.md)；[Codex 接入](ai-from-scaling/00-codex-mcp.md)与 [MCP 实战](mcp-projects/README.md)随后按需选择。
 
-写客户端、查通信时，再做约 30 分钟的[选修实验](ai-from-scaling/00-minimal-mcp.md)；只写 Server 可跳过。[TypeScript](ai-from-scaling/00-minimal-mcp.md#typescript-stack)按需补齐。
+最简演示后的[客户端深入实验](ai-from-scaling/00-minimal-mcp.md)与 [TypeScript](ai-from-scaling/00-minimal-mcp.md#typescript-stack)均为选读。
 
 [工具调用简史](ai-from-scaling/extra-tool-use-story.md)串联 ReAct、Plugins、Code Interpreter、函数调用、MCP、Skills，仅选读。
 
 ### MCP 项目实战
 
-从[实战总览](mcp-projects/README.md)按兴趣选天气、Blender、GitHub 或音乐，逐项核对前置与验证边界。
+从[实战总览](mcp-projects/README.md)选择案例，核对前置与验证边界；天气优先，Blender、GitHub 与音乐按需选修。
 
-天气先用离线样本；音乐选[钢琴排练台](ai-from-scaling/07-music-space-mcp.md)定位小节与独听，或在[舞台预演台](ai-from-scaling/08-music-photo-mcp.md)调整部件、机位并导出 PNG／MP4／GLB；均不以模型／Harness 为前置。
+天气先验证离线样本；音乐为选修，可用[钢琴排练台](ai-from-scaling/07-music-space-mcp.md)定位小节与独听，或在[舞台预演台](ai-from-scaling/08-music-photo-mcp.md)调整部件、机位并导出 PNG／MP4／GLB；均不以模型／Harness 为前置。
 
 ### 远程 MCP 与授权
 
 [Supabase × WeatherKit](ai-communication/weather-mcp/README.md)含体验、OAuth、天气 API、MCP 与验收；需账号、数据库、部署，先分清用户与 Apple token。
 
-### AI 搭子（同行者）
+<div class="heading-alias" id="ai-搭子同行者" aria-hidden="true"></div>
 
-[AI 搭子](side-by-side/README.md)以 Side by Side 为标语：一起思考、托付任务、持续推进并接受纠正。
+### AI 协作
+
+[AI 协作](side-by-side/README.md)以 Side by Side 为主题，覆盖任务执行、独立审查、返修与持续交付。
 
 <span id="issue-工作流"></span>
 
-**优先 Issue 自动化。** [Issue 夜班](issue-garden/README.md)依次做清单、手动修复，再连接选择、去重、验证与 PR；本仓库未启用。
+**优先 Issue 自动化。** [Issue 定时处理](issue-garden/README.md)依次做清单、手动修复，再连接选择、去重、验证与 PR；本仓库未启用。
 
 已有产品额度，按 [Dot 路线](issue-garden/04-dot-shift.md)连接 GitHub、准备 Cloud 环境，试一个 Issue。
 
@@ -151,12 +153,12 @@ Memory 仅选读，不列课程或前置。
 
 以下为 **2026-09-26** 的方向与原型验证范围；“跳过测试和 computer-use”仅限当轮：
 
-- 面向自己的 Apple 生态，最终覆盖 Mac mini、MacBook Air、iPad 和 iPhone。
+- 面向 Apple 生态，最终覆盖 Mac mini、MacBook Air、iPad 和 iPhone。
 - 重视性能、简单，以及可以长期演进的结构。
 - 自建模型调用与工具执行循环，掌控 Agent 运行时。
 - 第一阶段只做 Mac 本地闭环，之后逐步增加远程设备。
-- 同时开展自己的学习，重点理解 Zed、Raycast 等产品的流畅体验。
-- 并行实现五个 Mac MVP，亲手接触 Rust/GPUI 等路线，通过任务列表、流式输出、语音与更新检查比较开发体验。
+- 以 Zed、Raycast 等产品为实现与交互参考。
+- 并行实现五个 Mac MVP，验证 Rust/GPUI 等路线，通过任务列表、流式输出、语音与更新检查比较开发体验。
 - 本轮允许跳过测试验证和 computer-use；实际保留编译、打包，不进行 GUI、录音与性能测量。
 
 **Harness** 管上下文、工具、权限、运行状态、取消、用量与恢复；模型输出工具调用不代表机制已存在。
@@ -165,7 +167,7 @@ Memory 仅选读，不列课程或前置。
 
 | 问题 | 当前建议 | 验证或重评条件 |
 |---|---|---|
-| Mac 界面 | 五条路线均已进入实验，暂不指定胜者 | 亲手修改与使用，再按需要做相同负载的性能对照 |
+| Mac 界面 | 五条路线均已进入实验，暂不指定胜者 | 实际修改与使用，再按需要做相同负载的性能对照 |
 | 运行时语言 | Swift 与 Rust 都是候选；保持 model/tool loop 不依赖具体 UI | 依据库、状态模型、平台集成与维护体验决定；可直接学习 Rust |
 | 生命周期 | UI 与 Runner 分离，明确各阶段退出语义 | 需要关闭应用后继续运行时，验证独立 helper 管理 |
 | 数据 | SQLite 保存状态和事件，普通文件保存大型产物 | 依据实际查询、写入、归档负载调整 |
@@ -177,7 +179,7 @@ Memory 仅选读，不列课程或前置。
 ## 三项需要记住的调研结论
 
 1. **Raycast 的架构有版本边界。** v1 的 React 扩展映射到 AppKit 控件；v2 已采用 Swift/AppKit 宿主、WKWebView/React UI、Node 与 Rust 的混合结构。相关官方 API 文档仍有旧描述，引用时必须标明上下文。[v1 工程文](https://www.raycast.com/blog/how-raycast-api-extensions-work)、[v2 工程文](https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast)
-2. **Zed 的实现可以分开学习。** GPUI 解决绘制与交互，CRDT 解决并发文本编辑，Wasm 扩展与工具权限各有自己的边界。这些能力不必一起引入你的首版。[GPUI](https://zed.dev/blog/videogame)、[CRDT](https://zed.dev/blog/crdts)、[扩展能力](https://zed.dev/docs/extensions/capabilities)
+2. **Zed 的实现可以分开学习。** GPUI 解决绘制与交互，CRDT 解决并发文本编辑，Wasm 扩展与工具权限各有自己的边界。这些能力不必同时引入首版。[GPUI](https://zed.dev/blog/videogame)、[CRDT](https://zed.dev/blog/crdts)、[扩展能力](https://zed.dev/docs/extensions/capabilities)
 3. **Warp 的结构化输出值得借鉴，公开范围也要看清。** 其 Block 模型把命令、输出和丰富内容组织起来；客户端已开源，但官方说明内置服务端 Harness 尚未开源。[Block 模型](https://www.warp.dev/blog/block-model-behind-warps-agentic-development-environment)、[仓库 FAQ](https://github.com/warpdotdev/warp/blob/master/FAQ.md)
 
 流畅须测量输入工作量、长会话更新、主线程阻塞、输出积压与空闲能耗，不能从框架名推断。
@@ -192,7 +194,7 @@ Memory 仅选读，不列课程或前置。
 
 ## 事实与证据约定
 
-- **用户确认**：用户在会话中明确表达的目标与范围。
+- **需求确认**：已明确的项目目标与范围。
 - **公开事实**：官方文章、文档或源码支持的陈述，紧邻来源链接。
 - **本地观察**：本轮实际执行命令得到的环境信息，记录在开发计划中。
 - **设计建议**：针对 Yuuki Box 的推断和取舍，需要通过实现与实验验证。

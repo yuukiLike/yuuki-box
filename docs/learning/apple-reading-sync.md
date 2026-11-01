@@ -45,7 +45,7 @@
 用户条件见 [Apple 说明](https://support.apple.com/en-us/102609)；系统或浏览器已登录不等于本站已登录。
 
 <details class="qa">
-<summary>iOS 上有人用阅读同步吗？和 iCloud 是同一件事吗？</summary>
+<summary>iOS 阅读同步与 iCloud 的关系</summary>
 
 [Apple Books](https://support.apple.com/en-za/guide/iphone/iphb886e1752/ios)、[GoodLinks](https://goodlinks.app/) 使用 iCloud 同步阅读位置。
 
@@ -156,7 +156,9 @@ pnpm --dir site exec wrangler pages secret put SESSION_SECRET --project-name YOU
 
 两者放 Secret、不放 `vars`；`SESSION_SECRET` 至少 32 字符，用于登录校验。[Pages 环境变量与 Secrets](https://developers.cloudflare.com/pages/functions/bindings/#secrets)
 
-### 5 · 把接口和页面一起发布
+<div class="heading-alias" id="5--把接口和页面一起发布" aria-hidden="true"></div>
+
+### 5 · 发布接口与页面
 
 先完成本地检查：
 
@@ -197,7 +199,7 @@ curl -i --max-time 15 https://box.yuuki.page/api/reading/session
 预览域名与 `SITE_ORIGIN` 不同会未启用；真实授权在登记的 HTTPS 域名完成，不改成 `localhost`。
 
 <details class="qa">
-<summary>能出现 Apple 登录按钮，就算完成了吗？</summary>
+<summary>显示 Apple 登录按钮能证明什么？</summary>
 
 还需真实授权、令牌校验、站内会话与 D1 读写。失败时核对 Services/Team/Key/Primary App ID、私钥归属和精确回调。
 
@@ -205,14 +207,16 @@ curl -i --max-time 15 https://box.yuuki.page/api/reading/session
 
 </details>
 
-### 7 · 什么证据才算做完
+<div class="heading-alias" id="7--什么证据才算做完" aria-hidden="true"></div>
+
+### 7 · 验收证据
 
 | 证据 | 能支持的结论 |
 | --- | --- |
 | 类型检查、单元测试、构建通过 | 代码与测试覆盖的场景成立，页面能生成 |
 | 模拟 Apple 响应与本地数据库流程通过 | 能检查回调校验、合并、账号隔离及失败恢复；不能证明真实 Apple 配置有效 |
 | 正式域名接口返回预期 JSON | 已经能访问部署后的接口，并看到配置或会话状态 |
-| 两台真实设备、同账号同步与不同账号隔离通过 | 本次接入完成了真实的跨设备验收 |
+| 两台真实设备、同账号同步与不同账号隔离通过 | 跨设备同步与账号隔离已实测 |
 
 记录日期、域名、设备和失败；仅有前两项仍标“未完成真实登录验证”。
 

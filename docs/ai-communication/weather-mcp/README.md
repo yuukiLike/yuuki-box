@@ -2,9 +2,9 @@
 
 [本地工具实战](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
 
-让用户<mark class="key">连接、登录，再直接问天气</mark>。
+完整流程包含<mark class="key">连接、登录、授权与天气查询</mark>。
 
-Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供天气；你写 Server，Codex 提供 Host 和 Client。
+Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供天气；业务代码实现 Server，Codex 提供 Host 和 Client。
 
 需理解 `tools/call`、HTTP 和基础 TypeScript，无需先学模型训练或本地天气示例。先分清凭证，再搭云端工程。
 
@@ -12,17 +12,21 @@ Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供
 
 原创 SVG 为界面与天气示意，不代表实际截图或特定版本按钮位置。
 
-## 今天先做到哪里
+<div class="heading-alias" id="今天先做到哪里" aria-hidden="true"></div>
 
-先读[第一课](01-user-journey.md)，只回答一个问题：
+## 入门验收
 
-> **用户的 token 给谁看？Apple 的 token 又给谁看？**
+阅读[第一课](01-user-journey.md)，区分凭证接收方：
 
-指出“天气服务”和“Apple WeatherKit”即可，无需先建项目或填密钥。
+> **用户 token 与 Apple token 分别由哪个服务接收？**
 
-## 按这条路线跟做
+用户 token 发往天气服务，Apple token 发往 Apple WeatherKit；此步骤无需创建项目或配置密钥。
 
-| 课 | 要完成的事 | 停下来的证据 |
+<div class="heading-alias" id="按这条路线跟做" aria-hidden="true"></div>
+
+## 实现步骤
+
+| 章节 | 实现内容 | 验收结果 |
 | --- | --- | --- |
 | [1 · 用户体验与参与者](01-user-journey.md) | 把连接、授权、查询串起来 | 能解释两套 token 和两次 API 调用 |
 | [2 · Supabase 用户与授权](02-supabase-auth.md) | 准备账号、同意页、业务权限和 OAuth token | token 的接收方正确，用户不能给自己开权限 |
@@ -30,7 +34,7 @@ Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供
 | [4 · 封装为 MCP 工具](04-mcp-server.md) | 把认证、额度与天气查询放进 Edge Function | 匿名请求被拒绝，允许的请求能调用工具 |
 | [5 · 连接 Codex 与验收](05-connect-and-verify.md) | 完成浏览器授权和第一次真实查询 | 云端权限、工具调用、最终显示分别通过 |
 
-按标注文件名，在自己的天气工程跟写；文档站不部署这些代码。
+按标注文件名写入独立天气工程；文档站不部署这些代码。
 
 ## 先固定一个小范围
 
@@ -40,15 +44,17 @@ Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供
 
 独立练习项目用动态注册登记 Codex 回调，用户在浏览器登录同意；已有项目需按第二课限定客户端，不能照搬全局配置。
 
-## 把前面的概念落在具体位置
+<div class="heading-alias" id="把前面的概念落在具体位置" aria-hidden="true"></div>
+
+## 组件职责
 
 | 名称 | 在这个例子中是什么 |
 | --- | --- |
 | Host | 整个 Codex 应用，负责对话、模型与任务安排 |
-| MCP Client | Codex 内部实现 MCP 通信的组件，你不用再写一份 |
-| MCP Server | 你部署的 `weather-mcp` Edge Function |
+| MCP Client | Codex 内置的 MCP 通信组件 |
+| MCP Server | `weather-mcp` Edge Function |
 | 授权服务器 | Supabase Auth，处理 OAuth 授权码和令牌签发 |
-| 业务权限 | Postgres 中由你管理的天气使用资格与额度 |
+| 业务权限 | Postgres 中由服务端管理的天气资格与额度 |
 | 上游天气服务 | Apple WeatherKit；它不需要知道终端用户的 Supabase token |
 
 Host 可内置 Client；天气 Server 调用 WeatherKit 时又是 Apple API 的客户端，角色随连接而变。[MCP 架构](https://modelcontextprotocol.io/docs/learn/architecture)
@@ -67,7 +73,7 @@ Supabase OAuth Server 当前为 beta；本课由 Supabase 向 Codex 发访问天
 
 - 教程、导航、SVG 和代码片段的本地检查记录见[验收页](05-connect-and-verify.md#本次文档交付的验证记录)。
 - <mark class="caution">尚未部署 Supabase、OAuth 或 Edge Function。</mark>
-- 没有使用你的 Apple 额度，也没有完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。
+- 未调用真实 Apple API，未完成 Codex ↔ Supabase ↔ WeatherKit 联调。
 - SVG 是预期体验，不证明刷新、天气或来源标识已验收。
 
 先从[用户第一次点击“连接”](01-user-journey.md)开始。

@@ -30,7 +30,9 @@
 
 来源：[更新记录](https://developers.openai.com/codex/changelog)、[官方原图](https://developers.openai.com/images/codex/changelog/environment_setup.png)。新版改用准备对话、Install script／Start skill、Publish。
 
-### 图 2：任务完成后，看它交了什么文件
+<div class="heading-alias" id="图-2任务完成后看它交了什么文件" aria-hidden="true"></div>
+
+### 图 2：任务交付文件
 
 ![Neurodesk 的 Codex Legacy 任务结果截图，展示生成的构建配方及改动](../../site/public/images/codex-cloud/legacy-neurodesk-result.png)
 
@@ -53,12 +55,14 @@ Code Review、Linear、GitHub 部分入口仍属 Legacy；确认入口后读对�
 
 </details>
 
-## 你的第一次实验，到这里就够了
+<div class="heading-alias" id="你的第一次实验到这里就够了" aria-hidden="true"></div>
+
+## 首轮验证范围
 
 首轮完成 **读规格 → 拆任务 → 查依据**；实现时再加代码、检查、PR、Mac 验收。独立任务可并行，同模块按序整合。
 
-云端提供执行环境；`for-safe` 无线条件仍须自己准备并验收。
+云端提供执行环境；`for-safe` 无线测试条件由本地环境提供并验收。
 
-继续做自己的 AI 实验时，可联读 [AI 探索](../ai-ideas/README.md)与 [Issue 修复、验证和交班](../issue-garden/README.md)。
+相关实验见 [AI 探索](../ai-ideas/README.md)与 [Issue 修复、验证和交付](../issue-garden/README.md)。
 
 **已有代码的下一项练习：[for-job 的备份恢复与导出回归 →](03-for-job.md)**；也可选择 [agent-symphony 的事件与回放验证](04-agent-symphony.md)。

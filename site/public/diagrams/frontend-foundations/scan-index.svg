@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-labelledby="title desc">
-<title id="title">先找一次，还是先建索引？</title>
-<desc id="desc">先找一次，还是先建索引？。比较“建表 + 所有查询”，同时记录命中位置；不要只计一次 Map.get。</desc>
+<title id="title">数组扫描与索引构建</title>
+<desc id="desc">数组扫描与索引构建。比较“建表 + 所有查询”，同时记录命中位置；不要只计一次 Map.get。</desc>
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#6c8196" stroke-width="1.5"/></marker></defs>
 <rect width="1040" height="450" rx="20" fill="#ffffff"/>
 <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
-<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">先找一次，还是先建索引？</text>
+<text x="40" y="55" font-size="32" fill="#243448" font-weight="700">数组扫描与索引构建</text>
 <text x="40" y="94" font-size="20" fill="#455164" font-weight="400">同一批消息，查询次数会改变两种方案的总成本。</text>
 <rect x="40" y="134" width="464" height="222" rx="16" fill="#eef7ff" stroke="#8fc9ed" stroke-width="1.5"/><text x="62" y="176" font-size="24" fill="#245b86" font-weight="650">数组扫描</text><text x="62" y="216" font-size="20" fill="#455164" font-weight="400">每次查询从头找</text><text x="62" y="246" font-size="20" fill="#455164" font-weight="400">目标靠后或不存在时工作更多</text><text x="62" y="276" font-size="20" fill="#455164" font-weight="400">一次查询无需额外建表</text><text x="62" y="306" font-size="20" fill="#455164" font-weight="400">总工作量随查询次数继续增加</text><rect x="536" y="134" width="464" height="222" rx="16" fill="#edf8f2" stroke="#92cdb0" stroke-width="1.5"/><text x="558" y="176" font-size="24" fill="#23674a" font-weight="650">Map 索引</text><text x="558" y="216" font-size="20" fill="#455164" font-weight="400">先扫描数据，建立 id → 消息</text><text x="558" y="246" font-size="20" fill="#455164" font-weight="400">后续查询复用同一份索引</text><text x="558" y="276" font-size="20" fill="#455164" font-weight="400">数据变化时更新或重建</text><text x="558" y="306" font-size="20" fill="#455164" font-weight="400">额外成本：建表、存储和维护</text><text x="40" y="405" font-size="21" fill="#455164" font-weight="400">比较“建表 + 所有查询”，同时记录命中位置；不要只计一次 Map.get。</text>
 </g></svg>

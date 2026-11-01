@@ -1,4 +1,4 @@
-# 1 · 用户点击连接以后，发生了什么
+# 1 · 天气服务的连接与授权流程
 
 [目录](README.md) · [下一课：Supabase 授权](02-supabase-auth.md)
 
@@ -6,8 +6,8 @@
 
 ## 用户看到的四步
 
-1. 在 Codex 添加你的天气服务；发布后可以通过插件提供名称、介绍和连接配置。
-2. 点击连接，浏览器进入你的登录同意页。已登录的用户可以复用会话。
+1. 在 Codex 添加天气服务；发布后可通过插件提供名称、介绍和连接配置。
+2. 点击连接，浏览器进入服务的登录同意页。已登录用户可复用会话。
 3. 查看请求方与权限说明，选择允许或拒绝。
 4. 回到 Codex，发送“用天气服务查一下上海现在的天气”。
 
@@ -15,15 +15,15 @@
 
 [![浏览器中的天气服务授权页覆盖在 Codex 风格窗口前方，用户可允许或拒绝](../../../site/public/diagrams/weather-mcp/02-consent.svg)](../../../site/public/diagrams/weather-mcp/02-consent.svg)
 
-同意页由你提供，显示真实客户端名称；密码不进入对话。
+服务端提供同意页并显示真实客户端名称；密码不进入对话。
 
 ## 登录与授权分别证明什么
 
-| 动作 | 证明或决定什么 | 由谁处理 |
+| 动作 | 校验内容 | 处理方 |
 | --- | --- | --- |
-| 登录 | 当前是哪个用户 | 你的登录页面 + Supabase Auth |
+| 登录 | 当前用户身份 | 登录页面 + Supabase Auth |
 | 同意 OAuth 请求 | 是否允许该客户端代表自己访问服务 | 用户确认，Supabase Auth 记录授权 |
-| 检查天气资格 | 这个用户现在是否能调用天气工具 | 你的 Edge Function + 数据库 |
+| 检查天气资格 | 用户是否获准调用天气工具 | Edge Function + 数据库 |
 
 <mark class="caution">OAuth 同意不等于天气资格或额度。</mark>先为测试用户开通服务。
 
@@ -36,8 +36,8 @@ Codex → 天气 MCP：尝试连接
 天气 MCP → Codex：401，并指出 OAuth 元数据地址
 Codex → 元数据地址：找到 Supabase 的授权服务器
 Codex → 浏览器：打开 OAuth 授权请求
-Supabase → 你的 /oauth/consent：携带 authorization_id
-你的网站 → 用户：登录，显示请求详情，允许 / 拒绝
+Supabase → 网站 /oauth/consent：携带 authorization_id
+网站 → 用户：登录，显示请求详情，允许 / 拒绝
 Supabase → Codex 回调：返回一次性授权码
 Codex → Supabase token endpoint：用授权码和 PKCE 校验材料换 token
 Codex → 天气 MCP：带上 access token 再请求
@@ -51,8 +51,8 @@ Codex → 天气 MCP：带上 access token 再请求
 
 | 凭证 | 谁签发 | 谁持有和使用 | 谁验证 |
 | --- | --- | --- | --- |
-| Supabase OAuth access token | Supabase Auth | Codex 一侧的 MCP Client | 你的天气 MCP |
-| Apple developer token | 你的后端用 Apple 私钥签名 | 你的 Edge Function | Apple WeatherKit |
+| Supabase OAuth access token | Supabase Auth | Codex 一侧的 MCP Client | 天气 MCP 服务 |
+| Apple developer token | 后端使用 Apple 私钥签名 | Edge Function | Apple WeatherKit |
 | Apple `.p8` 私钥 | Apple 开发者后台创建并下载 | 仅服务端密钥存储 | 用于生成上面第二种 token |
 
 两段请求虽都用 Bearer，但用户 token 只到天气 MCP，Apple token 只到 Apple，私钥只留后端。[Apple 请求认证](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
@@ -60,7 +60,7 @@ Codex → 天气 MCP：带上 access token 再请求
 <details class="qa" id="为什么这里还有-host">
 <summary>为什么还需要 Host？</summary>
 
-Codex 组织对话并内置 Client，你只写 Server。先用 Inspector/脚本测接口，再验收 Codex 体验。
+Codex 组织对话并内置 Client，服务端只需实现 Server。先用 Inspector/脚本测接口，再验收 Codex 集成。
 
 </details>
 
@@ -77,6 +77,8 @@ Codex 组织对话并内置 Client，你只写 Server。先用 Inspector/脚本�
 
 刷新凭证也会过期，授权不是永久有效。[Supabase 令牌刷新](https://supabase.com/docs/guides/auth/oauth-server/oauth-flows#refresh-token-flow)
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 指出两套凭证的接收方，再进入[Supabase 用户与授权](02-supabase-auth.md)。

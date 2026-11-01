@@ -1,4 +1,4 @@
-# 3 · 让 Supabase 后端向 Apple 查询天气
+# 3 · 从 Supabase 后端查询 Apple 天气
 
 [上一课](02-supabase-auth.md) · [目录](README.md) · [下一课：MCP 工具](04-mcp-server.md)
 
@@ -14,7 +14,7 @@ WeatherKit REST API 可由 Supabase Edge Function 调用，无需 Apple 设备�
 | --- | --- | --- |
 | `APPLE_TEAM_ID` | Apple 开发者团队 ID | 标识本身不是密码，但没必要传给工具 |
 | `APPLE_KEY_ID` | 下载的 WeatherKit Key 对应的 ID | 同上 |
-| `APPLE_SERVICE_ID` | 你注册的 Services ID，如 `com.example.weather` | 同上 |
+| `APPLE_SERVICE_ID` | 注册的 Services ID，如 `com.example.weather` | 同上 |
 | `APPLE_PRIVATE_KEY_BASE64` | `.p8` 文件内容的 Base64 | **不能**；编码不等于加密 |
 
 私钥只放 Supabase Edge Function Secrets，不进聊天或仓库。[Apple 的创建与认证步骤](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
@@ -208,6 +208,8 @@ import 映射见下一课 `deno.json`；此处先阅读数据路径。
 
 资格与额度仅为访问控制练习。本例不存原始天气或批量下载；商业化需另核对原始数据收费、分发、派生数据库与缓存条款。[Developer Program 协议，Attachment 8](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/)
 
-## 到这里就停
+<div class="heading-alias" id="到这里就停" aria-hidden="true"></div>
+
+## 验收标准
 
 核对私钥留后端、token 只发 Apple、结果保留时间来源，再接 [MCP 工具](04-mcp-server.md)。

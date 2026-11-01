@@ -1,4 +1,4 @@
-# 追着一条安全告警修到底：CodeQL × Autofix
+# CodeQL × Autofix：安全告警修复
 
 从一条告警追到补丁，重跑扫描与正常功能。
 
@@ -21,7 +21,9 @@ CodeQL 扫描 → 告警与相关代码 → AI 解释并建议补丁
 
 [![安全修复既阻止危险输入，也保留正常输入对应的功能](../../site/public/diagrams/ai-practices/security-inputs.svg)](../../site/public/diagrams/ai-practices/security-inputs.svg)
 
-## 小挑战：让危险路径失败，让正常路径通过
+<div class="heading-alias" id="小挑战让危险路径失败让正常路径通过" aria-hidden="true"></div>
+
+## 验证练习：危险与正常输入
 
 在支持的语言、规则与账号下，选一条可理解的 CodeQL 告警，保存规则、位置与触发路径再求修复。
 

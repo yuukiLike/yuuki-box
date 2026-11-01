@@ -27,7 +27,7 @@ Actions／Webhook 已有；近两年的重点是接入 Agent。[gh-aw 记录](ht
 
 先手动再接事件，默认分支规则见[官方触发说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)。
 
-只想让 Outlook 收到新 Issue、新 PR 和合并提醒，先用[GitHub 原生邮件通知](08-github-outlook.md)。
+Issue、PR 与合并邮件使用[GitHub 原生通知](08-github-outlook.md)。
 
 ## 如果自制一个转发器
 
@@ -44,9 +44,11 @@ GitHub / 聊天 / 告警 → 接收器 → 持久队列 → Agent → 测试 →
 
 去重、返修次数与状态由程序保存。依据：[Webhook 实践](https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks)、[验签](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries)。
 
-多个 AI 接进来以后，看[EventBus 与持久任务总线](09-multi-agent-event-bus.md)：一张图理解并发、反馈与恢复。
+多 AI 的并发、反馈与恢复见[EventBus 与持久任务总线](09-multi-agent-event-bus.md)。
 
-## 我们下一次只试什么
+<div class="heading-alias" id="我们下一次只试什么" aria-hidden="true"></div>
+
+## 分阶段验证
 
 1. **先试分析：** 手动选择一个 Issue，普通 Responses API 返回复现与验收清单。
 2. **再试修复：** 用 [Codex Action](05-codex-api.md) 交付草稿 PR；示例面向 `for-job`，用于本站时换成 `site` 的范围和检查命令。
