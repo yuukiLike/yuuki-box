@@ -264,7 +264,8 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
 .pagination-links a:hover { background: var(--yuuki-panel); border-color: var(--sl-color-accent); }
 footer .meta:empty { display: none; }
 
-/* The directory stays the first content on the homepage. Nothing waits for JavaScript. */
+/* Keep the complete topic directory visible on the homepage. */
+#learning-step-start { scroll-margin-top: calc(var(--sl-nav-height) + 1rem); }
 .directory-home { container-type: inline-size; }
 .directory-frame .content-panel:first-child { padding-top: 1rem; padding-bottom: .15rem; }
 .directory-frame .content-panel + .content-panel { padding-top: .25rem; }

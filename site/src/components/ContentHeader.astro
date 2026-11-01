@@ -5,6 +5,7 @@ import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import DisplayMode from './DisplayMode.astro';
 import ReadingStatus from './ReadingStatus.astro';
+import LearningGuide from './LearningGuide.astro';
 import { navigationMetadata } from '../lib/navigation.mjs';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
@@ -41,6 +42,7 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
   </div>
   <div class="content-actions">
     <div class="content-search"><Search /></div>
+    <LearningGuide resume />
     <DisplayMode />
     <ReadingStatus control="sync" />
   </div>

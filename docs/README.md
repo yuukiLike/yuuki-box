@@ -16,9 +16,11 @@
 
 现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。全文搜索在生产构建与 preview 中可用。
 
-目录按学习目标分成独立专题。每个专题有自己的起点和前置条件，跨专题的阅读顺序由[模型与 Agent 四小时路线](ai-from-scaling/README.md)和[前端与 AI 联读指南](learning/ai-frontend-intersections.md)串联。
+网站首页保留完整列表目录，顶栏的历史图标用于返回已选任务，悬停时显示章节名称；每章开头写清“先做”和“停在这里”。点“开始这一小步”才会把它设为当前任务，临时查资料不会替换它。完成一小步后可以休息，其他专题留到需要时再打开。
 
-| 现在想做什么 | 从哪里出发 | 第一份成果 |
+**按最快体验云端任务来选，先做 for-safe 的只读小结。** MCP 入门仍是目录里的第一个专题。
+
+| 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
 | **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
 | **AI 搭子（同行者）** | [Side by Side · 和 AI 做朋友](side-by-side/README.md) | 优先实践 Issue 自动化，接回一份经过验证的草稿 PR |
@@ -37,6 +39,7 @@
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 用 for-safe、for-job 与 agent-symphony 练习任务交接、自动检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | 在 RTX 5060 Ti 16GB 上运行 Qwen Image 与 ACE-Step，保存图片和配乐 |
 | **阅读同步** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 用两张 SVG 分别看开发者如何开发、使用者如何跨设备同步 |
+| **附录** | [OpenAI API 模型分类与选型](appendix/openai-api-models.md) | 按用途查阅模型、价格、适用场景与停用计划 |
 
 ### MCP 入门
 
@@ -130,7 +133,7 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 
 ### 云端 Codex
 
-从[云端环境与任务](codex-cloud/README.md)开始，用 [`for-safe` 的第一次任务](codex-cloud/01-for-safe.md)练习创建环境、发布与检查结果。已有代码的练习再选 [`for-job` 的备份恢复与导出回归](codex-cloud/03-for-job.md)，或 [`agent-symphony` 的事件与回放验证](codex-cloud/04-agent-symphony.md)；[社区用法和真实历史截图](codex-cloud/02-community.md)提供公开经验。每项都区分云端实际完成的检查与本地仍需补的证据。
+最快开始选 [`for-safe` 的只读任务](codex-cloud/01-for-safe.md)：创建或选择环境，发送一条指令，核对带文件依据的三项小结就停。其他两个项目、并行实验与[社区案例](codex-cloud/02-community.md)先作为后续材料，完整入口见[云端专题](codex-cloud/README.md)。
 
 ### Windows 本地 AI
 
@@ -202,3 +205,7 @@ Memory 暂不纳入当前课程计划，相关材料保留为选读，也不作�
 完成每个里程碑后，在开发计划中更新状态并链接实测记录。只有被接受的取舍才从“建议”升级为“决定”；只有实际跑过的用例才从“待验证”升级为“通过”。
 
 后续最先需要确认的事项是模型提供方、首批工作任务、最低系统版本和关闭应用后的运行语义。这些不阻塞最早的模拟事件与界面实验。
+
+## 附录
+
+[OpenAI API 模型分类与选型](appendix/openai-api-models.md)按通用推理与编程、图片、语音对话、转写、翻译、检索、专业领域和开放权重分类，保留价格、适合本项目的用法与官方来源。较早型号、已弃用模型和停用记录单独列出，资料核对于 2026-11-01。

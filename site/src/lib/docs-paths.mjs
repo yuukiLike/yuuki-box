@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { learningStep } from './learning-guide.mjs';
 
 export const repositoryRoot = fileURLToPath(new URL('../../../', import.meta.url));
 export const docsRoot = resolve(repositoryRoot, 'docs');
@@ -53,6 +54,14 @@ export default function repositoryMarkdown() {
     if (!sourceFile || relative(docsRoot, sourceFile).startsWith('..')) return;
     const firstHeading = tree.children.findIndex((node) => node.type === 'heading' && node.depth === 1);
     if (firstHeading >= 0) tree.children.splice(firstHeading, 1);
+
+    const step = learningStep(documentId(posix(relative(docsRoot, sourceFile))));
+    if (step) {
+      const text = (node) => node.value ?? (node.children ?? []).map(text).join('');
+      const start = tree.children.findIndex((node) => node.type === 'heading'
+        && (step.section ? text(node) === step.section : node.depth === 2));
+      tree.children.splice(Math.max(0, start), 0, { type: 'html', value: '<span id="learning-step-start"></span>' });
+    }
 
     function visit(node) {
       if (node.type === 'image' && node.url) {

@@ -1,7 +1,21 @@
 ---
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
 import ReadingStatus from './ReadingStatus.astro';
+import { learningStep } from '../lib/learning-guide.mjs';
+const guided = Boolean(learningStep(Astro.locals.starlightRoute.entry.id));
 ---
 
 <ReadingStatus footer />
-<DefaultFooter><slot /></DefaultFooter>
+{guided ? <>
+  <p class="learning-end">今天可以停在这里。下一章留到你想继续的时候。</p>
+  <details class="learning-next">
+    <summary>之后再选：前后章节与页面信息</summary>
+    <DefaultFooter><slot /></DefaultFooter>
+  </details>
+</> : <DefaultFooter><slot /></DefaultFooter>}
+
+<style>
+  .learning-end { margin-top: 1rem; color: var(--sl-color-gray-2); font-size: .85rem; }
+  .learning-next { margin-top: .5rem; }
+  .learning-next > summary { color: var(--sl-color-gray-3); font-size: .8rem; cursor: pointer; }
+</style>

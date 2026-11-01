@@ -41,6 +41,8 @@
 
 ## 可以调用哪些模型？
 
+需要按类型逐项比较，查阅目录最底部的[附录 OpenAI API 模型分类与选型](../appendix/openai-api-models.md)，其中分别列出通用、图片、语音、检索与专业模型，以及旧型号和停用计划。
+
 下面列出常见用途与当前模型示例。**图片、TTS、转写和实时语音都可以消耗同一笔赠额**，具体费用随模型与用量变化。[额度覆盖范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 | 想做什么 | 模型示例 | 调用入口 |

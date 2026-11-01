@@ -377,6 +377,15 @@ export const navigation = [
       page('learning/apple-reading-sync', '最后一课：Apple 登录与阅读同步', ['开发者视角', '使用者视角', 'Apple 登录'], '最后一课 · Apple 登录与阅读同步'),
     ],
   },
+  {
+    label: '附录',
+    color: 'sky',
+    description: '按用途查阅 OpenAI API 模型、价格与适用场景，区分现役型号、旧型号和停用计划。',
+    tags: [topic('模型分类', 'appendix/openai-api-models#类型速查'), topic('语音与图片', 'appendix/openai-api-models'), topic('停用计划', 'appendix/openai-api-models#已弃用但尚未停用')],
+    items: [
+      page('appendix/openai-api-models', '附录 OpenAI API 模型分类与选型', ['OpenAI API', '模型选型', '分类查阅']),
+    ],
+  },
 ];
 
 export const tagText = (tag) => typeof tag === 'string' ? tag : tag.text;

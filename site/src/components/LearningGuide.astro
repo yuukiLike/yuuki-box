@@ -1,0 +1,145 @@
+---
+import { learningStep, learningUrl } from '../lib/learning-guide.mjs';
+
+interface Props { resume?: boolean; }
+const { resume = false } = Astro.props;
+const { entry } = Astro.locals.starlightRoute;
+const id = entry.id;
+const label = entry.data.title;
+const step = learningStep(id);
+---
+
+{resume && <a class="learning-resume print:hidden" href="/" data-learning-resume data-page-id={id}
+  title="回到上次阅读" aria-label="回到上次阅读" data-pagefind-ignore hidden>
+  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 11a9 9 0 1 1 2.6 7.4M3 4v7h7M12 7v5l3 2" />
+  </svg>
+</a>}
+
+{!resume && step && <aside class="learning-guide" data-learning-guide data-pagefind-ignore
+  data-lesson-id={id} data-lesson-label={label}>
+  <p class="learning-return" data-learning-return hidden>
+    你正在做另一小步。<a data-learning-return-link>回到刚才的任务</a>
+  </p>
+  <p class="learning-eyebrow" data-learning-eyebrow>现在只做这一小步</p>
+  <dl>
+    <div><dt>先做</dt><dd data-learning-first>{step.first}</dd></div>
+    <div><dt>停在这里</dt><dd data-learning-stop>{step.stop}</dd></div>
+  </dl>
+  <div class="learning-actions">
+    <a class="learning-start" href={learningUrl(id)} data-learning-start>开始这一小步</a>
+    <button type="button" data-learning-done hidden>这一步完成了</button>
+  </div>
+  <p class="learning-note">这是本次的小目标。其余内容和延伸链接，等用到时再看。</p>
+  <p class="learning-storage" role="status" data-learning-storage hidden></p>
+</aside>}
+{!resume && step && id.startsWith('labs/') && <span id="learning-step-start"></span>}
+
+<script>
+  import { learningUrl, learningFocusKey, parseLearningFocus, saveLearningFocus } from '../lib/learning-guide.mjs';
+
+  const panel = document.querySelector<HTMLElement>('[data-learning-guide]');
+  const resume = document.querySelector<HTMLAnchorElement>('[data-learning-resume]');
+  let storage: Storage | null = null;
+  let focus: ReturnType<typeof parseLearningFocus> = null;
+  try {
+    storage = window.localStorage;
+    focus = parseLearningFocus(storage.getItem(learningFocusKey));
+  } catch { storage = null; }
+
+  function render() {
+    if (resume) {
+      resume.hidden = !focus || focus.id === resume.dataset.pageId;
+      if (focus) {
+        resume.href = learningUrl(focus.id, focus.anchor);
+        resume.title = `回到上次阅读：${focus.label}`;
+        resume.setAttribute('aria-label', resume.title);
+      }
+    }
+    if (!panel) return;
+    const active = focus?.id === panel.dataset.lessonId;
+    const finished = active && focus?.done;
+    const start = panel.querySelector<HTMLAnchorElement>('[data-learning-start]')!;
+    const done = panel.querySelector<HTMLButtonElement>('[data-learning-done]')!;
+    const eyebrow = panel.querySelector<HTMLElement>('[data-learning-eyebrow]')!;
+    const returnNotice = panel.querySelector<HTMLElement>('[data-learning-return]')!;
+    const returnLink = panel.querySelector<HTMLAnchorElement>('[data-learning-return-link]')!;
+    start.href = learningUrl(panel.dataset.lessonId!, active ? focus?.anchor : undefined);
+    start.textContent = finished ? '回看这一小步' : active ? '继续这一小步' : '开始这一小步';
+    eyebrow.textContent = finished ? '这一小步已完成，今天可以到这里' : '现在只做这一小步';
+    done.hidden = !active || Boolean(finished);
+    returnNotice.hidden = !focus || focus.done || active;
+    if (focus) {
+      returnLink.textContent = `回到「${focus.label}」`;
+      returnLink.href = learningUrl(focus.id, focus.anchor);
+    }
+  }
+
+  function persist() {
+    if (saveLearningFocus(storage, focus)) return;
+    const notice = panel?.querySelector<HTMLElement>('[data-learning-storage]');
+    if (!notice) return;
+    notice.hidden = false;
+    notice.textContent = '这一页仍可继续；当前浏览器暂时无法保存跨页接续。';
+  }
+
+  if (panel) {
+    panel.querySelector('[data-learning-start]')!.addEventListener('click', () => {
+      if (focus?.id !== panel.dataset.lessonId) {
+        focus = { id: panel.dataset.lessonId!, label: panel.dataset.lessonLabel!, done: false };
+        persist();
+      }
+      render();
+    });
+    panel.querySelector('[data-learning-done]')!.addEventListener('click', () => {
+      if (!focus || focus.id !== panel.dataset.lessonId) return;
+      focus = { ...focus, done: true };
+      persist();
+      render();
+      const eyebrow = panel.querySelector<HTMLElement>('[data-learning-eyebrow]')!;
+      eyebrow.tabIndex = -1;
+      eyebrow.focus({ preventScroll: true });
+    });
+    window.addEventListener('pagehide', () => {
+      if (!focus || focus.done || focus.id !== panel.dataset.lessonId) return;
+      const headings = [...document.querySelectorAll<HTMLElement>('.sl-markdown-content :is(h2, h3)[id]')];
+      const reached = headings.filter((heading) => heading.getClientRects().length
+        && heading.getBoundingClientRect().top <= window.innerHeight * .35).at(-1);
+      if (reached) saveLearningFocus(storage, { ...focus, anchor: reached.id });
+    });
+  }
+  window.addEventListener('storage', (event) => {
+    if (event.key !== learningFocusKey && event.key !== null) return;
+    focus = event.key === null ? null : parseLearningFocus(event.newValue);
+    render();
+  });
+  window.addEventListener('pageshow', () => {
+    if (!storage) return;
+    try {
+      focus = parseLearningFocus(storage.getItem(learningFocusKey));
+      render();
+    } catch { storage = null; }
+  });
+  render();
+</script>
+
+<style>
+  .learning-resume { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: .5rem; color: var(--sl-color-gray-3); text-decoration: none; }
+  .learning-resume[hidden] { display: none; }
+  .learning-resume:hover, .learning-resume:focus-visible { color: var(--sl-color-accent-high); background: var(--yuuki-hover); }
+  .learning-guide { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--yuuki-border); border-radius: .65rem; background: var(--yuuki-panel); }
+  .learning-guide [hidden] { display: none !important; }
+  .learning-guide p { margin: 0; }
+  .learning-eyebrow { color: var(--sl-color-accent-high); font-size: .8rem; font-weight: 600; }
+  .learning-guide dl { display: grid; gap: .35rem; margin: .65rem 0 .8rem; font-size: .9rem; line-height: 1.65; }
+  .learning-guide dl > div { display: grid; grid-template-columns: 4.8rem minmax(0, 1fr); gap: .35rem; }
+  .learning-guide dt { color: var(--sl-color-gray-3); }
+  .learning-guide dd { margin: 0; }
+  .learning-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .learning-actions :is(a, button) { display: inline-flex; padding: .4rem .7rem; border: 1px solid var(--yuuki-border); border-radius: .4rem; background: transparent; color: var(--sl-color-text); font: 500 .85rem/1.5 var(--sl-font); text-decoration: none; cursor: pointer; }
+  .learning-actions .learning-start { background: var(--sl-color-accent-low); color: var(--sl-color-accent-high); border-color: var(--sl-color-accent-low); }
+  .learning-actions :is(a, button):hover { border-color: var(--sl-color-accent); }
+  .learning-note, .learning-storage { margin-top: .65rem !important; color: var(--sl-color-gray-3); font-size: .75rem; line-height: 1.6; }
+  .learning-return { margin-bottom: .65rem !important; font-size: .85rem; }
+  @media (max-width: 30rem) { .learning-guide dl > div { grid-template-columns: 1fr; gap: 0; } }
+</style>

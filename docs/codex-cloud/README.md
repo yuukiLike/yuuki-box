@@ -2,7 +2,18 @@
 
 **把仓库和一个明确任务交给 Codex，让它在云端读文件、改代码、运行命令，再回来检查结果。你的电脑休眠后，云端任务仍能继续。** [官方概览](https://learn.chatgpt.com/docs/cloud)
 
-这一专题从 `for-safe` 的规格拆分开始，再增加 `for-job` 和 `agent-symphony` 两个已有代码的项目：练习让云端检查简历编辑与导出，以及 Agent 事件记录与回放。每次交出一个小任务，观察 AI 实际接管了哪些工作、还缺哪些本地验收。
+## 最快开始：先用 for-safe
+
+**如果现在只想试一次，选 for-safe 的只读任务。** 第一轮让云端读 README 和实际目录，交回一份简短小结。课程中的这一轮不要求构建应用、配置无线设备或完成代码改动。
+
+现在只打开[第一条云端任务](01-for-safe.md)。先确认是否已有发布好的环境，再复制其中的只读指令。收到带文件依据的小结，就完成这次体验。
+
+创建、发布环境后才能发起任务；已经有可用环境时直接选用。[OpenAI 官方起步流程](https://learn.chatgpt.com/docs/cloud)
+
+<details>
+<summary>以后再看：其他 demo、完整目录与验证边界</summary>
+
+`for-job` 用来练习已有 Web 项目的检查与导出，`agent-symphony` 用来练习事件与回放。它们留到第一次云端交付完成后再选。
 
 | 阅读顺序 | 你会得到什么 |
 | --- | --- |
@@ -68,4 +79,6 @@
 
 之前截图里的 **API credit balance** 是 API 侧余额，不是这里的云端任务额度。订阅赠送的 API credits 也不适用于通过 API key 使用 Codex。云端跟做使用 ChatGPT 登录，不需要把 API key 填进环境。[API 赠额适用范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
-**下一步：[用 for-safe 发出第一条云端任务 →](01-for-safe.md)**；已有代码的练习可选 [for-job](03-for-job.md) 或 [agent-symphony](04-agent-symphony.md)。
+</details>
+
+本次最快入口核对：2026-11-01。其他产品规则沿用正文各自标注的核对日期。

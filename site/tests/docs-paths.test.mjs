@@ -45,10 +45,11 @@ test('public diagram images and their full-size links share a local URL while ot
     { type: 'image', url: 'https://example.com/image.png', alt: '远程图片' },
   ] };
   repositoryMarkdown()(tree, { path: document });
-  assert.equal(tree.children[0].url, '/diagrams/ai-ideas-map.svg');
-  assert.equal(tree.children[0].alt, '两项已有设想与五个新方向');
-  assert.equal(tree.children[1].url, 'local-image.png');
-  assert.equal(tree.children[2].url, 'https://example.com/image.png');
+  const images = tree.children.filter(node => node.type === 'image');
+  assert.equal(images[0].url, '/diagrams/ai-ideas-map.svg');
+  assert.equal(images[0].alt, '两项已有设想与五个新方向');
+  assert.equal(images[1].url, 'local-image.png');
+  assert.equal(images[2].url, 'https://example.com/image.png');
 });
 
 test('rendering removes the source H1 once and rewrites links without editing the Markdown source', () => {
@@ -57,6 +58,7 @@ test('rendering removes the source H1 once and rewrites links without editing th
     { type: 'paragraph', children: [{ type: 'link', url: '../README.md', children: [{ type: 'text', value: '导航' }] }] },
   ] };
   repositoryMarkdown()(tree, { path: source });
-  assert.equal(tree.children.length, 1);
-  assert.equal(tree.children[0].children[0].url, '/guide/');
+  assert.equal(tree.children.length, 2);
+  assert.equal(tree.children[0].value, '<span id="learning-step-start"></span>');
+  assert.equal(tree.children[1].children[0].url, '/guide/');
 });
