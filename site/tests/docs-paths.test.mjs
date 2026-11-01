@@ -35,6 +35,18 @@ test('repository code links preserve line numbers and other local checkouts rema
   assert.equal(resolveDocumentLink('https://example.com/a', source), 'https://example.com/a');
 });
 
+test('absolute checkout links use the same documentation and public asset routes as relative links', () => {
+  assert.equal(resolveDocumentLink(`${resolve(docsRoot, 'kv-cache/README.md')}#prefill`, source), '/kv-cache/#prefill');
+  assert.equal(resolveDocumentLink(encodeURI(resolve(docsRoot, 'tts/让-Yuuki-开口说第一句话.md')), source), '/tts/%E8%AE%A9-Yuuki-%E5%BC%80%E5%8F%A3%E8%AF%B4%E7%AC%AC%E4%B8%80%E5%8F%A5%E8%AF%9D/');
+  assert.equal(resolveDocumentLink(`${resolve(repositoryRoot, 'site/public/diagrams/codex-cloud-first-task.svg')}?v=1`, source), '/diagrams/codex-cloud-first-task.svg?v=1');
+});
+
+test('site-root URLs remain unchanged when recognizing absolute checkout paths', () => {
+  for (const target of ['/codex-cloud/', '/diagrams/codex-cloud-first-task.svg?v=1', '/source/kv-cache/labs/prefix-cache.mjs', '/search?q=100%', '/#top', '//example.com/a']) {
+    assert.equal(resolveDocumentLink(target, source), target);
+  }
+});
+
 test('public diagram images and their full-size links share a local URL while other images keep their source', () => {
   const document = resolve(docsRoot, 'ai-ideas/01-ideas-map.md');
   const target = '../../site/public/diagrams/ai-ideas-map.svg';

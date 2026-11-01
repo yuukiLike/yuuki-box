@@ -19,7 +19,9 @@ export function documentUrl(entry) {
 // Markdown 保持可在仓库阅读；只在网站渲染时改写目标地址。
 export function resolveDocumentLink(target, sourceFile) {
   if (!target || target.startsWith('#') || /^(?:[a-z][\w+.-]*:|\/\/)/i.test(target)) return target;
-  if (target.startsWith('/') && !target.startsWith('/Users/')) return target;
+  // 当前检出的绝对路径也需要转换；保留站内 URL 和已有的 macOS 路径处理。
+  const inCheckout = target.startsWith(repositoryRoot) || target.startsWith(encodeURI(repositoryRoot));
+  if (target.startsWith('/') && !target.startsWith('/Users/') && !inCheckout) return target;
 
   const [, pathname, suffix = ''] = target.match(/^([^?#]*)(.*)$/);
   const decoded = decodeURIComponent(pathname);
