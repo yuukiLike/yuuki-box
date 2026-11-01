@@ -97,6 +97,7 @@ export const navigation = [
           page('issue-garden/05-codex-api', 'API 路线 · 用 Codex Action 从 Issue 交付 PR', ['OpenAI API', 'Codex Action', '独立验证']),
           page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
           page('issue-garden/07-automation-options', 'AI 自动化：GitHub 工作流与自制转发器', ['路线比较', 'Webhook', '转发器'], '自动化 · 工作流与转发器'),
+          page('issue-garden/08-github-outlook', 'GitHub → Outlook：Issue 与 PR 邮件提醒', ['邮件通知', 'GitHub', 'Outlook'], '通知 · GitHub → Outlook'),
         ],
       },
     ],

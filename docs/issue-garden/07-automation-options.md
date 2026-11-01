@@ -27,6 +27,8 @@ Actions、Webhook 是已有基础设施；近两年的探索重点是把 Agent �
 
 先用手动入口，再加事件。工作流需满足各事件的默认分支规则；具体见[官方触发说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)。
 
+只想让 Outlook 收到新 Issue、新 PR 和合并提醒，先用[GitHub 原生邮件通知](08-github-outlook.md)。
+
 ## 如果自制一个转发器
 
 ```text

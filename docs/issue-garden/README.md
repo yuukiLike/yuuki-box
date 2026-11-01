@@ -14,6 +14,8 @@
 
 想选工具或自己接事件，读[AI 自动化：GitHub 工作流与自制转发器](07-automation-options.md)。
 
+只想收邮件，按[GitHub → Outlook 提醒](08-github-outlook.md)开启原生通知。
+
 ## 先认识今晚的搭档
 
 | 角色 | 负责什么 | 像前端里的什么 |
