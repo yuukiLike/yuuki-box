@@ -17,7 +17,7 @@ async function main(): Promise<void> {
       const checkpoint: CheckpointInput = {
         project: values.invalid ? '../outside' : 'yuuki-box',
         context: '本次实验：发现工具、保存记录，并在服务进程重启后读取。',
-        next: '我随便写一个',
+        next: 'test',
         stopWhen: '能区分 MCP 的发现与调用，以及工具实现的文件持久化。',
       };
       console.log(`[MCP] tools/call → save_checkpoint | project=${checkpoint.project}`);
