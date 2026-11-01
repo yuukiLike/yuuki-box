@@ -1,3 +1,9 @@
+---
+next:
+  link: /mcp-projects/
+  label: MCP 项目实战
+---
+
 # 在 Codex 里用自己的 MCP
 
 **本课只做一件事：用「接着做」MCP 保存一份项目记录，换一个 Codex 会话再取回。**
@@ -97,6 +103,8 @@ codex mcp get yuuki-continue
 
 后面的资料不计入本课的完成条件，今天可以直接停在这里。
 
+想继续做工具，下一步去 [MCP 项目实战](../mcp-projects/README.md)选一个项目。
+
 <details>
 <summary>选读：参考资料与延伸练习</summary>
 
@@ -108,7 +116,7 @@ codex mcp get yuuki-continue
 
 **其他练习**
 
-下次想观察跨进程调用时，选[独立 MCP 演示](00-minimal-mcp.md)；想做一个实际工具时，选 [MCP 实战项目](../mcp-projects/README.md)。[课程目录](README.md)保留其他学习入口。
+需要自己写客户端或排查通信时，再做[MCP 客户端与调用链实验（选修）](00-minimal-mcp.md)。[课程目录](README.md)保留其他学习入口。
 
 </details>
 

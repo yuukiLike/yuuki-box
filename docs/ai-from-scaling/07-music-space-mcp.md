@@ -1,6 +1,6 @@
 # 音乐 1：把一段音乐折成声部之结
 
-本篇属于 [MCP 项目实战](../mcp-projects/README.md)的音乐选修。看懂[独立 MCP 演示](00-minimal-mcp.md)后即可开始，无需先完成模型训练、Harness 或其他实战项目。
+本篇属于 [MCP 项目实战](../mcp-projects/README.md)的音乐选修，可独立开始。初次接入可先读[Codex MCP 入门](00-codex-mcp.md)，无需先完成客户端实验、模型训练、Harness 或其他实战项目。
 
 如果一首曲子能成为一件可以从侧面观察、交给 Blender 继续编辑的雕塑，会是什么样？
 

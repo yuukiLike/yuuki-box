@@ -6,7 +6,7 @@
 
 [上一课：SSE 实战](03-sse-http.md) · [目录](README.md) · [下一课](05-failure.md)
 
-复用[MCP 演示](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
+复用[客户端与调用链实验](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 
 **看输出 → 找代码 → 对照名称、参数与结果。**
 
@@ -64,7 +64,7 @@
 
 ## 1. 运行：观察两种不同的请求
 
-已经跑过第一个演示，可以直接看下一步。首次使用先按[开场教程](../ai-from-scaling/00-minimal-mcp.md)安装依赖，再运行：
+已经跑过客户端实验，可以直接看下一步。首次使用先按[选修实验](../ai-from-scaling/00-minimal-mcp.md)安装依赖，再运行：
 
 ```bash
 pnpm demo:mini-mcp

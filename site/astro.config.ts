@@ -22,7 +22,7 @@ export default defineConfig({
       title: 'Yuuki 学习手记',
       credits: false,
       disable404Route: true,
-      description: '按学习目标选择 MCP 入门、模型基础、Agent 工程、MCP 实战、AI 开发、应用通信、前端性能与语音交互，按需查阅探索和架构研究。',
+      description: '从 MCP 入门接着做工具实战，按需学习远程授权；另可选择模型基础、Agent 工程、AI 开发、应用通信、前端性能与语音交互。',
       locales: { root: { label: '简体中文', lang: 'zh-CN' } },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/yuukiLike/yuuki-box' }],
       customCss: ['./src/styles/custom.css'],

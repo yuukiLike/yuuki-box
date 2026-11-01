@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="920" viewBox="0 0 680 920" role="img" aria-labelledby="title desc">
-  <title id="title">第一课：看懂一次 MCP 工具调用</title>
+  <title id="title">选修：MCP 客户端与调用链实验</title>
   <desc id="desc">四步教学流程及你的操作：一，运行 demo，区分 MCP 的工具发现与调用，以及工具实现的文件持久化；二，找到 callTool、writeFile 与 readFile；三，修改 next 后重新运行，核对取回的文字；四，运行 demo --invalid，找到 projectSchema 的拒绝规则。tools/list 展示工具发现；服务重启后读取同一 Markdown 文件，验证的是文件持久化，不是 MCP 自动记忆。</desc>
   <style>
     .canvas { fill: #ffffff; }
@@ -16,7 +16,7 @@
   </style>
 
   <rect class="canvas" width="680" height="920" rx="16"/>
-  <text class="title" x="32" y="52">看懂一次 MCP 工具调用</text>
+  <text class="title" x="32" y="52">MCP 调用链实验（选修）</text>
   <text class="body" x="32" y="88">MCP 负责发现与调用，工具负责文件读写。</text>
   <text class="label" x="48" y="137">教学流程</text>
   <text class="label" x="392" y="137">你来做</text>

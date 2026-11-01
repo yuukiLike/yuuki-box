@@ -1,6 +1,16 @@
-# 开场 看懂一次 MCP 工具调用
+---
+next:
+  link: /mcp-projects/
+  label: MCP 项目实战
+---
 
-想直接接入 Codex，读[上一篇](00-codex-mcp.md)。本篇用独立客户端观察 MCP 请求。
+# 选修：MCP 客户端与调用链实验
+
+本篇演示 Host、Client、Server 三种职责的协作：脚本安排调用，Client 发送请求，Server 执行工具。**MCP 通信和文件读写真正发生；Host 的调用编排由固定脚本代替，未接入模型。**
+
+**如果你的目标是开发 MCP Server，可以跳过本篇。** 通常由我们编写 Server，Host 与 Client 由 Codex 等现有应用提供。沿[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)继续即可。
+
+需要自己写客户端、追踪请求或排查通信错误时，再做下面的实验。
 
 用 `save_checkpoint` 保存 Markdown，再用 `resume` 取回。先分清两件事：
 
@@ -13,7 +23,7 @@
 
 ## 教学流程与你的操作
 
-[![第一课流程：运行 demo，区分 MCP 发现与调用和文件持久化；定位代码，修改 next，再验证错误输入](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
+[![选修实验流程：运行 demo，区分 MCP 发现与调用和文件持久化；定位代码，修改 next，再验证错误输入](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)](../../site/public/diagrams/ai-from-scaling/00-minimal-mcp-flow.svg)
 
 ## 1. 运行：先看到完整结果
 
@@ -67,11 +77,13 @@ MCP 通信和文件读写都实际发生；客户端的 `console.log()` 负责�
 
 ## 2. 定位：谁调用，谁真正读写文件
 
-打开三个文件：
+打开三个文件，分别看调用编排、协议通信与工具执行：
 
 1. [demo.ts](../../examples/minimal-mcp/src/demo.ts)：找到 `client.listTools()` 和 `callTool(client, 'save_checkpoint', checkpoint, ...)`。前者查询有哪些工具，后者把工具名和 `checkpoint` 参数交给客户端的调用函数。
 2. [client.ts](../../examples/minimal-mcp/src/client.ts)：找到 `client.callTool({ name, arguments: args })`。这一行通过 MCP 连接发出请求，等待服务端返回结果。
 3. [server.ts](../../examples/minimal-mcp/src/server.ts)：找到 `registerTool('save_checkpoint', ...)` 和 `registerTool('resume', ...)`。它们把工具名对应到执行函数；函数里的 `writeFile()` 和 `readFile()` 真正操作文件。
+
+这里的 `demo.ts` 代替 Host 安排调用，与 Client 运行在同一程序中；Server 是另行启动的服务进程。
 
 先看保存函数里的这两行：
 
@@ -129,7 +141,7 @@ pnpm demo:mini-mcp --invalid
 
 ## 到这里完成
 
-能指出发现、调用、文件读写和输入校验的位置，MCP 入门就完成了。下面按需查阅。
+能指出调用编排、MCP 通信、文件读写和输入校验的位置，就完成本次选修实验。下面按需查阅。
 
 接下来按目标选择：[MCP 项目实战](../mcp-projects/README.md)做一个工具，[应用通信](../ai-communication/README.md)追踪请求，或 [Agent 入门](03-build-a-harness.md)理解模型怎样选择和执行工具。想研究训练原理，再进入[模型基础](01-understand-models.md)。
 

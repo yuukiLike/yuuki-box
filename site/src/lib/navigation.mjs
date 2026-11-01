@@ -30,11 +30,11 @@ export const navigation = [
   {
     label: 'MCP 入门',
     color: 'sky',
-    description: '先让 Codex 调用自己的工具，再用独立客户端观察发现、调用与校验。TypeScript 工程基础按需补齐。',
-    tags: [topic('Codex MCP', 'ai-from-scaling/00-codex-mcp'), topic('独立演示', 'ai-from-scaling/00-minimal-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack'), topic('工具调用简史', 'ai-from-scaling/extra-tool-use-story')],
+    description: '先在 Codex 中接入自己编写的 MCP Server，再进入工具实战。客户端与调用链实验按需选修。',
+    tags: [topic('Codex 接入', 'ai-from-scaling/00-codex-mcp'), topic('客户端实验（选修）', 'ai-from-scaling/00-minimal-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack'), topic('工具调用简史', 'ai-from-scaling/extra-tool-use-story')],
     items: [
       page('ai-from-scaling/00-codex-mcp', 'Codex MCP：保存与取回项目记录', ['Codex', 'MCP'], 'Codex MCP · 项目记录'),
-      page('ai-from-scaling/00-minimal-mcp', '独立 MCP 演示：服务端、客户端与工具调用', ['JSON-RPC', 'stdio'], '独立 MCP 演示'),
+      page('ai-from-scaling/00-minimal-mcp', '选修：MCP 客户端与调用链实验', ['选修', 'Client', 'stdio'], '选修 · 客户端与调用链'),
       {
         label: '选读：工具调用简史',
         tags: ['Agent 历史'],
@@ -42,6 +42,40 @@ export const navigation = [
           page('ai-from-scaling/extra-tool-use-story', '工具调用简史：ReAct、函数调用、MCP 与 Skills', ['Agent 历史', '选读'], '番外 · 工具调用简史'),
         ],
       },
+    ],
+  },
+  {
+    label: 'MCP 项目实战',
+    color: 'emerald',
+    description: '从入门接着做一个想用的工具：天气查询、Blender 建模、GitHub 修复验证或音乐可视化。客户端实验不作前置。',
+    tags: [topic('项目怎么选', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐可视化', 'ai-from-scaling/07-music-space-mcp')],
+    items: [
+      page('mcp-projects', 'MCP 实战总览：按兴趣选择一个工具项目', ['选做', '项目入口']),
+      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], 'Apple 天气 MCP'),
+      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
+      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
+      {
+        label: '音乐：MIDI 可视化与短片导出',
+        tags: ['MIDI', '3D 可视化', '视频导出'],
+        items: [
+          page('ai-from-scaling/07-music-space-mcp', '声部之结：将 MIDI 声部编织成三维对象', ['MIDI', 'Three.js']),
+          page('ai-from-scaling/08-music-photo-mcp', '光之剧场：照片图层、音乐动画与短片导出', ['照片图层', '视频导出']),
+        ],
+      },
+    ],
+  },
+  {
+    label: '远程 MCP 与授权',
+    color: 'emerald',
+    description: '以天气服务为完整工程，分清用户登录与上游鉴权，再实现业务权限、工具接入和端到端验收。',
+    tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
+    items: [
+      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
+      page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
+      page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
+      page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
+      page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
+      page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
     ],
   },
   {
@@ -159,40 +193,6 @@ export const navigation = [
           page('agent-engineering/computer-use-misconceptions', 'Computer Use：理解误区与自测', ['理解误区', '状态', '验证'], '4 · 误区与自测'),
         ],
       },
-    ],
-  },
-  {
-    label: 'MCP 项目实战',
-    color: 'emerald',
-    description: '选一个感兴趣的项目：天气查询、Blender 建模、GitHub 修复验证或音乐可视化。每个项目说明自己的前置条件。',
-    tags: [topic('项目怎么选', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐可视化', 'ai-from-scaling/07-music-space-mcp')],
-    items: [
-      page('mcp-projects', 'MCP 实战总览：按兴趣选择一个工具项目', ['选做', '项目入口']),
-      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], 'Apple 天气 MCP'),
-      page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
-      page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
-      {
-        label: '音乐：MIDI 可视化与短片导出',
-        tags: ['MIDI', '3D 可视化', '视频导出'],
-        items: [
-          page('ai-from-scaling/07-music-space-mcp', '声部之结：将 MIDI 声部编织成三维对象', ['MIDI', 'Three.js']),
-          page('ai-from-scaling/08-music-photo-mcp', '光之剧场：照片图层、音乐动画与短片导出', ['照片图层', '视频导出']),
-        ],
-      },
-    ],
-  },
-  {
-    label: '远程 MCP 与授权',
-    color: 'emerald',
-    description: '以天气服务为完整工程，分清用户登录与上游鉴权，再实现业务权限、工具接入和端到端验收。',
-    tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
-    items: [
-      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
-      page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
-      page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
-      page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
-      page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
-      page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
     ],
   },
   {

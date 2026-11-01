@@ -4,7 +4,7 @@
 
 **这是实现练习。** 当前 [shared/runtime](../../examples/shared/runtime/README.md) 提供 `list_files`、`read_file`、`write_note`，尚未接入这里的 MCP `ToolSource`。下面的接口、状态和图是待实现方案，没有一条命令能直接跑出全部验收结果。
 
-**你来做：找到现有执行入口 → 接一个只读工具源 → 跑一次读取 → 在调用中途断连。** 开始前先完成[极简 MCP](../ai-from-scaling/00-minimal-mcp.md)，并具备[运行状态与恢复](05-harness-vertical-slice.md)的基础。
+**你来做：找到现有执行入口 → 接一个只读工具源 → 跑一次读取 → 在调用中途断连。** 开始前需具备[运行状态与恢复](05-harness-vertical-slice.md)的基础；不熟悉客户端连接时，先选修[客户端与调用链实验](../ai-from-scaling/00-minimal-mcp.md)。
 
 ## 先看：正常返回与中途断连
 

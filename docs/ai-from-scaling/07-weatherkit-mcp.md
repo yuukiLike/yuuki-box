@@ -251,4 +251,4 @@ pnpm check:weatherkit-mcp
 
 后续按需增加城市搜索、分钟级降雨或预警，先确认地区支持与缺失时的回答。
 
-返回[MCP 项目实战](../mcp-projects/README.md) · 回查[极简 MCP](00-minimal-mcp.md) · 对照[MCP 官方天气教程](https://modelcontextprotocol.io/docs/develop/build-server)。
+返回[MCP 项目实战](../mcp-projects/README.md) · 选修[客户端与调用链实验](00-minimal-mcp.md) · 对照[MCP 官方天气教程](https://modelcontextprotocol.io/docs/develop/build-server)。

@@ -14,21 +14,21 @@
 
 ## 阅读入口
 
-现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。各教程的演示也可从仓库根目录运行，见[常用命令](../README.md#常用命令)；详细安装说明见[本地运行](../site/README.md#本地运行)。全文搜索在生产构建与 preview 中可用。
+现在可以通过 [Astro 文档目录](../site/src/pages/index.astro)一起浏览这些资料。首次在仓库根目录执行 `pnpm i`，之后用 `pnpm docs:dev` 启动，打开终端打印的本地地址。各教程的演示也可从仓库根目录运行，使用 `pnpm run` 查看全部脚本；详细安装说明见[本地运行](../site/README.md#本地运行)。全文搜索在生产构建与 preview 中可用。
 
 网站首页保留完整列表目录，顶栏的历史图标用于返回已选任务，悬停时显示章节名称；每章开头写清“先做”和“停在这里”。点“开始这一小步”才会把它设为当前任务，临时查资料不会替换它。完成一小步后可以休息，其他专题留到需要时再打开。
 
-**按最快体验云端任务来选，先做 for-safe 的只读小结。** MCP 入门仍是目录里的第一个专题。
+**按最快体验云端任务来选，先做 for-safe 的只读小结。** MCP 路线按「入门 → 项目实战 → 远程授权」排列。
 
 | 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md)、[独立演示与 TS 技术栈](ai-from-scaling/00-minimal-mcp.md) | 工具发现、调用、参数校验与文件读写 |
+| **MCP 入门** | [Codex MCP](ai-from-scaling/00-codex-mcp.md) | 编写 Server，在真实会话里保存与取回记录 |
+| **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
+| **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 搭子（同行者）** | [Side by Side · 和 AI 做朋友](side-by-side/README.md) | 优先实践 Issue 自动化，接回一份经过验证的草稿 PR |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 训练一个字符模型，解释预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | 算清 KV 容量，解释哪些前缀可以复用 |
 | **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | 跑通 Harness，理解外部工具与界面自动化 |
-| **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 选一个兴趣项目，核对工具结果与最终产物 |
-| **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 分清两套凭证，再验证登录、权限与天气查询 |
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 一条核实过的审查意见，或一份能验收的修复 diff |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 一组正确输出和工作量对照，解释哪里少做了功 |
@@ -43,9 +43,21 @@
 
 ### MCP 入门
 
-先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写服务端，在真实会话里保存与取回记录。想单独观察协议调用，再做约 30 分钟的[独立 MCP 演示](ai-from-scaling/00-minimal-mcp.md)。需要补齐工程知识时，按需阅读其中的 [TypeScript 技术栈](ai-from-scaling/00-minimal-mcp.md#typescript-stack)。
+先做[Codex MCP 接入](ai-from-scaling/00-codex-mcp.md)：只写 Server，在真实会话里保存与取回记录。接着去 [MCP 项目实战](mcp-projects/README.md)选一个工具。
+
+需要自己写客户端或排查通信，再做约 30 分钟的[客户端与调用链实验（选修）](ai-from-scaling/00-minimal-mcp.md)；只开发 Server 可以跳过。需要补齐工程知识时，按需读其中的 [TypeScript 技术栈](ai-from-scaling/00-minimal-mcp.md#typescript-stack)。
 
 想先看这些概念从哪来，读[番外：工具调用怎样长成 Agent](ai-from-scaling/extra-tool-use-story.md)——它把 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills 串成一条故事线，不要求跟做。
+
+### MCP 项目实战
+
+在[实战总览](mcp-projects/README.md)选择天气、Blender、GitHub 或音乐项目。它们按兴趣选做，分别说明环境、前置知识与验证边界。
+
+本地天气工具可从离线样本开始。音乐两篇从[声部之结](ai-from-scaling/07-music-space-mcp.md)走到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不要求先学完模型与 Harness。
+
+### 远程 MCP 与授权
+
+[Supabase × WeatherKit 工程教程](ai-communication/weather-mcp/README.md)独立成篇：用户体验、登录与 OAuth、上游天气 API、MCP 封装、端到端验收。它比本地工具多出账号、数据库和部署条件；先分清用户 token 与 Apple token 的接收方，再决定是否跟做完整工程。
 
 ### AI 搭子（同行者）
 
@@ -82,16 +94,6 @@
 想理解 AI 怎样操作电脑，读 [Computer Use 四篇](agent-engineering/computer-use.md)：从截图、AX、DOM 与执行器走到 [Codex 的 cua_repl](agent-engineering/cua-repl.md)，再比较 [Claude、Gemini 与浏览器自动化工具](agent-engineering/computer-use-ecosystem.md)，用[误区自测](agent-engineering/computer-use-misconceptions.md)分清连接、权限与完成证据。
 
 需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
-
-### MCP 项目实战
-
-在[实战总览](mcp-projects/README.md)选择天气、Blender、GitHub 或音乐项目。它们按兴趣选做，分别说明环境、前置知识与验证边界。
-
-本地天气工具可从离线样本开始。音乐两篇从[声部之结](ai-from-scaling/07-music-space-mcp.md)走到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不要求先学完模型与 Harness。
-
-### 远程 MCP 与授权
-
-[Supabase × WeatherKit 工程教程](ai-communication/weather-mcp/README.md)独立成篇：用户体验、登录与 OAuth、上游天气 API、MCP 封装、端到端验收。它比本地工具多出账号、数据库和部署条件；先分清用户 token 与 Apple token 的接收方，再决定是否跟做完整工程。
 
 ### AI 开发实践
 

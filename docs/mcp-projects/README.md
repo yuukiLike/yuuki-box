@@ -1,6 +1,14 @@
+---
+prev:
+  link: /ai-from-scaling/00-codex-mcp/
+  label: 在 Codex 里用自己的 MCP
+---
+
 # MCP 项目实战：选一个想做的工具
 
-先完成[独立 MCP 演示](../ai-from-scaling/00-minimal-mcp.md)，能分清工具发现、参数校验和实际执行，再从下面选一个项目。每项实战都可以独立开始；模型训练与 Harness 课程不作为前置。
+从[Codex 接入](../ai-from-scaling/00-codex-mcp.md)继续，选一个想做的工具。我们主要编写 Server，Host 与 Client 由现有应用提供；[客户端与调用链实验（选修）](../ai-from-scaling/00-minimal-mcp.md)可跳过。
+
+每项实战都可以独立开始，环境要求见各篇开头；模型训练与 Harness 课程不作为前置。
 
 ## 按成果选择
 
@@ -18,7 +26,7 @@
 
 **本地天气 MCP** 先用样本练习业务规则，再配置 WeatherKit，最后接入已有客户端。适合先做一个自己使用的工具。
 
-**远程天气 MCP** 已单独归入「远程 MCP 与授权」专题，增加 Supabase 登录、OAuth、业务权限与远程接入。需要在自己的练习工程中实现和部署；本仓库尚未完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)，再决定是否开始。
+**[远程天气 MCP](../ai-communication/weather-mcp/README.md)** 归入紧随实战的「远程 MCP 与授权」专题，增加 Supabase 登录、OAuth、业务权限与远程接入。需要在自己的练习工程中实现和部署；本仓库尚未完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)，再决定是否开始。
 
 其他项目也保留各自的环境与验证记录；能启动工具、工具成功返回和最终产物正确，要分别检查。
 
@@ -29,4 +37,4 @@
 - 怎样把外部 MCP 接进自己的循环：做[工具源与权限练习](../agent-engineering/README.md)。
 - 为什么有 function calling、MCP 与 Skills：选读[工具调用简史](../ai-from-scaling/extra-tool-use-story.md)。
 
-返回[文档目录](../../site/src/pages/index.astro)。
+返回[MCP 入门](../ai-from-scaling/00-codex-mcp.md) · [文档目录](../../site/src/pages/index.astro)。

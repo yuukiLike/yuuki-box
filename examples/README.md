@@ -6,9 +6,9 @@
 
 原来的固定事件回放保留在独立 Lab/回放区域，便于观察界面负载；它与真实 Agent 任务分开。详细基础见 [AI 与语音架构](../docs/architecture/ai-and-speech-foundation.md) 和 [Agent runtime](shared/runtime/README.md)。
 
-独立的 TypeScript MCP 实验：[项目接续记录](../docs/ai-from-scaling/00-minimal-mcp.md)、[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
+TypeScript MCP 示例：[客户端与调用链（选修）](../docs/ai-from-scaling/00-minimal-mcp.md)、[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
 
-学习示例的安装、演示和检查统一从仓库根目录运行，例如 `pnpm install:mini-mcp`、`pnpm demo:mini-mcp`、`pnpm check:mini-mcp`。运行 `pnpm run` 查看全部脚本，或参考[常用命令](../README.md#常用命令)。
+学习示例的安装、演示和检查统一从仓库根目录运行，例如 `pnpm install:mini-mcp`、`pnpm demo:mini-mcp`、`pnpm check:mini-mcp`。运行 `pnpm run` 查看全部脚本。
 
 [Apple 天气 MCP](weatherkit-mcp/README.md) 使用自己的 WeatherKit 权限查询常用地点、整理当前与未来天气、按阈值筛选连续出门时段；配套课程包含离线练习、Apple 后台配置与真实接入验收。
 

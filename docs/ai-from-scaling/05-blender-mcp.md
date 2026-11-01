@@ -6,7 +6,7 @@
 
 **MCP 负责发现工具、传递参数和返回结果；几何由 Blender 的 Python API 创建。** 本课特别观察：客户端怎样把第一次返回的 `modelId` 显式传给后两次调用，让工具找到同一份模型文件。参数与调用顺序写在 `demo.ts`，运行演示不会让 AI 自动设计托盘。
 
-**你来做：运行 → 看剖面 → 改两处尺寸 → 对照新结果。** 前置练习是[看懂一次 MCP 工具调用](00-minimal-mcp.md)。需要本机安装 Blender、Node.js ≥ 22.22 和 pnpm 11.14。仓库已有演示记录使用 Blender 5.2.3 LTS；其他版本和实际打印效果需另行验证。
+**你来做：运行 → 看剖面 → 改两处尺寸 → 对照新结果。** 初次接入可先读[Codex MCP 入门](00-codex-mcp.md)。需要本机安装 Blender、Node.js ≥ 22.22 和 pnpm 11.14。仓库已有演示记录使用 Blender 5.2.3 LTS；其他版本和实际打印效果需另行验证。
 
 ## 先看：三个工具怎样接力
 
@@ -169,4 +169,4 @@ STL 不携带单位；本例保留毫米数值，切片时按毫米解释。闭�
 
 </details>
 
-返回[MCP 项目实战](../mcp-projects/README.md) · 回查[独立 MCP 演示](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。
+返回[MCP 项目实战](../mcp-projects/README.md) · 选修[客户端与调用链实验](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。
