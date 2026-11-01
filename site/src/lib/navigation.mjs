@@ -350,6 +350,7 @@ export const navigation = [
     tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('Issue 到 PR', 'codex-cloud/05-issue-to-pr')],
     items: [
       page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
+      page('codex-cloud/cloud-machine', '云端电脑实测：CPU、内存、Shell 与多对话', ['资源实测', 'Shell', '多任务'], '云端电脑实测'),
       page('codex-cloud/01-for-safe', '1 · 用 for-safe 发出第一条云端任务', ['for-safe', '动手练习']),
       page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
       page('codex-cloud/03-for-job', '3 · for-job 的云端检查与导出回归', ['for-job', '备份与导出']),

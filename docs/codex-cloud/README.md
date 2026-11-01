@@ -10,6 +10,8 @@
 
 创建、发布环境后才能发起任务；已经有可用环境时直接选用。[OpenAI 官方起步流程](https://learn.chatgpt.com/docs/cloud)
 
+**已经在云端工作？** 看[云端电脑实测：CPU、内存、Shell 与多对话](cloud-machine.md)。记录 `yuuki-box` 本次测得的 4 vCPU 配额、32 GiB 内存上限，以及如何复查资源、执行命令和判断多个任务的实例关系。
+
 <details>
 <summary>以后再看：其他 demo、完整目录与验证边界</summary>
 
@@ -18,6 +20,7 @@
 | 阅读顺序 | 你会得到什么 |
 | --- | --- |
 | 本页 · 三个概念 | 分清环境、任务、PR，以及额度与硬件边界 |
+| [云端电脑实测](cloud-machine.md) | 读取 CPU、内存与磁盘，分清 Shell 入口、独立任务与资源占用 |
 | [1 · 用 for-safe 开始](01-for-safe.md) | 创建环境、发布、发出第一条任务、检查交付 |
 | [2 · 社区怎么用](02-community.md) | 三种有公开来源的做法，两张真实历史界面截图 |
 | [3 · for-job](03-for-job.md) | 准备已有 Web 项目，验证备份恢复与实际导出 |

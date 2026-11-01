@@ -60,6 +60,7 @@ export const learningSteps = {
   'architecture/technology-assessment': ['只看第一节，选一个需要比较的用户行为。', '写出这次比较要回答的问题就停。'],
   'appendix/openai-api-models': ['只看类型速查，选择这次想用到的一种能力。', '记下一个候选模型和想得到的产物就停。', '类型速查'],
   'codex-cloud': ['先看本页的最快入口，选择 for-safe 的只读任务。', '找到创建环境与第一条任务的入口就停。'],
+  'codex-cloud/cloud-machine': ['在云端对话发送本页的只读资源查询任务。', '得到资源限制与项目状态，分清可见 CPU 数和配额就停。', '在自己的对话里复查'],
   'codex-cloud/01-for-safe': ['打开 Codex 新任务，选择 Cloud，再打开环境选择器。', '确认 for-safe 是否已有已发布环境，就完成这次启动。', '② 创建并发布环境'],
   'codex-cloud/02-community': ['只看第一种社区用法。', '记下一项云端实际做过的工作与一项仍需人检查的结果就停。'],
   'codex-cloud/03-for-job': ['先核对仓库说明里的安装与检查条件。', '确认能否开始一次基线检查就停，导出回归下一次再做。'],
