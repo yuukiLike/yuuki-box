@@ -203,10 +203,7 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
   padding: .02em .12em;
   border-radius: .12em;
   font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--highlight-color) 70%, transparent);
-  text-decoration-thickness: .09em;
-  text-underline-offset: .2em;
+  text-decoration: none;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
