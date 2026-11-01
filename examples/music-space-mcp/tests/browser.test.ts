@@ -5,8 +5,9 @@ import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { execFile } from 'node:child_process';
 import test from 'node:test';
+import sharp from 'sharp';
 import { startPreview } from '../src/http.js';
-import { launchBrowser, exportClip } from '../src/render.js';
+import { launchBrowser, exportClip, exportModel } from '../src/render.js';
 import { decodeOwnWav, ffmpeg } from '../src/media.js';
 import { fixture } from './helpers.js';
 
@@ -17,24 +18,36 @@ test('浏览器验证小节定位、独听、真实音频输出、深度调整�
   const photo = await f.store.create(audio.assetId, 'photo', { title: '浏览器剧场实验', imagePath: fileURLToPath(new URL('../../assets/theatre.png', import.meta.url)),
     layers: [{ path: fileURLToPath(new URL('../../assets/proscenium.png', import.meta.url)), depth: 2.4 },
       { path: fileURLToPath(new URL('../../assets/silk.png', import.meta.url)), depth: 5 }] });
-  const preview = await startPreview(f.store); t.after(() => preview.close());
-  const browser = await launchBrowser(); t.after(() => browser.close());
+  const preview = await startPreview(f.store); f.onCleanup(() => preview.close());
+  const browser = await launchBrowser(); f.onCleanup(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`${preview.origin}/?scene=${score.sceneId}&backend=webgl`);
   await page.waitForFunction(() => !!window.musicSpace);
+  await page.getByRole('button', { name: '操作近景', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('[data-view="detail"]')?.classList.contains('selected'));
+  assert.equal((await f.store.scene(score.sceneId)).presentation.view, 'detail');
+  await page.locator('#lid').evaluate(input => { (input as HTMLInputElement).value = '45'; input.dispatchEvent(new Event('change', { bubbles: true })); });
+  await page.waitForFunction(() => document.getElementById('lid-value')?.textContent === '45°');
+  const calls = await f.store.calls();
+  assert.ok(calls.some(call => call.name === 'update_scene' && call.source === 'workbench' && typeof call.arguments.model === 'object' && call.arguments.model !== null && 'lidAngle' in call.arguments.model && call.arguments.model.lidAngle === 45));
+  assert.ok((await page.locator('#call-request').textContent())?.includes('lidAngle'));
   await page.getByRole('button', { name: '第 8 小节', exact: true }).click();
   await page.waitForFunction(() => document.getElementById('bar-label')?.textContent === '第 8 小节');
   assert.equal((await f.store.scene(score.sceneId)).transport.position, f.music.bars[7]?.time);
   await page.getByRole('button', { name: '独听 Counterline', exact: true }).click();
   await page.waitForFunction(() => window.musicSpace.snapshot().audibleTrackIds.join() === 'track-2');
+  const counterNote = f.music.tracks[1]?.notes.find(note => note.time > 15.5); assert.ok(counterNote);
+  await page.evaluate(time => window.musicSpace.frame(time), counterNote.time + counterNote.duration / 2);
+  assert.deepEqual((await page.evaluate(() => window.musicSpace.snapshot())).pressedKeys, [counterNote.midi]);
   await page.locator('#play').click();
   await page.waitForFunction(() => window.musicSpace.snapshot().audioState === 'running' && window.musicSpace.snapshot().meter > 0.001);
   const originalAzimuth = (await f.store.scene(score.sceneId)).camera.azimuth;
+  const originalRevision = (await f.store.scene(score.sceneId)).revision;
   const box = await page.locator('#stage canvas').boundingBox(); assert.ok(box);
   await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5);
   await page.mouse.down(); await page.mouse.move(box.x + box.width * 0.6, box.y + box.height * 0.5, { steps: 5 }); await page.mouse.up();
-  await page.waitForFunction(() => document.getElementById('message')?.textContent === '调整已保存。');
+  await page.waitForFunction(revision => Number(document.getElementById('revision')?.textContent?.replace('REV ', '')) > revision, originalRevision);
   assert.notEqual((await f.store.scene(score.sceneId)).camera.azimuth, originalAzimuth);
   assert.equal((await page.evaluate(() => window.musicSpace.snapshot())).audioState, 'running');
   await page.locator('#play').click();
@@ -42,6 +55,19 @@ test('浏览器验证小节定位、独听、真实音频输出、深度调整�
   assert.equal((await f.store.scene(score.sceneId)).transport.playing, false);
   await page.goto(`${preview.origin}/?scene=${photo.sceneId}`);
   await page.waitForFunction(() => !!window.musicSpace);
+  await page.locator('#toggle-console').click();
+  await page.evaluate(async () => { await new Promise<void>(resolve => requestAnimationFrame(() => resolve())); await window.musicSpace.frame(5); });
+  const canvas = await page.locator('#stage canvas').screenshot();
+  const dimensions = await sharp(canvas).metadata(); assert.ok(dimensions.width && dimensions.height);
+  const center = await sharp(canvas).extract({ left: Math.floor(dimensions.width * 0.2), top: Math.floor(dimensions.height * 0.18), width: Math.floor(dimensions.width * 0.6), height: Math.floor(dimensions.height * 0.5) }).stats();
+  assert.ok(center.channels.some(channel => channel.stdev > 8), '展开调用面板后，模型区域应有真实图像，不能只剩空白画布');
+  await page.getByRole('button', { name: '运行这一步', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('[data-view="plan"]')?.classList.contains('selected'));
+  const staged = await f.store.scene(photo.sceneId);
+  assert.equal(staged.model.speakerSpread, 8); assert.equal(staged.presentation.view, 'plan');
+  assert.ok((await page.locator('#call-request').textContent())?.includes('speakerSpread'));
+  await page.getByRole('button', { name: '整体展示', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('[data-view="overview"]')?.classList.contains('selected'));
   await page.evaluate(() => window.musicSpace.frame(5));
   const before = await page.locator('#stage canvas').screenshot();
   await page.locator('#depth').evaluate(input => {
@@ -70,7 +96,7 @@ test('浏览器验证小节定位、独听、真实音频输出、深度调整�
 test('导出有真实图像与 AAC 音轨，独听选择进入导出，保留固定配置回执', async t => {
   const f = await fixture(t); const scene = await f.store.create(f.music.assetId, 'score', {});
   await f.store.transport({ sceneId: scene.sceneId, soloTrackIds: ['track-2'] });
-  const preview = await startPreview(f.store); t.after(() => preview.close());
+  const preview = await startPreview(f.store); f.onCleanup(() => preview.close());
   await assert.rejects(() => exportClip(f.store, scene.sceneId, preview.origin, { start: 1000, duration: 1, fps: 24, width: 640 }), /超过/);
   const exported = await exportClip(f.store, scene.sceneId, preview.origin, { start: 5, duration: 0.5, fps: 24, width: 640 });
   assert.equal(exported.frames, 12); assert.ok(exported.bytes > 1000);
@@ -85,4 +111,16 @@ test('导出有真实图像与 AAC 音轨，独听选择进入导出，保留固
   assert.ok(probe.stdout.includes('h264')); assert.ok(probe.stdout.includes('aac')); assert.ok(probe.stdout.includes('640'));
   const receipt = await readFile(join(directory, 'receipt.json'), 'utf8'); assert.ok(receipt.includes('track-2'));
   await writeFile(join(f.directory, 'verification.txt'), '已完成视频与音频验证。');
+});
+
+test('舞台 GLB 保留实体部件与内嵌屏幕贴图，下载地址可打开', async t => {
+  const f = await fixture(t);
+  const scene = await f.store.create(f.music.assetId, 'photo', { imagePath: fileURLToPath(new URL('../../assets/theatre.png', import.meta.url)) });
+  const preview = await startPreview(f.store); f.onCleanup(() => preview.close());
+  const exported = await exportModel(f.store, scene.sceneId, preview.origin, 5);
+  const data = await readFile(exported.path); assert.equal(data.toString('ascii', 0, 4), 'glTF');
+  const document = JSON.parse(data.toString('utf8', 20, 20 + data.readUInt32LE(12))) as { nodes: { name?: string }[]; images: { bufferView?: number; uri?: string }[] };
+  assert.ok(document.nodes.some(node => node.name === 'stage.deck')); assert.ok(document.nodes.some(node => node.name === 'Microphone'));
+  assert.ok(document.images.length > 0); assert.ok(document.images.every(image => typeof image.bufferView === 'number' && !image.uri));
+  const downloaded = await fetch(exported.downloadUrl); assert.equal(downloaded.status, 200); assert.equal((await downloaded.arrayBuffer()).byteLength, data.length);
 });

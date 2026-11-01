@@ -52,6 +52,21 @@ export const transportSchema = z.strictObject({
   position: z.number().min(0), playing: z.boolean(), updatedAt: z.number(),
   soloTrackIds: z.array(z.string()).max(16),
 });
+export const presentationSchema = z.strictObject({
+  view: z.enum(['overview', 'detail', 'plan']).default('overview'), labels: z.boolean().default(true),
+});
+export const modelSettingsSchema = z.strictObject({
+  lidAngle: z.number().min(0).max(65).default(32),
+  showGuide: z.boolean().default(true),
+  speakerSpread: z.number().min(3).max(9).default(6.6),
+  screenHeight: z.number().min(2).max(5).default(3.5),
+});
+export const toolCallSchema = z.strictObject({
+  id: idSchema, at: z.string(), source: z.enum(['stdio', 'workbench']),
+  name: z.string(), arguments: z.record(z.string(), z.unknown()),
+  result: z.record(z.string(), z.unknown()), error: z.boolean(),
+});
+export const objectSchema = z.strictObject({ id: z.string(), name: z.string(), controls: z.array(z.string()) });
 export const sceneSchema = z.strictObject({
   schemaVersion: z.literal(1), sceneId: idSchema, assetId: idSchema,
   title: z.string().min(1).max(120), mode: z.enum(['score', 'photo']), revision: z.number().int().positive(),
@@ -60,6 +75,8 @@ export const sceneSchema = z.strictObject({
   depthSource: z.enum(['none', 'provided', 'layered', 'layers']),
   photoLayers: z.array(z.strictObject({ file: z.string().regex(/^layer-[1-4]\.png$/), depth: z.number().min(0.5).max(6) })).max(4).default([]),
   transport: transportSchema,
+  presentation: presentationSchema.default({ view: 'overview', labels: true }),
+  model: modelSettingsSchema.default({ lidAngle: 32, showGuide: true, speakerSpread: 6.6, screenHeight: 3.5 }),
 });
 export const importInputSchema = z.strictObject({ path: pathSchema, title: z.string().trim().min(1).max(120).optional() });
 export const assetSummarySchema = musicSchema.omit({ tracks: true, bars: true, repeats: true }).extend({
@@ -72,36 +89,38 @@ export const photoInputSchema = scoreInputSchema.extend({
   layers: z.array(z.strictObject({ path: pathSchema, depth: z.number().min(0.5).max(6) })).max(4).optional(),
 }).refine(input => !input.depthPath || !input.layers?.length, '深度图和分层素材请选择一种方式。');
 export const sceneOutputSchema = z.strictObject({ scene: sceneSchema, previewUrl: z.url(), configPath: z.string() });
-export const inspectOutputSchema = sceneOutputSchema.extend({ music: assetSummarySchema, currentTime: z.number(), activeNotes: z.number().int(), audibleTrackIds: z.array(z.string()) });
+export const inspectOutputSchema = sceneOutputSchema.extend({ music: assetSummarySchema, currentTime: z.number(), activeNotes: z.number().int(), audibleTrackIds: z.array(z.string()), objects: z.array(objectSchema) });
 export const updateInputSchema = referenceSchema.extend({
   expectedRevision: z.number().int().positive(),
   title: z.string().trim().min(1).max(120).optional(),
   camera: cameraSchema.partial().optional(), score: scoreSettingsSchema.partial().optional(),
   photo: photoSettingsSchema.partial().optional(), colors: z.array(colorSchema).min(1).max(16).optional(),
   cues: z.array(cueSchema).min(1).max(32).optional(),
+  presentation: presentationSchema.partial().optional(), model: modelSettingsSchema.partial().optional(),
 });
 export const transportInputSchema = referenceSchema.extend({
   time: z.number().min(0).optional(), bar: z.number().int().positive().optional(),
   playing: z.boolean().optional(), soloTrackIds: z.array(z.string()).max(16).optional(),
 }).refine(input => input.time === undefined || input.bar === undefined, 'time 和 bar 只能指定一个。');
 export const previewInputSchema = referenceSchema.extend({ time: z.number().min(0).optional() });
-export const previewOutputSchema = z.strictObject({ path: z.string(), time: z.number(), backend: z.enum(['webgpu', 'webgl']), width: z.number(), height: z.number() });
-export const modelOutputSchema = z.strictObject({ path: z.string(), bytes: z.number().positive(), time: z.number(), revision: z.number().int().positive() });
+export const previewOutputSchema = z.strictObject({ path: z.string(), downloadUrl: z.url(), time: z.number(), backend: z.enum(['webgpu', 'webgl']), width: z.number(), height: z.number() });
+export const modelOutputSchema = z.strictObject({ path: z.string(), downloadUrl: z.url(), bytes: z.number().positive(), time: z.number(), revision: z.number().int().positive() });
 export const exportInputSchema = referenceSchema.extend({
   start: z.number().min(0).default(0), duration: z.number().min(0.5).max(20).default(4),
   fps: z.union([z.literal(24), z.literal(30)]).default(24),
   width: z.union([z.literal(640), z.literal(960), z.literal(1280)]).default(960),
 });
-export const exportOutputSchema = z.strictObject({ path: z.string(), bytes: z.number().positive(), frames: z.number().int(), duration: z.number(), backend: z.enum(['webgpu', 'webgl']) });
+export const exportOutputSchema = z.strictObject({ path: z.string(), downloadUrl: z.url(), bytes: z.number().positive(), frames: z.number().int(), duration: z.number(), backend: z.enum(['webgpu', 'webgl']) });
 export type Music = z.infer<typeof musicSchema>;
 export type Track = z.infer<typeof trackSchema>;
 export type MusicScene = z.infer<typeof sceneSchema>;
 export type SceneUpdate = z.input<typeof updateInputSchema>;
 export type TransportInput = z.infer<typeof transportInputSchema>;
+export type ToolCall = z.infer<typeof toolCallSchema>;
 export interface FrameInfo { time: number; activeNotes: number; audibleTrackIds: string[]; energy: number; backend: 'webgpu' | 'webgl' }
 export interface ViewerApi {
   frame(time: number): Promise<FrameInfo>;
   model(): Promise<string>;
-  snapshot(): FrameInfo & { audioState: string; meter: number };
+  snapshot(): FrameInfo & { audioState: string; meter: number; pressedKeys: number[] };
 }
 declare global { interface Window { musicSpace: ViewerApi } }

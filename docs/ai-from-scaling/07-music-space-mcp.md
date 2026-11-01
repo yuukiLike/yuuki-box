@@ -1,22 +1,16 @@
-# 音乐 1：把一段音乐折成声部之结
+# 音乐 1：用 MCP 控制钢琴排练台
 
-[MCP 项目实战](../mcp-projects/README.md)音乐选修，可独立开始；初次接入先看[Codex MCP 入门](00-codex-mcp.md)。
+[MCP 项目实战](../mcp-projects/README.md)的音乐选修，可独立开始；初次接入先看[Codex MCP 入门](00-codex-mcp.md)。
 
-把音乐变成可观察、可在 Blender 编辑的雕塑。
+今天<mark class="key">定位第八小节，独听第二声部</mark>，把音名对应到亮起的琴键，再对照实际 MCP 请求与结果。
 
-**声部之结 · Phrase Knot** 把时间折成圆环，声部交织；音高弯折光带、力度决定宽度、休止留下断口，播放时点亮当前音符。
+钢琴有 88 个独立琴键，可调琴盖、练习提示与机位。它与[舞台预演台](08-music-photo-mcp.md)共用场景、时间轴、播放与导出，独立于 music-eyes。
 
-可暂停、独听、旋转，也可导出 GLB 保存三维对象。
-
-今天<mark class="key">定位第八小节，独听第二声部</mark>；能指出画面与声音的数据来源就停。
-
-这套音乐 MCP 独立于 music-eyes。实现使用 TypeScript、官方 MCP SDK、Zod、Three.js 和 [Tonejs/Midi](https://github.com/Tonejs/Midi)。它与[光之剧场](08-music-photo-mcp.md)共用场景配置、时间轴、播放与导出路径。
-
-![真实渲染的三维声部空间](../../site/public/images/music-space-score.png)
+![钢琴排练台与实际 MCP 调用](../../site/public/images/music-space-score.png)
 
 ## 打开第一场实验
 
-需要 Node.js ≥ 22.22、pnpm、Chrome/Chromium 和 FFmpeg。依赖与环境配置见[示例 README](../../examples/music-space-mcp/README.md)。仓库根目录执行：
+需 Node.js ≥22.22、pnpm、Chrome/Chromium、FFmpeg；配置见[示例 README](../../examples/music-space-mcp/README.md)。根目录执行：
 
 ```bash
 pnpm install:music-space-mcp
@@ -24,104 +18,67 @@ pnpm demo:music-space-mcp
 pnpm demo:music-space-mcp:preview
 ```
 
-打开打印的网址，选择“声部之结 · Phrase Knot”；demo 同时准备两篇素材，今天只看声部。
+打开打印的地址，选择“MIDI 钢琴排练台”：
 
-1. 点击“播放”，听到一段三声部的合成试听。
-2. 点击第 8 小节，时间停在对应位置。
-3. 点击 `Counterline` 的“独听”，再播放；其他声部的音符变暗，声音只保留这一轨。
-4. 点击“听全部声部”，比较同一段音乐。
+1. 点“运行这一步”：先 `inspect_scene`，再 `set_transport`，暂停第八小节并独听 `Counterline`。
+2. 点“操作近景”与“播放”，核对压下的琴键和音名。
+3. 在“实际 MCP 调用”选 `set_transport`、展开详情，对照参数和结构化结果。
 
-**停点：** 指出当前轨、时间与空间分离；试听是基础合成音，用于检查结构和时间。
+**停点：** 说出小节、声部、定位结果，并找到一个音名对应的琴键。按钮用固定参数，不调用付费模型。
 
-## 音乐怎样折成一个结
+## 这次调用做了什么
 
-| 看见的东西 | 数据或设计依据 |
-| --- | --- |
-| 圆环上的角度 | 音符时间 / 整段时长 |
-| 不同颜色与绕环相位 | 所属声部 |
-| 光段的位置、长度与粗细 | 音符起点、时值、力度 |
-| 纤维的弯折高度 | 音高在声部路径上的偏移 |
-| 光段之间的空隙 | 原 MIDI 的休止 |
-| 发亮的端点 | 当前实际发声的音符 |
-| 跨越时间的细弧 | 同轨精确重复的音高/节奏模式 |
-| 同时发声点之间的细线 | 不同声部的同度/八度或纯五度音程类 |
-| 结上的细截面环 | MIDI 自带的段落标记 |
+`sceneId` 换成当前场景返回的 UUID：
 
-圆环、绕环五圈和尺度是视觉设计，不代表真实乐器位置或必须循环；细线仅查模 12 音程。重复须音高、相对起点、时值完全相同，不自动识别副歌。
-
-示例第二声部第 3 小节进入，第 5/6 小节第一声部休止，第 9/10 小节第二声部让位；用画面和独听核对。暗线是路线、光段是音符，短间隙平滑连接、长休止留断口。
-
-拖动旋转、滚轮靠近，可恢复默认视角；暂停后仍可观察，运镜会保存。
-
-[![MIDI 音符映射为空间，普通音频包络和关键帧驱动剧场，两者共享导出时间轴](../../site/public/diagrams/ai-from-scaling/music-timeline.svg)](../../site/public/diagrams/ai-from-scaling/music-timeline.svg)
-
-## 先取得可靠的音乐数据
-
-输入多轨 MIDI，保留音高、起点、时值、力度、轨道、速度与拍号，用 Tonejs/Midi 解析。
-
-`src/media.ts` 把它整理成 `music.json`，示例结构如下：
-
-```ts
+```json
 {
-  kind: 'midi',
-  tracks: [{ id: 'track-2', notes: [/* 时间、音高、时值 */] }],
-  bars: [{ number: 8, time: 15.55554, /* 拍号与时长 */ }],
-  tempos: [{ time: 0, bpm: 108 }]
+  "name": "set_transport",
+  "arguments": {
+    "sceneId": "当前场景的 UUID",
+    "bar": 8,
+    "playing": false,
+    "soloTrackIds": ["track-2"]
+  }
 }
 ```
 
-小节时间须按速度/拍号事件换算；本例 108 BPM、4/4 拍，第八小节约 15.556 秒，不适用于其他文件。
-
-段落标记由 `src/fixtures.ts` 人工安排，不是自动曲式识别；外部 MIDI 也可带 marker/cuePoint。
-
-<mark class="caution">MP3/WAV 不提供准确音符与声部</mark>；`create_score_scene` 拒绝普通音频，可用于下一篇剧场。
-
-## MCP 怎样控制它
-
-连接方式见[客户端配置](../../examples/music-space-mcp/README.md#接入-ai-客户端)。连接后可以说：
-
-> 导入这份 MIDI，创建声部空间。暂停在第八小节，只听第二声部；把层间距稍微拉开，给我一张预览。
-
-一次调用链是：
-
-```text
-import_music → create_score_scene → set_transport
-→ inspect_scene → update_scene → render_preview → export_model
-```
-
-`set_transport` 按秒/小节定位，`soloTrackIds: ['track-2']` 独听，空数组听全部。`playing` 只是指令，发声仍须在预览点击“播放”或“启用声音”。
-
-`update_scene` 须带 `inspect_scene` 当前版本，拒绝旧版覆盖；保护限单进程，同目录只用一个可写实例。
+返回 `scene.transport.position`、`soloTrackIds` 与新 `revision`。示例 108 BPM、4/4 拍，第八小节约 15.556 秒；其他文件须按自身速度、拍号换算。空独听数组恢复全部声部。
 
 <details class="qa" id="为什么声音和画面能对齐">
 <summary>声音和画面怎样对齐？</summary>
 
-MIDI 声部 WAV 使用相同起点，浏览器从同一个 `AudioContext` 时钟播放并更新画面。暂停或定位后重建音源。
-
-导出按 `start + frame / fps` 渲染，从相同起点截音频，因此不依赖录屏速度。未启用音频时仍可检查画面。
-
-渲染用 [Three.js WebGPURenderer](https://threejs.org/docs/pages/WebGPURenderer.html)，优先 WebGPU，必要时回退 WebGL2；TSL 材质与 Bloom 处理颜色和辉光。
+共用 `AudioContext` 时钟，定位或独听后从同一偏移重建；用户须先点击播放启用声音。导出按 `start + frame / fps` 与相同音频起点渲染。
 
 </details>
 
+## 再改一个可见参数
+
+`inspect_scene.objects` 列出部件与控制路径：
+
+| 对象 | 可以操作什么 |
+| --- | --- |
+| `piano.keyboard` | 小节、独听与机位 |
+| `piano.lid` | `model.lidAngle`，0–65 度 |
+| `piano.guide` | `model.showGuide`，接下来四秒的音符提示 |
+
+![钢琴模型整体机位](../../site/public/images/music-space-piano-model.png)
+
+把琴盖改为 45 度，核对 `update_scene` 的 `expectedRevision`、`model.lidAngle: 45`、返回版本与模型变化。<mark class="caution">旧版本修改应被拒绝</mark>；同一数据目录只用一个可写服务实例。
+
+`presentation.view` 的 `overview / detail / plan` 对应整体、近景、俯视；`presentation.labels` 控制标注。拖动环绕后的姿态也经工具保存。
+
+## 展示页为什么也能用于学习 MCP
+
+页面经本地 Node 桥接层、官方 `Client` 与 `InMemoryTransport` 调用真实 MCP；外部宿主经 stdio，两者共用 `MusicStore`。右上角执行 `tools/list`，下方记录真实 `tools/call`、来源与结构化结果，不保存图片 base64。
+
+代码入口：[契约](../../examples/music-space-mcp/src/contracts.ts)、[工具注册](../../examples/music-space-mcp/src/tools.ts)、[客户端桥接](../../examples/music-space-mcp/src/http.ts)、[MIDI 解析](../../examples/music-space-mcp/src/media.ts)、[琴键映射](../../examples/music-space-mcp/web/piano.ts)、[时间轴](../../examples/music-space-mcp/src/timeline.ts)、[播放与组装](../../examples/music-space-mcp/web/main.ts)。
+
 ## 保存、重新打开与导出
 
-操作即保存 `scene.json`，同数据目录重启 preview 可恢复；也能下载 JSON。跨机需一起复制音乐与场景，配置不含音频。
+`scene.json` 自动保存；同目录重启可恢复，跨机需一起复制场景与音乐。`render_preview` 导出 PNG，`export_clip` 导出 H.264/AAC MP4，`export_model` 保留独立琴键、琴盖、材质与姿态，可交给 Blender 编辑。
 
-`render_preview` 输出 PNG，`export_clip` 输出 H.264/AAC MP4；固定快照的独听同时用于画面与混音，记录在 `exports/<exportId>/`。
+导出使用固定配置快照，独听同时作用于画面和混音。键盘对应 MIDI 21–108（A0–C8）；范围外音符仍参与音频和时间分析，但无对应琴键。模型不提供自动指法；基础合成音不代表专业钢琴音色。
 
-## 从画面走向可编辑的对象
+普通 MP3/WAV 不提供准确音符与声部，`create_score_scene` 会拒绝；可用于[音乐 2](08-music-photo-mcp.md)。渲染使用 [Three.js WebGPURenderer](https://threejs.org/docs/pages/WebGPURenderer.html)，WebGPU 不可用时回落 WebGL2；确定性捕获固定走 WebGL2。
 
-点击“保存三维模型 GLB”或调用 `export_model`，保存曲面、顶点颜色与素材信息，可导入 Blender 编辑。
-
-模型不含音频、辉光或界面环框，也无实体厚度；3D 打印前须补厚并检查。
-
-## 一项可以亲手改的挑战
-
-把 `score.layerSpacing` 从 `3.2` 改成 `5`，让声部绕时间环展开的半径变大，保持同一音乐、同一时刻、同一独听选择，再生成预览。
-
-先预测：哪些信息会改变，哪些音乐事实应当保持相同？比较两张图，再核对 `music.json` 的音符与时间没有改变。
-
-参考代码：[契约](../../examples/music-space-mcp/src/contracts.ts)、[MIDI 与音频处理](../../examples/music-space-mcp/src/media.ts)、[共享时间轴](../../examples/music-space-mcp/src/timeline.ts)、[声部之结几何](../../examples/music-space-mcp/web/weave.ts)、[浏览器播放与场景组装](../../examples/music-space-mcp/web/main.ts)。
-
-2026-10-25 已验证 stdio、小节定位/独听、音频、恢复、PNG/MP4 和 GLB；听感与画面舒适度仍需人判断。完成后可休息，或读[音乐 2](08-music-photo-mcp.md)。
+连接外部宿主见[客户端配置](../../examples/music-space-mcp/README.md#接入-ai-客户端)，自然语言选工具由宿主承担。返回[MCP 项目实战](../mcp-projects/README.md)。

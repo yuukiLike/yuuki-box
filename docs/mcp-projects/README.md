@@ -17,10 +17,10 @@ prev:
 | 查询天气、筛选出门时段 | [本地 Apple 天气 MCP](../ai-from-scaling/07-weatherkit-mcp.md) | 样本可离线跑；真实查询需要 Apple 配置 | 一份带时间、来源与筛选依据的天气结果 |
 | 改尺寸、检查模型并导出 | [Blender MCP](../ai-from-scaling/05-blender-mcp.md) | 本机 Blender | 可编辑模型、预览图与 STL |
 | 判断一个 bug 是否修好 | [GitHub MCP](../ai-from-scaling/06-github-lab-mcp.md) | 按原教程准备 GitHub 与本地实验环境 | 同一断言在基线、候选与参考修复中的对照 |
-| 将音乐变成可编辑的三维对象 | [声部之结](../ai-from-scaling/07-music-space-mcp.md) | 按教程准备音乐 MCP 与示例 MIDI | 声部分离、时间定位与 GLB 导出 |
-| 让照片与音乐组成短片 | [光之剧场](../ai-from-scaling/08-music-photo-mcp.md) | 沿用音乐 MCP，准备图层与音乐 | 一段有声音的舞台短片 |
+| 用 MIDI 排练与查看琴键 | [钢琴排练台](../ai-from-scaling/07-music-space-mcp.md) | 按教程准备音乐 MCP 与示例 MIDI | 小节定位、独听与 GLB 导出 |
+| 用音频预演舞台 | [舞台预演台](../ai-from-scaling/08-music-photo-mcp.md) | 沿用音乐 MCP，准备图层与音乐 | 可调布局与带声音的舞台短片 |
 
-音乐共用服务与时间轴，先声部之结，再光之剧场；无需其他实战前置。
+音乐共用服务与时间轴，先钢琴排练台，再舞台预演台；无需其他实战前置。
 
 ## 两套天气教程怎么选
 

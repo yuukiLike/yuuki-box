@@ -53,7 +53,7 @@
 
 从[实战总览](mcp-projects/README.md)按兴趣选天气、Blender、GitHub 或音乐，逐项核对前置与验证边界。
 
-天气先用离线样本；音乐从[声部之结](ai-from-scaling/07-music-space-mcp.md)到[光之剧场](ai-from-scaling/08-music-photo-mcp.md)，不以模型／Harness 为前置。
+天气先用离线样本；音乐选[钢琴排练台](ai-from-scaling/07-music-space-mcp.md)定位小节与独听，或在[舞台预演台](ai-from-scaling/08-music-photo-mcp.md)调整部件、机位并导出 PNG／MP4／GLB；均不以模型／Harness 为前置。
 
 ### 远程 MCP 与授权
 

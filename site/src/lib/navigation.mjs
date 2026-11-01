@@ -58,8 +58,8 @@ export const navigation = [
         label: '音乐：MIDI 可视化与短片导出',
         tags: ['MIDI', '3D 可视化', '视频导出'],
         items: [
-          page('ai-from-scaling/07-music-space-mcp', '声部之结：将 MIDI 声部编织成三维对象', ['MIDI', 'Three.js']),
-          page('ai-from-scaling/08-music-photo-mcp', '光之剧场：照片图层、音乐动画与短片导出', ['照片图层', '视频导出']),
+          page('ai-from-scaling/07-music-space-mcp', 'MIDI 钢琴排练台：定位、独听与模型导出', ['MIDI', 'Three.js']),
+          page('ai-from-scaling/08-music-photo-mcp', '舞台预演台：音频、机位与短片导出', ['舞台布局', '视频导出']),
         ],
       },
     ],

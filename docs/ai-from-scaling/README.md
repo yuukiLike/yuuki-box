@@ -78,6 +78,10 @@ node --version
 
 接入 Yuuki 读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 用 Markdown 持久化；选修 demo 清理临时记录，Codex 保留日常记录。小型 Harness 事件仅存在内存与终端，持久化和恢复留到工程专题。
 
+## 音乐 MCP（选修）
+
+可独立选择[钢琴排练台](07-music-space-mcp.md)或[舞台预演台](08-music-photo-mcp.md)：对照真实 MCP 参数、结果与模型变化，练习定位独听、部件调整和 PNG／MP4／GLB 导出。两篇共用本地存储、时间轴与工具，无需先完成模型训练。
+
 ## 番外：工具调用怎样长成 Agent
 
 [工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills，区分 Skills 首次推出与开放标准发布的日期，无需跟做。
