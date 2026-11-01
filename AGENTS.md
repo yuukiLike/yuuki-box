@@ -1,5 +1,11 @@
 # 项目规范
 
+## Git 提交身份
+
+- 在 Codex 云环境中提交时，作者和提交者统一使用 `Codex <codex@openai.com>`。
+- 创建提交前检查 `git var GIT_AUTHOR_IDENT` 与 `git var GIT_COMMITTER_IDENT`；若身份不同，在当前仓库设置 `git config user.name Codex` 和 `git config user.email codex@openai.com` 后再提交。
+- 该约定只设置提交署名，推送继续使用平台已有的 GitHub 认证。
+
 ## Docs
 
 - 命令说明用短标签或短句，如“安装依赖”“运行演示”；不重复解释目录切换或脚本转发。
