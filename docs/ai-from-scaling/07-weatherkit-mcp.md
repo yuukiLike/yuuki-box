@@ -21,8 +21,8 @@
 在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp install --frozen-lockfile
-pnpm --dir examples/weatherkit-mcp demo
+pnpm install:weatherkit-mcp
+pnpm demo:weatherkit-mcp
 ```
 
 **你要看到：**
@@ -61,7 +61,7 @@ pnpm --dir examples/weatherkit-mcp demo
 maxRainChancePercent: 90,
 ```
 
-重新运行 `pnpm --dir examples/weatherkit-mcp demo`。
+重新运行 `pnpm demo:weatherkit-mcp`。
 
 结果应为 09:00、11:00、13:00、15:00 起的四个两小时时段。10:00 与 13:00 的 80% 降雨概率现在被接纳；18:00 后仍因夜间被排除。
 
@@ -138,13 +138,13 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 回到仓库根目录：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp live
+pnpm demo:weatherkit-mcp:live
 ```
 
 这里只查工具与地点，**尚未请求 Apple**。继续执行才验证真实认证：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp live 上海
+pnpm demo:weatherkit-mcp:live 上海
 ```
 
 把「上海」换成实际配置名称。成功时打印真实 JSON。检查：
@@ -175,7 +175,7 @@ JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/
 
 同进程的两个天气工具共享内存缓存，最长五分钟且不超过 Apple 失效时间。命中保留原 `fetchedAt`，标记 `cacheHit: true`；`refresh: true` 强制刷新。失败不自动重试，不冒充新数据。
 
-每次 `pnpm live 上海` 都新建进程，连续两次运行不会共享缓存。
+每次 `pnpm demo:weatherkit-mcp:live 上海` 都新建进程，连续两次运行不会共享缓存。
 
 </details>
 
@@ -238,7 +238,7 @@ Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链�
 运行自动化检查：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp check
+pnpm check:weatherkit-mcp
 ```
 
 检查覆盖 JWT、stdio、输入与上游错误、取消、缓存、单位、时区与预报缺口。使用临时密钥和模拟 HTTP，不证明 Apple 接受了你的账号配置。

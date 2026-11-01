@@ -36,5 +36,5 @@ await withClient(root, async client => {
   await writeFile(join(root, 'demo.json'), JSON.stringify(manifest, null, 2) + '\n');
   console.log(JSON.stringify(manifest, null, 2));
   console.log('两种场景均已通过真实 MCP 调用生成 PNG 与带声音的 MP4。');
-  console.log('交互预览：pnpm --dir examples/music-space-mcp preview');
+  console.log('交互预览：在仓库根目录运行 pnpm demo:music-space-mcp:preview');
 });

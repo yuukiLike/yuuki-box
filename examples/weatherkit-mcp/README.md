@@ -9,9 +9,9 @@
 需要 Node.js ≥ 22.22 和 pnpm 11.14。在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp install --frozen-lockfile
-pnpm --dir examples/weatherkit-mcp check
-pnpm --dir examples/weatherkit-mcp demo
+pnpm install:weatherkit-mcp
+pnpm check:weatherkit-mcp
+pnpm demo:weatherkit-mcp
 ```
 
 演示是**人工构造的上海 2026-10-26 08:30 样本**，通过 SDK 的内存传输连接 MCP 客户端与服务端。不会请求 Apple，也不调用语言模型；`source.mode` 始终为 `fixture`。运行 `live` 和 `start` 时没有自动切换样本的后备路径。
@@ -44,15 +44,15 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/weatherkit-mcp live
-pnpm --dir examples/weatherkit-mcp live 上海
+pnpm demo:weatherkit-mcp:live
+pnpm demo:weatherkit-mcp:live 上海
 ```
 
 第一条检查配置并通过 stdio 列出地点，**还没请求 Apple**；第二条才查询指定地点的真实天气。成功结果包含 `source.mode: "live"`、数据时间、缓存状态和署名信息。认证失败会明确报错，不返回样本或旧天气。
 
 ## 接入客户端
 
-先执行 `pnpm --dir examples/weatherkit-mcp build`。用 `command -v node` 确认 Node 的绝对路径。
+先执行 `pnpm build:weatherkit-mcp`。用 `command -v node` 确认 Node 的绝对路径。
 
 Codex 的 `config.toml` 可以新增以下表；替换所有路径，保留已有配置：
 

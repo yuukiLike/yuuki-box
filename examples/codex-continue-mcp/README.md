@@ -13,30 +13,32 @@
 
 ## 先接入，再用一次
 
-需要 Node.js 22.22 或更高版本、pnpm 11.14，以及已经可以正常使用的 Codex CLI。先在仓库根目录进入示例，本文后续终端命令都在这个示例目录执行：
+需要 Node.js 22.22 或更高版本、pnpm 11.14，以及已经可以正常使用的 Codex CLI。本文终端命令都在仓库根目录执行：
 
 ```bash
-cd examples/codex-continue-mcp
-pnpm i --frozen-lockfile
-pnpm build
+pnpm install:codex-continue-mcp
+pnpm build:codex-continue-mcp
 
 codex mcp add yuuki-continue -- \
   "$(command -v node)" \
-  "$PWD/dist/server.js"
+  "$PWD/examples/codex-continue-mcp/dist/server.js"
 
 codex mcp get yuuki-continue
 ```
 
 <details>
-<summary>命令说明：pnpm i 与 --frozen-lockfile</summary>
+<summary>命令说明</summary>
 
-`cd` 进入示例目录；`pnpm i` 是 `pnpm install` 的简写，用于安装依赖；`pnpm build` 将源码编译到 `dist/`。
+| 命令 | 用途 |
+| --- | --- |
+| `pnpm install:codex-continue-mcp` | 安装依赖 |
+| `pnpm build:codex-continue-mcp` | 编译服务 |
 
-`pnpm-lock.yaml` 记录依赖的具体版本。`--frozen-lockfile` 要求按已有锁文件安装，保持它不变；锁文件缺失或与 `package.json` 的依赖声明不一致时，安装会报错停止。[pnpm 官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
+安装已启用 `--frozen-lockfile`：按锁文件安装；需更新时，报错停止。[官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
 
 </details>
 
-`codex mcp add` 保存启动命令。之后由 Codex 启动并连接这个服务，不需要另开终端运行 `pnpm start`。Node 和服务入口使用绝对路径，切换工作目录后仍能启动。
+Codex 会按注册配置启动服务。
 
 重新打开一个 Codex 会话，用 `/mcp` 确认 `yuuki-continue` 已连接，然后直接说：
 
@@ -84,7 +86,7 @@ codex mcp get yuuki-continue
 
 ## 查看调用计数
 
-更新后在示例目录运行 `pnpm build`，重新连接 `yuuki-continue` 或重新打开 Codex 会话，再说：
+更新后运行 `pnpm build:codex-continue-mcp`，重新连接 `yuuki-continue` 或重新打开 Codex 会话，再说：
 
 ```text
 用 yuuki-continue 查看调用统计。
@@ -102,7 +104,7 @@ codex mcp get yuuki-continue
 验证命令：
 
 ```bash
-pnpm check
+pnpm check:codex-continue-mcp
 ```
 
 移除连接用 `codex mcp remove yuuki-continue`，已经保存的 Markdown 文件仍然保留。原来的 [`minimal-mcp`](../minimal-mcp/) 演示保持独立。

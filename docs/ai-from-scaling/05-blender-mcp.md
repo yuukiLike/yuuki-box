@@ -17,8 +17,8 @@
 **你来做：** 在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/blender-mcp install --frozen-lockfile
-pnpm --dir examples/blender-mcp demo
+pnpm install:blender-mcp
+pnpm demo:blender-mcp
 ```
 
 **你要看到：** 下面省略连接日志，用 `<modelId>` 和 `<模型目录>` 代替本次生成的值：
@@ -80,7 +80,7 @@ parts: [
 ],
 ```
 
-保存后重新执行 `pnpm --dir examples/blender-mcp demo`。预期尺寸变为 `100 × 50 × 12`，网格闭合仍为 `true`。打开这次新打印的路径，对照前一次模型。
+保存后重新执行 `pnpm demo:blender-mcp`。预期尺寸变为 `100 × 50 × 12`，网格闭合仍为 `true`。打开这次新打印的路径，对照前一次模型。
 
 **先预测再看结果：** 如果只改外盒为 100、保留挖空宽度 74，左右侧壁会变成 `(100 - 74) / 2 = 13 mm`。两处一起改，才保持 3 mm。
 
@@ -125,7 +125,7 @@ parts: [
 调用方提交声明式形状数据。Blender 每次在独立后台进程运行，最多 90 秒；客户端等待上限为 100 秒，取消信号会传给子进程。创建失败会清理本次新目录并报告错误。
 
 ```bash
-pnpm --dir examples/blender-mcp check
+pnpm check:blender-mcp
 ```
 
 需要本机 Blender。检查包含类型检查、编译和真实 Blender 测试；测试解析 STL，核对毫米尺寸、闭合边和挖空体积，还会故意破坏测试模型的一个面，验证再次导出被拒绝。
@@ -140,7 +140,7 @@ pnpm --dir examples/blender-mcp check
 如果已安装 Claude Code，在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/blender-mcp build
+pnpm build:blender-mcp
 MCP_NODE=$(command -v node)
 MCP_SERVER="$PWD/examples/blender-mcp/dist/src/stdio.js"
 claude mcp add --transport stdio yuuki-blender -- "$MCP_NODE" "$MCP_SERVER"

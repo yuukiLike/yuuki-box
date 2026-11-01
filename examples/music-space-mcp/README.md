@@ -14,10 +14,10 @@
 需要 Node.js ≥ 22.22、pnpm 11.14、Chrome 或 Playwright Chromium、FFmpeg。`check` 会实际启动本地 HTTP 服务、浏览器和 FFmpeg，没有用跳过来替代这些验证。
 
 ```bash
-pnpm --dir examples/music-space-mcp install --frozen-lockfile
-pnpm --dir examples/music-space-mcp check
-pnpm --dir examples/music-space-mcp demo
-pnpm --dir examples/music-space-mcp preview
+pnpm install:music-space-mcp
+pnpm check:music-space-mcp
+pnpm demo:music-space-mcp
+pnpm demo:music-space-mcp:preview
 ```
 
 打开 `preview` 打印的 `http://127.0.0.1:<port>`，从右上角选择“声部之结 · Phrase Knot”或“光之剧场 · Light Theatre”。点击播放启用声音；声部场景可以拖动旋转、滚轮靠近、按小节定位及独听。剧场可以调整图层间距与运镜幅度、点击场次定位，并保存配置、导出短片。
@@ -34,7 +34,7 @@ pnpm --dir examples/music-space-mcp preview
 ## 接入 AI 客户端
 
 ```bash
-pnpm --dir examples/music-space-mcp build
+pnpm build:music-space-mcp
 MCP_NODE=$(command -v node)
 MCP_SERVER="$PWD/examples/music-space-mcp/dist/src/stdio.js"
 claude mcp add --transport stdio yuuki-music-space -- "$MCP_NODE" "$MCP_SERVER"

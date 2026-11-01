@@ -17,8 +17,8 @@
 完成[示例 README](../../examples/music-space-mcp/README.md)中的安装后，在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/music-space-mcp demo
-pnpm --dir examples/music-space-mcp preview
+pnpm demo:music-space-mcp
+pnpm demo:music-space-mcp:preview
 ```
 
 打开打印的本机地址，选择“光之剧场 · Light Theatre”。

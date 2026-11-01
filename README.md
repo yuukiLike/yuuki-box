@@ -24,11 +24,15 @@ pnpm docs:dev
 
 ## 常用命令
 
+`docs:*` 文档站 · `install:*` 安装 · `demo:*` 演示 · `build:*` 构建 · `check:*` 检查。
+
 | 命令 | 用途 |
 | --- | --- |
-| `pnpm i --frozen-lockfile` | 按锁文件安装依赖 |
+| `pnpm i --frozen-lockfile` | 按锁文件安装 |
 | `pnpm docs:build` | 构建文档站 |
-| `pnpm --dir site check` | 检查文档站类型 |
-| `pnpm run` | 查看全部脚本 |
+| `pnpm --dir site check` | 检查类型 |
+| `pnpm install:mini-mcp` | 安装依赖 |
+| `pnpm demo:mini-mcp` | 运行演示 |
+| `pnpm run` | 命令列表 |
 
-详细配置见[文档站说明](site/README.md)。
+文档站与 MCP 示例分别安装依赖。详细配置见[文档站说明](site/README.md)与各示例文档。

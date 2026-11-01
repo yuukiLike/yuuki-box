@@ -8,6 +8,8 @@
 
 Codex 篇由模型决定调用；独立演示由脚本安排。先分清谁发请求、谁执行、结果来自哪里。
 
+各演示统一在仓库根目录运行，例如 `pnpm demo:mini-mcp`、`pnpm demo:tiny-model`、`pnpm demo:harness`；基础用法见[常用命令](../../README.md#常用命令)，运行 `pnpm run` 查看全部脚本。
+
 想补齐 TS 工具工程基础，读独立演示里的 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#typescript-stack)：从现有代码认识 Node.js、Zod、异步执行、进程通信与自动测试，按需选读。
 
 入门后去 [MCP 项目实战](../mcp-projects/README.md)选天气、Blender、GitHub 或音乐项目；想追踪消息，去[应用通信](../ai-communication/README.md)。这些实践按兴趣选择。

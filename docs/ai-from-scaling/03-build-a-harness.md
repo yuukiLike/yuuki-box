@@ -15,7 +15,7 @@
 先跑离线模式：
 
 ```bash
-node docs/ai-from-scaling/labs/harness.mjs
+pnpm demo:harness
 ```
 
 内置计划为 20 人、每人餐费 35 元、场地费 80 元、预算 800 元。终端按顺序打印模型请求、工具提议、工具结果和最终回答。总花费为 780 元，预算余额为 20 元；保存默认被拒绝。
@@ -187,7 +187,7 @@ JS
 
 ```bash
 AI_HARNESS_DIR=$(mktemp -d)
-node docs/ai-from-scaling/labs/harness.mjs --write-to "$AI_HARNESS_DIR/summary.md"
+pnpm demo:harness --write-to "$AI_HARNESS_DIR/summary.md"
 ```
 
 程序展示完整内容与路径，再询问是否允许创建。第一次输入 `n`，检查结果明确写着拒绝，目录中没有摘要。第二次重跑并输入 `y`，随后查看：

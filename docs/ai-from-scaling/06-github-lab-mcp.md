@@ -19,8 +19,8 @@
 在仓库根目录执行：
 
 ```bash
-pnpm --dir examples/github-lab-mcp install --frozen-lockfile
-pnpm --dir examples/github-lab-mcp demo
+pnpm install:github-lab-mcp
+pnpm demo:github-lab-mcp
 ```
 
 **你要看到：** 下面节选关键日志，工具名列表、编号和路径作了缩写：
@@ -71,7 +71,7 @@ pnpm --dir examples/github-lab-mcp demo
 assert.doesNotThrow(() => emitter.off('missing'));
 ```
 
-它检查“移除一个从未注册的事件，应当正常返回”。保存后重新运行 `pnpm --dir examples/github-lab-mcp demo`。
+它检查“移除一个从未注册的事件，应当正常返回”。保存后重新运行 `pnpm demo:github-lab-mcp`。
 
 **你要看到：** 仍然是基线 `assertion_failed`、候选 `passed`、参考 `passed`；新报告的测试指纹变化，出现新一轮回执。基线仍由原来的目标断言抓住，新增断言补充了候选与参考的行为检查。
 
@@ -198,7 +198,7 @@ export default async function (target: string) {
 完整演示还检查：多个监听器一起清理、其他事件继续工作、通配监听器保留、传入未注册回调不误删监听器，以及按具体回调移除仍有效。这些断言只约束上述行为，不等于跑完 mitt 的上游测试集。
 
 ```bash
-pnpm --dir examples/github-lab-mcp check
+pnpm check:github-lab-mcp
 ```
 
 这会做严格 TS 检查、编译和离线测试；使用临时本地仓库与模拟 API，不依赖在线搜索或付费模型。每份真实回执保存测试与源码指纹、固定版本、耗时、退出码、stdout 和 stderr；原始回执是报告的依据。

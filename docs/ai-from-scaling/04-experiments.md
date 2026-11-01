@@ -15,7 +15,7 @@ read -r -s 'DEEPSEEK_API_KEY?输入 DeepSeek API key: '
 print
 export DEEPSEEK_API_KEY
 export DEEPSEEK_MODEL='deepseek-flash'
-node docs/ai-from-scaling/labs/harness.mjs --live
+pnpm demo:harness --live
 ```
 
 模型名可通过 `DEEPSEEK_MODEL` 改为账户可用、支持工具调用的模型。当前示例用 `deepseek-flash`，关闭 thinking，使用非流式回复，每次输出上限 512 tokens。请求与工具字段以 [DeepSeek Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion/) 为准。
@@ -23,7 +23,7 @@ node docs/ai-from-scaling/labs/harness.mjs --live
 真实模型的步骤可能不同。达到 4 轮上限后，先查记录，需要时再增加：
 
 ```bash
-node docs/ai-from-scaling/labs/harness.mjs --live --max-rounds 6
+pnpm demo:harness --live --max-rounds 6
 ```
 
 每次请求最多等待 30 秒。网络、HTTP 或超时错误会结束运行，程序不自动重试；这些失败也不代表远端没有产生用量。用完后可以执行 `unset DEEPSEEK_API_KEY`，清除当前 shell 中的变量。
@@ -38,8 +38,8 @@ node docs/ai-from-scaling/labs/harness.mjs --live --max-rounds 6
 先保持上下文为 2，只改训练轮数：
 
 ```bash
-node docs/ai-from-scaling/labs/tiny-model.mjs --context 2 --epochs 30
-node docs/ai-from-scaling/labs/tiny-model.mjs --context 2 --epochs 120
+pnpm demo:tiny-model --context 2 --epochs 30
+pnpm demo:tiny-model --context 2 --epochs 120
 ```
 
 只改变更新次数。比较训练/验证 loss，以及“猫吃”后“鱼”的概率；结论限于本例。
@@ -55,9 +55,9 @@ node docs/ai-from-scaling/labs/tiny-model.mjs --context 2 --epochs 120
 逐条执行离线故障场景：
 
 ```bash
-node docs/ai-from-scaling/labs/harness.mjs --scenario bad-json
-node docs/ai-from-scaling/labs/harness.mjs --scenario unknown-tool
-node docs/ai-from-scaling/labs/harness.mjs --scenario loop
+pnpm demo:harness --scenario bad-json
+pnpm demo:harness --scenario unknown-tool
+pnpm demo:harness --scenario loop
 ```
 
 | 场景 | 应当看到什么 | 核对哪项事实 |
@@ -76,7 +76,7 @@ node docs/ai-from-scaling/labs/harness.mjs --scenario loop
 
 ```bash
 AI_CANCEL_DIR=$(mktemp -d)
-node docs/ai-from-scaling/labs/harness.mjs --write-to "$AI_CANCEL_DIR/summary.md"
+pnpm demo:harness --write-to "$AI_CANCEL_DIR/summary.md"
 ```
 
 等待“允许创建这个文件吗”出现，先不要回答，按 `Ctrl+C`。检查最后一条事件是 `run.cancelled`，终端停止，目录里没有新文件。

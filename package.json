@@ -3,8 +3,40 @@
   "private": true,
   "packageManager": "pnpm@11.14.0",
   "scripts": {
-    "docs:dev": "pnpm --dir site dev",
     "docs:build": "pnpm --dir site build",
-    "docs:deploy": "pnpm --dir site run deploy"
+    "docs:deploy": "pnpm --dir site run deploy",
+    "docs:dev": "pnpm --dir site dev",
+
+    "install:blender-mcp": "pnpm --dir examples/blender-mcp install --frozen-lockfile",
+    "install:codex-continue-mcp": "pnpm --dir examples/codex-continue-mcp install --frozen-lockfile",
+    "install:github-lab-mcp": "pnpm --dir examples/github-lab-mcp install --frozen-lockfile",
+    "install:mini-mcp": "pnpm --dir examples/minimal-mcp install --frozen-lockfile",
+    "install:music-space-mcp": "pnpm --dir examples/music-space-mcp install --frozen-lockfile",
+    "install:weatherkit-mcp": "pnpm --dir examples/weatherkit-mcp install --frozen-lockfile",
+
+    "demo:blender-mcp": "pnpm --dir examples/blender-mcp demo",
+    "demo:github-lab-mcp": "pnpm --dir examples/github-lab-mcp demo",
+    "demo:harness": "node docs/ai-from-scaling/labs/harness.mjs",
+    "demo:mini-mcp": "pnpm --dir examples/minimal-mcp demo",
+    "demo:music-space-mcp": "pnpm --dir examples/music-space-mcp demo",
+    "demo:music-space-mcp:preview": "pnpm --dir examples/music-space-mcp preview",
+    "demo:tiny-model": "node docs/ai-from-scaling/labs/tiny-model.mjs",
+    "demo:weatherkit-mcp": "pnpm --dir examples/weatherkit-mcp demo",
+    "demo:weatherkit-mcp:live": "pnpm --dir examples/weatherkit-mcp live",
+
+    "build:blender-mcp": "pnpm --dir examples/blender-mcp build",
+    "build:codex-continue-mcp": "pnpm --dir examples/codex-continue-mcp build",
+    "build:github-lab-mcp": "pnpm --dir examples/github-lab-mcp build",
+    "build:mini-mcp": "pnpm --dir examples/minimal-mcp build",
+    "build:music-space-mcp": "pnpm --dir examples/music-space-mcp build",
+    "build:weatherkit-mcp": "pnpm --dir examples/weatherkit-mcp build",
+
+    "check:blender-mcp": "pnpm --dir examples/blender-mcp check",
+    "check:codex-continue-mcp": "pnpm --dir examples/codex-continue-mcp check",
+    "check:github-lab-mcp": "pnpm --dir examples/github-lab-mcp check",
+    "check:mini-mcp": "pnpm --dir examples/minimal-mcp check",
+    "check:mini-mcp:types": "pnpm --dir examples/minimal-mcp typecheck",
+    "check:music-space-mcp": "pnpm --dir examples/music-space-mcp check",
+    "check:weatherkit-mcp": "pnpm --dir examples/weatherkit-mcp check"
   }
 }

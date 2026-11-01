@@ -3,6 +3,7 @@
 
 # Root command launcher
 /node_modules/
+/.pnpm-store/
 
 # Local environment settings and credentials
 .env

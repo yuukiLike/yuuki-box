@@ -67,7 +67,7 @@
 已经跑过第一个演示，可以直接看下一步。首次使用先按[开场教程](../ai-from-scaling/00-minimal-mcp.md)安装依赖，再运行：
 
 ```bash
-pnpm --dir examples/minimal-mcp demo
+pnpm demo:mini-mcp
 ```
 
 核对输出：`tools/list` 列出工具，两次 `tools/call` 保存和读取，`[结果]` 显示执行结果。重启后可取回，是因为读取同一份文件。演示离线运行，由脚本填参数。

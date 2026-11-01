@@ -19,9 +19,9 @@
 需要 Node.js ≥ 22.22、pnpm、Chrome/Chromium 和 FFmpeg。依赖与环境配置见[示例 README](../../examples/music-space-mcp/README.md)。仓库根目录执行：
 
 ```bash
-pnpm --dir examples/music-space-mcp install --frozen-lockfile
-pnpm --dir examples/music-space-mcp demo
-pnpm --dir examples/music-space-mcp preview
+pnpm install:music-space-mcp
+pnpm demo:music-space-mcp
+pnpm demo:music-space-mcp:preview
 ```
 
 打开最后一条命令打印的本机网址，选择“声部之结 · Phrase Knot”。`demo` 一次准备两篇音乐教程的素材；今天只看声部场景即可。

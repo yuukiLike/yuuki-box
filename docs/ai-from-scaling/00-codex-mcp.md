@@ -24,39 +24,36 @@ MCP 约定 AI 应用怎样连接外部能力。本课中，你操作 Codex；Cod
 
 ## 接入 Codex
 
-准备 Node.js ≥22.22、pnpm 11.14 和可用的 Codex CLI。先在仓库根目录进入示例，再安装和编译：
+准备 Node.js ≥22.22、pnpm 11.14 和可用的 Codex CLI。以下命令都在仓库根目录执行：
 
 ```bash
-cd examples/codex-continue-mcp
-pnpm i --frozen-lockfile
-pnpm build
+pnpm install:codex-continue-mcp
+pnpm build:codex-continue-mcp
 ```
 
 <details class="qa">
-<summary>这些命令是什么意思？为什么加 --frozen-lockfile？</summary>
+<summary>命令说明</summary>
 
-| 命令 | 含义 |
+| 命令 | 用途 |
 | --- | --- |
-| `cd examples/codex-continue-mcp` | 进入「接着做」示例目录，后面的命令就在这里执行 |
-| `pnpm i` | `pnpm install` 的简写，安装示例需要的依赖 |
-| `pnpm build` | 运行示例的编译脚本，把 TypeScript 源码编译到 `dist/` |
+| `pnpm install:codex-continue-mcp` | 安装依赖 |
+| `pnpm build:codex-continue-mcp` | 编译服务 |
 
-`pnpm-lock.yaml` 记录依赖的具体版本。`--frozen-lockfile` 要求按这份锁文件安装，保持它不变；锁文件缺失或与 `package.json` 的依赖声明不一致时会报错停止。教程保留这个参数，便于使用仓库记录的依赖版本复现练习。[pnpm 官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
+安装已启用 `--frozen-lockfile`：按锁文件安装；需更新时，报错停止。[官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
 
 </details>
 
-保持在示例目录，接着注册服务：
+接着注册服务：
 
 ```bash
 codex mcp add yuuki-continue -- \
   "$(command -v node)" \
-  "$PWD/dist/server.js"
+  "$PWD/examples/codex-continue-mcp/dist/server.js"
 
 codex mcp get yuuki-continue
-cd ../..
 ```
 
-`$PWD/dist/server.js` 会展开成服务入口的绝对路径。最后一行 `cd ../..` 回到仓库根目录，方便继续对照源码；重开 Codex，用 `/mcp` 确认 `yuuki-continue` 已连接。
+`$PWD` 表示当前目录。重开 Codex，在 `/mcp` 确认连接。
 
 ## 保存与取回
 

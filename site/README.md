@@ -6,20 +6,22 @@
 
 使用 Node.js 22.22 或更高版本，以及项目声明的 pnpm 11.14。
 
-已经下载仓库时，在 `yuuki-box` 的上一级目录执行；终端已在仓库根目录时，从 `pnpm i` 开始：
+在仓库根目录执行：
 
 ```bash
-cd yuuki-box
 pnpm i
 pnpm docs:dev
 ```
 
 <details>
-<summary>命令说明：pnpm i 与 --frozen-lockfile</summary>
+<summary>命令说明</summary>
 
-`cd yuuki-box` 进入仓库根目录。`pnpm i` 是 `pnpm install` 的简写，会安装当前工作区（包括 `site`）的依赖；`pnpm docs:dev` 启动文档站。
+| 命令 | 用途 |
+| --- | --- |
+| `pnpm i` | 安装依赖 |
+| `pnpm docs:dev` | 启动文档站 |
 
-需要严格按照已有锁文件安装时，使用 `pnpm i --frozen-lockfile`。`pnpm-lock.yaml` 记录依赖的具体版本；这个参数要求保持锁文件不变，缺失或与 `package.json` 的依赖声明不一致时会报错停止。[pnpm 官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
+`--frozen-lockfile`：按锁文件安装；需更新时，报错停止。[官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
 
 </details>
 

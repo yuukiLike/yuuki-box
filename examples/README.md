@@ -8,6 +8,8 @@
 
 独立的 TypeScript MCP 实验：[项目接续记录](../docs/ai-from-scaling/00-minimal-mcp.md)、[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
 
+学习示例的安装、演示和检查统一从仓库根目录运行，例如 `pnpm install:mini-mcp`、`pnpm demo:mini-mcp`、`pnpm check:mini-mcp`。运行 `pnpm run` 查看全部脚本，或参考[常用命令](../README.md#常用命令)。
+
 [Apple 天气 MCP](weatherkit-mcp/README.md) 使用自己的 WeatherKit 权限查询常用地点、整理当前与未来天气、按阈值筛选连续出门时段；配套课程包含离线练习、Apple 后台配置与真实接入验收。
 
 [音乐空间 MCP](music-space-mcp/README.md) 对应 [MCP 项目实战](../docs/mcp-projects/README.md)中的两个音乐选修案例：可环绕观察并导出 GLB 的 MIDI 声部之结与分层光之剧场，可交互、保存配置并导出带声音的 MP4。

@@ -7,9 +7,9 @@ MCP 负责发现和调用；Python 中的 Blender API 执行建模。演示参�
 在仓库根目录执行；需要 Node.js 22.22+、pnpm 11.14 和可运行的 Blender：
 
 ```bash
-pnpm --dir examples/blender-mcp install --frozen-lockfile
-pnpm --dir examples/blender-mcp check
-pnpm --dir examples/blender-mcp demo
+pnpm install:blender-mcp
+pnpm check:blender-mcp
+pnpm demo:blender-mcp
 ```
 
 演示保留 `.artifacts/` 中的 `.blend`、PNG 与 STL，终端打印实际路径。日常 MCP 输出默认放在 `~/.yuuki/blender/`；`YUUKI_BLENDER_DIR` 可指定其他绝对路径，`BLENDER_BIN` 可指定 Blender 可执行文件。客户端直接启动编译后的 `dist/src/stdio.js`，保留整个目录和 `worker.py`。

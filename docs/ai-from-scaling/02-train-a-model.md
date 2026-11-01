@@ -9,7 +9,7 @@
 执行：
 
 ```bash
-node docs/ai-from-scaling/labs/tiny-model.mjs --epochs 0
+pnpm demo:tiny-model --epochs 0
 ```
 
 你会看到词表大小为 24，训练集有 27 句，验证集有 9 句。初始训练与验证 loss 均约为 `3.1781`，也就是 `ln(24)`。所有字符的分数都是 0，softmax 后各占 `1/24`。
@@ -86,7 +86,7 @@ export function trainStep(model, { row, target }, rate) {
 执行默认的 120 个 epoch：
 
 ```bash
-node docs/ai-from-scaling/labs/tiny-model.mjs --context 1
+pnpm demo:tiny-model --context 1
 ```
 
 参考实现会每 30 个 epoch 输出一次训练与验证 loss。在 Node.js 24.18.0 下，本课固定数据与配置得到：
@@ -105,7 +105,7 @@ node docs/ai-from-scaling/labs/tiny-model.mjs --context 1
 执行：
 
 ```bash
-node docs/ai-from-scaling/labs/tiny-model.mjs --context 2
+pnpm demo:tiny-model --context 2
 ```
 
 现在“猫吃”“鸟吃”“狗吃”对应不同的分数行。在固定配置下，模型给“猫吃”后的“鱼”约 96.9% 的概率，给“鸟吃”后的“虫”约 98.0% 的概率。检查终端里的实际概率，再读生成文本。
@@ -122,8 +122,8 @@ node docs/ai-from-scaling/labs/tiny-model.mjs --context 2
 
 ```bash
 AI_LAB_DIR=$(mktemp -d)
-node docs/ai-from-scaling/labs/tiny-model.mjs --context 2 --save "$AI_LAB_DIR/model.json"
-node docs/ai-from-scaling/labs/tiny-model.mjs --load "$AI_LAB_DIR/model.json"
+pnpm demo:tiny-model --context 2 --save "$AI_LAB_DIR/model.json"
+pnpm demo:tiny-model --load "$AI_LAB_DIR/model.json"
 ```
 
 第二条命令训练并保存词表、上下文长度和分数表；第三条命令加载这些参数，报告已有 loss 并生成文本，不再训练。保存采用独占创建，已有文件会被拒绝覆盖。

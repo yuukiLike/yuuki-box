@@ -11,9 +11,9 @@
 需要 Node.js ≥ 22.22、pnpm 11.14 和 Git，网络可以访问 GitHub。无需模型 key 或 GitHub token 即可读取公开资料；匿名 API 额度不足时可以通过环境变量 `GITHUB_TOKEN` 使用自己的只读凭据。
 
 ```bash
-pnpm --dir examples/github-lab-mcp install --frozen-lockfile
-pnpm --dir examples/github-lab-mcp check
-pnpm --dir examples/github-lab-mcp demo
+pnpm install:github-lab-mcp
+pnpm check:github-lab-mcp
+pnpm demo:github-lab-mcp
 ```
 
 演示固定使用 [developit/mitt #124](https://github.com/developit/mitt/pull/124)，只下载两份固定提交，不安装远端依赖、不运行远端 package scripts。示例自己提供 TypeScript 断言和候选修改；不调用模型。通过 MCP 接入 AI 客户端以后，阅读、编写测试与修改候选由宿主 Agent 完成。
@@ -38,7 +38,7 @@ pnpm --dir examples/github-lab-mcp demo
 
 ## 接入 stdio 客户端
 
-先执行 `pnpm --dir examples/github-lab-mcp build`。客户端使用本机 Node 可执行文件启动 `examples/github-lab-mcp/dist/src/stdio.js`。例如在仓库根目录运行：
+先执行 `pnpm build:github-lab-mcp`。客户端使用本机 Node 可执行文件启动 `examples/github-lab-mcp/dist/src/stdio.js`。例如在仓库根目录运行：
 
 ```bash
 MCP_NODE=$(command -v node)
