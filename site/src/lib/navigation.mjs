@@ -96,6 +96,7 @@ export const navigation = [
           page('issue-garden/04-dot-shift', '可选 · 用 Dot 跟进 GitHub 任务与返修', ['Dot', '现有额度', '持续跟进']),
           page('issue-garden/05-codex-api', 'API 路线 · 用 Codex Action 从 Issue 交付 PR', ['OpenAI API', 'Codex Action', '独立验证']),
           page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
+          page('issue-garden/07-automation-options', 'AI 自动化：GitHub 工作流与自制转发器', ['路线比较', 'Webhook', '转发器'], '自动化 · 工作流与转发器'),
         ],
       },
     ],

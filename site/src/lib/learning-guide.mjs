@@ -86,6 +86,7 @@ export const learningSteps = {
   'issue-garden/04-dot-shift': ['先核对你、Dot、Codex 和 GitHub 的分工。', '知道任务记录和需要你决定的问题放在哪里就停。'],
   'issue-garden/05-codex-api': ['先核对配置条件，列出 API 与仓库各需要什么。', '确定已有条件和一个缺口就停，先不运行付费工作流。'],
   'issue-garden/06-agentic-workflows': ['先看准备条件，区分工作流编译与模型执行。', '知道当前缺的是编译工具还是 API 凭据就停。'],
+  'issue-garden/07-automation-options': ['从五条路线里选择一条，写出一次触发与预期交付。', '选好一个 Issue 和完成条件就停。', '五条路线怎么选'],
   'kv-cache': ['只做“改一个输入”的第一局。', '能指出缓存从哪个位置失效就停。', '第一局：改一个输入，看缓存从哪里失效'],
   'kv-cache/00-first-request': ['只看第一组消息数组。', '能指出本次用户消息和系统说明就停。'],
   'kv-cache/00-why-so-large': ['先把 KV 看作一份随 token 增长的派生数据。', '能说出容量还受层数和精度影响就停。'],

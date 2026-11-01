@@ -12,6 +12,8 @@
 
 **已有 OpenAI API，可以跟做[官方 Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)。** 想并行比较三条路线，先用[共同基线与对照记录](../codex-cloud/05-issue-to-pr.md)隔离 Issue、分支和结果，再分别运行。
 
+想选工具或自己接事件，读[AI 自动化：GitHub 工作流与自制转发器](07-automation-options.md)。
+
 ## 先认识今晚的搭档
 
 | 角色 | 负责什么 | 像前端里的什么 |

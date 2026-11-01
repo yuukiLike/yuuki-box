@@ -63,13 +63,12 @@ Cloud 的新任务与已有任务各有自己的文件状态；不要靠对话�
 
 ## OpenAI API 先确认费用来源
 
-为 B / C 准备项目 API key，在目标仓库的 Actions secrets 中保存为 `OPENAI_API_KEY`，再配置模型变量 `CODEX_MODEL`。模型需要在该 API 项目中实际可用；按[当前 Codex 模型说明](https://learn.chatgpt.com/docs/models)与账号权限选择，不用聊天套餐中的模型名称替代 API 可用性检查。
-
-**若你持有的是订阅赠送的 API credits，不能据此假定它能抵扣 B / C。** 官方福利覆盖普通 Responses、Agents、图片等 API 用量，但排除了通过 API key 使用 Codex。先在所选组织的 Billing / Usage 确认可用于 Codex 的普通 API 配额，再启动编码实验。[官方额度适用范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits#what-the-credits-cover)
-
-也可以先用普通 **Responses API** 做一个辅助实验：将脱敏后的 Issue 发到 [Responses Playground](https://platform.openai.com/chat/)，让模型整理复现条件、未知项和验收清单，再把你确认的结果交给 A / B / C。这个实验不执行 Codex、不改代码、不创建 PR；它与完整编码路线分别记录，也不绕过 Codex 的计费规则。[API 额度与其他小实验](../agent-engineering/openai-api.md)
-
-预算先按“每条路线一次任务、一次明确启动、限定运行时间”控制。两条 API 路线并行时，费用会叠加。项目预算告警、job 超时和 API 花费上限是不同机制；没有实现总费用控制器时，不把告警或超时称为硬性消费封顶。运行后记录 Usage 中能归属的实际用量；无法准确拆分到单次任务时保留该缺口，不编造金额。
+- Actions + Codex Action 按 API 项目计费，不扣 ChatGPT 订阅额度；Actions 用量另计。
+- 订阅赠额排除通过 API key 使用 Codex；其他赠额看活动条款。[官方范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits#what-the-credits-cover)
+- 在 GitHub Actions 配置 Secret `OPENAI_API_KEY`、Variable `CODEX_MODEL`；模型须在该 API 项目可用。
+- 想先试赠额，可用普通 Responses API 分析 Issue。[小实验](../agent-engineering/openai-api.md)
+- 首轮只运行一次；预算告警、job 超时都不是硬性费用封顶。
+- 详细操作：[配置 API 与仓库](../issue-garden/05-codex-api.md#配置-api-与仓库)。
 
 ## 用同一张表比较结果
 

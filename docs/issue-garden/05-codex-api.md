@@ -13,7 +13,7 @@
 | Secret | `OPENAI_API_KEY` | 你准备给本次实验使用的项目 API key |
 | Variable | `CODEX_MODEL` | 该项目实际可用的 Codex 模型 ID，参照官方模型说明与账号权限 |
 
-也可以在目标仓库运行 `gh secret set OPENAI_API_KEY`，通过交互输入保存密钥。无需把 key 写进工作流、Issue 或命令历史。先确认[API 费用来源](../codex-cloud/05-issue-to-pr.md#openai-api-先确认费用来源)，尤其区分普通 API 配额与不支持 Codex 的订阅赠额。
+密钥只放 Actions Secret。先看[极简费用注意事项](../codex-cloud/05-issue-to-pr.md#openai-api-先确认费用来源)：API 用量与订阅额度分别计算，订阅赠额不适用于通过 API key 使用 Codex。
 
 为试验 Issue 添加 `ai-ready` 和 `ai-route-api`。仓库需允许 Actions 创建 PR；组织策略与分支保护仍然生效。[GitHub Actions 仓库设置](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository)
 
