@@ -16,6 +16,8 @@
 
 只想收邮件，按[GitHub → Outlook 提醒](08-github-outlook.md)开启原生通知。
 
+想让多个 AI 围绕事件协作，读[从 EventBus 到任务总线](09-multi-agent-event-bus.md)。
+
 ## 先认识今晚的搭档
 
 | 角色 | 负责什么 | 像前端里的什么 |

@@ -44,6 +44,8 @@ GitHub / 聊天 / 告警 → 接收器 → 持久队列 → Agent → 测试 →
 
 实现依据：[Webhook 最佳实践](https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks)、[验签说明](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries)。去重、返修次数和状态转换由程序保存，不能只写在提示词里。
 
+多个 AI 接进来以后，看[EventBus 与持久任务总线](09-multi-agent-event-bus.md)：一张图理解并发、反馈与恢复。
+
 ## 我们下一次只试什么
 
 1. **先试分析：** 手动选择一个 Issue，普通 Responses API 返回复现与验收清单。

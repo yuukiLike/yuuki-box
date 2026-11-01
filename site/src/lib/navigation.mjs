@@ -98,6 +98,7 @@ export const navigation = [
           page('issue-garden/06-agentic-workflows', 'API 路线 · 用 Agentic Workflows 提议 PR', ['OpenAI API', 'Agentic Workflows']),
           page('issue-garden/07-automation-options', 'AI 自动化：GitHub 工作流与自制转发器', ['路线比较', 'Webhook', '转发器'], '自动化 · 工作流与转发器'),
           page('issue-garden/08-github-outlook', 'GitHub → Outlook：Issue 与 PR 邮件提醒', ['邮件通知', 'GitHub', 'Outlook'], '通知 · GitHub → Outlook'),
+          page('issue-garden/09-multi-agent-event-bus', '多 AI 协作演进：从 EventBus 到任务总线', ['多 AI', 'EventBus', '状态与恢复'], '多 AI · EventBus 与任务总线'),
         ],
       },
     ],

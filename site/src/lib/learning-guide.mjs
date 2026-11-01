@@ -88,6 +88,7 @@ export const learningSteps = {
   'issue-garden/06-agentic-workflows': ['先看准备条件，区分工作流编译与模型执行。', '知道当前缺的是编译工具还是 API 凭据就停。'],
   'issue-garden/07-automation-options': ['从五条路线里选择一条，写出一次触发与预期交付。', '选好一个 Issue 和完成条件就停。', '五条路线怎么选'],
   'issue-garden/08-github-outlook': ['打开 GitHub 通知设置，选择已验证的 Outlook 邮箱。', '核对新 Issue、新 PR 和合并提醒能否收信就停。', '先开原生通知'],
+  'issue-garden/09-multi-agent-event-bus': ['沿图追踪一个任务，从 Webhook 到草稿 PR。', '能说明迟到结果为什么不能推进发布就停。', '用前端经验理解'],
   'kv-cache': ['只做“改一个输入”的第一局。', '能指出缓存从哪个位置失效就停。', '第一局：改一个输入，看缓存从哪里失效'],
   'kv-cache/00-first-request': ['只看第一组消息数组。', '能指出本次用户消息和系统说明就停。'],
   'kv-cache/00-why-so-large': ['先把 KV 看作一份随 token 增长的派生数据。', '能说出容量还受层数和精度影响就停。'],

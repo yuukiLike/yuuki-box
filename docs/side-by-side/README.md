@@ -18,6 +18,7 @@ Side by Side · 和 AI 做朋友，一起想，一起做。
 | 使用 Dot 路线 | [用 Dot 接手 GitHub 开发任务](../issue-garden/04-dot-shift.md) | 试跑一个 Issue，接回草稿 PR |
 | 使用 API 路线 | [官方 Codex Action](../issue-garden/05-codex-api.md)、[Agentic Workflows](../issue-garden/06-agentic-workflows.md) | 一次实现、验证与草稿 PR 交付 |
 | 想接更多事件 | [GitHub 工作流与自制转发器](../issue-garden/07-automation-options.md) | 选一条路线，先跑通一个任务 |
+| 想让多个 AI 协作 | [EventBus 与持久任务总线](../issue-garden/09-multi-agent-event-bus.md) | 分清并发、反馈与恢复 |
 
 ## 一起检查，接受纠正
 
