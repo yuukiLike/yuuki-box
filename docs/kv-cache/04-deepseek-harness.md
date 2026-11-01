@@ -2,27 +2,27 @@
 
 [专题入口](README.md) · [上一篇 DeepSeek 缓存规则](03-prefix-cache-and-yuuki.md) · [下一篇 Pi](05-pi.md)
 
-模型服务管理 KV，Harness 组织请求。读 `dsh` 时只追一件事：**工具调用后，下一次请求保留了多少原样前缀？**
+服务端管理 KV，Harness 组织请求。读 `dsh` 时追踪<mark class="key">工具调用后保留了多少原样前缀</mark>。
 
 
 ## 先从你写过的请求函数理解 Harness
 
-Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，程序真正读取，再把结果加入下一轮。
+模型提出 `read_file`，Harness 执行并把结果加入下一轮请求。
 
 [![用户输入后，Harness 装配规则、历史和工具定义；模型提出 read_file；Harness 执行并把结果加入历史，再进行模型请求](../../site/public/diagrams/kv-cache/12-harness-loop.svg)](../../site/public/diagrams/kv-cache/12-harness-loop.svg)
 
 **装配上下文**：决定本次发送的消息、规则与工具定义。
 
-**第一停点：模型提议，Harness 执行并接着组织请求，服务端判断缓存命中。** 分清三者之后，再看下面三个小选择。
+先分清：模型提议、Harness 执行与装配、服务端判断命中，再看三个工程选择。
 
 <details>
 <summary>源码追踪：一个判断、五个入口</summary>
 
 ## 第一眼，先看“不需要更新”的分支
 
-打开 [`SystemPromptProjection.project`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L88)。找到“最新有效 system 文本与当前渲染一致，就返回空更新”的判断，再往上看它处理新请求序列的条件。
+打开 [`SystemPromptProjection.project`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L88)，找文本一致时返回空更新的分支，再查新请求序列条件。
 
-这一小步要解释：system 文字相同，为什么把它从历史后部移到第一条消息，也可能损失缓存？前缀身份包含此前的内容、位置与序列关系；最终有效指令相同，并不代表提交给模型的序列相同。
+解释：system 文本相同，为何移到首条仍可能损失缓存？前缀身份包含内容、位置和序列，最终指令相同不等于输入序列相同。
 
 ## 沿五个入口读一次请求
 
@@ -34,7 +34,7 @@ Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，
 | [`llm-pi-ai/src/adapter.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-pi-ai/src/adapter.ts#L126) | `profileOptions` | 把 `cacheRetention` 等选项传入 Pi 的模型层 |
 | [`llm-pi-ai/src/stream.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-pi-ai/src/stream.ts#L19) | `mapUsage` | 把 Pi 的用量转成 Harness 的流式统计 |
 
-可把这条路径记成：`会话与插件贡献 → 装配请求 → 供应商适配 → 模型服务 → 用量回写`。其中直接保存和匹配推理 KV 的工作发生在模型服务端。
+路径：`会话与插件贡献 → 装配请求 → 供应商适配 → 模型服务 → 用量回写`；服务端才保存、匹配 KV。
 
 </details>
 
@@ -42,31 +42,31 @@ Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，
 
 ### 1. 给工具一个确定的顺序
 
-`orderTools` 在未指定顺序时按名称排序；配置 `toolOrder` 时，显式列出的工具按配置排列，其余工具有确定顺序。上游还测试了相反的插件注册顺序能产生相同的工具列表。[排序源码](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/src/index.ts#L225)、[工具顺序测试](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/tests/tool-order.spec.ts#L26)
+`orderTools` 默认按名称排序；有 `toolOrder` 时先按配置，其余仍保持确定顺序。上游测试了相反注册顺序输出相同列表。[源码](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/src/index.ts#L225)、[测试](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/tests/tool-order.spec.ts#L26)
 
-这能减少插件加载顺序带来的请求差异。实际命中仍取决于供应商如何编码工具和消息；一个稳定的 JavaScript 数组本身不能证明服务端命中。
+排序减少加载差异；实际命中还取决于供应商编码，稳定数组不证明命中。
 
 ### 2. 动态上下文变化时，再留下新快照
 
-快照是某一刻的内容；投影从已有记录生成本次表示，类似从 state 生成视图数据。
+快照保存某时刻内容；投影从记录生成本次表示，类似 state 到视图。
 
-`RuntimeContextProjection.project` 比较当前内容与保留的快照，一致时不产生更新。系统提示的注册表也把进程相关路径、端点等列入 runtime context 的职责。[动态投影](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L151)、[context 分区](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/src/index.ts#L178)
+`RuntimeContextProjection.project` 在内容与快照相同时不更新；进程路径、端点归 runtime context 管理。[投影](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/src/runtime-context.ts#L151)、[分区](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/system-prompt/src/index.ts#L178)
 
 未变的内容不重复追加；时间、工作区等必要变化仍需告诉模型。
 
 ### 3. 支持历史内 system 更新的路由，才保留这种布局
 
-**路由**在这里包含所选模型接口及其能力。先看简化的消息顺序图：S0 是旧规则版本，S1 是后来的规则版本。
+**路由**包括模型接口与能力；图中 S0 / S1 分别是旧、新规则。
 
 [![支持历史内 system 更新时，有效规则 S1 不变可以保留消息原位；把 S1 搬到开头会改变原有前缀](../../site/public/diagrams/kv-cache/13-prompt-move.svg)](../../site/public/diagrams/kv-cache/13-prompt-move.svg)
 
 最终指令相同，不代表输入序列相同；移动位置也可能破坏前缀。
 
-`SystemPromptProjection` 根据路由的 `inHistory` 能力、当前提示与请求序列边界，选择追加、保持原位或重建头部。不能把“system 一律往后追加”作为所有接口通用的优化。
+`SystemPromptProjection` 按 `inHistory`、当前提示和序列边界选择追加、保留原位或重建头部；<mark class="caution">不能对所有接口一律后加 system</mark>。
 
-上游有一份很适合研究的[已实现修复记录](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/.agents/notes/implemented/bug-fix/2026-10-22-series-start-unchanged-prompt-prefix.md)：局部历史替换开始新序列时，未变化的 system 文本曾被搬回头部，导致前部差异扩大。修复让最新有效文本相同时保持原位。它是上游记录的故障与修复，本仓库没有复现其运行数据。
+上游[修复记录](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/.agents/notes/implemented/bug-fix/2026-10-22-series-start-unchanged-prompt-prefix.md)：局部历史替换开启新序列时，相同 system 曾被搬回头部；修复后保持原位。本仓库未复现其运行数据。
 
-**这一站完成了：工具顺序、动态快照和规则位置，都可能改变请求前缀。** 下次从 [Pi 怎样翻译接口用量](05-pi.md)继续。
+工具顺序、快照与规则位置都影响前缀。下一篇看 [Pi 用量转换](05-pi.md)。
 
 <details>
 <summary>dsh 与 Pi 的关系，以及两个适配层的字段</summary>
@@ -75,7 +75,7 @@ Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，
 
 适配器把应用数据转成供应商请求，再把响应转回。
 
-`@deepseek-ai/dsh-llm-pi-ai` 是 dsh 的模型适配包，声明依赖 `@earendil-works/pi-ai`；同仓也保留 `llm-deepseek` 专用实现。[适配包声明](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-pi-ai/package.json)
+`@deepseek-ai/dsh-llm-pi-ai` 依赖 `@earendil-works/pi-ai`，同仓另有专用 `llm-deepseek`。[包声明](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-pi-ai/package.json)
 
 复用 Pi 模型层不等于复用它的 Agent 循环；下一篇的独立快照也不代表 dsh 安装的依赖版本。
 
@@ -89,9 +89,9 @@ Harness 串起请求、工具执行和结果回传。模型提出 `read_file`，
 | `cacheWrite` | `cacheWriteTokens` | 大于 0 时写入 |
 | `totalTokens` | `totalTokens` | 保留 Pi 的总量 |
 
-dsh 的 [`TokenUsage` 契约](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm/src/types.ts#L169)把输入与缓存桶定义为互斥计数。Pi 适配层会省略值为 0 的缓存字段，所以看到字段缺失时，还要回查适配器，不能只凭缺失判断供应商没有提供缓存能力。
+dsh [`TokenUsage`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm/src/types.ts#L169) 将输入与缓存分桶互斥计数。Pi 适配层省略 0 值缓存字段，缺失时须回查，不能断言供应商不支持。
 
-另一个协议差异也值得保留：同快照 `llm-deepseek` 的 [`translate.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-deepseek/src/translate.ts#L34)处理 Messages 风格的 `cache_read_input_tokens` 等字段；本仓库 Yuuki 使用 Chat Completions。研究某个响应时，先确定走的是哪个适配器和协议。
+专用 `llm-deepseek` 的 [`translate.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/llm/llm-deepseek/src/translate.ts#L34) 处理 Messages 风格 `cache_read_input_tokens`；Yuuki 用 Chat Completions。先核对协议与适配器。
 
 </details>
 
@@ -100,7 +100,7 @@ dsh 的 [`TokenUsage` 契约](https://github.com/deepseek-ai/deepseek-harness/bl
 
 ## 上游怎样验证，本文验证到了哪一步
 
-[`request-cache.e2e.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/tests/request-cache.e2e.ts#L76)包含需要 `DEEPSEEK_API_KEY` 的真实服务测试：制造一次工具往返和后续用户轮次，从 `assistant/message` 事件读取 usage，断言首个请求之后出现 `cacheReadTokens > 0`。
+[`request-cache.e2e.ts`](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/packages/core/agent-loop/tests/request-cache.e2e.ts#L76) 用 `DEEPSEEK_API_KEY` 测真实服务：工具往返与后续轮次后，从 `assistant/message` usage 断言出现 `cacheReadTokens > 0`。
 
 | 证据 | 能说明什么 | 还不能说明什么 |
 | --- | --- | --- |
@@ -108,19 +108,19 @@ dsh 的 [`TokenUsage` 契约](https://github.com/deepseek-ai/deepseek-harness/bl
 | 真实 API 测试代码 | 上游准备从哪里观察真实缓存命中 | 本次已经发请求并观测到命中 |
 | 单次服务端命中字段 | 该请求报告命中了多少输入 | 所有请求必然命中，或端到端延迟必然降低 |
 
-测试中的旧缓存粒度注释不能代替[当前 DeepSeek 持久化规则](https://api-docs.deepseek.com/guides/kv_cache/)。即使请求构造稳定，也要保留缓存构建、淘汰和尽力命中的条件。
+旧测试注释不替代[当前持久化规则](https://api-docs.deepseek.com/guides/kv_cache/)；稳定请求仍受构建、淘汰与尽力命中影响。
 
 ## 带回 Yuuki 的下一项小研究
 
-先只做一次源码对照：在 Yuuki 的 [`completion`](../../examples/shared/runtime/Sources/main.swift:351) 中指出 system、tools、history 和 usage 的入口，再标出缺少的缓存字段。下一步实现可从**单次请求的原始缓存用量**开始，验收后再研究前缀布局与摘要策略。
+在 Yuuki [`completion`](../../examples/shared/runtime/Sources/main.swift:351) 定位 system、tools、history、usage 与缓存字段缺口；先实现单次原始缓存用量，验收后再调布局和摘要。
 
-继续阅读[Pi 怎样使用和观测缓存](05-pi.md)，比较同一组 token 数怎样跨过两个项目的接口。
+接着用 [Pi](05-pi.md) 核对同组 token 的跨项目转换。
 
 </details>
 
 <details>
 <summary>来源与核对范围</summary>
 
-核对日期：2026-10-24。本文静态阅读官方仓库的 [`22ddee379240`](https://github.com/deepseek-ai/deepseek-harness/tree/22ddee3792402c3e70ec5f86a63c3e3e895a2f60) 快照，未安装运行，也未执行上游测试或真实 API 实验。项目在该快照仍标为 developer preview。[项目说明](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/README.md)
+2026-10-24 静态阅读 [`22ddee379240`](https://github.com/deepseek-ai/deepseek-harness/tree/22ddee3792402c3e70ec5f86a63c3e3e895a2f60)，未安装、运行上游测试或 API 实验；快照标为 developer preview。[项目说明](https://github.com/deepseek-ai/deepseek-harness/blob/22ddee3792402c3e70ec5f86a63c3e3e895a2f60/README.md)
 
 </details>

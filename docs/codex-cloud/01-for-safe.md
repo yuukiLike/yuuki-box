@@ -1,16 +1,16 @@
 # 1 · 用 for-safe 发出第一条云端任务
 
-**第一轮只做一件事：让云端读 `for-safe` 的 README 和实际目录，交回一份有文件依据的简短小结。** 先体验一次发出任务、收到结果的过程。
+**先读 `for-safe` 的 README 与目录，交回有文件依据的小结。**
 
 ![新版 Codex Cloud 的操作顺序：选择 Cloud 并创建环境，检查设置后 Publish，再开始新任务](../../site/public/diagrams/codex-cloud-first-task.svg)
 
-上图是操作步骤图。按 ① → ② → ③ 做到第一份只读结果，本次就可以结束。
+按 ① → ② → ③ 取得首份只读结果即可。
 
 ## ① 把需要读的文件放进 GitHub
 
-准备有 Cloud 使用权限的 ChatGPT 账号，以及你愿意授权给 Codex 的 GitHub 仓库；仓库可以是私有的。套餐与工作区权限以[官方说明](https://learn.chatgpt.com/docs/pricing)和实际入口为准。把本轮要读的规格提交并推送到目标分支。**本机 `~/codex/for-safe` 中未推送的文件，不会因为你写了这个路径就自动进入云端。**
+准备有 Cloud 权限的账号与授权仓库，规格先推到目标分支；**本机未推送文件不会自动进入云端。** [官方说明](https://learn.chatgpt.com/docs/pricing)
 
-第一次只需要规格文档。没有可执行项目，就明确告诉 Codex 当前没有安装、构建和测试命令。
+首轮只需规格；没有代码时明确无安装、构建、测试命令。
 
 ## ② 创建并发布环境
 
@@ -18,7 +18,7 @@
 
 **Work in → Cloud → Select environment → Create environment**
 
-选择目标 GitHub 仓库；如有提示，完成 GitHub 连接，再点 **Get started**。也可以从 **Settings → Codex Cloud → Environments** 进入。[官方操作说明与界面示意](https://learn.chatgpt.com/docs/environments/cloud-environments#create-and-publish-an-environment)
+选择仓库、完成连接，点 **Get started**；也可从 **Settings → Codex Cloud → Environments** 进入。 [官方操作说明与界面示意](https://learn.chatgpt.com/docs/environments/cloud-environments#create-and-publish-an-environment)
 
 在环境准备对话里直接说：
 
@@ -30,14 +30,14 @@
 报告找到的仓库、分支/提交、可用命令与缺失条件。
 ```
 
-检查准备报告，确认选中了正确仓库、没有遗留失败步骤；保存改动并点 **Publish**。等到 **Environment published**，再点 **Start a new task**。只保存草稿还没有完成发布。[保存与发布的区别](https://learn.chatgpt.com/docs/environments/cloud-environments#create-and-publish-an-environment)
+确认仓库正确、无未处理失败，再保存并 **Publish**；看到 **Environment published** 后 **Start a new task**。<mark class="caution">保存草稿不等于发布</mark>。 [保存与发布的区别](https://learn.chatgpt.com/docs/environments/cloud-environments#create-and-publish-an-environment)
 
 <details class="qa">
 <summary>以后有代码了，依赖和测试怎么配置？</summary>
 
-让 Codex 从仓库已有的清单、锁文件和说明中确认运行时、安装与测试命令，再实际执行。可复用的安装命令放进 **Install script**，启动服务和检查就绪的说明放进 **Start skill**；测试与验收规则写进仓库的 `AGENTS.md`，供后续任务读取。
+按清单、锁文件确认并执行命令。安装写 **Install script**，启动与就绪检查写 **Start skill**，验收约定写 `AGENTS.md`。
 
-依赖变化时，编辑环境、验证后 **Republish**，再用新任务检查。已有任务保留自己的状态；仓库后台刷新不会自动重跑安装和启动命令。[安装与启动](https://learn.chatgpt.com/docs/environments/cloud-environments#customize-installation-and-startup)
+依赖变化后验证并 **Republish**，用新任务复查；已有任务保留状态，后台刷新不重跑安装与启动。 [安装与启动](https://learn.chatgpt.com/docs/environments/cloud-environments#customize-installation-and-startup)
 
 </details>
 
@@ -58,14 +58,14 @@
 先交回这份小结，等我决定下一项任务。
 ```
 
-你的交付物是**有文件依据的三项小结**。核对一个引用的文件，确认与原文相符，这一轮就完成了。下面的实现任务留到下一次。
+核对**三项小结**中的一个文件引用，与原文相符即完成；实现留待下一轮。
 
 <details>
 <summary>下一次再做：实现、验收与故障排查</summary>
 
 ## ④ 进入实现时，一次交一个小任务
 
-等你决定让 `for-safe` 进入实现阶段，再把上一轮确认的任务发给云端。例如：
+进入实现阶段后，每轮只交一个小任务，例如：
 
 ```text
 本轮允许实现一个离线切片：权限拒绝、扫描成功但无设备、
@@ -86,7 +86,7 @@
 2. **真跑了吗？** 命令、退出结果和失败原因是否可查；「未运行」不能算通过。
 3. **还差什么？** 把代码改动带回本地或通过 PR 分支检出，在 Mac 补做原生与设备验证，再决定合并。
 
-用于交接的一句话可以是：**「云端样本测试通过；真实权限拒绝、无线开关与休眠恢复未验证。」** 这样 AI 可以继续接手实现和修复，人也能看清最后缺哪份证据。
+交接示例：**「云端样本测试通过；真实权限、无线开关与休眠恢复未验证。」**
 
 <details class="qa">
 <summary>卡在联网、密钥或找不到仓库时怎么办？</summary>
@@ -98,16 +98,16 @@
 | 关掉全网开关，仍然能访问某些站点 | **Enable all public internet access** 关闭后，显式允许的域名仍可访问 |
 | 需要调用私有 API | 在环境配置中选择变量或 HTTP secrets；允许联网本身不会提供凭证。本次文档任务不需要业务密钥 |
 
-新版 **Network secret / HTTP secret** 通过代理向允许的 HTTPS 目标替换凭证，可用于准备阶段和任务阶段。它与直接传给程序的环境变量不同；不能照搬 Legacy「秘密只在 setup 阶段可用」的说法。[联网与密钥](https://learn.chatgpt.com/docs/environments/cloud-environments#configure-environment-variables-and-network-secrets)
+**Network／HTTP secret** 在允许的 HTTPS 目标经代理替换，准备与任务阶段都可用；与直接环境变量不同，勿套用 Legacy setup-only 规则。 [联网与密钥](https://learn.chatgpt.com/docs/environments/cloud-environments#configure-environment-variables-and-network-secrets)
 
 </details>
 
 <details class="qa">
 <summary>能在云端替我点应用、验收界面、一直跑服务吗？</summary>
 
-截至本次核对，新版 Cloud 的限制仍列出不支持内置 computer / browser use。不要把桌面端可用的电脑操控能力直接算到云端头上；项目自带的命令行浏览器测试工具能否运行，需要另行配置和实测。[当前限制](https://learn.chatgpt.com/docs/environments/cloud-environments)
+本次核对时 Cloud 无内置 computer／browser use；项目命令行浏览器测试需另行实测。 [当前限制](https://learn.chatgpt.com/docs/environments/cloud-environments)
 
-同样，开发服务能启动，不代表已经获得正式部署。云端任务不会自动接管本机 Mac 的屏幕、系统权限或无线设备。
+服务启动不等于部署，也不会接管本机屏幕、权限或无线设备。
 
 </details>
 

@@ -2,17 +2,13 @@
 
 [上一课](05-failure.md) · [目录](README.md)
 
-**这一课：在自己的代码里，认出前面学过的步骤。**
-
-这次只读代码，不需要模型 Key。
+只读代码，找到<mark class="key">请求、流式接收和工具执行</mark>；无需模型 Key。
 
 ## 看图
 
 [![页面发送任务，运行程序联系模型并安排工具；外部 MCP 工具留作后续接入](../../site/public/diagrams/ai-communication/request-map.svg)](../../site/public/diagrams/ai-communication/request-map.svg)
 
-图里的“运行程序”就是代码中的 runtime。它负责安排模型和工具工作。
-
-MCP 工具还没有接入当前 runtime。虚线表示后续练习；目前执行的是内建工具。
+runtime 安排模型和工具。当前仅执行内建工具；图中虚线 MCP 尚未接入。
 
 ## 只找三处
 
@@ -22,18 +18,16 @@ MCP 工具还没有接入当前 runtime。虚线表示后续练习；目前执�
 | [completion()](../../examples/shared/runtime/Sources/main.swift:351) | 发请求，接收 SSE，拼接文字和工具参数 |
 | [run()](../../examples/shared/runtime/Sources/main.swift:280) | 调用工具，把结果交回模型，再继续回答 |
 
-一次模型回复结束，整个任务还可能继续。比如模型要先读文件，读完后再回答。
+一次模型回复结束，任务仍可能继续调用工具。
 
 ## 到这里就停
 
-能在代码里指出 **“哪里发请求、哪里收文字、哪里执行工具”**，这一轮就完成了。
+指出上表三处调用即可。
 
 <details>
 <summary>页面怎样收到变化</summary>
 
-页面与 runtime 用 JSONL 通信，一行一条 JSON。它们使用自己的命令和事件格式。
-
-runtime 发给页面的文字变化类似：
+页面与 runtime 按自有格式交换 JSONL，一行一条；文字事件类似：
 
 ```json
 {"type":"delta","sessionId":"…","messageId":"…","text":"追加的文字"}
@@ -41,11 +35,11 @@ runtime 发给页面的文字变化类似：
 
 `sessionId` 找到会话，`messageId` 找到消息，`text` 追加文字。
 
-`completion()` 会先积累文字，在后续文字到来、间隔达到约 50 ms 时发布一次，结束时补齐。这样能减少部分更新次数；界面是否流畅还需要测量。
+`completion()` 积累文字，有后续文字且间隔约 50 ms 时发布，结束时补齐；实际流畅度未测。
 
 取消入口在 [run.cancel](../../examples/shared/runtime/Sources/main.swift:236)。它会取消任务和网络请求；已经完成的工具结果仍保留。[运行时说明](../../examples/shared/runtime/README.md)
 
-这一课来自源码阅读，未执行真实模型调用、界面操作或性能测量。实际运行按[客户端说明](../../examples/README.md)操作。
+本课仅源码阅读，未测真实模型、界面或性能；运行见[客户端说明](../../examples/README.md)。
 
 </details>
 

@@ -42,7 +42,7 @@ const sectionMetadata = section ? navigationMetadata(section) : undefined;
   </div>
   <div class="content-actions">
     <div class="content-search"><Search /></div>
-    <LearningGuide resume />
+    {isDirectory && <LearningGuide resume />}
     <DisplayMode />
     <ReadingStatus control="sync" />
   </div>

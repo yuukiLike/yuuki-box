@@ -2,7 +2,7 @@
 
 [上一课](04-mcp.md) · [目录](README.md) · [下一课](06-yuuki.md)
 
-**这一课：你停止等待以后，对方可能还在做。**
+<mark class="caution">停止等待，不等于对方停止执行。</mark>
 
 ## 先运行
 
@@ -10,9 +10,7 @@
 node docs/ai-communication/labs/05-failure.ts
 ```
 
-发请求的一方叫客户端，只等 20 毫秒（ms）。
-
-读笔记的一方叫服务端，要过 120 ms 才读完。
+客户端只等 20 ms，服务端需 120 ms 才读完。
 
 ## 看图
 
@@ -27,13 +25,13 @@ node docs/ai-communication/labs/05-failure.ts
 
 ## 再试一次之前
 
-**先确认上一次有没有执行。** 重试可能让同一件事执行两次。
+重试前<mark class="key">确认上一次是否已执行</mark>，避免重复操作。
 
-请求的 id 用来配对回答，本身不保证重复操作只执行一次。[JSON-RPC 规范](https://www.jsonrpc.org/specification)
+请求 id 只配对回答，不保证操作只执行一次。[JSON-RPC 规范](https://www.jsonrpc.org/specification)
 
 ## 到这里就停
 
-能解释 **“停止等待以后，还要通知真正做事的一方停止”**，就完成了。
+知道取消还需传到执行方即可。
 
 <details>
 <summary>代码与迟到结果</summary>
@@ -42,7 +40,7 @@ node docs/ai-communication/labs/05-failure.ts
 
 实验里的 `AbortController` 只取消客户端等待，没有把取消消息发给服务端。
 
-超时或取消时，客户端删除等待项。迟到的结果找不到原来的等待项，就会被忽略。原来的调用也不会重新变成成功。
+超时或取消会删除等待项；迟到结果被忽略，不会把原调用改成成功。
 
 | 看到什么 | 能确定什么 |
 | --- | --- |
@@ -51,16 +49,16 @@ node docs/ai-communication/labs/05-failure.ts
 | 超时或断线 | 最终结果没有可靠到达，执行情况可能未知 |
 | 点击取消 | 用户要求停止，还要继续传给执行方 |
 
-实验不自动重试。实际应用需要根据操作约定去重、查询结果或人工核对。
+实验不自动重试；应用需按操作约定去重、查询结果或人工核对。
 
 </details>
 
 <details class="qa">
 <summary>怎样把取消传下去？</summary>
 
-MCP 普通请求可用 `notifications/cancelled` 告知对方取消哪个请求。取消可能来晚，仍要处理迟到结果；任务增强请求另用 `tasks/cancel`。[取消规范](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/cancellation)
+MCP 普通请求用 `notifications/cancelled`，任务增强请求用 `tasks/cancel`；仍需处理迟到结果。[取消规范](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/cancellation)
 
-Yuuki 的 [run.cancel](../../examples/shared/runtime/Sources/main.swift:236) 会取消 Swift 任务、终止网络请求、唤醒待确认操作。已经完成的工具操作仍保留记录。[运行时说明](../../examples/shared/runtime/README.md)
+Yuuki 的 [run.cancel](../../examples/shared/runtime/Sources/main.swift:236) 取消 Swift 任务和网络请求、唤醒待确认操作；已完成工具仍保留记录。[运行时说明](../../examples/shared/runtime/README.md)
 
 想继续学恢复，读[把一次运行管到底](../agent-engineering/05-harness-vertical-slice.md)。
 

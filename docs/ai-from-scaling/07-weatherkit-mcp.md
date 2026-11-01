@@ -1,8 +1,8 @@
 # Apple 天气 MCP：从查询天气到安排出门
 
-把 WeatherKit 接进 MCP，查询真实天气，再按你的条件筛选出门时段。结果保留时间、单位与判断依据。
+接入 WeatherKit，按条件筛出门时段，保留时间、单位与依据。
 
-配套实现：[examples/weatherkit-mcp](../../examples/weatherkit-mcp/README.md)。需要 Node.js ≥ 22.22、pnpm 11.14。离线部分不需要 Apple 密钥；真实查询需要有效的 Apple Developer Program 会员与网络。
+实现：[examples/weatherkit-mcp](../../examples/weatherkit-mcp/README.md)。需 Node.js ≥22.22、pnpm 11.14；离线无需密钥，真实查询需 Apple 开发者会员与网络。
 
 分三次做：样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端。没有密钥可先做前两节。
 
@@ -10,11 +10,11 @@
 
 | 你的问题 | 工具提供的事实 | 由谁决定 |
 | --- | --- | --- |
-| 今天出门要不要带伞？ | 当前天气和未来几小时的降雨概率 | 模型结合你出门的时间解释；概率不保证一定下或不下 |
-| 今天找两小时散步，别太热、风别太大 | 连续两小时逐项满足阈值的时段，以及每小时原始数值 | 本地函数执行筛选，模型转述理由 |
-| 周末去另一个城市，温差大吗？ | 两个配置地点的逐日最高/最低温和降雨概率 | 模型对照相同日期的数据 |
+| 要带伞吗？ | 当前天气与逐小时降雨概率 | 模型结合出门时间解释，概率不是保证 |
+| 找两小时散步 | 连续满足阈值的时段和逐小时数据 | 本地筛选，模型解释 |
+| 两城温差大吗？ | 逐日高低温和降雨概率 | 模型对照同日数据 |
 
-三个工具：`list_locations`、`get_weather`、`find_outdoor_windows`。只查询你配置的地点。**Apple 提供天气，你设阈值，本地函数筛选时段。**
+工具为 `list_locations`、`get_weather`、`find_outdoor_windows`，只查配置地点：<mark class="key">Apple 给天气，本地按阈值筛选</mark>。
 
 ## 1. 跑通离线样本，先看一份有用的结果
 
@@ -37,7 +37,7 @@ pnpm demo:weatherkit-mcp
 2026-10-26 16:00 起 2 小时 | 最大降雨概率 10%
 ```
 
-这是人工样本，不能用于今天的安排。`demo.ts` 通过内存传输执行 MCP 调用，用样本替换 HTTP 响应，没有模型参与；真实入口不支持替换。
+<mark class="caution">人工样本不能用于今天安排</mark>。`demo.ts` 经内存 MCP 调用替换 HTTP 响应，无模型参与，真实入口不支持替换。
 
 打开 [demo.ts](../../examples/weatherkit-mcp/src/demo.ts)，找到对 `find_outdoor_windows` 的调用。它传入的是：
 
@@ -49,7 +49,7 @@ pnpm demo:weatherkit-mcp
 }
 ```
 
-默认规则还包括：降雨概率不超过 30%、风速不超过 20 km/h、体感温度在 5–32°C、UV 不超过 5、只选白天、活动在当地 07:00–22:00 内。它们是本项目的默认偏好，可以修改。
+默认偏好可改：降雨 ≤30%、风速 ≤20 km/h、体感 5–32°C、UV ≤5，白天当地 07:00–22:00。
 
 核对地点、时区、连续时长与 `mode=fixture`。
 
@@ -75,13 +75,13 @@ maxRainChancePercent: 90,
 4. 比较时间戳，确认每两个小时真的相邻。
 5. 返回最多五个最早、互不重叠的时段，并保留逐小时依据。
 
-**亲手检查一处边界：** 在 [fixtures/weather.ts](../../examples/weatherkit-mcp/fixtures/weather.ts) 里制造一个缺失小时，或把某小时的 `daylight` 改成 `undefined`。缺口不能拼成连续时段；要求白天时，未知值不能当作 `true`。修改样本以后先观察 `demo`；运行正式测试前恢复练习改动，因为测试使用同一份基准样本。
+**边界练习：** 在 [fixtures/weather.ts](../../examples/weatherkit-mcp/fixtures/weather.ts) 删一小时，或将 `daylight` 改为 `undefined`；缺口不能拼连续时段，未知不能当白天。先运行 demo，正式测试前恢复样本。
 
 **MCP 负责调用，业务规则决定筛选结果。**
 
 ## 3. 准备你的 Apple 配置
 
-你购买的 Apple Developer Program 会员包含 WeatherKit 访问权限。Apple 当前公布的包含额度为每个会员每月 50 万次 API 调用，各应用和服务共享这个会员额度；额度和政策以账户及官方页面为准。[WeatherKit 官方说明](https://developer.apple.com/weatherkit/)
+Apple 开发者会员含 WeatherKit，各应用与服务共享每月 50 万次 API 调用；以账户和官方政策为准。[WeatherKit 官方说明](https://developer.apple.com/weatherkit/)
 
 ### 3.1 注册 Services ID
 
@@ -91,13 +91,13 @@ maxRainChancePercent: 90,
 2. 填写描述，例如「个人天气 MCP」。
 3. 填写唯一标识，例如 `com.yourname.weather-mcp`，完成注册。
 
-记录完整标识，后面作为 `APPLE_SERVICE_ID`。这里使用 REST 服务的 Services ID；不要把 App Store Connect API 的 Issuer ID 填进来。Apple 当前说明所有已注册 Services ID 都可以用于 WeatherKit。[官方操作说明](https://developer.apple.com/help/account/capabilities/create-a-services-identifier-and-private-key-for-weatherkit/)
+完整标识填 `APPLE_SERVICE_ID`，不能填 App Store Connect Issuer ID；已注册 Services ID 均可用于 WeatherKit。[官方操作说明](https://developer.apple.com/help/account/capabilities/create-a-services-identifier-and-private-key-for-weatherkit/)
 
 ### 3.2 创建 WeatherKit Key
 
-在同一个后台进入 **Keys**：新增密钥，勾选 **WeatherKit**，注册并下载 `.p8`。记录 **Key ID**，并从开发者会员信息中找到 **Team ID**。Team ID 与 Key ID 都是 10 位标识。
+在 **Keys** 新增并勾选 **WeatherKit**，下载 `.p8`、记录 **Key ID**；会员信息中取 **Team ID**，两者均为 10 位。
 
-`.p8` 私钥只能下载一次，保存在本机私人目录，例如 `~/.config/yuuki-weatherkit/`；不要粘贴到聊天、课程文件或 Git。后面的配置只填写它的绝对路径。[Apple 密钥创建说明](https://developer.apple.com/help/account/keys/create-a-private-key/)
+`.p8` 只能下载一次，留在本机私人目录，如 `~/.config/yuuki-weatherkit/`；不进聊天或 Git，配置仅填绝对路径。[Apple 密钥创建说明](https://developer.apple.com/help/account/keys/create-a-private-key/)
 
 ### 3.3 填写本地配置
 
@@ -118,7 +118,7 @@ APPLE_PRIVATE_KEY_PATH=/绝对路径/AuthKey_你的KeyID.p8
 WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locations.json
 ```
 
-把所有占位符替换成自己的值。路径必须是绝对路径；包含空格时使用双引号。将 `.env` 和私钥文件权限设为只有自己可读写，例如对各自路径执行 `chmod 600`。
+替换占位符，使用绝对路径，空格加双引号；对 `.env` 与私钥执行 `chmod 600`。
 
 编辑 `locations.json`。下面的城市中心坐标只用于演示，替换成你要查询的位置：
 
@@ -129,7 +129,7 @@ WEATHERKIT_LOCATIONS_FILE=/绝对路径/yuuki-box/examples/weatherkit-mcp/locati
 ]
 ```
 
-使用 WGS84 经纬度，纬度在 -90 到 90、经度在 -180 到 180 之间；不同地图坐标系统不能直接混用。名称保持唯一，最多配置 20 个。时区采用 `Asia/Shanghai` 这样的 IANA 名称，旅行地点按当地时区填写。修改地点后重启服务。
+使用 WGS84，纬度 ±90、经度 ±180，不混用坐标系；名称唯一、最多 20 地点，填写当地 IANA 时区，修改后重启。
 
 核对五项配置：Team ID 是团队，Key ID 是密钥，Service ID 是服务；私钥仅留本机。
 
@@ -156,7 +156,7 @@ pnpm demo:weatherkit-mcp:live 上海
 - `daily[].date` 是地点当地日期；`hourly[].start`/`end` 是带时区的 ISO 时间，`localStart` 配合 `location.timezone` 阅读。
 - `source.attribution` 包含官方标识和来源链接。
 
-请求字段、单位和时区依据：[天气接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[逐小时字段](https://developer.apple.com/documentation/weatherkitrestapi/hourweatherconditions)、[数据元信息](https://developer.apple.com/documentation/weatherkitrestapi/metadata)。本例不发送非文档约定的 `units=si` 参数，而是在返回边界明确单位。
+字段依据：[天气接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[逐小时字段](https://developer.apple.com/documentation/weatherkitrestapi/hourweatherconditions)、[数据元信息](https://developer.apple.com/documentation/weatherkitrestapi/metadata)。不发送 `units=si`，在返回时转换单位。
 
 ### 顺着代码走一次
 
@@ -173,7 +173,7 @@ pnpm demo:weatherkit-mcp:live 上海
 
 JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/exp`。本例由 `jose` 签名，有效 30 分钟，提前一分钟续签。[Apple 认证](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
 
-同进程的两个天气工具共享内存缓存，最长五分钟且不超过 Apple 失效时间。命中保留原 `fetchedAt`，标记 `cacheHit: true`；`refresh: true` 强制刷新。失败不自动重试，不冒充新数据。
+同进程共享缓存，最长五分钟且不越过 Apple 失效时间；命中保留 `fetchedAt`、标记 `cacheHit`，`refresh: true` 强刷。失败不重试或伪装新数据。
 
 每次 `pnpm demo:weatherkit-mcp:live 上海` 都新建进程，连续两次运行不会共享缓存。
 
@@ -183,7 +183,7 @@ JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/
 
 ## 5. 接入已有客户端，让它帮助安排一天
 
-按照[示例 README 的 Codex 或 Claude Desktop 配置](../../examples/weatherkit-mcp/README.md#接入客户端)，让客户端启动 `dist/src/stdio.js`。使用 Node 绝对路径和 `--env-file`，保留原有 MCP 配置。
+按[示例 README 的 Codex 或 Claude Desktop 配置](../../examples/weatherkit-mcp/README.md#接入客户端)启动 `dist/src/stdio.js`：Node 绝对路径、`--env-file`，保留已有配置。
 
 先用一个明确任务：
 
@@ -218,9 +218,9 @@ JWT 用 `ES256`，头部含 `kid`、`TeamID.ServiceID`，载荷含 `iss/sub/iat/
 
 Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链接。[官方署名要求](https://developer.apple.com/weatherkit/#apple-weather-and-third-party-attribution)
 
-最终回答须显示 `logoLight/logoDark` 对应标识及 `legalUrls` 来源链接；仅隐藏在工具结果中不算通过。纯文本终端无法完成标识展示验收，发布前应在支持的宿主检查。样本标识只是占位。
+最终回答须显示 `logoLight/logoDark` 标识和 `legalUrls`，不能只藏在工具结果里；纯文本终端无法验收标识，需在支持的宿主检查。样本仅占位。
 
-本例只处理当前、逐小时和逐日天气，没有分钟级降水、天气预警和空气质量。符合散步阈值只是筛选结果，不是户外安全保证；这些边界会随结果返回。
+仅含当前、逐小时、逐日天气，不含分钟降水、预警或空气质量；匹配时段不是安全保证，边界随结果返回。
 
 ## 6. 故意制造失败，确认它没有编造答案
 
@@ -233,7 +233,7 @@ Apple 对天气展示要求保留 Apple Weather 标识与数据来源法律链�
 | 设置风速阈值 0 | 可能没有匹配，正常返回空时段列表 |
 | 选超出未来预报范围的日期 | 报告没有可用覆盖，和“有预报但不匹配”区分 |
 
-遇到 `401/403`，检查会员状态、WeatherKit Key、三个标识和系统时间；遇到 `429`，稍后再试并查看账户用量。工具请求有十秒超时；客户端取消会传递到 HTTP 请求。取消不能撤回已经到达 Apple 的请求，也不保证这次请求未计费。
+`401/403` 查会员、Key、三个标识与时间；`429` 查用量后稍后重试。请求限时十秒，取消传给 HTTP，但不能撤回已到 Apple 的请求或保证未计费。
 
 运行自动化检查：
 
@@ -245,9 +245,9 @@ pnpm check:weatherkit-mcp
 
 ## 到这里，怎样判定学会了
 
-你能独立完成三件事：配置一个常用地点并取回真实天气；改变一个阈值并解释时段为什么变化；沿代码指出 MCP、Apple 认证和本地业务判断各自的位置。
+完成三件事：查真实天气、改阈值解释变化、定位 MCP/认证/业务规则代码。
 
-课程交付验证记录（2026-10-26）：类型检查、自动化测试与离线演示通过，真实 stdio 发现/地点查询使用临时测试密钥验证。个人 Apple 凭据尚未配置，真实天气请求和最终客户端的署名展示留在第 4、5 步由你验收。
+2026-10-26：类型、自动测试、离线 demo 通过；临时密钥验证 stdio 发现/地点查询。未配个人 Apple 凭据，真实天气与署名展示须在第 4、5 步补验。
 
 后续按需增加城市搜索、分钟级降雨或预警，先确认地区支持与缺失时的回答。
 

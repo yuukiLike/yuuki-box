@@ -2,7 +2,7 @@
 
 [Wasm 入口](README.md) · [Worker 与内存](workers-and-memory.md) · [其他交织点](../learning/ai-frontend-intersections.md)
 
-前端写了 `await model.run(input)` 之后，实际工作可能发生在浏览器 CPU、GPU、本机 helper，或远端 API。先找到执行位置，再讨论缓存、速度和交互。
+`await model.run(input)` 可能运行在浏览器 CPU/GPU、本机 helper 或远端 API；<mark class="key">先确认执行位置</mark>。
 
 ## 把应用的几层分开看
 
@@ -19,9 +19,9 @@ Transformers.js 提供浏览器中使用模型的高层接口，可以执行多�
 
 ## Wasm 和 WebGPU 分别在哪
 
-Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计算；WebGPU 路径通过浏览器的 GPU 能力执行支持的工作。它们与模型运行时合作，页面还需负责加载、输入准备和结果显示。
+Wasm 通常走 CPU，WebGPU 使用浏览器 GPU；模型运行时组织计算，页面加载、准备输入并显示结果。
 
-浏览器支持 API 不代表模型一定可运行；还要验证算子、后端、数值与内存需求。[ONNX Runtime Web 性能诊断](https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html)
+<mark class="caution">支持 API 不等于能跑模型</mark>；还须验证算子、后端、数值与内存。[ONNX Runtime Web 性能诊断](https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html)
 
 [![冷启动包括下载与初始化，热运行复用会话但持续占用资源](../../site/public/diagrams/wasm/runtime-cold-warm.svg)](../../site/public/diagrams/wasm/runtime-cold-warm.svg)
 
@@ -35,9 +35,9 @@ Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计�
   处理输入 → 得到结果
 ```
 
-分开记录下载、初始化与推理，阶段可能重叠。复用已加载实例会减少等待，也会持续占用资源。
+下载、初始化、推理分别计时；复用减少等待，也持续占资源。
 
-它与[缓存成本](../frontend-foundations/cache-cost.md)是一件连续的事：减少下次等待，往往需要保留结果、资源或运行实例，并为它们安排结束时机。
+如[缓存成本](../frontend-foundations/cache-cost.md)：保留结果、资源或实例节省等待，也需安排释放。
 
 ## 可以从一个小任务开始
 
@@ -47,12 +47,12 @@ Wasm 路径把编译后的计算模块交给宿主执行，通常用于 CPU 计�
 | 短音频处理 | 已有录音、TypedArray 和任务状态的自然入口 | 数据格式、缓冲区传递与初始化 |
 | 小型文本分类 | 输入输出明确，易于观察 Worker 协作 | 首次加载、重复执行与过期结果 |
 
-这些是下一轮实验候选；先选择一个支持明确输入输出的模型，再核对文件大小、运行时支持与目标设备。
+先选输入输出明确的模型，核对体积、运行时和目标设备。
 
 当前文档站的 Wasm 实验只运行随页面提供的小模块。接入实际模型时，再把下载进度、资源缓存、失败和释放机制一起落地。
 
 ## 连接回 KV Cache
 
-浏览器里运行自回归语言模型，同样会遇到历史状态、缓存布局和上下文长度。Wasm 或 GPU 改变执行与存储方式，模型本身需要保留什么，仍取决于架构与推理实现。
+自回归模型仍需处理历史、缓存和上下文；Wasm/GPU 改变执行方式，保留哪些状态取决于模型与推理实现。
 
 先用[KV 容量实验](../../site/src/pages/labs/kv-memory.astro)看量级，再检查 Worker 与运行时的资源归属。

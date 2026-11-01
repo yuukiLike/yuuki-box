@@ -1,6 +1,6 @@
 # GitHub → Outlook：Issue 与 PR 邮件提醒
 
-**先用 GitHub 原生邮件通知；严格只收三类事件时，再加 Actions。**
+**<mark class="key">先用 GitHub 原生邮件通知</mark>；严格只收三类事件时，再加 Actions。**
 
 目标：`yuukiLike/yuuki-box` 有新 Issue、新 PR 或 PR 合并时，Outlook 收到邮件。
 
@@ -11,7 +11,7 @@
 3. 仓库 **Watch → Custom**：勾选 **Issues、Pull requests**。
 4. 自己的操作也要提醒：启用 **Your own updates**。
 
-PR 合并属于 PR 更新；原生没有单独的「仅合并」开关，也可能发来评论、评审等邮件。[官方通知设置](https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications)
+原生 PR 更新包含合并，也会有评论、评审；没有「仅合并」开关。[官方设置](https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications)
 
 ## 路线图
 
@@ -31,7 +31,7 @@ PR 合并属于 PR 更新；原生没有单独的「仅合并」开关，也可�
 | 新 PR | `pull_request_target: opened` |
 | PR 合并 | `pull_request_target: closed`，且 `github.event.pull_request.merged == true` |
 
-这一备选只读取事件信息，不检出或运行 PR 代码；自定义发信仍需 SMTP 或邮件 API，`GITHUB_TOKEN` 不提供通用发信能力。机器人创建的 PR 要另测触发链。[官方事件说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request_target)
+只读事件，不运行 PR 代码；发信仍需 SMTP／邮件 API，`GITHUB_TOKEN` 不能通用发信。机器人 PR 另测触发链。 [官方事件说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request_target)
 
 多平台接入再考虑[转发器](07-automation-options.md#如果自制一个转发器)。只接收 GitHub 邮件，无需 AI key 或 Outlook API。
 

@@ -1,10 +1,10 @@
 # Skills：这件事，下次不用从头教
 
-把反复交代的“拆章节、改导航、查链接、跑构建”存成 Skill，换会话后检验能否复用。
+把“拆章节、改导航、查链接、跑构建”存成 Skill，换会话检验复用。
 
-**Skill 是可版本化的任务目录：触发条件、输入输出、步骤与验收。** 同类任务可以复用。
+Skill 保存<mark class="key">触发条件、步骤与验收</mark>，可版本化、复用。
 
-状态：实现建议。目录与字段按 Agent Skills 规范及当前 Claude Code / Codex 文档整理；具体加载行为以你使用的版本为准。资料核对：2026-10-23。
+实现建议；按 Agent Skills 与 Claude Code / Codex 文档整理，加载行为以所用版本为准。核对：2026-10-23。
 
 ## Skill 由什么组成
 
@@ -27,11 +27,11 @@ description: 重构 docs 目录、拆分章节并同步站点导航。当用户�
 
 规范建议 `name` 使用小写字母和连字符，长度不超过 64 个字符；`description` 不超过 1024 个字符，不要包含 XML 标签。正文建议控制在 500 行以内。[Agent Skills specification](https://agentskills.io/specification)
 
-Claude Code 从 `.claude/skills/<name>/SKILL.md` 读取，Codex 从 `.agents/skills/<name>/SKILL.md` 读取；两者目录不同，`SKILL.md` 的结构可以共用。显式调用分别是 `/skill-name` 与 `$skill-name`，也都可以靠 description 隐式触发。
+Claude Code 使用 `.claude/skills/<name>/SKILL.md`，Codex 使用 `.agents/skills/<name>/SKILL.md`，结构可共用。显式调用分别为 `/skill-name`、`$skill-name`；也可由 description 触发。
 
 [![Skill 按名称描述、正文、引用资料三层加载；工具权限另行检查](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)
 
-读图时只追踪一件事：这一步新增了哪些上下文，又为什么现在才需要它。
+读图只看：这一步为什么需要新增上下文。
 
 ## 加载是渐进的
 
@@ -43,14 +43,14 @@ Claude Code 从 `.claude/skills/<name>/SKILL.md` 读取，Codex 从 `.agents/ski
 
 ## description 才是触发器
 
-description 要回答三件事：**做什么、什么时候用、什么时候不要用。** 只写“帮助处理文档”会让它在错误的任务上加载。
+description 要写清<mark class="key">做什么、何时用、何时不用</mark>；“帮助处理文档”太宽。
 
 | 写法 | 问题 |
 | --- | --- |
 | `帮助处理文档` | 太宽，几乎所有文档任务都会命中 |
 | `重构 docs 目录、拆分章节并同步站点导航。当用户要求调整文档结构、侧栏顺序或拆分章节时使用；只改错别字或单篇内容时不要触发。` | 有动作、有触发条件、有负例 |
 
-负例不是装饰。它是你后续测试“该不该加载”的固定用例。
+把负例保留为触发测试。
 
 ## 正文模板
 
@@ -89,7 +89,7 @@ description 要回答三件事：**做什么、什么时候用、什么时候不
 
 ## 小挑战：把最近重复过的任务教一遍
 
-选一个你最近重复做过、且有明确验收标准的任务。不要为演示造一个 skill。
+选最近重复过、验收明确的真实任务。
 
 - **Baseline：** 不带 skill 做 3 次同类任务。
 - **With skill：** 带 skill 做 3 次同类任务。
@@ -105,11 +105,11 @@ description 要回答三件事：**做什么、什么时候用、什么时候不
 
 ## 边界
 
-- **Skill 是说明，不是权限。** 它不能替代审批、路径校验或沙箱；副作用仍要走 Harness 的工具策略。
-- **Skill 会过期。** 产品接口、目录结构和命令变化后，旧步骤可能变成错误引导；把版本和核对日期写进正文。
-- **Skill 会冲突。** 两个 skill 给出不同步骤时，模型不会自动知道谁优先；description 要尽量互斥，或者明确依赖关系。
-- **不要把密钥写进 skill。** 需要凭据时引用环境变量或 Keychain，不要在示例里放真实值。
-- **不要自动运行下载来的 skill。** 先读 `SKILL.md` 和 `scripts/`，确认它做什么，再决定是否启用。
+- <mark class="caution">Skill 不提供权限</mark>；审批、路径和沙箱仍由工具策略检查。
+- **会过期：** 接口、目录、命令变化后重查，正文标注版本与日期。
+- **会冲突：** description 尽量互斥，或写明依赖和优先关系。
+- **不存密钥：** 引用环境变量或 Keychain。
+- **先读后启用：** 下载的 `SKILL.md` 与 `scripts/` 不自动执行。
 
 ## 资料
 

@@ -1,14 +1,14 @@
 # Agent 入门 2：接真实模型并做对照实验
 
-接着[搭建 Harness](03-build-a-harness.md)，把脚本模型换成真实模型，再改变工具运行条件。每次先预测，再运行，用工具结果或文件核对。
+接着[搭建 Harness](03-build-a-harness.md)，换成真实模型，再改变工具条件：<mark class="key">先预测，再用结果核对</mark>。
 
-实验约 50 分钟，复述 10 分钟。没有 API key 可先做离线部分。字符模型对照只供[四小时联读路线](README.md)选做，可以跳过。
+实验 50 分钟，复述 10 分钟；无 API key 先做离线部分，字符模型对照供[四小时联读路线](README.md)选做。
 
 ## 前十分钟 接入真实模型
 
 真实模式使用 DeepSeek Chat Completions，发送本实验的任务、工具定义、活动计划与本轮结果。
 
-在 macOS 默认的 zsh 终端中，交互输入自己的 key。输入隐藏，实际值不会写进这条命令的历史：
+macOS zsh 中隐藏输入 key，避免写进命令历史：
 
 ```zsh
 read -r -s 'DEEPSEEK_API_KEY?输入 DeepSeek API key: '
@@ -18,7 +18,7 @@ export DEEPSEEK_MODEL='deepseek-flash'
 pnpm demo:harness --live
 ```
 
-模型名可通过 `DEEPSEEK_MODEL` 改为账户可用、支持工具调用的模型。当前示例用 `deepseek-flash`，关闭 thinking，使用非流式回复，每次输出上限 512 tokens。请求与工具字段以 [DeepSeek Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion/) 为准。
+`DEEPSEEK_MODEL` 须支持工具调用；本例用 `deepseek-flash`、关闭 thinking、非流式、最多输出 512 tokens。字段以 [DeepSeek Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion/) 为准。
 
 真实模型的步骤可能不同。达到 4 轮上限后，先查记录，需要时再增加：
 
@@ -26,23 +26,23 @@ pnpm demo:harness --live
 pnpm demo:harness --live --max-rounds 6
 ```
 
-每次请求最多等待 30 秒。网络、HTTP 或超时错误会结束运行，程序不自动重试；这些失败也不代表远端没有产生用量。用完后可以执行 `unset DEEPSEEK_API_KEY`，清除当前 shell 中的变量。
+请求限时 30 秒，网络、HTTP 或超时错误不自动重试；<mark class="caution">失败仍可能产生用量</mark>。结束后执行 `unset DEEPSEEK_API_KEY`。
 
-`scriptedModel()` 与 `liveModel()` 返回相同形态的消息与结束原因，工具、审批和验证仍由同一 Harness 处理。
+两种模型返回相同格式；工具、审批与验证沿用同一 Harness。
 
 <details>
 <summary>四小时路线选做：对照训练计算与上下文</summary>
 
 先完成[字符模型训练](02-train-a-model.md)，再做下面的对照。
 
-先保持上下文为 2，只改训练轮数：
+固定上下文 2，只改训练轮数：
 
 ```bash
 pnpm demo:tiny-model --context 2 --epochs 30
 pnpm demo:tiny-model --context 2 --epochs 120
 ```
 
-只改变更新次数。比较训练/验证 loss，以及“猫吃”后“鱼”的概率；结论限于本例。
+比较训练/验证 loss 和“鱼”的概率；结论限于本例。
 
 1 字与 2 字上下文对照则同时改变输入、参数和工作量，解释结果时要列出这些变量。
 
@@ -68,7 +68,7 @@ pnpm demo:harness --scenario loop
 
 前两项只验证错误通路，不衡量模型纠错能力。循环场景预期退出码为 1，终态保持 `limit_reached`。
 
-再打开 `executeTool()`，找到人数范围的检查，临时把离线计划中的人数改成 `-1` 后运行。确认返回的是工具错误，且没有继续请求保存。完成后把人数恢复为 20。
+在 `executeTool()` 找人数校验，临时将计划人数改为 `-1`；确认工具报错且不请求保存，再恢复为 20。
 
 ## 第三十五到四十五分钟 检查审批与取消
 
@@ -79,11 +79,11 @@ AI_CANCEL_DIR=$(mktemp -d)
 pnpm demo:harness --write-to "$AI_CANCEL_DIR/summary.md"
 ```
 
-等待“允许创建这个文件吗”出现，先不要回答，按 `Ctrl+C`。检查最后一条事件是 `run.cancelled`，终端停止，目录里没有新文件。
+审批出现时按 `Ctrl+C`；应以 `run.cancelled` 结束，目录无新文件。
 
-再运行一次并输入 `y`，核对文件确实创建。文件已经创建后再结束进程，文件仍会存在；取消请求不会撤销已经发生的写入。
+重跑输入 `y`，核对文件；写入后结束进程不会撤销文件。
 
-把这件事接回真实模型：取消能让本地循环停止并中止等待中的请求，远端是否已处理请求、是否已计费，仍需要分别核对。
+真实调用取消后，本地停止；远端处理与计费仍须另查。
 
 ## 最后五分钟 用成果判断是否做对
 
@@ -100,15 +100,15 @@ pnpm demo:harness --write-to "$AI_CANCEL_DIR/summary.md"
 
 ## 练习后的十分钟 回顾与验收
 
-只做 Agent 入门时，拿着 Harness 输出，解释工具请求怎样执行、结果怎样回传，以及为什么任务还可能未完成。
+用 Harness 输出解释调用、回传，以及任务为何可能未完成。
 
-沿四小时路线联读时，再拿着模型文件与 Harness 输出，解释三件事：
+四小时路线再结合模型文件，回答：
 
 1. 参数在哪里更新？生成时又使用了什么？
 2. 哪次实验改变计算量，哪次改变输入和容量？结论适用到哪里？
 3. 工具请求怎样执行、结果怎样回传，又怎样证明任务完成？
 
-用下面这张短记录保留自己的发现，下一轮就从最难解释的一项继续：
+记下发现，下轮先解最难的一项：
 
 ```text
 我亲手改动的地方：

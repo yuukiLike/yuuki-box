@@ -1,8 +1,8 @@
 # Computer Use：模型怎样看界面、做动作、检查结果
 
-**Computer Use 把图形界面接进 Agent 的工具循环：模型根据观察提出动作，外部程序执行，再把新的界面状态交回模型。** 模型能力、工具接口、浏览器连接和操作系统权限各有职责；换一个模型不会自动补齐其他部分。
+Computer Use 把界面接进工具循环：<mark class="key">观察 → 提出动作 → 执行 → 重新观察</mark>。模型、工具、连接与系统权限各有职责。
 
-这组知识点按四篇阅读，也可以直接跳到你遇到的问题：
+按顺序读，或直接找对应问题：
 
 | 顺序 | 入口 | 读完能解释什么 |
 | --- | --- | --- |
@@ -11,23 +11,23 @@
 | 3 | [同类工具对照](computer-use-ecosystem.md) | Claude、Gemini、Playwright MCP、Browser Use、Stagehand 与 UI-TARS 各提供什么 |
 | 4 | [理解误区与自测](computer-use-misconceptions.md) | 为什么能看见却不能操作，调用成功却没完成，重试可能重复提交 |
 
-资料核对：**2026-10-31**。公开产品事实附官方来源；`cua_repl` 的细节来自本次会话实际返回的工具说明。图和架构拆解是教学归纳，不代表厂商未公开的内部源码。本次只读取了连接清单与接口说明，没有执行桌面点击、安装扩展或调用付费模型做实验。
+资料核对：**2026-10-31**。产品事实附官方来源，`cua_repl` 细节来自本次工具说明；图与分层为教学归纳。仅查阅清单和接口，未点击桌面、安装扩展或调用付费模型。
 
 ## 一次“把标题改为周计划”怎样完成
 
 [![Computer Use 闭环：模型提出动作，Harness 检查，驱动操作应用，再把截图或结构化状态送回模型](../../site/public/diagrams/agent-engineering/computer-use-loop.svg)](../../site/public/diagrams/agent-engineering/computer-use-loop.svg)
 
-假设目标是一份已经打开的测试文档，用户要求把标题改为“周计划”：
+以已打开的测试文档为例：
 
-1. **观察。** 宿主读取目标窗口的截图或界面结构，模型才知道标题输入框在哪里、当前写着什么。
-2. **定位。** 模型把“标题”对应到一个元素引用、定位器或坐标。这一步通常叫 grounding，即把意图落到具体界面目标。
-3. **提出动作。** 输出可能是一个结构化工具调用，也可能是一小段操作界面的代码。
-4. **执行。** Harness 检查目标与权限，驱动程序输入文字。操作系统或浏览器处理真实事件。
-5. **核对。** 重新读取界面，确认标题真的变了。若任务要求保存，还要确认保存状态，而不是停在输入完成。
+1. **观察。** 宿主读取截图或结构，找到标题框及当前值。
+2. **定位。** 将“标题”对应到元素引用、定位器或坐标，即 grounding。
+3. **提出动作。** 输出结构化工具调用或界面操作代码。
+4. **执行。** Harness 检查目标与权限，驱动向系统或浏览器发送输入。
+5. **核对。** 重新观察；若要求保存，还须确认保存状态。
 
-OpenAI 的 Responses Computer Use 文档明确区分模型返回的动作与应用执行动作的责任；其代码执行路线则让应用提供运行环境并返回观察结果。[OpenAI Computer Use](https://developers.openai.com/api/docs/guides/tools-computer-use)
+模型返回动作，应用负责执行与回传观察；代码执行路线也由应用提供运行环境。[OpenAI Computer Use](https://developers.openai.com/api/docs/guides/tools-computer-use)
 
-这里有三个不同的“成功”：**模型生成了合法调用 → 驱动执行没有报错 → 用户要求的结果已经成立。** 前两个都不能代替第三个。
+合法调用、驱动无报错、目标成立是三种结果；<mark class="caution">前两个不能代替任务完成</mark>。
 
 ## 先分清五层
 
@@ -39,7 +39,7 @@ OpenAI 的 Responses Computer Use 文档明确区分模型返回的动作与应�
 | 驱动与连接 | 元素引用、坐标、文字 → 浏览器或系统操作 | 绑定哪个应用、窗口、标签页、浏览器 profile |
 | 被操作环境 | 真实输入 → 页面和应用状态变化 | 持有登录态、文件、焦点、弹窗和业务数据 |
 
-MCP 可以把其中的工具暴露给宿主；Skill 可以说明应该按什么步骤使用它们。两者都不替代驱动和目标环境。可以回看 [MCP 工具源](01-mcp-tool-source.md)与 [Skills 结构](03-skills-structure.md)。
+MCP 暴露工具，Skill 描述步骤，均不替代驱动或目标环境。参见 [MCP 工具源](01-mcp-tool-source.md)与 [Skills 结构](03-skills-structure.md)。
 
 ## “看见界面”有三种常见表示
 
@@ -49,35 +49,35 @@ MCP 可以把其中的工具暴露给宿主；Skill 可以说明应该按什么�
 | AX / 可访问性树 | 按钮、文本框等角色，以及名称、值、状态 | 根据语义寻找“保存”按钮或标题框 | 完整程度取决于应用；不能完整表达视觉布局 |
 | DOM / 页面结构 | 网页元素、属性、文本及工具允许读取的页面信息 | 表单、列表、网页定位与调试 | 不覆盖所有原生应用；也不能直接解释画布内每个对象 |
 
-AX 是 accessibility 的常见缩写。可访问性树通常来自应用或浏览器提供的语义，不能简单理解为“截图 OCR 以后变成的树”。DOM 与 AX 也不是同一棵树：前者组织网页节点，后者表达可访问的交互语义。[Apple AXUIElement API](https://developer.apple.com/documentation/applicationservices/axuielement_h)、[Playwright MCP 快照](https://github.com/microsoft/playwright.dev/blob/main/mcp/snapshots.mdx)
+AX（accessibility）来自应用或浏览器的交互语义，并非截图 OCR。DOM 组织网页节点，AX 表达可访问性，两者也不同。[Apple AXUIElement API](https://developer.apple.com/documentation/applicationservices/axuielement_h)、[Playwright MCP 快照](https://github.com/microsoft/playwright.dev/blob/main/mcp/snapshots.mdx)
 
-**“我检查过页面”必须带着观察范围理解。** 读到了按钮文字，可以支持“按钮存在”；确认颜色、对齐或遮挡，需要对应的视觉证据。看到一张截图，也不能证明它以外的所有标签页都已检查。
+观察范围决定结论：文字证明按钮存在，视觉证据才能确认颜色、对齐和遮挡；一张截图不覆盖其他标签页。
 
 <details class="qa">
 <summary>模型怎样从截图生成点击位置？必须先做 OCR 吗？</summary>
 
-可以把视觉路线理解为：图像经过视觉编码，与任务文字和历史一起进入模型；模型生成动作表示，再由程序解析为坐标和输入事件。OCR、元素检测或标号覆盖层都可以参与，但不是所有实现都必须具有的独立步骤。
+图像与任务、历史进入模型，模型输出动作，程序解析为坐标和输入。OCR、元素检测或标号可以参与，但不是必需的独立步骤。
 
-公开的 UI-TARS 提供了模型输出解析与坐标后处理代码，能看到“模型结果 → 动作结构 → 自动化代码”的边界。它说明 GUI 能力可以专门训练；不能据此推断 Codex、Claude 或 Gemini 内部采用了相同网络、训练数据或解析器。[UI-TARS 模型与后处理](https://github.com/bytedance/UI-TARS)
+UI-TARS 公开了动作解析与坐标后处理；它展示 GUI 专项训练，不能代表其他模型的内部实现。[UI-TARS 模型与后处理](https://github.com/bytedance/UI-TARS)
 
 </details>
 
 ## 再往下：谁真正完成点击
 
-**macOS 原生应用路线。** 可访问性客户端可以通过 `AXUIElement` 读取元素属性、设置受支持的值、请求元素执行动作；屏幕捕获则可由 ScreenCaptureKit 等系统能力提供。两种能力解决不同问题，所以“有录屏权限”不推出“能操作控件”。这是公开的系统实现材料，不是对 Codex 使用了哪些具体系统函数的源码确认。[Apple AXUIElement API](https://developer.apple.com/documentation/applicationservices/axuielement_h)、[ScreenCaptureKit 示例](https://developer.apple.com/documentation/screencapturekit/capturing-screen-content-in-macos)
+**macOS 原生应用。** `AXUIElement` 可读取属性、设置受支持的值和执行动作；ScreenCaptureKit 可抓屏。录屏权限不等于操作权限。这是系统能力示例，未确认 Codex 使用了哪些函数。[Apple AXUIElement API](https://developer.apple.com/documentation/applicationservices/axuielement_h)、[ScreenCaptureKit 示例](https://developer.apple.com/documentation/screencapturekit/capturing-screen-content-in-macos)
 
-**浏览器路线。** 驱动可通过浏览器自动化接口定位元素、派发输入和获取截图。CDP（Chrome DevTools Protocol）是 Chromium 的调试协议；Chrome 扩展的 `chrome.debugger` 可以作为它的传输入口，访问受支持的 DOM、Input、Network 等域。CDP 是控制通道，不负责理解用户意图。[Chrome debugger API](https://developer.chrome.com/docs/extensions/reference/api/debugger)
+**浏览器。** 驱动定位元素、发送输入、抓图。Chromium 的 CDP 是调试控制通道；扩展可通过 `chrome.debugger` 访问受支持的 DOM、Input、Network 域，但意图仍由模型判断。[Chrome debugger API](https://developer.chrome.com/docs/extensions/reference/api/debugger)
 
-**隔离桌面路线。** 应用也可以运行在虚拟机或容器中的图形环境，由外部程序抓图和发送输入。Claude 的参考环境展示了这种组合：虚拟显示、桌面应用、动作实现与 Agent 循环分别存在。模型服务不会因为收到截图，就自行连接到这台机器。[Claude Computer Use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool)
+**隔离桌面。** 应用可在虚拟机或容器的图形环境运行。Claude 参考环境将显示、应用、动作与 Agent 循环分开；接入方仍须连接机器、抓图和输入。[Claude Computer Use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool)
 
-上述路线可以组合。一个产品既能操作原生应用，也能通过浏览器专用通道操作网页；不能从“它点了网页按钮”倒推出使用的是哪种驱动。
+这些路线可以组合，仅凭一次网页点击无法确定底层驱动。
 
 <details class="qa">
 <summary>屏幕坐标、截图像素和网页 CSS 像素为什么不能直接混用？</summary>
 
-截图可能缩放或裁剪，网页有视口与滚动偏移，屏幕还可能有不同的像素密度。假设截图只做了等比缩小，原图宽 1440、输入图宽 720，那么输入图的横坐标 300 对应原图 600；一旦还有裁剪，就要继续加上裁剪原点。
+缩放、裁剪、滚动和像素密度都会改变坐标。例如原图宽 1440、等比缩到 720 后，横坐标 300 对应原图 600；裁剪时还须加回原点偏移。
 
-这是简化计算，不能代替具体驱动契约。不同工具也可能使用归一化坐标。执行器必须知道坐标属于哪一张图、哪一个窗口和哪一套尺寸。[OpenAI 截图与分辨率](https://developers.openai.com/api/docs/guides/tools-computer-use-integration#capture-screenshots)
+实际换算以驱动契约为准，可能使用归一化坐标；执行器须绑定图像、窗口和尺寸。[OpenAI 截图与分辨率](https://developers.openai.com/api/docs/guides/tools-computer-use-integration#capture-screenshots)
 
 </details>
 
@@ -90,11 +90,11 @@ AX 是 accessibility 的常见缩写。可访问性树通常来自应用或浏�
 代码执行：  模型 → 一段脚本 → 脚本调用界面 API → 工具结果
 ```
 
-代码入口可以复用对象、做条件判断、整理结果，把一组已知步骤放在一次往返里。它不会让模型在每条 `await` 后自动重新思考：脚本继续执行，模型通常在这一轮结果返回后才作下一次判断。
+代码可复用对象、条件判断和批量执行。`await` 只等待调用；模型通常收到整轮结果后才重新判断。
 
-因此，适合合并的是“在已确认的输入框填值，然后读取状态”这样的短序列。遇到未知弹窗、页面跳转或目标可能变化时，应先返回新观察。减少往返和保留反馈需要同时考虑。
+已确认的短步骤可合并；遇到未知弹窗、跳转或目标变化，先返回新观察。
 
-OpenAI 的公开指南同时描述代码执行与结构化 computer actions；这两种交互形式不应被写成谁已经完全取代谁。[OpenAI 代码执行路线](https://developers.openai.com/api/docs/guides/tools-computer-use#use-code-execution)
+公开指南同时提供代码执行与结构化动作，两者仍并存。[OpenAI 代码执行路线](https://developers.openai.com/api/docs/guides/tools-computer-use#use-code-execution)
 
 ## 如果给 Yuuki 增加这种能力
 
@@ -108,6 +108,6 @@ OpenAI 的公开指南同时描述代码执行与结构化 computer actions；�
 | 取消与恢复 | 停止后续动作；对已经发生但回执丢失的副作用先核对 |
 | 运行报告 | 模型耗时、驱动耗时、等待页面耗时、失败原因分别记录 |
 
-第一步可以只做“读取一个测试窗口的标题与截图”。第二步再加一个可逆动作和独立结果检查。不要因为有了 `click()`，就把一长串网页操作视为已经可靠。
+先读测试窗口的标题和截图，再加一个可逆动作及独立检查；单个 `click()` 成功不代表长流程可靠。
 
 读下一篇：[Codex 与 cua_repl：接口、连接与状态](cua-repl.md)。

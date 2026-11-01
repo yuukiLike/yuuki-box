@@ -2,13 +2,13 @@
 
 [上一课](03-apple-weatherkit.md) · [目录](README.md) · [下一课：连接与验收](05-connect-and-verify.md)
 
-**这一课的目标：让 Codex 能发现并调用 `get_current_weather`，同时保持权限检查在服务端。**
+让 Codex 发现并调用天气工具；<mark class="key">权限检查留在服务端</mark>。
 
 [![Codex 对话区旁的教程观察栏，展示用户 token 到 Supabase、开发者 token 到 Apple 的两段请求](../../../site/public/diagrams/weather-mcp/03-request.svg)](../../../site/public/diagrams/weather-mcp/03-request.svg)
 
 ## 1. 先看完整目录
 
-这是你另建的天气服务工程。前两课的文件与本课文件放在一起：
+在独立天气工程汇总前两课与本课文件：
 
 ```text
 weather-service/
@@ -27,7 +27,7 @@ weather-service/
         └── index.ts
 ```
 
-教程按当前 Supabase 官方 MCP 示例使用 TypeScript SDK v2 的 `createMcpHandler`，每个请求创建独立服务实例。它处理 JSON-RPC、工具发现、参数验证和 Streamable HTTP；我们负责身份与业务逻辑，不手写一套 MCP 协议。[Supabase 自建 MCP 指南](https://supabase.com/docs/guides/ai-tools/byo-mcp)
+按 Supabase 示例使用 SDK v2 `createMcpHandler`，每请求新建实例。SDK 处理协议、发现、参数和传输；我们处理身份与业务。[Supabase 自建 MCP 指南](https://supabase.com/docs/guides/ai-tools/byo-mcp)
 
 `supabase/functions/weather-mcp/deno.json`：
 
@@ -44,7 +44,7 @@ weather-service/
 }
 ```
 
-版本固定是为了复现本教程，不代表以后永远不升级。不要把这里的 v2 import 与旧课程的 SDK v1 import 混用。
+固定版本用于复现；不要混用 v2 与旧 SDK v1 import。
 
 ## 2. 给 OAuth 发现留一个公开入口
 
@@ -58,11 +58,11 @@ weather-service/
 verify_jwt = false
 ```
 
-这个配置只关掉 Supabase 网关的默认 JWT 检查，让客户端能在登录前读取资源元数据。**天气工具仍须经过下面的函数内验证。** 如果既关闭网关检查，又删掉函数内验证，就变成任何人都能消耗 Apple 额度的接口。[Edge Functions 与 MCP 认证](https://supabase.com/docs/guides/ai-tools/byo-mcp)
+网关关闭 JWT 检查，仅为公开资源发现；<mark class="caution">函数内验证必须保留</mark>，否则匿名用户可消耗 Apple 额度。[Edge Functions 与 MCP 认证](https://supabase.com/docs/guides/ai-tools/byo-mcp)
 
 ## 3. 验证 Supabase 签发的用户 token
 
-我们不用 `decodeJwt` 的结果做授权。解码只是在读 JSON，不能证明签名正确。
+`decodeJwt` 只读 JSON，不能证明签名，不能据此授权。
 
 `supabase/functions/weather-mcp/auth.ts`：
 
@@ -111,17 +111,17 @@ export async function verifyWeatherUser(token: string): Promise<string> {
 }
 ```
 
-这里同时验证签名、签发方、接收方、有效期和用户身份。`client_id` 要求它来自 OAuth 流程；普通网站登录 token 不应被当作 Codex 授权。业务资格依然要查数据库。[MCP token 校验要求](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)、[Supabase OAuth token 安全](https://supabase.com/docs/guides/auth/oauth-server/token-security)
+验证签名、issuer、audience、有效期与身份；`client_id` 区分 OAuth token，数据库再判断天气资格。[MCP token 校验要求](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)、[Supabase OAuth token 安全](https://supabase.com/docs/guides/auth/oauth-server/token-security)
 
-离线 JWT 验证不等于实时查询“用户刚刚是否退出登录”。本例每次请求查询 `weather_access.enabled`，可立即停用天气权限；若要按客户端即时撤销某个授权，还需增加客户端授权状态检查。不要承诺一个已签发的 JWT 在点击退出后瞬间失效。
+离线验证不保证 JWT 在退出时立即失效。每请求查 `weather_access.enabled` 可停用天气资格；即时撤销客户端授权还需另查授权状态。
 
 [![天气调用前依次验证身份、业务资格与原子额度](../../../site/public/diagrams/weather-mcp/access-gates.svg)](../../../site/public/diagrams/weather-mcp/access-gates.svg)
 
-把“登录成功但没有天气资格”作为第一条负例：应在第二道门停下，不应调用 Apple，也不应反复要求登录。
+首个负例：已登录但无天气资格，应拒绝调用 Apple，也不反复要求登录。
 
 ## 4. 注册工具并连接两套权限
 
-入口中只有资源元数据是公开的。真正的 MCP 请求先验证用户，再查资格；真正的天气调用还要原子预占额度。
+仅资源元数据公开；MCP 请求验身份、查资格，天气调用再原子预占额度。
 
 `supabase/functions/weather-mcp/index.ts`：
 
@@ -241,7 +241,7 @@ Deno.serve(async (request: Request) => {
 });
 ```
 
-`readOnlyHint` 描述用户业务操作是查询。服务器仍会记录额度；它不是授权凭证，也不能替代权限校验。工具参数只接受三个城市，因此模型不能借此请求任意 URL 或冒充另一个用户。
+`readOnlyHint` 描述查询性质，不是权限凭证；服务器仍计额度。参数只接受三个城市，不允许任意 URL 或用户身份。
 
 ## 5. 走一遍实际消息
 
@@ -252,7 +252,7 @@ HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://YOUR_PROJECT_REF.supabase.co/functions/v1/weather-mcp/oauth-protected-resource", scope="openid"
 ```
 
-客户端读取这个公开地址，找到 Supabase 授权服务器，完成浏览器授权与 PKCE，带 token 重试。它会按协商的 MCP 版本完成连接、发现工具，再发送类似的调用：
+客户端发现 Supabase，完成浏览器授权与 PKCE，带 token 重试，再按协商版本发现、调用工具：
 
 ```json
 {
@@ -266,12 +266,12 @@ WWW-Authenticate: Bearer resource_metadata="https://YOUR_PROJECT_REF.supabase.co
 }
 ```
 
-在同一个 HTTP 请求里：`Authorization` 负责用户身份；JSON-RPC body 说明要调用什么。`tools/list` 让 Codex 知道工具名、说明和参数格式。HTTPS 仍然承担网络传输；MCP 提供的是大家一致理解的工具协议。
+HTTP `Authorization` 传身份，JSON-RPC body 传调用；`tools/list` 提供名称、说明与参数。HTTPS 负责传输，MCP 约定工具协议。
 
-这里通过 `WWW-Authenticate` 明确给出元数据地址，避免要求你修改 Supabase 项目域名根目录的路由。不要把这个 Edge Function 地址误写成 Supabase 管理平台的 MCP 地址。[MCP 资源发现](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
+`WWW-Authenticate` 指定元数据地址，无需修改域名根路由；别误填 Supabase 管理平台的 MCP 地址。[MCP 资源发现](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
 
-公开地址含 `/functions/v1`，函数内的路由则以 `/weather-mcp` 开头。示例同时识别这两个固定路径，但始终用公开的 `WEATHER_MCP_URL` 作为 audience 和资源标识。[Supabase 函数路由](https://supabase.com/docs/guides/functions/routing)
+公开路径含 `/functions/v1`，内部路径以 `/weather-mcp` 开头；两者都识别，但 audience 与资源标识始终用公开 URL。[Supabase 函数路由](https://supabase.com/docs/guides/functions/routing)
 
 ## 到这里就停
 
-沿代码找到三道门：`verifyWeatherUser`、`weather_access`、`reserve_weather_call`。能分别解释身份、资格、额度后，就去[部署、连接并验收](05-connect-and-verify.md)。
+找到身份、资格、额度三道门，再去[部署与验收](05-connect-and-verify.md)。

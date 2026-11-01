@@ -2,11 +2,11 @@
 
 本篇属于 [MCP 项目实战](../mcp-projects/README.md)的音乐选修，建议先读[声部之结](07-music-space-mcp.md)，熟悉共用服务与时间轴。
 
-镜头先经过近处的暗红丝绸，再穿过黄铜拱门，远处是一座通向发光椭圆的剧场。音乐推进，灯束由冷转暖，悬浮光环展开；前景与舞台以不同速度滑过视线。
+镜头经过暗红丝绸、黄铜拱门与远处剧场；随音乐推进，灯光转暖、光环展开、远近景交错。
 
-这个案例叫 **光之剧场 · Light Theatre**。它用三张独立图像和少量三维几何构成 2.5D 舞台。你可以换音乐、改段落灯光与运镜，再由 MCP 生成有声音的短片。
+**光之剧场 · Light Theatre** 用三张图与少量三维几何组成 2.5D 舞台；换音乐、灯光与运镜，再通过 MCP 导出有声短片。
 
-**今天只做一件事：暂停在第 5 秒，把图层间距从 0 调到 1.5，比较同一时刻的遮挡，再导出 4 秒。**
+今天<mark class="key">固定第 5 秒，对比间距 0 与 1.5</mark>，再导出 4 秒。
 
 它与[声部之结](07-music-space-mcp.md)共用 TypeScript MCP、音乐时间轴、持久化、播放与逐帧导出；独立于 music-eyes。
 
@@ -28,9 +28,9 @@ pnpm demo:music-space-mcp:preview
 3. 点击不同场次，比较镜头方向与灯光；再调节“运镜幅度”。
 4. 点击“导出当前位置 4 秒”，打开页面显示的本机 MP4 文件。
 
-`demo` 还会生成两种场景各 6 秒的带声音短片，以及第 5/18 秒等不同段落的 PNG，路径记录在 `.artifacts/demo.json`。
+demo 另生成各 6 秒有声短片和第 5/18 秒等 PNG，路径在 `.artifacts/demo.json`。
 
-**停点：指出哪一层离镜头最近，哪些变化来自音频，哪些来自关键帧，并能打开导出的短片。**
+**停点：** 找到最近图层，区分音频与关键帧驱动的变化，打开短片。
 
 ## 这次真正分开了什么
 
@@ -41,9 +41,9 @@ pnpm demo:music-space-mcp:preview
 | 暗红丝绸 | 带透明通道的 PNG，前景深度 5 |
 | 灯束、悬浮环、尘埃 | Three.js 几何，按时间与音乐包络更新 |
 
-透明图层让中心真实露出背景。相机横向移动时，各层因深度不同产生相对位移；近处丝绸与中景拱门会遮住远处舞台的不同区域。`depthStrength` 控制前景、中景离背景的距离，`cameraTravel` 控制镜头运动。
+透明处露出背景，镜头横移使不同深度的图层产生视差与遮挡；`depthStrength` 控制间距，`cameraTravel` 控制运镜。
 
-每层会根据自身距离与画面宽高比缩放，留出运镜余量。它仍是有限视角的舞台布景，不能任意绕到建筑背面。
+图层按距离与画幅缩放，留运镜余量；<mark class="caution">不能任意绕到建筑背面</mark>。
 
 ## MCP 接收怎样的素材
 
@@ -60,13 +60,13 @@ pnpm demo:music-space-mcp:preview
 }
 ```
 
-每个图层须有 alpha 通道，与背景保持相同宽高比；最多四层，素材会复制到本地场景目录。示例三张图由内置 imagegen 分别生成，完整提示词、透明背景设置见 [assets/README.md](../../examples/music-space-mcp/assets/README.md)。
+图层需 alpha、与背景同宽高比，最多四层，导入后复制到场景目录；示例三图分别由 imagegen 生成，提示词见 [assets/README.md](../../examples/music-space-mcp/assets/README.md)。
 
-也保留了另一条输入路径：背景加灰度 `depthPath`，白近黑远，细分网格按深度变形。没有图层或深度图时使用明确标注的纵向手工深度。`layers` 与 `depthPath` 不同时使用；这个剧场实际使用独立透明图层，没有运行自动深度模型。
+也支持灰度 `depthPath`：白近黑远；与 `layers` 互斥。都未提供时用手工纵向深度。本剧场用独立透明图层，未运行深度模型。
 
 ## 把音乐和导演意图分开
 
-普通音频经过 FFmpeg 处理：播放与导出使用 48kHz 立体声 PCM，音量分析另用 22.05kHz 单声道，每 50ms 提取包络。包络控制曝光、灯束强度和光环尺度；它没有准确音符、乐器或副歌信息。
+FFmpeg 输出 48kHz 立体声 PCM 供播放，另用 22.05kHz 单声道每 50ms 提取包络，控制曝光、灯束和光环；不提供准确音符、乐器或副歌。
 
 场次关键帧保存显式的导演选择：
 
@@ -78,11 +78,11 @@ pnpm demo:music-space-mcp:preview
 ]
 ```
 
-`pan` 决定水平运镜，`zoom` 决定构图，`light` 同时改变灯束强度与冷暖倾向。关键帧之间平滑插值，时间须唯一且处于音乐范围内。上述时间只是格式示例，先核对自己的音频时长。
+`pan` 控制水平运镜、`zoom` 控制构图、`light` 控制灯束和冷暖；时间须唯一且在音乐内，帧间平滑插值，示例时间需按音频调整。
 
-本例音乐来自上一篇 MIDI 的完整混音，场次沿用源 MIDI 的人工段落标记。程序并没有从混音里自动识别这些段落。你也可以让宿主 AI 提议关键帧，再通过 `update_scene` 修改、渲染和比较。
+音乐来自前篇 MIDI 混音，场次沿用人工标记，不是自动识别；也可让 AI 提议关键帧，再用 `update_scene` 对照。
 
-TSL 节点材质把图片颜色、alpha、曝光与色调组合起来；Bloom 为亮部提供辉光。交互页面优先 WebGPU，必要时回退 WebGL2；离线捕获固定使用 WebGL2。本机验证覆盖 WebGL2，未测目标设备的 WebGPU 性能。
+TSL 组合颜色、alpha、曝光与色调，Bloom 添加辉光。交互优先 WebGPU、回退 WebGL2；离线用 WebGL2，仅验证了后者，未测 WebGPU 性能。
 
 ## 对 MCP 说什么
 
@@ -97,12 +97,12 @@ import_music → create_photo_scene → inspect_scene
 → update_scene → render_preview → export_clip
 ```
 
-MCP 提供工具契约；宿主负责选择参数，Three.js 负责渲染，FFmpeg 合成视频。`update_scene` 携带最新版本号，避免旧配置覆盖新调整。
+宿主选参数，MCP 传调用，Three.js 渲染，FFmpeg 合成；`update_scene` 须带最新版本号。
 
 <details class="qa" id="为什么导出不用录屏">
 <summary>为什么逐帧导出？</summary>
 
-保存配置快照后，按 `start + frame / fps` 渲染，并从同一时间截音频。计算某帧较慢不会改变成片时间。
+按快照的 `start + frame / fps` 渲染并截音频，计算慢不改变成片时长。
 
 输出 H.264/AAC MP4，回执记录时长、帧数、版本与独听选择。限制 0.5–20 秒、24/30fps，不能超出音乐范围。跨机器恢复还需复制音乐与图片。[目录说明](../../examples/music-space-mcp/README.md#保存分享与恢复)
 
@@ -110,7 +110,7 @@ MCP 提供工具契约；宿主负责选择参数，Three.js 负责渲染，FFmp
 
 ## 亲手验证
 
-固定第 5 秒与运镜幅度，对比图层间距 0 和 1.5；再固定间距，把运镜幅度设为 0。观察遮挡发生在哪里，以及没有相机位移时还保留哪些灯光变化。
+固定第 5 秒和运镜幅度，比间距 0/1.5；再固定间距、运镜设 0，区分遮挡与灯光变化。
 
 代码入口：[分层剧场](../../examples/music-space-mcp/web/theatre.ts)、[场景导入与保存](../../examples/music-space-mcp/src/store.ts)、[共享时间轴](../../examples/music-space-mcp/src/timeline.ts)、[逐帧导出](../../examples/music-space-mcp/src/render.ts)。
 

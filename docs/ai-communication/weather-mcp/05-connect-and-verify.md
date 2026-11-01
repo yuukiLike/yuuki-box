@@ -2,13 +2,13 @@
 
 [上一课](04-mcp-server.md) · [目录](README.md)
 
-**这一课的目标：分别验证后端、OAuth、工具调用和用户最终看到的结果。**
+分别验证<mark class="key">后端、OAuth、工具调用和最终展示</mark>。
 
 [![Codex 风格对话中显示上海当前天气、数据时间和来源，所有天气值均为示例](../../../site/public/diagrams/weather-mcp/04-result.svg)](../../../site/public/diagrams/weather-mcp/04-result.svg)
 
 ## 1. 把代码放进自己的练习工程
 
-你需要安装 Supabase CLI；本地 Deno 用于类型检查。以下命令由你在新建的天气工程中运行，本教程交付并没有替你执行云端操作。
+需 Supabase CLI 和用于类型检查的 Deno；以下命令在自己的天气工程执行，教程未代跑云端操作。
 
 ```bash
 mkdir weather-service
@@ -17,7 +17,7 @@ supabase init
 supabase functions new weather-mcp
 ```
 
-按[第二课](02-supabase-auth.md)、[第三课](03-apple-weatherkit.md)、[第四课](04-mcp-server.md)的文件名复制代码。新建 `supabase/migrations` 后放入两份 SQL；将第四课配置**追加到** CLI 生成的 `config.toml`，不要用四行片段覆盖整个配置。
+按[第二课](02-supabase-auth.md)、[第三课](03-apple-weatherkit.md)、[第四课](04-mcp-server.md)放置文件和两份 migration；配置追加到生成的 `config.toml`，不覆盖整文件。
 
 检查函数类型：
 
@@ -25,7 +25,7 @@ supabase functions new weather-mcp
 deno check --config supabase/functions/weather-mcp/deno.json supabase/functions/weather-mcp/index.ts
 ```
 
-登录同意页接入你已有的前端工程，安装本教程使用的 `@supabase/supabase-js@2.118.0`。HTML 与 `consent.ts` 必须在同一个 `/oauth/consent` 路由实际加载；它不是一份放在磁盘上就能被 Supabase 自动发现的文件。
+前端安装 `@supabase/supabase-js@2.118.0`，在 `/oauth/consent` 实际加载 HTML 和 `consent.ts`；Supabase 不会自动发现磁盘文件。
 
 ## 2. 应用数据库与 Auth 配置
 
@@ -44,7 +44,7 @@ supabase db push --dry-run
 supabase db push
 ```
 
-随后按第二课启用 OAuth Server、动态客户端注册、非对称签名和 Token Hook，部署同意页，配置它的 Site URL、Authorization Path、邮件回跳地址。创建测试用户并由管理员开通 `weather_access`。[Supabase CLI](https://supabase.com/docs/reference/cli/supabase-db-push)、[OAuth Server 设置](https://supabase.com/docs/guides/auth/oauth-server/getting-started)
+再按第二课配置 OAuth、动态注册、签名、Hook 与同意页地址；管理员为测试用户开通 `weather_access`。[Supabase CLI](https://supabase.com/docs/reference/cli/supabase-db-push)、[OAuth Server 设置](https://supabase.com/docs/guides/auth/oauth-server/getting-started)
 
 不要在已有项目里为了练习执行 `db reset`，也不要把未知的既有 migration 一起推上去。
 
@@ -61,15 +61,15 @@ supabase db push
 | `APPLE_SERVICE_ID` | 注册的 Services ID |
 | `APPLE_PRIVATE_KEY_BASE64` | `.p8` 完整内容的 Base64 |
 
-`SUPABASE_URL` 和 `SUPABASE_SERVICE_ROLE_KEY` 是托管 Edge Function 默认环境变量，不需要把它们写进前端或 Codex 配置。这里的服务端 key 会绕过 RLS，只能在已经验证身份的固定查询里使用。[Supabase Secrets](https://supabase.com/docs/guides/functions/secrets)
+托管环境默认提供 `SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY`；后者绕过 RLS，只能用于验身份后的固定后端查询，不进前端或 Codex。[Supabase Secrets](https://supabase.com/docs/guides/functions/secrets)
 
-在 macOS 可把私钥编码后直接复制到剪贴板，粘贴到 Dashboard 的 secret 字段，不在终端打印：
+macOS 编码后复制到剪贴板，再粘到 Dashboard Secret：
 
 ```bash
 base64 -i /你的本地私密目录/AuthKey_KEYID.p8 | tr -d '\n' | pbcopy
 ```
 
-这是编码后的同一份私钥，保密要求不变。保存后清空剪贴板，私钥文件继续保存在私密位置；不要放进本仓库。
+Base64 仍是私钥；保存后清空剪贴板，文件留在私密目录。
 
 部署函数：
 
@@ -77,7 +77,7 @@ base64 -i /你的本地私密目录/AuthKey_KEYID.p8 | tr -d '\n' | pbcopy
 supabase functions deploy weather-mcp
 ```
 
-托管环境的 `SUPABASE_URL` 应为公开项目 URL。本教程先验证托管环境；如果改跑本地容器，Auth issuer、JWKS 可访问地址与网关地址可能不同，不能只替换一个端口就假定 OAuth 全部可用。
+本课先验托管环境的公开 URL；本地容器需另核对 issuer、JWKS 与网关地址。
 
 ## 4. 先验证没有 token 时的行为
 
@@ -93,9 +93,9 @@ curl -i \
   'https://YOUR_PROJECT_REF.supabase.co/functions/v1/weather-mcp/oauth-protected-resource'
 ```
 
-第一个应为 `401`，且 `WWW-Authenticate` 指向第二个地址。第二个应为 `200`，`resource` 是天气 MCP 的公开 URL，`authorization_servers` 是你项目的 Auth issuer。
+首个请求应为 `401`，challenge 指向第二个地址；后者应为 `200`，含公开 `resource` 和 Auth issuer。
 
-如果第一个错误来自网关、没有预期 challenge，先查函数的 `verify_jwt` 配置。若第二个是 `404`，查部署名称和第四课的内部路由。**此时还不需要排查 Apple 私钥。**
+缺 challenge 查 `verify_jwt`，元数据 `404` 查函数名和内部路由；此时不查 Apple 私钥。
 
 ## 5. 用 Codex 完成 OAuth
 
@@ -106,15 +106,15 @@ codex mcp add weather --url https://YOUR_PROJECT_REF.supabase.co/functions/v1/we
 codex mcp login weather --scopes openid
 ```
 
-登录命令会发起 OAuth；按实际提示打开浏览器，在你的网站登录并允许连接。动态注册让客户端登记它实际使用的回调地址，不要自己猜一个 Codex 回调 URL 写死。也不要把 Apple token 当成 `--bearer-token` 之类的手工配置。[Codex MCP 官方说明](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+按提示在浏览器登录、允许连接；回调地址由动态注册登记，不猜测写死，也不把 Apple token 当手工 bearer。[Codex MCP 官方说明](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
 
-回到使用同一配置环境的 Codex，检查天气服务已加载，必要时重新打开会话。桌面 app、远程开发环境或不同 `CODEX_HOME` 未必读取同一份配置；以当前客户端的 MCP 设置为准，不因 CLI 显示已连接就断言另一个环境也已连上。
+回到同配置环境的 Codex，检查 MCP 设置，必要时重开会话。桌面、远程或不同 `CODEX_HOME` 可能使用不同配置。
 
 发送：
 
 > 用 weather 的 get_current_weather 查询上海当前天气。保留数据时间、摄氏度单位、Apple Weather 标识资源和来源链接，不要生成未来预报。
 
-检查工具记录的城市参数是“上海”，返回的数据时间合理、字段有单位。工具成功后，再检查最终回答；这两步不能合并成一个“看起来成功了”。
+核对城市、时间、单位，再检查最终回答；工具成功与展示正确分别验收。
 
 ## 6. 验证几种会真的遇到的失败
 
@@ -133,13 +133,13 @@ codex mcp login weather --scopes openid
 | 用户拒绝同意 | OAuth 不完成 | 否 |
 | 用户停用天气权限后再次请求 | 新请求立即被业务检查拒绝 | 否 |
 
-额度消耗的是尝试次数。重试不是免费操作；教程没有实现自动无限重试。更大规模上线前还需加入全服务预算、网关请求限流和运行监控，用户日额度不能防止海量匿名请求。
+额度按尝试计，重试也扣；未实现无限重试。上线前另加全服务预算、网关限流和监控。
 
 ## 7. 让普通用户不用输入命令
 
-上面的 CLI 是开发者联调入口。服务验证通过后，可把名称、说明、MCP URL 和 OAuth 类型放进 Codex 支持的插件包；用户安装后连接账号，后端仍然是同一个 Edge Function。
+CLI 用于开发联调；服务通过后，将名称、说明、MCP URL、OAuth 配置打包为插件，后端不变。
 
-当前 OpenAI 插件配置使用 `mcp.json` 声明服务，认证扩展标记 OAuth。下例只展示相关配置，完整清单和分发方式以官方打包文档为准：
+`mcp.json` 声明服务与 OAuth；下面仅为相关字段，完整包按官方文档：
 
 ```json
 {
@@ -158,18 +158,18 @@ codex mcp login weather --scopes openid
 }
 ```
 
-这并不自动完成发布、审核或进入插件目录。先完成服务与账号连接，再做分发；插件不代替用户授权，也不保存你的 Apple 私钥。[OpenAI 插件打包](https://developers.openai.com/plugins/build/plugins)、[OAuth 接入](https://developers.openai.com/plugins/build/auth)
+插件仍需发布审核，不能代替用户授权或保存 Apple 私钥。[OpenAI 插件打包](https://developers.openai.com/plugins/build/plugins)、[OAuth 接入](https://developers.openai.com/plugins/build/auth)
 
 ## 8. 最终体验单独验收
 
 - 第一次连接只有必要的登录与同意步骤，没有复制 token。
 - 用户拒绝后仍保持未连接；允许后能回到 Codex 继续查询。
 - 数据有明确时间、单位和城市，没有把当前天气说成明天预报。
-- **用户实际能看见 Apple Weather 标识，并能打开 Apple 返回的来源链接。** JSON 里有 logo URL 不算通过；SVG 里的占位标识也不算通过。
+- <mark class="caution">用户实际看见标识并能打开来源</mark>；JSON URL 或 SVG 占位不算通过。
 - 令牌过期、刷新失败、资格停用和上游失败，各自显示正确反馈。
 - 密钥没有出现在工具结果、前端 bundle、聊天内容和日志中。
 
-如果当前 Host 无法稳定显示要求的标识，需要补充能正确展示结果的产品界面，并重新验证实际展示路径。仅在工具 description 中要求模型“记得显示”不是可靠保证。[Apple 展示要求](https://developer.apple.com/weatherkit/)
+Host 若不能稳定显示标识，需补展示界面并重验；工具 description 不能保证展示。[Apple 展示要求](https://developer.apple.com/weatherkit/)
 
 ## 本次文档交付的验证记录
 
@@ -185,8 +185,8 @@ codex mcp login weather --scopes openid
 | Apple 密钥、真实天气与调用额度 | 未使用真实凭证执行 |
 | Codex 中的最终标识显示、刷新与撤销 | 未真实联调；图为预期体验示意 |
 
-检查在临时目录运行，没有向仓库添加天气服务依赖，也没有读取实际账号凭证。站点构建仍提示现有配置缺少 `site`，因此跳过 sitemap 生成；不影响教程页面生成。
+检查在临时目录运行，未加天气依赖或读取账号凭据；缺 `site` 的既有警告仅跳过 sitemap。
 
 ## 到这里就停
 
-第一次只追求一个真实结果：**允许的测试用户，经浏览器授权后，能查询上海当前天气，并看到时间与来源。** 再分别处理展示验收和失败分支。当前天气跑通之后，才扩展预报或城市搜索。
+先让获准用户经浏览器授权查到上海当前天气、时间和来源，再验失败分支，最后扩展预报与城市搜索。

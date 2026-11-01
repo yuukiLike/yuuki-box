@@ -1,18 +1,18 @@
 # AI 协作构想：Issue 夜班、独立代码审查与验收流程
 
-从“白天记 Issue，晚上有人来修”出发，旁边还会长出自动审查、故障驱动任务、目标驱动实验。先把整张地图摊开，沿一条最让你好奇的分支走走看。
+从 Issue 夜班出发，扩展审查、故障任务和目标实验；先挑一条分支。
 
-这里收录你提出的两个设想、上一轮讨论的配套环节，以及新探索的五个方向。这些内容仍处于构想与教学阶段，没有落地记录；已经有公开案例的做法另见[已落地的 AI 开发实践](../ai-practices/README.md)。共同目标是：人表达意图，AI 交付改动与可检查的证据，人保留最终判断。
+收录两个设想、配套环节和五个新方向，尚无本项目落地记录；公开案例见[已落地的 AI 开发实践](../ai-practices/README.md)。目标是 <mark class="key">AI 交付改动和证据，人最终判断</mark>。
 
-核对日期：2026-10-21。新增方向的代表方案公开于 2025—2026 年，其中包含 2026-09-29 的近期产品更新；这些日期代表所引用实现或更新的公开节点，不代表某种思想第一次诞生。
+核对日期 2026-10-21；方案公开于 2025—2026 年，含 2026-09-29 更新，日期不代表思想起源。
 
-2026-10-22 补充：[已落地的 AI 开发实践](../ai-practices/README.md)收录 CodeRabbit 等六项方案的案例与小实验；[你的工作流分析](../ai-practices/your-workflow.md)则说明哪些做法更适合减少验收与返工。
+2026-10-22 补充：[已落地的 AI 开发实践](../ai-practices/README.md)含六项案例，[你的工作流分析](../ai-practices/your-workflow.md)聚焦验收与返工。
 
 ## 协作地图：Issue 夜班、独立审查与探索方案
 
 [![思维导图：你的两个设想是 Issue 夜班和独立 AI 审查；新增五个方向是运行数据驱动任务、目标驱动实验、数字孪生、规格驱动开发、空闲时间整理知识](../../site/public/diagrams/ai-ideas-map.svg)](../../site/public/diagrams/ai-ideas-map.svg)
 
-点击图片可打开 SVG 原图放大。各方向的来源、时间和小实验见[故障驱动、自动实验、模拟验收、规格驱动与知识整理](02-five-new-directions.md)。
+点击放大；来源、时间和实验见[故障驱动、自动实验、模拟验收、规格驱动与知识整理](02-five-new-directions.md)。
 
 <details>
 <summary>Mermaid 源码</summary>
@@ -64,7 +64,7 @@ AI A 创建或更新 PR
   → 你确认结果
 ```
 
-第二个 AI 可以使用同一模型的新会话，也可以换模型。这里建议它只读代码、输出审查意见；把修改责任留给 A，自动返修先限制为两轮。这是首版设计建议。
+审查者可用同模型新会话或另一模型；只读提意见，由 A 修改，首版最多返修两轮。
 
 可以从这段审查指令开始：
 
@@ -76,7 +76,7 @@ AI A 创建或更新 PR
 没有发现问题时直接说明；先不修改代码。
 ```
 
-如果已经在使用 Copilot，也可以给自己的一份 PR 手动请求一次代码审查。观察反馈是否有用，再决定是否启用自动审查。具体入口与账号条件见[GitHub 代码审查操作](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)。
+已有 Copilot 可先手动审查一份 PR，再决定是否自动运行；条件见[GitHub 代码审查操作](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)。
 
 ## 配套环节：Issue 澄清、回归测试、CI 返修与维护
 
@@ -95,12 +95,12 @@ GitHub Agentic Workflows 已将 Issue 分类、CI 调查、文档维护和测试
 
 ## 效果验证：确认问题、验收时间与合并后返工
 
-产品已经支持某件事，说明有现成路径可试；公司工程实践说明有团队在使用；研究或开源实验说明存在一种可探索的方法。它们对个人项目的收益仍需分别验证。
+产品、公司实践、研究各提供不同证据，不能直接推断个人项目收益。
 
-AI 审查也会漏报或误报，结论仍需通过具体检查验证。[GitHub 对局限的说明](https://docs.github.com/en/copilot/responsible-use/agents#7-limitations)
+<mark class="caution">审查可能漏报、误报</mark>，仍须验证。[GitHub 对局限的说明](https://docs.github.com/en/copilot/responsible-use/agents#7-limitations)
 
-先用自己的少量任务观察三件事：发现了多少经你确认的问题、你花了多少验收时间、合并后有多少返工。记录任务类型、模型和代码版本，保留不成功的案例。
+用少量任务记录确认问题数、验收时间、合并后返工；注明模型、代码版本，并保留失败案例。
 
-**当前最小下一步：从[工作流分析中的小实验](../ai-practices/your-workflow.md#下一次只试一件事)开始，让 AI 先复现问题，再交付修复后的检查结果。** 想体验新的协作方式，再从上面的独立审查或[五个探索方向](02-five-new-directions.md)中挑一个。
+先做[工作流分析中的小实验](../ai-practices/your-workflow.md#下一次只试一件事)：复现后修复并交证据；再选独立审查或[五个探索方向](02-five-new-directions.md)。
 
 本文是构想与教学资料。图的层级和 SVG 结构经过本地检查；远端 Agent、自动审查和上述协作流程尚未在本仓库启用。

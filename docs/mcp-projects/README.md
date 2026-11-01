@@ -6,9 +6,9 @@ prev:
 
 # MCP 项目实战：选一个想做的工具
 
-从[Codex 接入](../ai-from-scaling/00-codex-mcp.md)继续，选一个想做的工具。我们主要编写 Server，Host 与 Client 由现有应用提供；[客户端与调用链实验（选修）](../ai-from-scaling/00-minimal-mcp.md)可跳过。
+从[Codex 接入](../ai-from-scaling/00-codex-mcp.md)继续：<mark class="key">自己写 Server，应用提供 Client</mark>；[客户端实验（选修）](../ai-from-scaling/00-minimal-mcp.md)可跳过。
 
-每项实战都可以独立开始，环境要求见各篇开头；模型训练与 Harness 课程不作为前置。
+各项可独立开始，无需先学训练或 Harness；环境见各篇。
 
 ## 按成果选择
 
@@ -20,15 +20,15 @@ prev:
 | 将音乐变成可编辑的三维对象 | [声部之结](../ai-from-scaling/07-music-space-mcp.md) | 按教程准备音乐 MCP 与示例 MIDI | 声部分离、时间定位与 GLB 导出 |
 | 让照片与音乐组成短片 | [光之剧场](../ai-from-scaling/08-music-photo-mcp.md) | 沿用音乐 MCP，准备图层与音乐 | 一段有声音的舞台短片 |
 
-音乐两篇共用同一个服务与时间轴，建议先读声部之结，再读光之剧场。它们不要求先完成天气、Blender 或 GitHub 实战。
+音乐共用服务与时间轴，先声部之结，再光之剧场；无需其他实战前置。
 
 ## 两套天气教程怎么选
 
-**本地天气 MCP** 先用样本练习业务规则，再配置 WeatherKit，最后接入已有客户端。适合先做一个自己使用的工具。
+**本地天气 MCP**：样本练规则 → 配 WeatherKit → 接客户端，适合自用。
 
-**[远程天气 MCP](../ai-communication/weather-mcp/README.md)** 归入紧随实战的「远程 MCP 与授权」专题，增加 Supabase 登录、OAuth、业务权限与远程接入。需要在自己的练习工程中实现和部署；本仓库尚未完成真实 Codex ↔ Supabase ↔ WeatherKit 联调。先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)，再决定是否开始。
+**[远程天气 MCP](../ai-communication/weather-mcp/README.md)** 增加 Supabase/OAuth 与业务权限，需自行实现部署；<mark class="caution">真实联调未完成</mark>，先看[验证边界](../ai-communication/weather-mcp/README.md#这份教程的验证边界)。
 
-其他项目也保留各自的环境与验证记录；能启动工具、工具成功返回和最终产物正确，要分别检查。
+各项目保留验证记录；启动、工具返回、产物正确分别检查。
 
 ## 想继续研究哪一层
 

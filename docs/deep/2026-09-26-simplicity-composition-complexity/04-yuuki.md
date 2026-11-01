@@ -1,18 +1,18 @@
 # 回到 Yuuki：用一次变化看清简单、组合与复杂性
 
-**Yuuki 现在最值得研究的，是共同能力能否让一次变化停在合适的边界内。** 五种 UI 已开始共用实际 Agent runtime 和语音 helper；因此可以直接观察“换一个工具、换一个识别后端、加一种交互”会牵动什么。这比按语言、进程数或代码量选赢家更接近长期维护体验。本章承接[上轮 Zed / PI 调查](../2026-09-26-zed-pi-rust/README.md)，将本轮的[概念框架](01-framework.md)落到当前项目。
+<mark class="key">用一次变化检验共同能力的边界</mark>。五种 UI 已共用 runtime/helper，可观察换工具、识别后端或交互牵动什么，而非按语言/进程数选赢家。本章把[上轮调查](../2026-09-26-zed-pi-rust/README.md)与[分析框架](01-framework.md)用于当前项目。
 
 ## 1. 先把观察时点说清楚
 
-本章依据 2026-09-26 的本地源码和文档。项目目录没有 Git 元数据，源码也在其他任务中同步变化；下面的行号是本轮阅读定位，不能当作固定 commit。本轮阅读过程中，项目从旧文档“尚无真实模型调用、工具循环、持久化”的基线推进到了新实现，最终[文档入口](../../README.md)也已更新。目前已有 `command → run → completion → tool` 的实际代码、会话保存和五条 UI 的集成路径。[新架构说明](../../architecture/ai-and-speech-foundation.md)与 [runtime 源码](../../../examples/shared/runtime/Sources/main.swift)反映了这个变化。
+依据 2026-09-26 本地源码：当时无 Git 元数据，且实现同步变化，行号不是固定 commit。本轮已从旧基线推进到 `command → run → completion → tool`、会话保存和五 UI 集成，[文档入口](../../README.md)同步更新。[架构](../../architecture/ai-and-speech-foundation.md) · [runtime 源码](../../../examples/shared/runtime/Sources/main.swift)。
 
-“有代码”与“行为已验证”仍需分开：runtime README 明确记录仅编译，真实 API、权限、并发竞态、恢复和工具边界尚未端到端测试；协议文件仍标注 implementation in progress。本次调查没有运行应用、调用模型、读取凭据或执行语音识别。[构建与未验证范围](../../../examples/shared/runtime/README.md) · [协议状态](../../../examples/shared/runtime/PROTOCOL.md)。
+runtime 仅编译；真实 API、权限、竞态、恢复和工具边界未端到端测试，协议仍标 implementation in progress。本轮未运行应用、模型、语音或读取凭据。[验证范围](../../../examples/shared/runtime/README.md) · [协议状态](../../../examples/shared/runtime/PROTOCOL.md)。
 
-五条路线共用 Swift runtime，也意味着现阶段能比较的是 UI、宿主和协议接入成本，不能据此比较 Swift Harness 与 Rust Harness 的性能。Rust / GPUI 继续是正式学习与产品候选，自研 model/tool loop 继续是方向；当前共享实现没有替未来做最终选型。[AI 与语音基础说明](../../architecture/ai-and-speech-foundation.md) · [上轮选型边界](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
+共用 Swift runtime 只能比较 UI、宿主和协议成本，不能比较 Swift/Rust Harness 性能。Rust/GPUI、自研 loop 仍是候选方向，未作最终选型。[语音基础](../../architecture/ai-and-speech-foundation.md) · [选型边界](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
 
 ## 2. 共同运行时：少写五份规则，同时保留明确的时间语义
 
-当前责任关系可以读成下面这张图。它表示数据和意图的关系，具体进程拓扑随 UI 路线变化：
+以下为数据与意图关系，进程拓扑随 UI 路线变化：
 
 ```text
 UI：草稿、按钮、状态投影
@@ -22,51 +22,51 @@ UI：草稿、按钮、状态投影
                    └─ 转写 → 用户采用为草稿 → 用户发送任务
 ```
 
-模型请求、工具结果与会话状态由 runtime 管；UI 保留尚未提交的草稿和正在编辑的设置。共享 Web model 收到 `state` 时替换 runtime 投影，收到 `delta` 时按 `sessionId` 和 `messageId` 更新消息，同时保护未提交草稿与设置。这些本地状态有各自目的，不能因“都有一份数据”就全部删掉；应检查是否出现两个地方同时决定同一个业务事实。[状态处理源码](../../../examples/shared/web/src/agent-model.mjs:37)。
+runtime 管请求、工具结果和会话；UI 管未提交草稿/设置。Web model 用 `state` 替换投影，按 session/message ID 应用 `delta`，保护本地编辑。要删除的是重复权威，不是所有数据副本。[状态源码](../../../examples/shared/web/src/agent-model.mjs:37)。
 
-同样，JSONL 只解决传输表示。协议还必须说清：流式消息先出现在状态中，随后才有增量；终态重新提供完整状态；运行中哪些命令可用。当前 runtime 忙时拒绝新建会话、切会话和改设置，仅保留 bootstrap、取消和审批。这是通过限制可同时发生的事情缩小状态组合，代价是任务运行时用户不能随意切换工作。[协议](../../../examples/shared/runtime/PROTOCOL.md) · [命令入口](../../../examples/shared/runtime/Sources/main.swift:192)。
+JSONL 之外还需顺序：先 state 中的消息，再 delta，终态给完整 state。忙时仅接受 bootstrap、取消和审批，拒绝新建/切会话及改设置；缩小状态组合，也限制运行中的操作。[协议](../../../examples/shared/runtime/PROTOCOL.md) · [命令入口](../../../examples/shared/runtime/Sources/main.swift:192)。
 
 ### 变化链 A：加一个工具，再在不同阶段取消
 
-以尚未实现的 `file_info(path)` 为阅读探针：若它只返回工作区文件元信息，预计变化集中在工具 schema、参数校验、路径策略复用和执行分支。现有循环将工具结果统一转换为 `name/content/status` 消息；在保持这种结果形式时，五个 UI 不必各自理解一种新的工具输出。这个判断来自现有调用链，尚未用实际改动验证。[toolDefinitions](../../../examples/shared/runtime/Sources/main.swift:440) · [工具循环与结果](../../../examples/shared/runtime/Sources/main.swift:305)。
+未实现的 `file_info(path)` 可作探针：预期只改 schema、参数、路径策略和执行分支。结果仍为 `name/content/status` 时，UI 无需识别新输出；此推断未用改动验证。[toolDefinitions](../../../examples/shared/runtime/Sources/main.swift:440) · [工具结果](../../../examples/shared/runtime/Sources/main.swift:305)。
 
-边界也很具体：当前 `tool()` 在分派前要求所有参数都含 `path`，并按 `write_note` 与其他工具限定字段。它是“少量工作区文件工具”的接口。如果新增无需路径的计算工具、需要分页的远端查询或长期任务，前置假设就要重新设计。泛化为“任意工具已经可插拔”会隐藏真正的改动。[参数检查和分派](../../../examples/shared/runtime/Sources/main.swift:472)。
+当前 `tool()` 要求 `path`，并分别限定 `write_note`/其他工具字段；只适配少量文件工具。无路径计算、分页查询或长期任务需重设计，不能称任意工具可插拔。[参数与分派](../../../examples/shared/runtime/Sources/main.swift:472)。
 
-取消更能显露组合质量。UI 发 `run.cancel`；runtime 取消 Task 和网络请求，并唤醒等待审批的 continuation；循环将任务归为 cancelled，保存已收到内容和已完成结果。`write_note` 在审批后、创建前再检查取消。这里至少存在三个不同观察点：请求还在流式返回、正在等待允许、文件已经写入。最后一种情形不能靠按钮把副作用撤销；现有实现也没有自动回滚承诺。[取消入口](../../../examples/shared/runtime/Sources/main.swift:236) · [任务结束路径](../../../examples/shared/runtime/Sources/main.swift:276) · [审批与写入边界](../../../examples/shared/runtime/Sources/main.swift:492)。
+`run.cancel` 取消 Task/请求、唤醒审批 continuation；循环保存已有内容/结果并标 cancelled，`write_note` 在审批后、创建前再查取消。分别观察流式请求、审批等待和写入后取消；<mark class="caution">取消不能撤销已写文件</mark>，也无自动回滚承诺。[入口](../../../examples/shared/runtime/Sources/main.swift:236) · [结束路径](../../../examples/shared/runtime/Sources/main.swift:276) · [写入边界](../../../examples/shared/runtime/Sources/main.swift:492)。
 
-由此得到的研究问题是：新工具能否沿用取消、结果和恢复语义，而不是每加一个工具就新增一套特殊状态？若工具有无法撤销的副作用，就应把“开始执行”“结果已知”“结果未知”暴露给调用方。上轮 PI 的持久化与恢复调查也强调了已接收、已记录和已完成的区别；增加一个进程或换成 Rust 都不会替代这些定义。[PI 的简化与代价](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
+检验新工具能否复用取消、结果与恢复语义；不可撤销动作须区分执行中、结果已知/未知。PI 同样区分接收、记录、完成，进程或语言不能替代定义。[PI 简化与代价](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
 
 ## 3. 共同语音协议：能够替换后端，不代表后端行为相同
 
 ### 变化链 B：Apple Speech → Whisper，停止还能叫同一件事吗？
 
-共享 helper 已有两条实际路径：Apple Speech / AVFoundation，以及 AVFoundation 录音与转换后调用本地 whisper.cpp CLI。两者复用 `speech.state/partial/final/error` 信封，但 Whisper 当前是先录音、后转写，不产生 partial。复用这一层让各 UI 无须各写一套音频转换与 CLI 管理。[语音 helper 说明](../../../examples/shared/native/README.md)。
+helper 包含 Apple Speech/AVFoundation 与录音转换→whisper.cpp CLI 两条路径，共用 `speech.state/partial/final/error`；Whisper 先录后转、不产 partial，各 UI 共用转换/CLI 管理。[helper](../../../examples/shared/native/README.md)。
 
-真正影响上层的是时间语义：Apple 实时 `stop` 停止采集并短暂等待收尾；Whisper 的 `stop` 则结束录音，继续转换和推理。`cancel`、stdin EOF 或宿主退出才表示放弃。因而宿主必须在 stop 后保持 stdin 打开，并提供等待状态与取消入口；沿用 Apple 的短时间强杀会截断 Whisper 的正常工作。共享 Swift 宿主现在只发送 stop，代码中明确保留后续转写时间。[宿主 stopSpeech](../../../examples/shared/web/NativeHostSupport.swift:132) · [两种后端的停止约定](../../../examples/shared/native/README.md)。
+Apple `stop` 停止采集后短暂收尾，Whisper `stop` 后还要转换/推理；`cancel`、stdin EOF 或宿主退出才放弃。宿主需保留 stdin、等待和取消入口，不能照搬 Apple 的短时强杀；当前 Swift 宿主已保留转写时间。[stopSpeech](../../../examples/shared/web/NativeHostSupport.swift:132) · [停止约定](../../../examples/shared/native/README.md)。
 
-资源清理也不是一个通用 `stop()` 足够表达的。Whisper 有准备、录音、转换、推理、完成几个阶段；转换尚未响应取消时，不能删除它仍使用的临时文件；CLI 运行时先终止，等待退出后再清理。这些细节可以留在 helper，但“任务仍在收尾、取消不产出 final”必须成为外部契约。[Whisper 阶段与资源](../../../examples/shared/native/Sources/WhisperSession.swift:33) · [finish 清理顺序](../../../examples/shared/native/Sources/WhisperSession.swift:321)。
+Whisper 分准备、录音、转换、推理、完成阶段；转换响应取消前不能删临时文件，CLI 终止退出后再清理。内部细节可隐藏，但外部须知道仍在收尾、取消不产 final。[阶段与资源](../../../examples/shared/native/Sources/WhisperSession.swift:33) · [清理顺序](../../../examples/shared/native/Sources/WhisperSession.swift:321)。
 
-产品层另有一条有价值的限制：识别结果先成为草稿，经用户检查再发送给 Agent。它切断了“麦克风结果一到就产生工具执行或模型费用”的隐式联系，同时允许用户修正转写。代码中的 `useTranscript()` 只更新草稿，不启动任务。这是交互选择对状态复杂性的直接约束。[草稿与语音操作](../../../examples/shared/web/src/agent-model.mjs:29)。
+识别结果先经用户检查，再发送给 Agent；`useTranscript()` 只改草稿，不启动任务，避免录音直接触发工具或费用。[草稿与语音](../../../examples/shared/web/src/agent-model.mjs:29)。
 
-将来若把短命 CLI 换成常驻 worker，模型加载和临时文件策略可以在 helper 内变化；但新增流式 partial、并行识别或可恢复任务时，上层状态与身份契约仍可能需要扩展。这里的“可替换”有条件，不能从 JSON 字段相同推出所有行为都可互换。当前没有 Whisper 耗时、识别质量或取消延迟实测。[已有边界与未验证项](../../../examples/shared/native/README.md)。
+CLI 换常驻 worker 可局限在 helper，新增 partial、并行或恢复则可能扩展上层契约。同字段不等于行为互换；Whisper 耗时、质量与取消延迟未实测。[未验证项](../../../examples/shared/native/README.md)。
 
 ## 4. React → AppKit：组合现有词汇，与创造新词汇的成本不同
 
 ### 变化链 C：加一个按钮，与加一种编辑器
 
-这条路线已有真实 React reconciler：Node 生成结构化 UI 树，Swift 映射为 AppKit 控件；用户动作再以 ID 回到 Node callback。固定词汇中已有 Button、Field、Select、Editor、Transcript 等。Swift 按稳定 ID 保留控件，避免每次提交重建输入对象。这说明“原生控件”背后包含一份共同维护的语义词汇。[实际拓扑](../../../examples/react-native-bridge/README.md) · [控件映射](../../../examples/react-native-bridge/src/Host.swift:192)。
+React reconciler 在 Node 生成树，Swift 映射 AppKit，动作按 ID 回传 callback。Button、Field、Select、Editor、Transcript 是共同词汇；稳定 ID 保留控件，避免每次重建输入对象。[拓扑](../../../examples/react-native-bridge/README.md) · [映射](../../../examples/react-native-bridge/src/Host.swift:192)。
 
-如果只是给已有动作加一个 Button，现有 title、enabled、ID 和 onPress 往返机制可能足够，改动可留在 React UI 与 model。若按钮代表全新能力，能力侧依然要实现命令；按钮外观的复用不能替代业务实现。[现有按钮与回调](../../../examples/react-native-bridge/src/main.jsx:75)。
+给已有动作加 Button，可复用 title、enabled、ID、onPress；新能力仍需实现业务命令，外观复用不能替代。[按钮与回调](../../../examples/react-native-bridge/src/main.jsx:75)。
 
-若“新编辑器”指在现有纯文本 Editor 上增加一个草稿区，仍可能只是复用；若指富文本、选区同步、IME composition、撤销和文档语义，就在扩展词汇本身。届时要决定 React props、JSON 表示、AppKit 对象生命周期、反向事件与谁持有编辑状态。当前 README 明确不承诺通用 UI 框架、复杂富文本或 Markdown 编辑器。这类成本应记在平台能力开发上，不能当成“React 写几行就够了”。[renderer 范围](../../../examples/react-native-bridge/README.md) · [文本控件入口](../../../examples/react-native-bridge/src/Host.swift:213)。
+加纯文本草稿区可复用 Editor；富文本、选区、IME、撤销与文档语义则扩展词汇，涉及 props、JSON、AppKit 生命周期、反向事件和状态归属。当前不承诺通用 UI、复杂富文本或 Markdown 编辑器，成本应计入平台开发。[范围](../../../examples/react-native-bridge/README.md) · [文本入口](../../../examples/react-native-bridge/src/Host.swift:213)。
 
-还有一个容易被“有背压”遮住的成本：`commitTree()` 先遍历整个树并 JSON 序列化，随后 `writeRender()` 才在通道拥堵时只保留最新快照。它约束积压，尚未省去已发生的全树序列化。AppKit 保留控件、Node 丢弃旧待发快照、只更新变动数据是三个不同层次，不能相互代称。底部解码时间也不是端到端帧率。[提交与背压源码](../../../examples/react-native-bridge/src/main.jsx:12)。
+`commitTree()` 先全树序列化，`writeRender()` 后丢弃积压快照，未省去前面的工作。保留控件、丢待发快照、增量数据是不同层次；解码时间也不是帧率。[背压源码](../../../examples/react-native-bridge/src/main.jsx:12)。
 
-这与[Raycast / Warp 的组合案例](02-raycast-warp.md)可以形成阅读对照：受控词汇让常见需求容易组合，超出词汇的能力则由平台承担扩展成本。Yuuki 无须现在成为一个通用 renderer；需要先看自己的产品是否频繁触碰同一个限制。
+对照 [Raycast / Warp](02-raycast-warp.md)：受控词汇便于常见组合，超出词汇则需平台开发。Yuuki 先观察重复限制，无需先做通用 renderer。
 
 ## 5. 把复杂性放到一张实际可用的变更探针表里
 
-下表是后续可执行的观察计划，**本轮没有实施或运行这些探针**。每次选一行，记录实际改动、必须同时理解的契约和失败现象；不要将文件数简单加成复杂度分数。
+以下探针<mark class="caution">尚未实施或运行</mark>。每次选一行，记录改动、契约和失败，不将文件数当复杂度分数。
 
 | 变更 | 应该局部化的位置 | 仍必须暴露的契约 | 需要观察的失败 |
 |---|---|---|---|
@@ -78,14 +78,14 @@ UI：草稿、按钮、状态投影
 | 纯文本 Editor 扩展为复杂编辑器 | 新控件契约及 AppKit 实现 | 选区、输入法、撤销、状态归属 | 组合输入被覆盖；焦点丢失；两侧文本互相覆盖 |
 | 对话内容增长并保持连续输出 | UI 投影、传输和渲染策略 | 增量先后顺序、消息身份、终态对齐 | 全量复制增长；积压；旧增量进入新会话 |
 
-前三行的基线见 [runtime](../../../examples/shared/runtime/README.md)，语音行见 [helper](../../../examples/shared/native/README.md)，UI 行见 [原生桥](../../../examples/react-native-bridge/README.md)。最后一行还应对照[已有性能比较的口径限制](../../../examples/COMPARISON.md)，避免把固定单行回放当作完整聊天负载。
+基线见 [runtime](../../../examples/shared/runtime/README.md)、[helper](../../../examples/shared/native/README.md)、[原生桥](../../../examples/react-native-bridge/README.md)。内容增长还需遵守[性能比较口径](../../../examples/COMPARISON.md)，固定单行回放不代表完整聊天。
 
 ## 6. 哪些复杂性值得承担，哪些可以等
 
-对当前 Yuuki，任务身份、取消、工具副作用和恢复属于已经进入产品的语义；签名、系统权限、子进程与输入法属于当前平台路线带来的约束；通用插件系统、多 Agent、跨设备同步、后台常驻则仍可根据实际需求延后。把这三类分开，才能看出一次简化是在删除无用能力、把重复能力集中，还是只把工作藏到了另一个进程。[当前范围](../../../examples/shared/runtime/README.md) · [Apple 平台与五路线比较](../../../examples/COMPARISON.md)。
+任务身份、取消、副作用与恢复已进入语义；签名、权限、进程和输入法是平台约束；插件、多 Agent、同步和常驻可延后。分清三类，才知道是在删能力、集中重复，还是搬到别处。[范围](../../../examples/shared/runtime/README.md) · [五路线](../../../examples/COMPARISON.md)。
 
-Zed 提供的是强领域模型、注册关系、快照和版本检查的参考；PI 提供的是异构组件间状态权威与故障边界的参考。可以将这些经验用到当前小系统，却没有必要先复制它们的 crate 数、进程数或完整编辑器结构。[Zed 组合机制](../2026-09-26-zed-pi-rust/02-zed-architecture.md) · [PI 边界](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
+Zed 可借鉴领域模型、注册、快照和版本；PI 可借鉴状态权威与故障边界，不必复制 crate、进程数量或完整编辑器。[Zed](../2026-09-26-zed-pi-rust/02-zed-architecture.md) · [PI](../2026-09-26-zed-pi-rust/03-pi-desktop.md)。
 
-Mac、iPad、iPhone 的方向仍应保留，但当前五个示例都是 Mac 学习样本。可复用的候选是任务与事件语义、纯领域逻辑；macOS helper、进程管理、Keychain 接入和 UI 生命周期不能直接当作移动端实现。下一次产生信息的动作，是选一条自己愿意维护的 UI 路线，沿表中一个变化追到完成与失败，再看另一条路线承担了哪些不同成本。这样留下的是具体经验，也给未来 Rust runtime 对照保留同一组问题。[已有目标与候选](../../README.md) · [上轮验证建议](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
+五个示例仍是 Mac 样本：任务/事件和纯领域逻辑可复用，macOS helper、进程、Keychain 和 UI 生命周期不能直接搬到移动端。选一条愿维护的 UI，追一项变化的成败，再对照另一条成本，为未来 Rust runtime 保留共同问题。[目标与候选](../../README.md) · [验证建议](../2026-09-26-zed-pi-rust/04-yuuki-box.md)。
 
 返回[本轮调查入口](README.md) · 对照[Zed / Grok](03-zed-grok.md)。

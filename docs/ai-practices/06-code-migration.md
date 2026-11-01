@@ -1,16 +1,16 @@
 # 给升级划条线，再让 AI 动手：借鉴 Amazon Q
 
-升级一个依赖，报错却从三个角落冒出来，很容易让人想把分支关掉。先划定这轮的目标版本，保留升级前的检查结果，再让 AI 沿着报错逐个处理关联改动。
+<mark class="key">固定目标版本</mark>与升级前检查结果，再让 AI 逐项处理迁移错误。
 
-**先确定升级目标，再让 AI 在构建和测试反馈中处理关联改动。** Amazon Q Developer 的 Java 转换会生成迁移计划，修改代码、反复构建并运行已有测试，最后提供摘要和 diff 供审查。[当前转换流程](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/how-CT-works.html)
+**按构建、测试反馈做迁移。** Amazon Q Java 转换会列计划、改代码、反复检查，交摘要与 diff。 [当前转换流程](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/how-CT-works.html)
 
 资料核对：2026-10-22；以下生产迁移记录发布于 2024-08-01。
 
 ## Amazon 的生产迁移记录
 
-**生产迁移案例。** AWS 报告 Amazon 已在 Q Developer 协助下，将数万个生产应用从 Java 8 或 11 迁移到 Java 17。这是企业对自身升级工作的公开记录。[AWS 工程文章](https://aws.amazon.com/blogs/devops/amazon-q-developer-just-reached-a-260-million-dollar-milestone/)
+**企业记录：** AWS 报告 Amazon 借 Q Developer 将数万生产应用从 Java 8／11 迁至 17。 [AWS 工程文章](https://aws.amazon.com/blogs/devops/amazon-q-developer-just-reached-a-260-million-dollar-milestone/)
 
-该案例中的工时与成本节省是企业估算；这里采用的是迁移已发生这一证据，不用估算值预测个人项目的收益。
+节省工时与成本为企业估算，不用于预测个人收益。
 
 ## 把升级拆成一条能回查的路径
 
@@ -21,16 +21,16 @@
 
 直接使用该工具需要符合支持条件的 Java/Maven 项目。[支持范围与前置条件](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/code-transformation.html)
 
-对于 Yuuki Box，可以借鉴“限定升级目标、保留原有检查结果、根据错误逐项修正”的流程。用于 Astro 或其他前端依赖升级时，需要在本项目中验证效果。
+本站可借鉴限定目标、保留基线、逐项修错；前端依赖升级效果仍需实测。
 
 [![迁移比较旧环境与目标环境中的同一组检查，区分原有失败与新增失败](../../site/public/diagrams/ai-practices/migration-baseline.svg)](../../site/public/diagrams/ai-practices/migration-baseline.svg)
 
 ## 小挑战：带着同一张检查单完成一次升级
 
-等项目确实需要一次升级时，再选一个依赖或模块，在独立分支记录当前版本与检查结果。给 AI 明确的目标版本、官方迁移说明，以及必须保持的行为，让它处理这一次迁移。
+确需升级时，在独立分支记录版本与基线，给 AI 目标版本、官方迁移说明和必须保持的行为。
 
-在笔记里留三列：`升级前就有 / 本轮新出现 / 已修复并复查`。对比升级前后同一组检查，再执行一条受影响的真实操作。如果必须调整断言、检查配置或升级范围，先说明依据，并确认原有行为仍有对应检查。
+记录 `原有失败 / 新增失败 / 修复复查`，对比同组检查并操作受影响功能；改断言、配置或范围须说明依据。
 
-**这一局的成果：一个范围清楚、能解释关联改动的迁移 diff。** 下次再升级，你可以顺着这份记录找到真正花力气的地方。
+**交回范围清楚、关联改动能解释的迁移 diff。**
 
 返回[实践目录](README.md)。

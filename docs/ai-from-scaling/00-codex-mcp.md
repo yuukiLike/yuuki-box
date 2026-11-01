@@ -6,17 +6,17 @@ next:
 
 # 在 Codex 里用自己的 MCP
 
-**本课只做一件事：用「接着做」MCP 保存一份项目记录，换一个 Codex 会话再取回。**
+用「接着做」MCP <mark class="key">保存记录，换会话取回</mark>。
 
-先看清角色，再按顺序完成「接入 → 保存与取回 → 对照源码」。参考资料与延伸练习集中在文末。
+按「接入 → 保存与取回 → 对照源码」完成，延伸资料在文末。
 
 ## 先看 MCP 全景
 
-MCP 约定 AI 应用怎样连接外部能力。本课中，你操作 Codex；Codex 内置的 MCP Client 连接我们编写的「接着做」Server。
+MCP 约定应用如何连接外部能力：你操作 Codex，它的 Client 连接「接着做」Server。
 
 [![MCP 全景：你使用 Codex 这样的 Host，应用内置的 Client 连接你编写的 Server；Zed、Warp、Raycast 也能接入外部 MCP](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
 
-点击图可放大。先把上半部分的三个角色与本课对应起来：
+点击图可放大；先对应三个角色：
 
 | 图里的角色 | 本课具体是谁 | 负责什么 |
 | --- | --- | --- |
@@ -24,9 +24,9 @@ MCP 约定 AI 应用怎样连接外部能力。本课中，你操作 Codex；Cod
 | Client：连接组件 | Codex 内置的 MCP Client | 连接 Server、发现工具、发送调用并接收结果 |
 | Server：能力提供程序 | 我们编写的「接着做」 | 提供保存与取回工具，实际读写 Markdown 文件 |
 
-模型通过模型接口与 Codex 沟通，提出工具调用；Codex 检查后，由 Client 把工具名和参数发给 Server。Server 执行文件读写，再把结果返回 Codex。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
+模型提出调用，Codex 检查，Client 发送工具名和参数，Server 读写文件并返回结果。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
 
-**先确认这条分工：Codex 提供 Client，你编写 Server，文件由 Server 读写。** 图中的 Zed、Warp、Raycast 是其他 Host 的例子；具体接入方式与常见服务见[角色与平台说明](../ai-communication/04-mcp.md#先分清你hostclientserver)。
+**Codex 提供 Client，你写 Server，Server 读写文件。** 其他 Host 的接入方式见[角色与平台说明](../ai-communication/04-mcp.md#先分清你hostclientserver)。
 
 ## 接入 Codex
 
@@ -86,7 +86,7 @@ codex mcp get yuuki-continue
 
 ## 对照源码
 
-在编辑器里打开本地文件 `examples/codex-continue-mcp/src/server.ts`，只找下面四处，能把它们与刚才的保存、取回操作对应起来即可。
+打开 `examples/codex-continue-mcp/src/server.ts`，对应四处代码：
 
 | 代码 | 作用 |
 | --- | --- |
@@ -99,9 +99,9 @@ codex mcp get yuuki-continue
 
 ## 本课完成
 
-能把 Codex、Client、Server 与图中角色对应起来，完成跨会话保存与取回，并在源码中指出工具声明与文件读写的位置，就完成本课。
+能对应角色、跨会话保存取回，并找到工具声明与文件读写代码，就完成本课。
 
-后面的资料不计入本课的完成条件，今天可以直接停在这里。
+今天可以停在这里，后文选读。
 
 想继续做工具，下一步去 [MCP 项目实战](../mcp-projects/README.md)选一个项目。
 
@@ -123,16 +123,16 @@ codex mcp get yuuki-continue
 <details>
 <summary>选读：temperature 与 top_p 怎样影响输出</summary>
 
-token 可以先理解为一小段文字。模型生成文本时，会为下一步的候选 token 分配概率；「采样」就是按概率抽取下一个 token。为便于理解，图里假设候选只有「猫、狗、鸟」三个；真实模型通常面对更大的词表。
+token 是一小段文字；模型给候选 token 分配概率，采样据此抽取下一个。图中用「猫、狗、鸟」代替真实词表。
 
 [![同一段输入下，temperature 改变猫、狗、鸟的抽中概率；top_p 为 0.8 时保留累计概率达到 80% 的猫和狗，再按 62.5% 与 37.5% 抽取。](../../site/public/diagrams/ai-from-scaling/sampling-memory-card.svg)](../../site/public/diagrams/ai-from-scaling/sampling-memory-card.svg)
 
-点击图可放大。三种温度是对照值，用来观察同一组概率怎样变化。
+点击图可放大，观察同一组概率随温度变化。
 
-**temperature（温度）：改变候选之间的概率差距。** 固定同一段输入，本例在温度为 1 时，猫、狗、鸟的概率是 50%、30%、20%。温度降到 0.2 后，约变为 92%、7%、1%，更容易抽中原本概率最高的「猫」；温度调高，其他候选相对更有机会。
+**temperature 改变概率差距。** 温度 1 时，猫、狗、鸟占 50%、30%、20%；降到 0.2 后约为 92%、7%、1%，更偏向「猫」；升温则让其他候选更有机会。
 
-**top_p（核采样）：先保留一组候选，再从中抽取。** 沿用 50%、30%、20% 这组概率，设 `top_p = 0.8`：先保留猫，累计 50%；再保留狗，累计达到 80%，筛选结束。接着只在猫和狗里抽一个，两者的概率按原比例重新计算为 `50 ÷ 80 = 62.5%` 和 `30 ÷ 80 = 37.5%`。本例中，`top_p = 0.5` 只留猫，`top_p = 1` 三者都保留。
+**top_p 先筛候选再抽取。** 同一组概率下，`top_p = 0.8` 保留猫和狗，重新归一化为 62.5%、37.5%；`0.5` 只留猫，`1` 保留全部。
 
-实际使用时，先确认所用模型支持这些参数；每次只改一个、另一个保持默认，比较同一任务的输出变化。[OpenAI 参数说明](https://developers.openai.com/api/reference/python/resources/responses/methods/create)
+<mark class="caution">先确认模型支持参数</mark>，每次只改一个，对照同一任务。[OpenAI 参数说明](https://developers.openai.com/api/reference/python/resources/responses/methods/create)
 
 </details>

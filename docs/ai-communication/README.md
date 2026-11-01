@@ -1,12 +1,12 @@
 # AI 应用通信：从 RPC、SSE 到 Agent 工具调用
 
-从“读一条笔记”开始，看懂程序怎样沟通。本专题只沿请求、响应、流式事件与失败处理展开；模型训练和前端性能可以分别学习。
+从读笔记开始，追踪请求、响应、流式事件和失败。
 
-**每课一张图、一个动作。看懂就停。**
+每课<mark class="key">一张图、一个动作</mark>，看懂就停。
 
 ## 今天只学第一课
 
-打开[第一课：让一次函数调用跨过进程](01-rpc.md)。在项目根目录运行：
+打开[第一课](01-rpc.md)，运行：
 
 ```bash
 node docs/ai-communication/labs/01-rpc.ts
@@ -33,12 +33,12 @@ node docs/ai-communication/labs/01-rpc.ts
 
 ## 学完后选做：让 Codex 查询 Apple 天气
 
-想把“用户登录 → 授权 → 工具调用”接成完整服务，进入独立的[远程 MCP 与授权专题](weather-mcp/README.md)。它是工程跟做课程，后端使用 Supabase，天气来自 Apple WeatherKit；不作为通信六课的必修续篇。
+选做[远程 MCP 与授权](weather-mcp/README.md)：用 Supabase 登录，调用 Apple WeatherKit；不是六课的必修续篇。
 
 <details>
 <summary>运行环境与检查</summary>
 
-使用 Node.js 22.22 或更高版本。新增实验只用标准库，不需要安装依赖或填写模型 Key。Node 可以直接运行这里的 TypeScript，但不会替你检查类型。[Node 文档](https://nodejs.org/docs/latest-v24.x/api/typescript.html)
+需 Node.js ≥22.22。新增实验只用标准库，无需安装依赖或模型 Key；直接运行 TypeScript 不会检查类型。[Node 文档](https://nodejs.org/docs/latest-v24.x/api/typescript.html)
 
 第四课使用已有 MCP 示例，首次运行要按原教程安装依赖。
 
@@ -49,7 +49,7 @@ node --test docs/ai-communication/labs/verify.test.mjs
 node --experimental-eventsource --test docs/ai-communication/labs/sse-http.test.mjs
 ```
 
-课程整理于 2026-10-25，SSE 实战补充于 2026-10-30。本地实验已运行；SSE 入门模拟字节分片，实战使用真实 HTTP 与固定事件，验证自动重连和提前关闭。真实模型调用和界面性能未测。第六课按当前源码讲解。
+整理于 2026-10-25，SSE 实战补于 2026-10-30。本地实验已运行：入门模拟分片，实战验证真实 HTTP、重连与提前关闭；真实模型、界面性能未测。第六课为源码阅读。
 
 </details>
 

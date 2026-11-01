@@ -1,39 +1,39 @@
 # 五条技术路线的统一评估工具
 
-日期：2026-09-26。状态：工具调研与实现提案；本轮未安装分析器、执行静态扫描、启动应用或采集性能数据。已有五个 MVP 见 [examples](../../examples/README.md)。
+日期：2026-09-26。状态：调研与提案；未安装分析器、扫描、启动应用或采集性能。五个 MVP 见 [examples](../../examples/README.md)。
 
-后续 MVP 已新增共同的 Swift Agent runtime、持久会话和 Whisper 后端，见 [AI 与语音基础](ai-and-speech-foundation.md)。评估工具本身仍是提案；将来采集时还需计入 Agent runtime 进程。原回放页与真实 Agent 页分开记录，不能把后者的网络等待归因到渲染路线。
+MVP 后续加入了 Swift Agent runtime、持久会话和 Whisper，见 [AI 与语音基础](ai-and-speech-foundation.md)。采集需计入 runtime 进程，回放与真实 Agent 页分开记录，避免把网络等待归因于渲染。
 
-**后续实现进度：**五个应用又增加了 [十五个 Harness 场景](../learning/harness-scenario-lab.md)，提供朴素/优化实际路径、局部工作计数、输入/取消观察和源码中的维护责任。这是应用内的实验入口，尚无统一结果导出、CLI、系统性能采集或自动开发成本推算；本轮也没有执行这些场景。后续统一工具可以接这些明确场景，不能把它们的局部计数当成 FPS 或整套应用内存。
+五个应用已加入 [十五个 Harness 场景](../learning/harness-scenario-lab.md)，可观察朴素/优化路径、局部计数、输入/取消与维护责任；本轮未执行。尚无统一导出、CLI、系统采集或开发成本推算，局部计数不代表 FPS 或应用内存。
 
 ## 1. 能统一到什么程度
 
-可以为五条路线建立一个统一入口和报告，分别呈现运行性能、架构复杂度与开发成本。采集端仍按技术栈使用适合的工具，统一的是场景、指标定义、证据和展示。
+五条路线可共用入口和报告，采集器仍按技术栈选择。<mark class="key">统一场景、指标、证据与展示</mark>，分别报告性能、架构和成本。
 
-本轮核实的工具中，没有一个能零配置、等价地分析 SwiftUI、Rust/GPUI、React→AppKit、WKWebView、Electron 的全部内部机制，并据此准确算出人的开发成本。
+本轮没有找到能零配置、等价分析五条路线全部机制并准确推算人工成本的工具。
 
-建议先做小型本地 CLI + JSON/Markdown 报告；后续需要时生成 HTML。无需先为评估工具选择第六套桌面框架，也无需把所有数据迁入数据库。
+先做本地 CLI + JSON/Markdown 报告，按需再加 HTML，不另造桌面框架或数据库。
 
 ## 2. 可以复用的工具
 
 | 工具 | 负责的部分 | 对本项目的限制 |
 |---|---|---|
-| Instruments / xctrace | macOS CPU、线程、内存等采集；需要时加入 SwiftUI、Metal 等专项分析 | 深度内容依赖模板、符号和权限；原生调用栈不等于 JS 源码级分析；需要完整 Xcode |
-| Perfetto | 自定义事件时间线、兼容 trace 的查询与展示 | macOS 没有开箱即用的系统级数据源集成；不能把它当成 Instruments 的完整替代 |
-| scc | 多语言文件、代码量和近似复杂度统计，可输出 JSON | 复杂度是词法启发式，适合找同语言热点，不直接比较 Swift/Rust/JS；工时和费用估算不是实际账单 |
-| CodeCharta | 将已有指标和代码目录展示为交互式地图，发现大文件与热点 | 文件地图不等于真实进程架构；依赖原始指标，不能测量渲染或自动还原全部桥接协议 |
-| WebKit Web Inspector | WKWebView 内部 JavaScript、布局、绘制、内存等时间线 | 专门分析 Web 内容，需要与宿主和系统侧结果结合 |
-| Electron contentTracing / DevTools | Chromium 相关进程的 trace、Web 内容性能 | 不会自动覆盖外部 Swift helper，也不是 SwiftUI 或 GPUI 的分析器 |
+| Instruments / xctrace | macOS CPU、线程、内存，及 SwiftUI/Metal 专项 | 需要完整 Xcode；深度依赖模板、符号与权限，原生栈不等于 JS 源码分析 |
+| Perfetto | 自定义事件时间线、兼容 trace 查询与展示 | macOS 无开箱即用的系统采集，不能完整替代 Instruments |
+| scc | 多语言代码量、近似复杂度、JSON 输出 | 词法启发式仅辅助找同语言热点；不能跨语言排名或当真实账单 |
+| CodeCharta | 将代码指标映射为交互地图 | 文件地图不是进程架构，也不测渲染或还原全部桥接协议 |
+| WebKit Web Inspector | WKWebView 的 JS、布局、绘制与内存时间线 | 需结合宿主与系统采集 |
+| Electron contentTracing / DevTools | Chromium 进程 trace 与 Web 性能 | 不覆盖外部 Swift helper、SwiftUI 或 GPUI |
 
-Apple 描述了通过 Time Profiler、System Trace 与并发相关工具定位响应瓶颈，以及通过 Metal 工具定位图形工作。具体可用模板以安装的 Xcode 为准。[Apple 响应分析](https://developer.apple.com/videos/play/wwdc2026/268/)、[Metal 性能分析](https://developer.apple.com/documentation/xcode/analyzing-the-performance-of-your-metal-app/)
+Time Profiler、System Trace 等定位响应瓶颈，Metal 工具定位图形工作；模板以本机 Xcode 为准。[Apple 响应分析](https://developer.apple.com/videos/play/wwdc2026/268/)、[Metal 性能分析](https://developer.apple.com/documentation/xcode/analyzing-the-performance-of-your-metal-app/)
 
-Perfetto 官方明确 macOS 系统采集的限制；其 Instruments XML 导入主要针对 CPU 栈样本，不能保证完整保留内存分配、signpost 或所有图形轨道。因此应保留原始 `.trace`，报告链接到它，只导入支持的数据。[系统 trace 支持范围](https://perfetto.dev/docs/getting-started/system-tracing)、[外部格式与 Instruments XML](https://perfetto.dev/docs/getting-started/other-formats)
+Perfetto 的 Instruments XML 导入主要面向 CPU 栈样本，不保证保留内存、signpost 或全部图形轨道。保留并链接原始 `.trace`，只导入支持的数据。[系统 trace 范围](https://perfetto.dev/docs/getting-started/system-tracing)、[外部格式与 Instruments XML](https://perfetto.dev/docs/getting-started/other-formats)
 
-scc 支持 Swift、Rust 等多种语言，官方也明确其复杂度近似没有构建 AST，不能直接跨语言比较。默认关闭 COCOMO/类似费用估算，避免产生精确但无依据的开发报价。[scc 说明及复杂度边界](https://github.com/boyter/scc#complexity-estimates)、[语言列表](https://github.com/boyter/scc/blob/master/LANGUAGES.md)
+scc 不构建 AST，复杂度不能跨语言直接比较。默认关闭 COCOMO 等费用估算。[scc 复杂度边界](https://github.com/boyter/scc#complexity-estimates)、[语言列表](https://github.com/boyter/scc/blob/master/LANGUAGES.md)
 
-CodeCharta 支持指标映射与导入，适合后续看热点；五份小样第一阶段用普通表格即可。[CodeCharta 介绍](https://codecharta.com/docs/overview/introduction/)、[指标映射](https://codecharta.com/docs/visualization/user-controls/metrics/)
+CodeCharta 可导入指标看热点；五份小样先用表格即可。[CodeCharta 介绍](https://codecharta.com/docs/overview/introduction/)、[指标映射](https://codecharta.com/docs/visualization/user-controls/metrics/)
 
-WebKit 可以分别显示 JS、布局绘制及内存；Electron 的 contentTracing 可协调其相关子进程采集。这些工具能解释各自引擎内部的时间分布。[WebKit Timelines](https://webkit.org/web-inspector/timelines-tab/)、[Electron contentTracing](https://www.electronjs.org/docs/latest/api/content-tracing)
+WebKit 分析 JS、布局绘制与内存；Electron contentTracing 协调相关子进程采集。[WebKit Timelines](https://webkit.org/web-inspector/timelines-tab/)、[Electron contentTracing](https://www.electronjs.org/docs/latest/api/content-tracing)
 
 ## 3. 最小工具架构
 
@@ -50,9 +50,9 @@ flowchart TD
     Report --> Detail["按需打开 Instruments / Perfetto / 代码位置"]
 ```
 
-以上均为提案，未创建相应 CLI。一个报告可以覆盖五条路线；做公平性能比较时，应逐个运行并交替顺序，避免五个应用一起争抢 CPU/GPU。
+此 CLI 尚未实现。比较时逐个运行、交替顺序，避免五个应用争抢 CPU/GPU。
 
-建议的目录也是未来结构：
+建议目录：
 
 ```text
 tools/assessment/
@@ -81,19 +81,19 @@ assessment-results/
 | 空闲 | 停止任务后 CPU、唤醒及活跃计时器 | 不能用一个主进程的 CPU 推断整套应用的耗电 |
 | 构建与包大小 | 冷/暖构建、下载、签名分别记录；区分压缩包与展开体积 | 当前 GPUI dev 产物不应与 Swift 优化构建排名 |
 
-性能归属至少包括主应用、已关联的 Node/renderer/GPU 进程和语音 helper。WKWebView 的系统托管进程不能保证通过普通 PPID 子树找到；进程应记录角色、身份和关联依据。系统共享服务无法精确归属时，单列为系统观察，不强行分摊。
+采集主应用、关联的 Node/renderer/GPU 进程与语音 helper，并记录角色、身份和关联依据。WKWebView 托管进程不一定在 PPID 子树中；无法归属的系统共享服务单列，不强行分摊。
 
-最初只采空闲、固定流和 10,000 条列表三类场景。语音的固定音频文件比真人每次说话更可重复；真实麦克风与权限体验另记。更新清单检查与真正下载/安装是不同任务。
+先采空闲、固定流、10,000 条列表三类场景。语音用固定音频复测，麦克风和权限另记；更新清单检查与下载/安装分开。
 
-若未来汇合不同运行时的事件，统一 `run_id`、`event_id`、阶段名、单位与单调时钟映射。不能直接减去来自不同进程、不同时间原点的时间戳。
+跨运行时事件统一 ID、阶段、单位和单调时钟映射；不同进程或时间原点的时间戳不能直接相减。
 
-可以用应用内部的回放参数驱动固定场景，采集无需 computer-use。不过自动回放只证明该路径；真实键盘、输入法、焦点和滚动仍需要相应的交互证据。
+固定场景可用内部回放参数驱动，无需 computer-use；键盘、输入法、焦点和滚动仍需真实交互证据。
 
 ## 5. 架构：统计你需要维护的边界
 
-源代码复杂度与架构复杂度分别展示。前者关注函数/文件，后者关注职责、通信和生命周期。
+源码复杂度看函数/文件，架构复杂度看职责、通信与生命周期，分别展示。
 
-建议先手写一份很小的架构声明，自动核对部分文件与依赖事实。跨语言 IPC、动态加载和系统托管进程不能靠搜索 `import` 完整还原。
+先手写架构声明，再自动核对文件与依赖；搜索 `import` 不能还原全部 IPC、动态加载和托管进程。
 
 | 架构观察项 | 要回答的问题 |
 |---|---|
@@ -106,17 +106,17 @@ assessment-results/
 | 依赖与分发 | 直接/传递/平台特定依赖、随包运行时、系统提供组件分别是什么？ |
 | 能力覆盖 | 同样叫“语音”或“更新”，是否完成了相同错误、取消和安装路径？ |
 
-不要将进程更多直接标为更差：隔离也能提供故障边界。依赖数量同样不等于维护负担，系统框架不会出现在 Cargo/npm 锁文件里；编译期、目标平台和实际打包内容应分别记录。
+进程数量不直接代表优劣，隔离也提供故障边界。依赖数不等于维护负担；系统框架不在 Cargo/npm 锁文件中，编译期、目标平台与打包内容需分列。
 
-当前原生桥的 React 提交要转成 JSON，再由 Swift 更新 AppKit，这条边界值得明确计量。GPUI 的 Rust UI 直接进入绘制路径，但接语音仍跨到 Swift helper。Swift 示例为了统一实验也使用该 helper，不能把它画成完全没有 IPC 的实现。
+原生桥将 React 提交转成 JSON，再由 Swift 更新 AppKit，需测量这条边界。GPUI 直接绘制，但与 Swift 示例一样通过 Swift helper 接语音，都有 IPC。
 
-另外，当前 WKWebView 示例的回放计时器和普通 UI 状态留在 Web 侧；Electron 示例由主进程每次发送一个事件到 renderer。两者同为 ReactDOM，也有不同的逐事件 IPC 成本。因此评估对象是这五份具体实现，归因到框架前应先控制事件发生位置。preload 是脚本环境，不应计为独立进程；Rust stdout reader 是线程，也不应计为进程。
+WKWebView 的回放计时器与普通 UI 状态在 Web 侧；Electron 由主进程逐事件发送到 renderer，IPC 成本不同。比较框架前先控制事件位置；preload 是脚本环境，Rust stdout reader 是线程，都不是独立进程。
 
 ## 6. 编码成本：用同一功能的改动记录校准
 
-工具能辅助记录，不能只看现有源码就准确推算一个人未来的学习与开发工时。缺少历史时记录“未知”，不能把这次会话总时长按文件量分摊给五条路线。
+<mark class="caution">源码不能直接推算人工工时</mark>。缺少历史就记“未知”，不按文件量分摊会话时长。
 
-建议五条路线各做相同的三个改动，要求相同完成标准：
+五条路线用相同标准完成三个改动：
 
 1. 添加可编辑任务标题，处理中文输入、提交与取消。
 2. 把固定单行日志变成可展开的多行内容，保留合理滚动位置。
@@ -124,13 +124,13 @@ assessment-results/
 
 每项单独记录：
 
-- 主动阅读/学习、编码、调试、人工验收的时间；等待下载/编译另外记。
-- 修改文件、模块、语言、协议和构建配置；共享代码与该路线独有代码分列。
-- 编译失败与返工原因，以及为完成相同交互额外实现的控件能力。
-- AI 请求次数、实际 token/账单与人工修正时间；无日志即未知，不从源码行数反算。
-- 后续再次做类似改动的成本，分开首次学习投入与熟练后的维护成本。
+- 阅读/学习、编码、调试、人工验收时间；下载/编译等待另记。
+- 改动的文件、模块、语言、协议与构建配置；共享/独有代码分列。
+- 编译失败、返工原因与为相同交互补写的控件能力。
+- AI 请求、实际 token/账单与人工修正；无日志记未知，不按代码量反算。
+- 首次学习与后续类似改动的维护成本。
 
-人力总量与日历时长也应分开：多个 Agent/开发者并行的耗时不能简单相加当作交付时间。Git 提交间隔不足以证明主动工作时间；代码行、圈复杂度和模型推算只作为线索。
+人力总量与交付时长分开，并行耗时不能简单相加。Git 间隔不能证明主动工作时间；代码量、圈复杂度和模型估算只作线索。
 
 ## 7. 第一版报告与实现顺序
 
@@ -144,14 +144,14 @@ assessment-results/
 | WKWebView | 未采集 | 待形成机器可读声明 | 未记录 | 参见路线 README |
 | Electron | 未采集 | 待形成机器可读声明 | 未记录 | 参见路线 README |
 
-每个指标保存：定义、单位、采集器版本、源码快照/commit、构建模式、场景、原始证据链接、局限。值缺失用 `null` 加原因，不能填成 0。状态区分 measured（实测）、declared（声明）、estimated（估算）和 missing（未知）。
+每项保存定义、单位、采集器版本、commit、构建模式、场景、原始证据和局限。<mark class="key">缺失值用 `null` 加原因</mark>；区分 measured（实测）、declared（声明）、estimated（估算）和 missing（未知）。
 
-第一步只做静态清单与成本记录模板，排除 `node_modules`、`target`、`build`、`dist`、生成文件与锁文件的代码量；依赖清单另读锁文件。共享 helper 在全仓维护量中只算一次，同时在每条路线标出使用关系。
+先做静态清单和成本模板：代码量排除依赖目录、`target/build/dist`、生成物及锁文件，依赖另读锁文件。共享 helper 全仓只计一次，各路线标明使用关系。
 
-第二步统一回放和事件标记，然后接运行采集。按之前环境记录，本机选中的是 CLT；完整 Instruments/xctrace 环境尚需配置，本轮没有重新检查或安装。
+再统一回放与事件标记，接运行采集。此前本机使用 CLT，完整 Instruments/xctrace 尚待配置；本轮未重查或安装。
 
-第三步才根据实际瓶颈增加语言/引擎专项分析，或接入 Perfetto/CodeCharta 的详细视图。首版不生成任意加权的“总分”；等有真实偏好与数据，再讨论性能、维护和学习价值的权重。
+最后按瓶颈增加语言/引擎分析或 Perfetto/CodeCharta 视图。首版不设任意加权总分，积累数据与偏好后再讨论权重。
 
-推荐的下一项具体交付：**一份能列出五条路线代码范围、运行时、协议边界与能力缺口的静态对照报告，再逐步填入真实性能与改动记录。**
+下一项交付：列出五条路线代码范围、运行时、协议边界与能力缺口，再填入实测与改动记录。
 
 返回 [文档入口](../README.md) · [实现对照](../../examples/COMPARISON.md)。

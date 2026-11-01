@@ -1,8 +1,8 @@
 # OpenAI API：额度、图片与语音
 
-**ChatGPT Pro / Business 订阅赠送的 API 额度可以用于文字、图片和语音。先把额度领取到自己的 API 组织，再使用该组织的项目 Key 调用。** 本页说明这项订阅福利；其他活动赠额要按各自条款判断。[官方适用范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+Pro / Business 的 API 赠额可用于文字、图片和语音：<mark class="key">先领取到 API 组织，再用该组织的项目 Key</mark>。其他活动按各自条款判断。[官方范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
-资料核对：**2026-10-31**。这里的 `$40` 表示可抵扣的 API 费用，能用多少取决于模型和实际用量。
+核对：**2026-10-31**。`$40` 是费用抵扣额，调用量取决于模型与实际用量。
 
 ## 官方入口：领取后先试一次
 
@@ -15,13 +15,13 @@
 
 1. 用订阅对应的邮箱登录 API 平台，选择自己拥有的 API 组织。
 2. 在 Billing 找到 API credits 福利，选择符合资格的订阅或 Business 工作区，确认关联。
-3. 查看到账余额与到期时间，再在该组织下试一次 Playground 请求；自己的应用使用该组织的项目 API Key。
+3. 核对余额与到期时间，在该组织试一次 Playground；应用使用该组织的项目 Key。
 
-领取与使用须满足订阅资格和 API 访问条件；模型权限、速率限制以所选组织为准。[领取说明](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+资格、模型权限与速率限制以所选组织为准。[领取说明](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 ## 本期没用完，下期还有吗？
 
-**按月发放的赠额会在订阅账单周期结束时失效，不结转；首次激活后，续费时自动发放下一期额度，前提是福利仍提供、订阅仍符合资格。** 不需要每期重新领取。[到期与续发规则](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+月度赠额在账单周期结束时失效、不结转；首次激活后，福利与订阅资格仍有效时随续费自动发放，无需重领。[到期与续发](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 | 情况 | 怎么理解 |
 | --- | --- |
@@ -30,20 +30,20 @@
 | 取消订阅 | 后续赠额停止；已发放额度仍可用到其到期时间 |
 | Business 年付 | 按年预付的工作区一次获得全年赠额，在年度账单周期结束时到期 |
 
-例如，后台若显示当前赠额在 11 月 12 日到期，就按该日期安排使用。10 月 31 日不会仅因为到了月末而自动成为截止日。上表规则见[订阅赠额文档](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)。
+后台显示 11 月 12 日到期，就按该日期使用，不按自然月末推算。[赠额规则](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)。
 
 <details class="qa">
 <summary>哪些账号可以领取？为什么有订阅却看不到入口？</summary>
 
-官方要求付费 Pro 或 Business 订阅已生效至少 7 天；领取人同时拥有对应订阅或工作区，以及接收额度的 API 组织，关联时使用同一邮箱。试用与赠送订阅不符合资格。实际资格以领取页面为准。[资格条件](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+付费 Pro / Business 须生效至少 7 天；领取人拥有订阅或工作区及 API 组织，并用同一邮箱关联。试用、赠送订阅不符合资格，以领取页为准。[资格条件](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 </details>
 
 ## 可以调用哪些模型？
 
-需要按类型逐项比较，查阅目录最底部的[附录 OpenAI API 模型分类与选型](../appendix/openai-api-models.md)，其中分别列出通用、图片、语音、检索与专业模型，以及旧型号和停用计划。
+分类、选型与停用计划见[模型附录](../appendix/openai-api-models.md)。
 
-下面列出常见用途与当前模型示例。**图片、TTS、转写和实时语音都可以消耗同一笔赠额**，具体费用随模型与用量变化。[额度覆盖范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+图片、TTS、转写与实时语音可使用同一笔赠额，费用随模型和用量变化。[覆盖范围](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 | 想做什么 | 模型示例 | 调用入口 |
 | --- | --- | --- |
@@ -53,30 +53,30 @@
 | 录音转文字 | `gpt-transcribe` | 音频转写 API |
 | 实时语音对话 | `gpt-live-1`、`gpt-realtime-2.1` | 分别使用 GPT-Live 与 Realtime API |
 
-模型清单见[官方目录](https://developers.openai.com/api/docs/models/all)。TTS 的接入方式见[文字转语音文档](https://developers.openai.com/api/docs/guides/text-to-speech)；当前价格看[API 定价](https://developers.openai.com/api/docs/pricing)。模型可选项仍取决于组织权限。
+查[模型目录](https://developers.openai.com/api/docs/models/all)、[TTS 接入](https://developers.openai.com/api/docs/guides/text-to-speech)和[定价](https://developers.openai.com/api/docs/pricing)；可用模型取决于组织权限。
 
-图片先按目标选择：需要精细编辑时用 Sunburst，日常快速出图用 Flare。两者支持从提示词生成图片，也支持修改已有图片。[图片生成与编辑指南](https://developers.openai.com/api/docs/guides/image-generation)
+精细编辑选 Sunburst，快速出图选 Flare；两者均可生成、编辑图片。[图片指南](https://developers.openai.com/api/docs/guides/image-generation)
 
 <details class="qa">
 <summary>教程里的 tts-1、tts-1-hd、gpt-4o-mini-tts 还能用吗？</summary>
 
-核对时仍可通过 `/v1/audio/speech` 使用，但这些模型已弃用，计划于 **2027 年 1 月 6 日停用**。新项目按官方建议使用 `gpt-realtime-2.1-mini` 与 Realtime API。
+核对时 `/v1/audio/speech` 仍可用，但三款模型已弃用，计划 **2027-01-06 停用**。新项目采用 `gpt-realtime-2.1-mini` 与 Realtime API。
 
-迁移需要调整接口流程，不能只替换模型名：`gpt-realtime-2.1-mini` 不支持 `/v1/audio/speech`。[TTS 迁移说明](https://developers.openai.com/api/docs/guides/text-to-speech)
+迁移需改接口流程：`gpt-realtime-2.1-mini` 不支持 `/v1/audio/speech`。[迁移说明](https://developers.openai.com/api/docs/guides/text-to-speech)
 
 </details>
 
 ## 使用时确认三件事
 
-- **费用记在哪个组织。** 赠额只抵扣关联组织的 API 用量，应用使用该组织的项目 Key。
-- **是否属于 Codex 用量。** 这项福利不支持通过 API Key 使用 Codex，也不增加 ChatGPT 或登录态 Codex 的订阅使用限额。
-- **赠额用完以后怎么计费。** 系统先使用免费额度；若还有购买的 API 余额，会继续扣购买余额。没有余额时，请求会返回 `429`，错误码为 `credit_balance_exhausted`。[官方计费说明](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
+- **组织：** 仅抵扣关联组织的 API，用其项目 Key。
+- **Codex：** <mark class="caution">不支持 API Key 调用 Codex</mark>，也不增加 ChatGPT / 登录态 Codex 限额。
+- **用完后：** 先赠额、后购买余额；无余额返回 `429 / credit_balance_exhausted`。[计费说明](https://developers.openai.com/api/docs/guides/chatgpt-api-credits)
 
 <span id="community-ideas"></span>
 
 ## 社区里的六个妙用
 
-下面的灵感来自 Hacker News、Reddit 与 OpenAI 开发者社区，检索于 **2026-10-31**。**「社区实作」是原作者的公开自述；「试做建议」是据此为本仓库设计的小实验，尚未实现或运行。** 老帖用于说明玩法，接入时采用上文的当前 API；原项目可能混用其他供应商，赠额只覆盖符合规则的 OpenAI API 费用。
+来源为 HN、Reddit 与 OpenAI 社区，检索于 **2026-10-31**。“实作”是作者自述，“建议”是尚未运行的本仓库实验。老帖说明玩法，接入用当前 API；其他供应商费用不计入 OpenAI 赠额。
 
 | 想得到什么 | 可以先试多小 | 用到的能力 |
 | --- | --- | --- |
@@ -90,75 +90,75 @@
 <details>
 <summary>1 · 截图记忆库：找回「那张我明明存过的图」</summary>
 
-**社区实作：** Trickle 作者在 2023 年的 Show HN 中介绍了截图收藏、检索和提问。原版当时采用 OCR 与文本 GPT-4，并非如今的原生看图模型。[HN 原帖与作者说明](https://news.ycombinator.com/item?id=37432793)
+**实作：** Trickle 在 2023 Show HN 展示截图收藏、检索与提问，当时使用 OCR + 文本 GPT-4，非原生看图模型。[原帖](https://news.ycombinator.com/item?id=37432793)
 
-**试做建议：** 给 20 张自己的截图编号，用看图模型生成标题、标签和简短说明，连同原图路径保存。以后问「那个粉色侧栏的设置界面在哪」，返回候选原图，点击即可查看。第一版把这些说明放进一次请求即可，后续再考虑检索索引。
+**试做：** 给 20 张截图编号，生成标题、标签与说明，保存原图路径。查询“粉色侧栏设置页”时返回候选原图；首版直接发送说明，后续再建索引。
 
-**看什么结果：** 用 5 个不同说法寻找已知截图，记录能否命中；用原图核对答案，避免只得到一段看似合理的描述。
+**验收：** 用 5 种说法找已知截图，记录命中并核对原图。
 
 </details>
 
 <details>
 <summary>2 · 开口复习：让文档变成会追问的卡片</summary>
 
-**社区实作：** Hands-Free Anki 作者在 2023 年公开了读出卡片、语音作答、自动评分的方案，使用 Anki 保存卡片与安排复习，组合了 TTS、Faster-Whisper 和 ChatGPT。[HN 作者介绍](https://news.ycombinator.com/item?id=38620389)
+**实作：** 2023 年 Hands-Free Anki 用 Anki 管理卡片与复习，组合 TTS、Faster-Whisper、ChatGPT 做读题、作答和评分。[作者介绍](https://news.ycombinator.com/item?id=38620389)
 
-**试做建议：** 从本站 KV Cache 或 SSE 教程提取 5 道题，每题保留标准答案和原文位置。先读题，录下你的解释，再指出遗漏并追问一小步。可以先使用「TTS → 录音转写 → 文本判答」三段流程，之后再试实时语音。
+**试做：** 从 KV Cache 或 SSE 提取 5 题，附答案与原文。用“TTS → 录音转写 → 文本判答”指出遗漏并追问，之后再试实时语音。
 
-**看什么结果：** 故意漏答一个条件，检查反馈能否指出它并链接原文；转写错了术语时，允许修正后再判答。
+**验收：** 漏答条件时能指出并链接原文；术语转写错后可修正重判。
 
 </details>
 
 <details>
 <summary>3 · 私人播客：把今天的学习笔记装进耳机</summary>
 
-**社区实作：** Podcastfy 作者在 2024 年展示了将网页、PDF、图片等资料转成可定制的双人音频对话，并支持多种 TTS 提供方。[HN 作者介绍](https://news.ycombinator.com/item?id=41852401) 另有 HN 用户介绍了「网页正文 → TTS → 音频文件与 RSS → Apple Podcasts」的个人收听流程。[用户实作](https://news.ycombinator.com/item?id=50069680)
+**实作：** Podcastfy 在 2024 年展示网页、PDF、图片转双人音频，支持多家 TTS。[作者介绍](https://news.ycombinator.com/item?id=41852401) 另有“网页 → TTS → 音频与 RSS → Apple Podcasts”流程。[用户实作](https://news.ycombinator.com/item?id=50069680)
 
-**试做建议：** 选一篇自己的学习笔记，让两个虚构角色分别负责「讲清楚」与「追问容易混淆的地方」，先生成约 3 分钟的脚本。核对内容后再合成音频，并保留脚本和原文链接；喜欢这种方式，再接 RSS。
+**试做：** 一篇笔记生成约 3 分钟双人脚本，一人讲解、一人追问；核对后合成音频，保留脚本与原文，再按需接 RSS。
 
-**看什么结果：** 听完能否复述核心区别；数字、结论能否回到笔记中找到依据。先生成一小段听音色与术语发音，再处理全文。
+**验收：** 能复述核心区别，数字与结论有依据；先试听一小段音色和术语发音。
 
 </details>
 
 <details>
 <summary>4 · 拍照收纳：给抽屉建立可搜索的清单</summary>
 
-**社区实作：** Homebox Companion 作者在 Reddit 展示了用 OpenAI 视觉模型识别照片中的物品、数量和可见字段，人工修正后写入 Homebox，并附有仓库和演示链接。[Reddit 原帖](https://www.reddit.com/r/homebox/comments/1pf5orf/homebox_companion_ai_powered_photo_cataloging_for/)
+**实作：** Homebox Companion 用 OpenAI 视觉识别物品、数量与字段，人工修正后写入 Homebox，附仓库和演示。[Reddit 原帖](https://www.reddit.com/r/homebox/comments/1pf5orf/homebox_companion_ai_powered_photo_cataloging_for/)
 
-**试做建议：** 拍几张线材、转接头或工具的照片，手动填写「书桌第二个抽屉」。让模型生成物品名、数量、可见型号与照片编号，先存成 CSV。以后搜「HDMI 转接头」，就能找到记录的位置和对应照片。
+**试做：** 拍线材与工具，手填存放位置；模型提取物品、数量、可见型号与照片编号，存成 CSV。搜索物品时返回位置和原图。
 
-**看什么结果：** 对照实物检查漏识别与重复计数；看不清的型号留空。位置由你提供，物品移动后更新记录。
+**验收：** 对照实物查漏识别和重复计数，模糊型号留空；位置由人提供，移动后更新。
 
 </details>
 
 <details>
 <summary>5 · 连载学习漫画：让同一个角色解释不同概念</summary>
 
-**社区实作：** OpenAI 社区用户 `_j` 在 2026-09-29 展示了参考已有漫画的角色与画风继续创作，并讨论通过图片编辑 API 提供参考图。[社区示例，第 1229 帖](https://community.openai.com/t/gpt-image-general-ai-art-gallery-art-created-by-users-of-openai-products-2026/1388609?page=61)
+**实作：** `_j` 于 2026-09-29 展示按已有角色与画风续作，并讨论编辑 API 参考图。[社区第 1229 帖](https://community.openai.com/t/gpt-image-general-ai-art-gallery-art-created-by-users-of-openai-products-2026/1388609?page=61)
 
-**试做建议：** 先做一张自己的 Yuuki 角色参考图，然后围绕「缓存命中 → 条件改变 → 缓存失效」写 3 格故事。每次带上参考图和角色描述，生成画面，再把下一篇概念接成新一集。
+**试做：** 用 Yuuki 参考图与角色描述，画“缓存命中 → 条件改变 → 失效”3 格故事，再续作新概念。
 
-**看什么结果：** 先核对知识点与分镜，再检查角色、服装和配色是否一致；发现漂移时针对该格编辑。需要精确呈现的公式和代码，可在排版时加入。
+**验收：** 核对知识、分镜及角色服装配色；漂移时单格编辑，公式代码在排版时加入。
 
 </details>
 
 <details>
 <summary>6 · 有存档的语音冒险：让一个 NPC 记得上一回合</summary>
 
-**社区实作：** 在 OpenAI 的 DnD 讨论中，一位作者介绍了使用 OpenAI API 制作的互动小说；讨论同时记录了语音朗读，以及作者当时尚待完善的历史上下文问题。[社区原帖，作者第 2、4 帖](https://community.openai.com/t/using-chatgpt-as-a-dm-in-dnd/259037)
+**实作：** OpenAI DnD 讨论中，作者介绍 API 互动小说与语音朗读，当时历史上下文仍待完善。[作者第 2、4 帖](https://community.openai.com/t/using-chatgpt-as-a-dm-in-dnd/259037)
 
-**试做建议：** 设定「飞船维修店」和一个 NPC，让你通过说话选择行动，模型负责台词与叙事。应用另外保存位置、背包、任务进度，每回合把这些状态提供给模型；先玩 5 回合，再试保存和继续。
+**试做：** 在“飞船维修店”用语音选择行动；模型写台词，应用保存位置、背包、进度，每回合传入。玩 5 回合后测试存档继续。
 
-**看什么结果：** 交出去的道具是否从背包移除，重开后人物是否记得已完成的任务。可以先做文字版，确认状态连贯，再加语音与场景插画。
+**验收：** 道具交出后移除，重开后保留进度；先验证文字状态，再加语音插画。
 
 </details>
 
 ## 接着试什么
 
-想把语音和音乐方向集中起来选，继续读[额度怎么用：语音、音乐与多模态小项目](openai-api-projects.md)。新一章把灵感整理、有声笔记、口答复习，以及配乐草案、MIDI 讲解、音乐照片短片串成可验收的小方案。
+语音与音乐方案见[额度怎么用](openai-api-projects.md)：灵感卡、笔记、复习、配乐、MIDI 与短片。
 
-想先把额度用在自己的学习上，优先试 **5 张口答复习卡**；想留下直观的图片成果，试 **3 格学习漫画**。先完成上表的小样本，核对结果和平台 Usage 中的实际用量，再决定是否扩大。
+学习先试 **5 张口答卡**，图片先试 **3 格漫画**；核对成果与 Usage 后再扩大。
 
-核对日期只表示本文查阅过官方文档与社区帖子；本页没有执行实际付费调用，账户金额、到期时间和权限仍需在后台确认。
+本页仅查阅官方与社区资料，未付费调用；金额、到期与权限仍须后台确认。
 
 想先了解语音链路，读[语音交互：合成、转写与人声检测](../tts/README.md)。想搭自己的工具循环，回到 [Agent 工程总览](README.md)。

@@ -2,13 +2,13 @@
 
 [上一课](02-supabase-auth.md) · [目录](README.md) · [下一课：MCP 工具](04-mcp-server.md)
 
-**这一课的目标：用你自己的 Apple 开发者凭证，在服务器取得当前天气。**
+用 Apple 开发者凭证，<mark class="key">在后端取得当前天气</mark>。
 
-这里选择 WeatherKit **REST API**。它可以从 Supabase Edge Function 发起 HTTPS 请求，不要求你的后端运行在 Apple 设备上。[WeatherKit 概览](https://developer.apple.com/weatherkit/)
+WeatherKit REST API 可由 Supabase Edge Function 调用，无需 Apple 设备。[WeatherKit 概览](https://developer.apple.com/weatherkit/)
 
 ## 1. 准备四个值
 
-在 Apple Developer 的 **Certificates, Identifiers & Profiles** 中创建启用了 WeatherKit 的 Key，下载 `.p8` 私钥；再创建一个 Services ID。REST API 的 `sub` 使用这个 Services ID，不要把 Supabase 项目 ID 填进去。
+在 Apple Developer 的 **Certificates, Identifiers & Profiles** 创建 WeatherKit Key、下载 `.p8`，再建 Services ID；它用于 REST API 的 `sub`，不是 Supabase 项目 ID。
 
 | 后端配置 | 从哪里取得 | 是否能交给 Codex / 浏览器 |
 | --- | --- | --- |
@@ -17,7 +17,7 @@
 | `APPLE_SERVICE_ID` | 你注册的 Services ID，如 `com.example.weather` | 同上 |
 | `APPLE_PRIVATE_KEY_BASE64` | `.p8` 文件内容的 Base64 | **不能**；编码不等于加密 |
 
-私钥保存在 Supabase Edge Function Secrets。教程只出现配置名称，不要求把实际私钥粘贴到聊天或代码仓库。[Apple 的创建与认证步骤](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
+私钥只放 Supabase Edge Function Secrets，不进聊天或仓库。[Apple 的创建与认证步骤](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
 
 ## 2. 看清 Apple token 代表谁
 
@@ -42,9 +42,9 @@ payload 只放 Apple 文档要求的四个 claims：
 }
 ```
 
-时间只是格式示例，运行时重新计算。这证明的是**你的开发者团队与服务身份**，不是终端用户身份。Apple token 不放用户邮箱、Supabase token，也不复制前一课的 MCP `aud`。
+时间在运行时计算；Apple token 代表开发者团队与服务，不放用户邮箱、Supabase token 或 MCP `aud`。
 
-这份教程给 Apple token 设定十分钟有效期，这是示例的选择，不是声称 Apple 规定必须十分钟。[JWT 字段与 ES256 签名要求](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
+示例选择十分钟有效期，并非 Apple 的强制时长。[JWT 字段与 ES256 签名要求](https://developer.apple.com/documentation/weatherkitrestapi/request-authentication-for-weatherkit-rest-api)
 
 ## 3. 写 WeatherKit 适配器
 
@@ -61,7 +61,7 @@ export function requireEnv(name: string): string {
 }
 ```
 
-下面的文件只做四件事：选城市、生成 Apple token、请求 Apple、校验并整理结果。用户资格和额度留给下一课。
+适配器负责选城市、签名、请求、校验结果；用户资格与额度留到下一课。
 
 `supabase/functions/weather-mcp/weatherkit.ts`：
 
@@ -187,12 +187,12 @@ export async function getCurrentWeather(city: City) {
 }
 ```
 
-`weatherkit.ts` 的 import 映射在下一课 `deno.json` 中给出。这里先看懂数据经过哪里，不用现在就运行整段代码。
+import 映射见下一课 `deno.json`；此处先阅读数据路径。
 
 <details class="qa" id="4-为什么不直接把-apple-json-原样交给模型">
 <summary>为什么要整理 Apple 返回的数据？</summary>
 
-只保留所需字段，并在名称中明确单位：摄氏度、百分比、`km/h`。保留 `conditionCode` 与真实 `asOf`，避免猜天气或替换数据时间。[字段说明](https://developer.apple.com/documentation/weatherkitrestapi/currentweather/currentweatherdata)
+只取所需字段，标明摄氏度、百分比、`km/h`，保留 `conditionCode` 和真实 `asOf`。[字段说明](https://developer.apple.com/documentation/weatherkitrestapi/currentweather/currentweatherdata)
 
 只请求 `currentWeather`，带明确时区并验证 `metadata.units === 'm'`。缺字段、过期或上游失败都报错。[天气接口](https://developer.apple.com/documentation/weatherkitrestapi/get-api-v1-weather-_language_-_latitude_-_longitude_)、[元数据](https://developer.apple.com/documentation/weatherkitrestapi/metadata)
 
@@ -202,12 +202,12 @@ export async function getCurrentWeather(city: City) {
 
 ## 5. 来源标识属于结果的一部分
 
-Apple 要求显示天气数据时呈现 Apple Weather 标识，并提供其他数据来源的法律链接。`/attribution/{language}` 提供标识资源地址；`currentWeather.metadata.attributionURL` 提供来源链接。标识返回值可能是相对路径，因此示例补全 Apple 域名。[标识资源](https://developer.apple.com/documentation/weatherkitrestapi/attribution)、[Apple 展示要求](https://developer.apple.com/weatherkit/)
+展示须有 Apple Weather 标识及法律来源链接。`/attribution/{language}` 返回标识地址，`metadata.attributionURL` 返回来源；相对标识路径需补 Apple 域名。[标识资源](https://developer.apple.com/documentation/weatherkitrestapi/attribution)、[Apple 展示要求](https://developer.apple.com/weatherkit/)
 
-MCP 工具可以返回这些地址，但**返回地址不等于 Codex 已经显示了合规标识**。模型可能只输出文字，Host 也未必渲染远程图片。第五课会把“最终用户看见标识与可点击来源”列成独立验收项；没有通过时，先保留为开发联调，不把它作为已完成的公开产品。
+<mark class="caution">返回标识地址不等于用户看见标识。</mark>Host 可能不渲染图片；第五课独立验收实际标识与来源，未通过前仅作开发联调。
 
-这里的 `enabled` 和限额是访问控制练习。Apple 的条款对原始天气数据收费、批量分发、派生数据库和缓存都有约束，不能直接把它包装成“买套餐转售原始天气 API”。本例不存原始天气，也不做批量下载；后续如需商业化，应按实际产品核对条款。[Developer Program 协议，Attachment 8](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/)
+资格与额度仅为访问控制练习。本例不存原始天气或批量下载；商业化需另核对原始数据收费、分发、派生数据库与缓存条款。[Developer Program 协议，Attachment 8](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/)
 
 ## 到这里就停
 
-能指出 `.p8` 只在后端、Apple token 只发给 Apple、结果必须保留时间与来源，就完成本课。下一课把它接到 [MCP 工具](04-mcp-server.md)，再一起部署验证。
+核对私钥留后端、token 只发 Apple、结果保留时间来源，再接 [MCP 工具](04-mcp-server.md)。

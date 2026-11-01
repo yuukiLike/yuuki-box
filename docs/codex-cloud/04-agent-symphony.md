@@ -1,21 +1,21 @@
 # agent-symphony 的云端事件与回放验证
 
-**让云端检查 `agent-symphony` 的事件处理、存储和界面，把真实宿主接入与听感留给本地。** 这个项目将 Codex / dsh 的可观察执行记录呈现为时间线与声音，首轮适合验证“界面和声音有没有忠实表达收到的事件”。
+**云端查事件、存储和界面，本地验宿主接入与听感。** Agent Symphony 将 Codex／dsh 记录呈现为时间线和声音。
 
-实际项目名为 **Agent Symphony**，目录是 `~/explore/agent-symphony`，包名为 `agent-symphony`。项目状态按 **2026-10-31** 本机工作树核对；本页提供待执行的云端步骤。
+项目：**Agent Symphony**，目录 `~/explore/agent-symphony`，包名 `agent-symphony`。状态按 **2026-10-31** 本机工作树核对，云端步骤待执行。
 
 ## 先把目标代码版本交给云端
 
-本次阅读时，项目已有 Codex 本地 Hooks 观察器、dsh 适配、事件存储、导入导出、声音规则和浏览器测试；部分代码、依赖和蓝图仍是本机未提交改动。**先整理本轮要用的文件，提交并推送到目标分支，再让云端报告实际提交和文件。** 只推送旧提交，云端可能读不到这里提到的适配器与用例。
+项目已有 Hooks 观察、dsh 适配、事件存储、回放与测试，部分仍未提交。**<mark class="key">先推送本轮文件</mark>，再核对云端实际 SHA 与目录。**
 
 | 工作 | 云端先验证什么 | 还需要什么证据 |
 | --- | --- | --- |
 | 事件与调用关联 | 乱序、重投、冲突、未知事件和缺失结果 | 样本只能证明程序如何处理输入 |
 | 存储、HTTP 与导入导出 | 隔离数据库、鉴权、分页、原始字段与历史标记 | 本地实际记录库的迁移与使用情况另验 |
-| 时间线、筛选、配置和回放 | 已有浏览器用例与截图、声音调度和取消行为 | 实际扬声器输出、音色舒适度与辨识度 |
+| 时间线、筛选、配置和回放 | 浏览器用例、截图、声音调度与取消 | 真实输出、音色与辨识度 |
 | Codex / dsh 真实接入 | 适配器契约和隔离测试 | 宿主版本、加载配置、实际触发与采集记录 |
 
-模拟事件、真实 dsh 隔离执行和本机 Codex 接入是不同的证据。云端启动了观察服务，也不会自动附着到本机桌面会话。
+模拟、真实 dsh 隔离执行与本机 Codex 接入分别记录；云端服务不会自动附着桌面会话。
 
 ## 准备 Node 环境
 
@@ -34,7 +34,7 @@ docs/implementation-contract.md、playwright.config.mjs 和 scripts/browser-serv
 不需要模型 API key，也不启动真实 Agent。
 ```
 
-保存实际验证过的安装步骤，检查报告后 **Publish**，再启动新任务。运行时和依赖以目标提交的清单为准。[OpenAI 官方环境说明，核对于 2026-10-31](https://learn.chatgpt.com/docs/environments/cloud-environments#customize-installation-and-startup)
+保存已验证安装步骤，检查后 **Publish**、启动新任务；运行时以目标清单为准。 [OpenAI 官方环境说明，核对于 2026-10-31](https://learn.chatgpt.com/docs/environments/cloud-environments#customize-installation-and-startup)
 
 ## 第一条任务验证事件是否被正确解释
 
@@ -54,11 +54,11 @@ docs/implementation-contract.md、playwright.config.mjs 和 scripts/browser-serv
 最后推荐一个最小的回归或修复任务，先不扩展宿主、日志格式或执行能力。
 ```
 
-这项练习检查程序对已有输入的解释。适配器测试通过，仍需在本地确认真实宿主有没有提供这些事件、是否加载了观察配置，以及丢失了哪些记录。
+这轮仅查输入解释；本地另验宿主事件、观察配置和漏采记录。
 
 ## 第二条任务运行界面与声音规则回归
 
-已有 Playwright 配置通过 `scripts/browser-server.mjs` 启动隔离临时服务，使用 `127.0.0.1:4318`、单个 worker。它与日常启动的 `4317` 服务分开，测试结束清理临时数据库。
+Playwright 用 `scripts/browser-server.mjs` 启动 `127.0.0.1:4318` 隔离服务、单 worker，结束清库；不使用日常 `4317`。
 
 ```bash
 pnpm exec playwright install chromium
@@ -76,19 +76,19 @@ pnpm exec playwright test test/browser/workbench.spec.mjs test/browser/sound-rul
 不要把演示 session 写成真实宿主接入，也不要把音频调度写成听感通过。
 ```
 
-Cloud 当前没有内置 computer / browser use；项目自带的 Playwright 能否运行，要在环境中实测。[官方工具边界](https://learn.chatgpt.com/docs/environments/cloud-environments#current-limitations)
+Cloud 无内置 computer／browser use；自带 Playwright 需实测。 [官方工具边界](https://learn.chatgpt.com/docs/environments/cloud-environments#current-limitations)
 
-若改动涉及其他页面，再选相关用例；`pnpm test:browser` 才是仓库声明的完整浏览器测试入口。回放和规则测试能检查调度、静音或取消等程序行为，音色与真实输出仍回到 Mac 验收。
+按改动选用例，完整入口是 `pnpm test:browser`；规则测试查调度、静音、取消，真实输出与音色回 Mac 验收。
 
 ## 真实宿主接入怎样继续
 
-项目的 Codex 观察器面向本地 command hooks。宿主加载并信任配置后，还要在新会话中核对实际采集；生成文件本身不代表已经接入。[官方 Hooks 加载与信任规则](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)
+观察器面向本地 command hooks；加载、信任后须在新会话核对采集，生成文件不等于接入。 [官方 Hooks 加载与信任规则](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)
 
-本页的云端任务验证接收接口与事件样本，结果应按这两项记录。云端编排的 Hook 支持另有约束，不能把本地 command hooks 直接视为可用的云端采集入口。[官方云端编排约束](https://learn.chatgpt.com/docs/hooks#managed-hooks-from-requirementstoml)
+云端只验接收接口与样本；本地 command hooks 不能直接视作云端采集入口。 [官方云端编排约束](https://learn.chatgpt.com/docs/hooks#managed-hooks-from-requirementstoml)
 
-`pnpm test:integration` 另需按项目 `docs/dsh-setup.md` 准备隔离 dsh runtime，固定面向 `@deepseek-ai/dsh@0.1.6-alpha.2`。普通 `pnpm install` 不等于联调依赖已准备好。这项测试使用发布的真实 dsh 和本地固定响应模型，不能替代个人生产配置或远端模型服务的验证。第一轮基线可以先记录“未运行及缺少条件”。
+`pnpm test:integration` 另需 `docs/dsh-setup.md` 的隔离 runtime，固定 `@deepseek-ai/dsh@0.1.6-alpha.2`。真实 dsh + 本地固定模型不代表生产或远端模型验证；缺条件可记未运行。
 
-实现任务完成后，检查 diff、实际命令、事件样本与相关页面证据，再在 Mac 补真实接入或试听。比如交接为：“事件重投与乱序回归通过；本机 Codex 新会话采集和实际声音待验。”
+交付 diff、命令、事件样本及页面证据；本机新会话采集和实际声音另验。
 
 <details>
 <summary>本页对应的项目文件</summary>

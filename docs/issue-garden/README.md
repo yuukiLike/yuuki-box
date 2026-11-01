@@ -1,16 +1,16 @@
 # 白天记 Issue，夜里长出 PR
 
-白天碰见一个恼人的小 bug，先记成 Issue。第二天打开仓库，已经有一份草稿 PR 等你看：改了哪里，跑过什么检查，哪里还需要你拿主意。这就是这组教程想陪你搭出来的夜班。
+白天记 Issue，夜里处理；第二天看草稿 PR 中的改动、检查与待验项。
 
-这是[AI 搭子（同行者）](../side-by-side/README.md)当前优先实践的事情：把一个问题托付给 AI 朋友，一起完成修复、检查和交付。
+这是[AI 搭子（同行者）](../side-by-side/README.md)的优先实践：修复、检查、交付一个问题。
 
-这一组是可跟做的教学与首版方案。还没有落地记录的构想放在[AI 实践构想](../ai-ideas/README.md)，有公开案例的做法放在[已落地的 AI 开发实践](../ai-practices/README.md)。
+本组是教学与首版方案；构想看[AI 实践构想](../ai-ideas/README.md)，公开案例看[已有实践](../ai-practices/README.md)。
 
-**第一班先让 Issue 自己来报到。** 拿到一份自动生成的清单，再陪 AI 修掉一个小问题，最后才把这套流程交给夜班。每一步都有单独的成果，今天做到哪一步都能接着往下走。
+**先生成 Issue 清单，再修一个小问题，最后接持续流程。**
 
-**已有 Dot、希望使用现有产品额度，可以直接从[用 Dot 接手 GitHub 开发任务](04-dot-shift.md)开始。** 这一条由 Dot 协调、Codex 执行，你在 Dot 对话里提目标和反馈，GitHub 保存任务与交付记录。
+已有 Dot 与产品额度，选[Dot 路线](04-dot-shift.md)：Dot 协调，Codex 执行，GitHub 保存交付。
 
-**已有 OpenAI API，可以跟做[官方 Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)。** 想并行比较三条路线，先用[共同基线与对照记录](../codex-cloud/05-issue-to-pr.md)隔离 Issue、分支和结果，再分别运行。
+已有 API，选[Codex Action](05-codex-api.md)或 [Agentic Workflows](06-agentic-workflows.md)；并行时按[共同基线](../codex-cloud/05-issue-to-pr.md)隔离任务。
 
 想选工具或自己接事件，读[AI 自动化：GitHub 工作流与自制转发器](07-automation-options.md)。
 
@@ -22,12 +22,12 @@
 
 | 角色 | 负责什么 | 像前端里的什么 |
 | --- | --- | --- |
-| GitHub Issue | 保存问题、复现步骤和期望结果 | 一条待处理的数据 |
+| GitHub Issue | 问题、复现与预期 | 一条待处理的数据 |
 | GitHub Actions | 到时间启动任务，准备执行环境 | 一个由事件触发的异步任务 |
-| Dot | 采用 Dot 路线时，持续跟进任务、安排 Codex 开发和返修 | 跟踪任务进度的协调者 |
+| Dot | Dot 路线中跟进任务、安排开发与返修 | 跟踪任务进度的协调者 |
 | Codex | 阅读仓库、修改代码、运行检查 | 能使用工具完成任务的 Agent |
 
-PR（Pull Request）保存准备合并的改动，方便你检查和讨论。GitHub Actions 支持按时间触发；Codex 也有供 Actions 调用的官方接入方式。[GitHub 定时触发](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、[OpenAI Docs：Codex GitHub Action](https://learn.chatgpt.com/docs/github-action)
+PR 保存待审改动，Actions 定时启动任务，官方 Codex Action 执行编码。 [GitHub 定时触发](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、[OpenAI Docs：Codex GitHub Action](https://learn.chatgpt.com/docs/github-action)
 
 [![Issue 工作流先选择去重，再修改验证，最后发布可验收的草稿 PR](../../site/public/diagrams/issue-garden/handoff.svg)](../../site/public/diagrams/issue-garden/handoff.svg)
 
@@ -38,9 +38,9 @@ PR（Pull Request）保存准备合并的改动，方便你检查和讨论。Git
       → 独立分支 → AI 修改 → 运行检查 → 草稿 PR → 你验收
 ```
 
-“扫描所有 Issue”与“执行哪些 Issue”分别决定。可以每天扫描指定仓库的全部未关闭问题，再只修复你标了 `ai-ready` 的小问题；已经有待验收 PR 的任务跳过。
+扫描范围与修复范围分别设置：<mark class="key">只修 `ai-ready`</mark>，已有待验 PR 的 Issue 跳过。
 
-这是一种建议的首版规则。扫描和筛选可以按规则执行，修复是否正确则需要检查与验收来判断。
+这是首版建议，仍需检查修复与验收结果。
 
 ## 三班练习，一班比一班多接一点活
 
@@ -49,14 +49,14 @@ PR（Pull Request）保存准备合并的改动，方便你检查和讨论。Git
 | 第一班：让任务报到 | [让 Issue 自己来报到](01-first-scan.md) | 在 Actions 里看到一份 Issue 清单 |
 | 第二班：搭手修一次 | [搭一次班，修掉一个小问题](02-first-repair.md) | 看见一份自己能理解、能验证的 diff |
 | 第三班：试着交班 | [交班：让流程接着跑](03-night-shift.md) | 能说明时间、权限、去重与失败分别由谁处理 |
-| 已有 Dot，想让它接班 | [用 Dot 接手 GitHub 开发任务](04-dot-shift.md) | 配好 GitHub 与编码环境，试跑一个 Issue 并接回草稿 PR |
+| 已有 Dot，想让它接班 | [用 Dot 接手 GitHub 开发任务](04-dot-shift.md) | 配环境、试一个 Issue、接草稿 PR |
 | 已有 OpenAI API | [官方 Codex Action 的一次交付](05-codex-api.md) | 在独立 job 验证补丁，再发布草稿 PR |
 | 想试 Markdown 工作流 | [Agentic Workflows 与 API](06-agentic-workflows.md) | 编译配置，运行 Codex，再核对 safe output 与实际 CI |
-| 想并行比较产品与 API | [云端 Codex 与 Issue 到 PR](../codex-cloud/05-issue-to-pr.md) | 同一基线下比较正确性、返修、用量和人工介入 |
+| 想并行比较产品与 API | [云端 Codex 与 Issue 到 PR](../codex-cloud/05-issue-to-pr.md) | 同基线比较正确性、返修、用量 |
 | 想看看还有什么可能 | [AI 实践构想](../ai-ideas/README.md) | 看懂已有设想与五个新方向的关系 |
 | 想先看别人已经怎么做 | [已落地的 AI 开发实践](../ai-practices/README.md) | 看懂六项实践中的一个案例 |
 
-第一篇只扫描 Issue，不需要 AI Key。第三篇的 Actions 执行方式需要 API 凭据与预算；Dot 路线使用账号已有的产品权限和额度，具体配置与限制见第四篇。GitHub Actions 的运行费用按自己的账户情况确认。
+扫描无需 AI Key；Actions 编码需 API 凭据及预算，Dot 使用产品额度，Actions 用量另计。
 
 ## 写 Issue 可以很短
 
@@ -67,6 +67,6 @@ PR（Pull Request）保存准备合并的改动，方便你检查和讨论。Git
 验收：链接能打开目标页，其他目录链接继续可用。
 ```
 
-先记录清楚问题，再由你决定是否加上 `ai-ready`。学习材料是一组可以挑选的入口，不是需要全部清空的任务列表。
+记录问题后再加 `ai-ready`，按当前需要选入口。
 
-Actions 基础资料核对：2026-10-21；Dot 路线补充：2026-10-27；API 与并行实验补充：2026-10-31。本组包含教学示例与首版设计建议；尚未在这个仓库启用定时工作流、API 运行或 Dot 开发循环，也没有由这些流程自动修改远端代码或创建 PR。
+核对：Actions 2026-10-21，Dot 10-27，API／并行实验 10-31。本组尚未启用定时、API 或 Dot 开发循环，未自动创建远端改动或 PR。

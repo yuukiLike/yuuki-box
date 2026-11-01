@@ -1,12 +1,12 @@
 # 四小时路线：模型基础与 Agent 入门
 
-这是一条跨专题的阅读顺序：用前两课理解模型与训练，用后两课搭建 Harness、接入真实模型。可分四次完成；需要基础 JavaScript、终端与文件编辑，其他概念随用随讲。
+前两课学模型与训练，后两课搭 Harness、接真实模型。可分四次完成，需要基础 JavaScript、终端和文件编辑。
 
-目录中的 **MCP 入门、MCP 项目实战、模型基础、Agent 工程** 各有自己的学习目标。想先做工具，可以直接进入 [MCP 入门](00-codex-mcp.md)；想先写执行循环，可以直接进入 [Agent 入门](03-build-a-harness.md)。训练字符模型不作为这两条路线的前置。
+先做工具选 [MCP 入门](00-codex-mcp.md)，先写执行循环选 [Agent 入门](03-build-a-harness.md)；<mark class="key">都不必先训练模型</mark>。
 
 ## MCP 练习怎么选
 
-开发 MCP 工具，推荐沿 **[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)** 继续。通常由我们编写 Server，Host 与 Client 由现有应用提供。
+开发工具按 **[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)** 继续：自己写 Server，应用提供 Host 与 Client。
 
 | 路线 | 内容 | 第一份成果 |
 | --- | --- | --- |
@@ -14,17 +14,17 @@
 | 实战 | [选一个想用的工具](../mcp-projects/README.md) | 天气查询、建模、修复验证或音乐可视化 |
 | 选修 · 约 30 分钟 | [MCP 客户端与调用链实验](00-minimal-mcp.md) | 找到调用编排、协议通信、文件读写与校验的位置 |
 
-选修实验用固定脚本代替 Host 编排，真实执行 MCP 通信与文件读写。需要自己写客户端或排查通信时再做；只开发 Server 可以跳过。
+选修实验用脚本编排真实 MCP 调用与文件读写；只开发 Server 可跳过。
 
 需要远程接入与用户授权，再看紧随实战的[远程 MCP 与授权](../ai-communication/weather-mcp/README.md)；想追踪消息，去[应用通信](../ai-communication/README.md)。
 
 各演示统一在仓库根目录运行，例如 `pnpm demo:mini-mcp`、`pnpm demo:tiny-model`、`pnpm demo:harness`；运行 `pnpm run` 查看全部脚本。
 
-想补齐 TS 工具工程基础，按需读选修实验里的 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#typescript-stack)：从现有代码认识 Node.js、Zod、异步执行、进程通信与自动测试。
+TS 工程基础见 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#typescript-stack)：Node.js、Zod、异步、进程通信和测试。
 
 ## 四小时跨专题路线
 
-下面的 240 分钟连接两个专题。只学习其中一个专题时，按对应两课进行；MCP 入门与实战的时间单独计算。
+240 分钟连接模型与 Agent 两个专题，也可只学其中两课；MCP 时间另计。
 
 | 时间 | 内容 | 这一段要完成什么 |
 | --- | --- | --- |
@@ -57,11 +57,11 @@ Harness 先用脚本检查循环，再接 DeepSeek。字符小模型只练习续
 node --version
 ```
 
-使用 Node.js 22.22 或更高版本，与现有文档站要求一致。MCP 示例需要用 pnpm 安装固定版本的官方 SDK；小模型与 Harness 两份实验无需安装 npm 包，所有本地实验均无需下载模型或使用 GPU。
+使用 Node.js ≥22.22。MCP 需 pnpm 安装固定版本 SDK；小模型与 Harness 无需 npm 依赖，均无需下载模型或 GPU。
 
 参考实现：[Codex MCP](../../examples/codex-continue-mcp/src/server.ts)、[客户端实验（选修）](../../examples/minimal-mcp/src/demo.ts)、[小模型](labs/tiny-model.mjs)、[Harness](labs/harness.mjs)。先跑通，再跟改关键函数。
 
-“接真实模型”需要自己的 DeepSeek API key 并产生用量。客户端实验、小模型和脚本 Harness 可离线运行；Codex 篇使用已有模型配置。
+<mark class="caution">真实模型调用会产生用量</mark>，需 DeepSeek API key；其余实验可离线，Codex 篇沿用已有模型配置。
 
 ## 学完以后检查什么
 
@@ -76,7 +76,7 @@ node --version
 
 想继续实现 Transformer，可以先复习 [Attention 与 KV Cache](../kv-cache/02-attention-and-kv.md)，再参考 Karpathy 的 [makemore](https://github.com/karpathy/makemore) 从字符模型走到神经网络结构。
 
-想把 Harness 接进 Yuuki，继续读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 记录服务通过 Markdown 文件实现持久化：选修实验的 `demo` 会清理自己的临时记录，日常 Codex 接入则保留配置目录中的记录。本课程小型 Harness 的运行事件保存在内存并打印到终端。执行过程的持久化、崩溃恢复和多设备执行沿用后续工程专题展开。
+接入 Yuuki 读[共享运行时](../../examples/shared/runtime/README.md)与[可取消和恢复的运行](../agent-engineering/05-harness-vertical-slice.md)。MCP 用 Markdown 持久化；选修 demo 清理临时记录，Codex 保留日常记录。小型 Harness 事件仅存在内存与终端，持久化和恢复留到工程专题。
 
 ## 番外：工具调用怎样长成 Agent
 

@@ -1,12 +1,12 @@
 # 第一班：让 Issue 自己来报到
 
-先给夜班装一块小看板：按一下运行，仓库里的 Issue 就带着编号、标题和链接排到你面前。**这一班的成果是一份 Actions 运行摘要，不需要 AI Key。**
+**先手动运行，取得一份 <mark class="key">Actions 运行摘要</mark>；不需要 AI Key。**
 
-做完再把手动按钮换成定时启动，你就摸到了夜班的第一个机关：一个事件怎样唤起任务，把结果送到能看见的地方。
+跑通后再改为定时启动。
 
 ## 1. 在练习仓库放一份工作流
 
-选一个你有管理权限、已经启用 Issues 与 Actions 的练习仓库，先写一个小 Issue。
+选择有管理权限、已启用 Issues 与 Actions 的练习仓库，先建一个 Issue。
 
 在该仓库创建 `.github/workflows/issue-scan.yml`，复制下面的内容，提交到默认分支：
 
@@ -47,11 +47,11 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 ```
 
-这里的文件内容是教学示例，需要你放入练习仓库后才会生效。
+示例提交到练习仓库后生效。
 
 ## 2. 先手动运行一次
 
-进入 GitHub 仓库的 **Actions → 🍀 看一眼 Issue → Run workflow**，选择默认分支并运行。结束后打开这次运行的摘要，能看见 Issue 的编号、标题和链接就完成了。
+在 **Actions → 🍀 看一眼 Issue → Run workflow** 运行默认分支；摘要应显示 Issue 编号、标题与链接。
 
 如果没有 Issue，会显示 `0`；这是正常结果。[手动运行工作流](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow)
 
@@ -66,9 +66,9 @@ jobs:
 | `--paginate` | 继续读取下一页，避免只拿到第一页 |
 | `GITHUB_STEP_SUMMARY` | 把结果放进这次运行的摘要 |
 
-仓库的 Issues API 也会返回 PR，所以示例过滤掉带 `pull_request` 字段的记录。`github.token` 是 GitHub 为工作流提供的令牌，传给 `GH_TOKEN` 后，GitHub CLI 才能以这次任务的权限访问仓库。[Issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues)、[GitHub CLI 分页](https://cli.github.com/manual/gh_api)、[工作流令牌](https://docs.github.com/en/actions/tutorials/authenticate-with-github_token)
+Issues API 也返回 PR，需过滤 `pull_request`。`github.token` 通过 `GH_TOKEN` 提供本次工作流权限。 [Issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues)、[GitHub CLI 分页](https://cli.github.com/manual/gh_api)、[工作流令牌](https://docs.github.com/en/actions/tutorials/authenticate-with-github_token)
 
-`15 18 * * *` 使用默认 UTC 时间，对应北京时间每天 **02:15**。自动触发需要工作流存在于默认分支；GitHub 的调度可能延迟，不能把它当作精确到分钟的闹钟。[定时触发规则](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
+`15 18 * * *` 是 UTC，对应北京时间每天 **02:15**；工作流须在默认分支，调度可能延迟。 [定时触发规则](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
 
 ## 遇到问题
 
@@ -93,8 +93,8 @@ jobs:
 
 </details>
 
-想再戳一下它：新增一个标题容易认出的练习 Issue，重新运行，看看清单是否更新；没有 Issue 时，也看一眼 `0` 的结果。这样就把“读到了什么”对上了。
+新增练习 Issue 后重跑，核对清单变化；无 Issue 时应显示 `0`。
 
-**摘要里出现清单，这一班就交付了。** 下一次再来[搭手修一个小问题](02-first-repair.md)。
+**摘要出现清单即可停止。** 下一次再来[搭手修一个小问题](02-first-repair.md)。
 
 示例状态：已在本地检查 YAML、Shell 语法与固定数据的过滤逻辑；尚未提交到远端运行。

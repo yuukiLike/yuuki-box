@@ -1,8 +1,8 @@
 # Deep 调查：Zed、Rust 与 PI-Desktop 的搭配
 
-调查日期：**2026-09-26**。这轮在[前期产品调研](../../research/zed-raycast-warp.md)基础上，直接研究本地 Zed 和 PI-Desktop，回答为什么采用 Rust、各模块如何配合，以及哪些设计适合带回 Yuuki Box。
+调查：**2026-09-26**。承接[前期调研](../../research/zed-raycast-warp.md)，读本地 Zed、PI-Desktop，研究 Rust 动机、模块配合和 Yuuki 适用性。
 
-**核心发现：Zed 把 Rust 用成贯穿 UI、文本与后台任务的一套应用体系；PI 把 Rust 用成混合架构中的系统与数据核心。** 共同点是对性能、资源和边界的控制，搭配方式由产品目标决定。收益需要数据结构、增量更新、任务生命周期和协议一起兑现。
+<mark class="key">Zed 用 Rust 贯穿应用，PI 用 Rust 稳定宿主</mark>。收益靠数据结构、增量更新、生命周期和协议兑现，搭配取决于产品目标。
 
 ## 阅读顺序
 
@@ -13,20 +13,20 @@
 | [03 · PI-Desktop 实例](03-pi-desktop.md) | Electron、Rust、Node 谁拥有状态？prompt、工具与持久化如何跨进程？怎样提炼极简骨架？ |
 | [04 · Yuuki Box 搭配与验证](04-yuuki-box.md) | 如何接上已有五条 MVP？接下来读哪些代码，用什么负载验证？ |
 
-先看 01 和 03 可以快速理解选型；想深入 Rust GUI、文本与异步架构，再完整阅读 02。04 是研究建议，不替用户确定最终技术栈。
+选型先读 01、03，GUI/文本/异步深入读 02；04 仅为建议，不作最终选型。
 
-后续调查：[简单、组合、复杂性](../2026-09-26-simplicity-composition-complexity/README.md)沿用本轮源码证据，加入 Raycast、Warp、Grok Build 的具体组合机制，并对照 Yuuki 新增的共享 runtime 与语音实现。两轮的本地项目状态不同，应分别按各自的观察日期和验证范围阅读。
+后续[简单、组合、复杂性](../2026-09-26-simplicity-composition-complexity/README.md)沿用证据，加入 Raycast/Warp/Grok 机制及 Yuuki 新 runtime/语音。两轮状态不同，按各自日期和验证范围阅读。
 
 ## 关键结论
 
-1. **crate 数量表达模块组织。** Zed 根清单有 253 个显式 workspace member，其中 246 个在 `crates/`；该目录实际有 248 份 manifest。这些既不是独立进程数，也不等于数百个团队各自推荐 Rust。
-2. **Zed 的关键组合是快照与增量工作。** SumTree/Rope 提供结构共享，text/language 管版本与语法，MultiBuffer/Editor 管片段及显示变换，GPUI 管实体、事件、任务和画面。
-3. **GPUI 的版本和平台差异必须记录。** 当前 checkout 已拆平台 crate：macOS 接 Metal，Linux Wayland/X11 接 wgpu，Windows 接 Direct3D 11。它与本项目 crates.io GPUI 0.2.2 不能仅按版本文本混用 API。
-4. **PI 的整体实现已经超出极简规模。** 它只有一个 Rust crate，但 apps/packages 下有 11 个直接应用/库包。最值得提炼的是四个责任角色，以及 Main 分别连接 Rust host 和 Node Agent 的两条 sidecar 通道。
-5. **PI 明确选择混合生态。** ADR 选择 Rust 做系统宿主，同时保留 Electron UI 与 pi 的 TypeScript/provider 层。当前桌面 Agent 用 Electron 自带 Node；普通 Desktop 会话正文为 JSONL，SQLite 保存索引，native Pi 会话另有路径。
-6. **可以继续认真学习 Rust。** 现有证据不足以要求 Yuuki 的 UI、Agent 和所有 Apple 能力都统一到 Rust，也没有证明某条路线实测性能最佳。
+1. **crate 不等于进程。** Zed 有 253 个显式 member，246 个在 `crates/`，该目录共 248 份 manifest；不能视为独立团队的 Rust 推荐。
+2. **Zed 依靠快照与增量。** SumTree/Rope 共享结构，text/language 管版本语法，MultiBuffer/Editor 管片段显示，GPUI 管实体、事件、任务与画面。
+3. **GPUI 需区分版本/平台。** 此 checkout：macOS→Metal，Linux Wayland/X11→wgpu，Windows→Direct3D 11；不能因同名 0.2.2 与 crates.io 版混用 API。
+4. **PI 并非小型实现。** 一个 Rust crate、11 个直接应用/库包；可提炼四个角色及 Main→Rust host、Main→Node Agent 两条通道。
+5. **PI 选择混合生态。** Rust 宿主保留 Electron UI、pi TypeScript/provider；Agent 用 Electron Node，Desktop 正文存 JSONL、索引存 SQLite，native Pi 另有路径。
+6. **Rust 值得继续实验。** 尚无全 Rust 选型或某路线性能最佳的证据。
 
-各项结论在对应章节都有源码/ADR 锚点。历史动机另由一手文章核对：[Zed 团队访谈](https://zed.dev/blog/we-have-to-start-over)、[GPUI 重写](https://zed.dev/blog/why-the-big-rewrite)。
+源码/ADR 锚点见各章；历史动机见[团队访谈](https://zed.dev/blog/we-have-to-start-over)、[GPUI 重写](https://zed.dev/blog/why-the-big-rewrite)。
 
 ## 版本与证据边界
 
@@ -37,22 +37,22 @@
 | Yuuki Box | 当前 docs 与 examples；调查时未初始化 Git | 新建调查资料并增加导航，未建立仓库或提交 |
 | 外部资料 | 本轮打开的官方工程文章 | 用于历史动机；文章年代/更新日期与当前源码分别记录 |
 
-**事实** 指直接看到的源码、manifest、ADR 或官方陈述；**推断/建议** 指收益分析与 Yuuki 适用性判断；**待验证** 指未运行的行为或性能。ADR 表达意图，源码表达当前实现，二者有差异时会指出。
+源码、manifest、ADR、官方陈述为事实；收益/适用性为推断；未运行行为/性能待验证。ADR 意图与当前源码有差异时注明。
 
-Zed 引用已指向上述固定提交，Yuuki 源码使用仓库相对路径。PI 引用保留为文末的本地源码定位说明，没有可供公开访问的源码链接；其 staged 改动没有导出为补丁，不能仅凭 HEAD 完整重建当时状态。
+Zed 引用固定提交，Yuuki 用相对路径。PI 仅保留本地定位，无公开链接或 staged 补丁，不能仅靠 HEAD 重建。
 
 ## 深度和限制
 
-完整静态扫描 Zed 的根成员与 `crates/` manifests；深入打开文件、输入/语法/LSP、命令面板后台匹配、PI prompt、PI 消息持久化五条主链。另核对 GPUI 运行时与平台边界、Zed Agent 模型层/扩展宿主、PI 工具取消/重启及可选远端路径。没有逐行审计全部 crate 或所有权限分支。
+静态扫描 Zed 根成员和 manifests，深入打开文件、输入/语法/LSP、命令面板、PI prompt、PI 持久化五条链；另查 GPUI 平台、Agent/扩展、PI 取消/重启与远端路径，非全量审计。
 
-两个参考仓库均只读。未启动应用、下载依赖、编译整个 Zed、调用模型或执行性能基准。没有新增 FPS、延迟、内存或能耗测量；源码中的历史性能注释不作为本次测量。Raycast/Warp 仅补充一手动机，未进行同深度源码调查。
+两仓库只读，<mark class="caution">未运行、构建或测性能</mark>，也未下载依赖、调用模型。历史性能注释不算本轮测量；Raycast/Warp 仅核对动机。
 
 ## 可复查的清单
 
-- [inventory.json](inventory.json)：Zed 255 个 manifest 记录，即 253 个显式成员加 2 个额外 manifest；本地依赖边及其 kind/target/optional/features、manifest SHA-256；两仓库 commit/status；PI package manifests 和 Rust workspace。
-- [collect_inventory.py](collect_inventory.py)：Python 3.11+ 标准库脚本，只读取参考仓库。记录静态声明关系，没有运行 Cargo 或解析最终启用 features。
+- [inventory.json](inventory.json)：255 个 Zed manifest（253 成员+2 额外），依赖边及 kind/target/optional/features、SHA-256，两仓库 commit/status，PI 包与 Rust workspace。
+- [collect_inventory.py](collect_inventory.py)：Python 3.11+ 只读标准库脚本；记录声明，不运行 Cargo 或解析最终 features。
 
-项目根目录执行下面的命令可生成**另一份**当前快照，保留本次归档：
+在根目录生成另一份快照，保留归档：
 
 ```bash
 python3 docs/deep/2026-09-26-zed-pi-rust/collect_inventory.py \
@@ -61,15 +61,15 @@ python3 docs/deep/2026-09-26-zed-pi-rust/collect_inventory.py \
   --out /tmp/yuuki-zed-pi-inventory.json
 ```
 
-需有 `python3`、`git`、`rg`；把 `/path/to/...` 替换成自己的可读 Git 工作树路径。默认输出会覆盖脚本旁的 `inventory.json`，保留历史证据时请指定新的 `--out`。
+需 `python3/git/rg`，替换为可读工作树路径。默认覆盖原清单；保留历史须指定新 `--out`。
 
-`path` 是本地包关系的定位依据；`package` 记录依赖声明名/alias，target/dev/build 边仍单列。全部声明边不能被当作当前 macOS release 的实际依赖。
+`path` 定位本地包，`package` 记声明名/alias，target/dev/build 分列；声明边不等于 macOS release 实际依赖。
 
 ## 本轮核对记录
 
-以下是 2026-09-26 原始调查记录，不覆盖后来新增的图解、导航与链接形式调整。
+以下为 2026-09-26 记录，不覆盖后续图解、导航和链接调整。
 
-- 五篇文档的 217 个本地链接已检查目标存在；带行号的链接已检查范围，Markdown 代码围栏已检查配对。源码/ADR 的核心结论另经人工定点阅读与交叉复核；路径存在不代表语义自动正确。
-- 上面的采集命令已实际重跑，两份清单除采集时间外一致；253/248/255 与 PI 14 份 package manifest 的数量断言通过。
-- 收尾时 Zed HEAD 与干净状态未变；PI HEAD 与 44 项暂存状态匹配采集记录。
-- 没有运行应用测试、性能测试或 Mermaid 渲染器。本轮验证针对文档事实、路径和静态清单，不将其写成运行行为验收。
+- 已查 217 个本地链接、行号和围栏；核心源码/ADR 另经定点复核，路径存在不证明语义正确。
+- 重跑清单仅时间不同；253/248/255、PI 14 份 manifest 数量断言通过。
+- Zed HEAD/干净状态未变；PI HEAD/44 项暂存与记录一致。
+- 未运行应用/性能测试或 Mermaid 渲染器；仅验证文档与静态清单。

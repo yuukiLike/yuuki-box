@@ -1,12 +1,12 @@
 # Blender MCP：让参数变成模型
 
-**这一课的目的：看懂一组尺寸参数怎样经过 MCP，变成可编辑、可检查、可导出的 Blender 模型。**
+用 MCP 把尺寸参数变成可编辑、可检查、可导出的 Blender 模型。
 
-用一个 **80 × 50 × 12 mm** 的托盘做实验，四周和底部各留 3 mm。三个工具依次完成创建、检查和导出；你的任务是看结果、理解挖空、改尺寸，再沿代码找到真正执行建模的位置。
+实验做 **80 × 50 × 12 mm** 托盘，底和四周各 3 mm：创建 → 检查 → 导出，再改尺寸、找建模代码。
 
-**MCP 负责发现工具、传递参数和返回结果；几何由 Blender 的 Python API 创建。** 本课特别观察：客户端怎样把第一次返回的 `modelId` 显式传给后两次调用，让工具找到同一份模型文件。参数与调用顺序写在 `demo.ts`，运行演示不会让 AI 自动设计托盘。
+<mark class="key">MCP 传调用，Blender 创建几何</mark>。客户端把 `modelId` 传给后续工具，定位同一文件；`demo.ts` 固定参数和顺序，不调用 AI 设计。
 
-**你来做：运行 → 看剖面 → 改两处尺寸 → 对照新结果。** 初次接入可先读[Codex MCP 入门](00-codex-mcp.md)。需要本机安装 Blender、Node.js ≥ 22.22 和 pnpm 11.14。仓库已有演示记录使用 Blender 5.2.3 LTS；其他版本和实际打印效果需另行验证。
+按「运行 → 看剖面 → 改尺寸 → 对照」完成；初次接入看[Codex MCP 入门](00-codex-mcp.md)。需 Blender、Node.js ≥22.22、pnpm 11.14；已有记录用 Blender 5.2.3 LTS，其他版本与打印另验。
 
 ## 先看：三个工具怎样接力
 
@@ -36,15 +36,15 @@ pnpm demo:blender-mcp
 [文件] STL：<模型目录>/model.stl
 ```
 
-`tools/list` 只证明客户端拿到了工具清单；三个 `tools/call` 才执行建模、检查和导出。`closed=true` 是本例 Python 代码的网格检查结果，不是 MCP 的连接状态，也不代表已经完成切片或打印。
+`tools/list` 只列工具，`tools/call` 才执行；`closed=true` 是网格检查结果，<mark class="caution">不能代替切片或打印验收</mark>。
 
-打开终端打印的 `preview.png`，再用 Blender 打开同一目录的 `model.blend`。演示产物保存在 `examples/blender-mcp/.artifacts/`；每次创建使用新的目录和 `modelId`。
+打开本次 `preview.png` 和 `model.blend`；产物在 `examples/blender-mcp/.artifacts/`，每次目录与 `modelId` 不同。
 
-下面是仓库此前保留的实际预览。你本次的结果，以终端给出的文件为准。
+下图为此前预览；本次以终端文件为准。
 
 ![此前生成的 80 × 50 × 12 mm 托盘](../../site/public/images/blender-mcp-practice-tray.png)
 
-**完成标志：** 你找到了本次的 `.blend`、PNG 和 STL，并在终端看到预期尺寸。演示参数由代码填写，不调用语言模型。
+**完成标志：** 找到本次 `.blend`、PNG、STL，核对终端尺寸。
 
 ## 2. 看图：3 mm 的底和侧壁从哪里来
 
@@ -65,7 +65,7 @@ parts: [
 - 前后侧壁：`(50 - 44) / 2 = 3 mm`。
 - 底厚：大盒子底部在 `6 - 12 / 2 = 0`，挖空盒子底部在 `9 - 12 / 2 = 3`，所以留下 3 mm。
 
-挖空盒子的顶部达到 Z=15，超过实体顶部 Z=12，于是形成开口。托盘材料的表面仍然可以围成闭合实体，`closed: true` 检查的是网格几何。
+挖空顶部 Z=15 超过实体 Z=12，形成开口；材料表面仍围成闭合实体。
 
 **完成标志：** 你能说明两个 `position` 的 Z 值为什么分别是 6 和 9。
 
@@ -80,9 +80,9 @@ parts: [
 ],
 ```
 
-保存后重新执行 `pnpm demo:blender-mcp`。预期尺寸变为 `100 × 50 × 12`，网格闭合仍为 `true`。打开这次新打印的路径，对照前一次模型。
+重跑 `pnpm demo:blender-mcp`；预期 `100 × 50 × 12`、闭合 `true`，打开新路径与前次对照。
 
-**先预测再看结果：** 如果只改外盒为 100、保留挖空宽度 74，左右侧壁会变成 `(100 - 74) / 2 = 13 mm`。两处一起改，才保持 3 mm。
+**先预测：** 只改外盒，侧壁为 `(100 - 74) / 2 = 13 mm`；两处一起改才保持 3 mm。
 
 **完成标志：** 你看到了加宽的模型，并能用参数解释侧壁和底厚。
 
@@ -94,26 +94,26 @@ parts: [
 2. [blender.ts](../../examples/blender-mcp/src/blender.ts)：`runBlender()` 用 `execFile()` 启动后台 Blender，通过 JSON 文件交付参数。
 3. [worker.py](../../examples/blender-mcp/worker.py)：`create_model()` 用 `bpy` 创建实体，并用 `DIFFERENCE` 做减法。
 
-回到图中观察后两步：`inspect_model` 和 `export_stl` 都会重新打开 `model.blend`。在 `demo.ts` 找到这两次调用的 `{ modelId: model.modelId }`：演示客户端主动把同一个编号作为参数传回。服务端用 `join(root, modelId)` 定位目录，Blender 再从磁盘读文件。
+`inspect_model` 和 `export_stl` 会重新打开 `model.blend`；在 `demo.ts` 找 `{ modelId: model.modelId }`：客户端传回编号，服务端用 `join(root, modelId)` 找目录，Blender 读文件。
 
-`modelId` 是本例工具的业务编号，区别于配对请求和响应的 JSON-RPC `id`。模型能跨进程继续处理，依靠这个编号和保留的文件；只有编号、文件已经删除时，检查会失败。MCP 负责传递编号，不会自动保留 Blender 场景或帮客户端选择“上一个模型”。
+`modelId` 是业务编号，不是 JSON-RPC 请求 `id`；跨进程处理依赖编号和文件，文件删除就失败。MCP 不保存场景或自动选择上一个模型。
 
 **完成标志：** 你能指出“TS 发出调用”和“Python 创建几何”的位置，并说明三个工具为什么能接着处理同一个模型。
 
 ## 到这里完成
 
-拿着你新生成的模型，说清三件事：MCP 怎样调用 Blender 工具，参数怎样决定底厚与侧壁，以及客户端怎样用 `modelId` 让工具找到保存的文件。`.blend`、PNG、STL 分别用于编辑、预览和交给切片软件。
+用新模型说明 MCP 调用、尺寸计算和 `modelId` 定位；`.blend` 用于编辑、PNG 预览、STL 切片。
 
 ## 选读与参考
 
 <details>
 <summary>支持的形状、输出文件与导出失败</summary>
 
-第一版支持长方体 `box`、圆柱 `cylinder`、球体 `sphere`。每项包含 XYZ 尺寸、中心位置、旋转角度与 `add` / `subtract`。尺寸和位置使用毫米，旋转使用度；最多 16 项，第一项必须为 `add`。整体模型生成后移到 Z=0。
+支持 `box`、`cylinder`、`sphere`，含 XYZ 尺寸、中心、旋转和 `add` / `subtract`；毫米制、角度制，最多 16 项，首项须 `add`，整体移到 Z=0。
 
 `create_model` 保存 `design.json`、`model.blend`、`preview.png`；`export_stl` 增加或替换同目录的 `model.stl`。`inspect_model` 返回尺寸、体积、面数和闭合检查结果。
 
-手动编辑时保留名为 `MCP_Model` 的网格对象；导出只包含它。导出前会重新检查，闭合检查失败时旧 STL 保持原样。失败后查看 `.blend` 和本次错误，不能用目录里已有的 STL 证明本次成功。
+手动编辑须保留 `MCP_Model`，仅导出该对象；检查失败保留旧 STL，因此应看本次错误与 `.blend`，不能拿旧文件证明成功。
 
 </details>
 
@@ -122,13 +122,13 @@ parts: [
 
 [contracts.ts](../../examples/blender-mcp/src/contracts.ts) 用 Zod 声明输入、输出并推导 TS 类型。[client.ts](../../examples/blender-mcp/src/client.ts) 检查工具错误与返回值。[stdio.ts](../../examples/blender-mcp/src/stdio.ts) 是协议启动入口。严格 TS 配置沿用第一个示例。
 
-调用方提交声明式形状数据。Blender 每次在独立后台进程运行，最多 90 秒；客户端等待上限为 100 秒，取消信号会传给子进程。创建失败会清理本次新目录并报告错误。
+调用只提交形状数据；Blender 后台限时 90 秒，客户端等待 100 秒，取消传给子进程；创建失败清理新目录并报错。
 
 ```bash
 pnpm check:blender-mcp
 ```
 
-需要本机 Blender。检查包含类型检查、编译和真实 Blender 测试；测试解析 STL，核对毫米尺寸、闭合边和挖空体积，还会故意破坏测试模型的一个面，验证再次导出被拒绝。
+需本机 Blender；检查含类型、编译和真实建模测试，核对 STL 尺寸、闭合边、挖空体积，并破坏一个面验证拒绝导出。
 
 </details>
 
@@ -147,21 +147,21 @@ claude mcp add --transport stdio yuuki-blender -- "$MCP_NODE" "$MCP_SERVER"
 claude mcp get yuuki-blender
 ```
 
-整个示例目录需要一起保留，包括 `worker.py`。实际连接后，在 `/mcp` 检查工具，再试着说：
+保留完整示例目录和 `worker.py`；连接后在 `/mcp` 查工具，再说：
 
 ```text
 用 yuuki-blender 做一个 80×50×12 毫米的桌面托盘，底和四周各留 3 毫米。
 先创建并展示预览，再检查网格；闭合检查通过后导出 STL。
 ```
 
-客户端注册写法来自 [Claude Code 官方文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。仓库已有验证覆盖示例 MCP 客户端；你的 Claude Code 配置需要在实际接入后检查。
+注册方式见 [Claude Code 官方文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)；仓库仅验证示例客户端，实际接入另查。
 
 </details>
 
 <details>
 <summary>从 STL 到实物：切片与打印另行验证</summary>
 
-STL 不携带单位；本例保留毫米数值，切片时按毫米解释。闭合检查只检查网格的非流形边、零面积面与非零体积，不能代替壁厚、悬空、支撑、材料和实际打印验收。将 STL 放进你使用的切片软件，先核对外尺寸，再检查切片预览。
+STL 无单位，本例按毫米解释；闭合检查仅查非流形边、零面积面和非零体积。切片时核对外尺寸、壁厚、悬空、支撑与材料，再做实际打印验收。
 
 示例只生成文件，实际打印需要另行操作与验证。
 

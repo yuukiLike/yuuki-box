@@ -2,7 +2,7 @@
 
 [上一站 一条消息的旅程](00-first-request.md) · [专题入口](README.md) · [下一站 因果 Attention](02-attention-and-kv.md)
 
-**这一站只弄清：数组末尾多一项，哪些旧结果还能继续用。** 先用三个数字，暂时不引入模型公式。
+用三个数字理解：<mark class="key">末尾追加后，哪些旧结果还能用</mark>？
 
 ## 第一步：区分输入和算出来的结果
 
@@ -13,7 +13,7 @@ const inputs = [3, 5, 2];
 const totals = [3, 8, 10]; // 3；3 + 5；3 + 5 + 2
 ```
 
-`inputs` 是原始数据，`totals` 是从它计算出来的**派生数据**。前端里的过滤列表、Markdown 解析结果，也属于派生数据。
+`inputs` 是输入，`totals` 是派生结果；过滤列表和 Markdown 解析结果也属于派生数据。
 
 现在往末尾加一个 `4`。旧的 `3、8、10` 不需要改变，只要接着算：
 
@@ -23,17 +23,17 @@ const nextTotal = totals.at(-1) + 4; // 10 + 4 = 14
 
 [![累计和对照：追加 4 只增加 14；将中间的 5 改成 8 后，要从修改处重算 11、13、17](../../site/public/diagrams/kv-cache/04-prefix-change.svg)](../../site/public/diagrams/kv-cache/04-prefix-change.svg)
 
-先看图的中间一组：绿色旧结果保留，蓝色只算新增部分。这就是我们要研究的增量计算。
+图中绿色保留旧结果，蓝色只算新增部分，即增量计算。
 
 ## 第二步：前缀是什么，为什么修改会往后传播
 
 **前缀**就是从开头开始连续相同的一段。旧输入 `[3, 5, 2, 4]` 改成 `[3, 8, 2, 4]`，共同前缀只剩 `[3]`。
 
-图的最后一组中，后面的输入 `2、4` 没变，累计结果却变了。因为第三项结果需要第二项累计值，第四项又需要第三项累计值。
+输入 `2、4` 未变，但累计值依赖前一项结果，仍须重算。
 
-**失效**表示旧结果已经不适合当前输入，需要重新计算。这里从第二项开始失效；不能看到后面的数字相同，就直接拿旧结果。
+**失效**是旧结果不再适用；此处从第二项开始，后续数字相同也不能复用。
 
-这给模型缓存搭起第一座桥：如果一个位置只依赖自己和前面的输入，末尾追加时，旧位置就有机会保持有效。模型为什么满足这个条件，留到[下一站](02-attention-and-kv.md)看图。
+若位置只依赖自身与前缀，末尾追加就不改变旧位置；模型的条件见[下一站](02-attention-and-kv.md)。
 
 ## 第三步：再回头看 useMemo
 
@@ -46,11 +46,11 @@ const formatted = useMemo(
 );
 ```
 
-执行 `[...messages, nextMessage]` 得到新数组时，`messages` 这个依赖变了，React 会重新调用这里的计算。它不会自动把你写的 `map` 改成「只算最后一项」。[React useMemo](https://react.dev/reference/react/useMemo)
+`[...messages, nextMessage]` 改变依赖引用，React 会重跑计算，不会把 `map` 自动改成只算最后一项。[useMemo](https://react.dev/reference/react/useMemo)
 
 [![useMemo 依赖变化时重新调用整个计算；计算内部若自行保留兼容前缀状态，就可以复用前三项，只新算第四项](../../site/public/diagrams/kv-cache/05-cache-granularity.svg)](../../site/public/diagrams/kv-cache/05-cache-granularity.svg)
 
-上半部缓存整个返回值，下半部自行复用前缀。React 用 `Object.is` 比较依赖；模型缓存还需检查输入与计算配置，有效条件不同。
+上图缓存整个返回值，下图自行复用前缀。React 比较 `Object.is`；模型缓存检查输入与配置，条件不同。
 
 ## 只跑一个小实验
 
@@ -60,9 +60,9 @@ const formatted = useMemo(
 node docs/kv-cache/labs/prefix-cache.mjs
 ```
 
-先只找「末尾追加」一行：复用 3 项，新算 1 项。再看「修改第 2 项」一行：只复用第一项，从第二项开始重算。
+查“末尾追加”：复用 3、新算 1；再查“修改第 2 项”：仅复用第一项。
 
-**输入没变，依赖变了，结果也可能变。** 下一步：[Q/K/V](02-attention-and-kv.md)。
+<mark class="caution">输入不变，依赖变了也会失效</mark>。下一步：[Q/K/V](02-attention-and-kv.md)。
 
 <details>
 <summary>并非所有数组计算都适合前缀复用</summary>
@@ -73,14 +73,14 @@ node docs/kv-cache/labs/prefix-cache.mjs
 | 累计和 | 到当前位置为止的前缀 | 旧结果有效 | 重算受影响后缀 |
 | 每项除以整个数组总和 | 依赖所有输入 | 旧结果也可能变化 | 所有结果都可能变化 |
 
-追加本身不能证明缓存有效，要检查独立消息行、全文布局、引用解析各自的依赖。[流式输出与渲染](../learning/rendering-performance.md)
+追加不证明有效；消息行、全文布局与引用解析各查依赖。[流式渲染](../learning/rendering-performance.md)
 
 </details>
 
 <details>
 <summary>缓存键还要考虑配置；完整实验数据</summary>
 
-实验的规则是 `total = previousTotal + currentInput * scale`。`scale` 是倍率配置；它变化时，即使输入相同，旧结果也必须失效。
+规则为 `total = previousTotal + currentInput * scale`；倍率 `scale` 变化，即使输入相同也要失效。
 
 | 操作 | 新输入 | 倍率 | 复用项数 | 新算项数 | 累计结果 |
 | --- | --- | --- | --- | --- | --- |
@@ -92,17 +92,17 @@ node docs/kv-cache/labs/prefix-cache.mjs
 | 配置改变 | `[3, 8]` | 2 | 0 | 2 | `[6, 22]` |
 | 清空 | `[]` | 2 | 0 | 0 | `[]` |
 
-类似地，文本解析结果要考虑文本、解析选项和解析器版本；布局结果还要考虑可用宽度、字体与字号。缓存键需要覆盖实际的计算依赖。
+文本缓存还依赖解析选项和版本；布局还依赖宽度、字体、字号。缓存键覆盖实际依赖。
 
-查找共同前缀仍需要扫描，保存状态也占空间。表中的数字只统计派生项数，不能当成真实加速倍数。
+前缀匹配仍需扫描，状态仍占空间；表中派生项数不是加速倍数。
 
 </details>
 
 <details>
 <summary>练习：故意让配置失效判断漏掉一个条件</summary>
 
-在[实验脚本](labs/prefix-cache.mjs)的副本里，把相同配置判断 `previous?.scale === scale` 改成仅检查 `previous` 是否存在。配置改变一行会触发断言，因为旧结果仍按倍率 1 保存。改回条件，检查结果恢复一致。
+在[脚本](labs/prefix-cache.mjs)副本中，把 `previous?.scale === scale` 改为仅检查 `previous`。配置变化时旧倍率 1 触发断言；恢复条件后应通过。
 
-也可以把实验中出现的 `8` 一致改成 `9`，先预测累计结果，再运行核对。实验断言用来发现错误，不应为了通过而删去。
+也可统一把 `8` 改成 `9`，预测后运行核对；不要删断言迎合结果。
 
 </details>

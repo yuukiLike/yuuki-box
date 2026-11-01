@@ -6,18 +6,18 @@ next:
 
 # 选修：MCP 客户端与调用链实验
 
-本篇演示 Host、Client、Server 三种职责的协作：脚本安排调用，Client 发送请求，Server 执行工具。**MCP 通信和文件读写真正发生；Host 的调用编排由固定脚本代替，未接入模型。**
+脚本安排调用、Client 发请求、Server 执行工具；MCP 通信与文件读写真实发生，<mark class="caution">未接入模型</mark>。
 
-**如果你的目标是开发 MCP Server，可以跳过本篇。** 通常由我们编写 Server，Host 与 Client 由 Codex 等现有应用提供。沿[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)继续即可。
+**只开发 Server 可跳过。** Codex 等应用提供 Host 与 Client，直接沿[Codex 接入](00-codex-mcp.md) → [MCP 项目实战](../mcp-projects/README.md)继续。
 
-需要自己写客户端、追踪请求或排查通信错误时，再做下面的实验。
+需要写客户端或查通信错误时再做。
 
 用 `save_checkpoint` 保存 Markdown，再用 `resume` 取回。先分清两件事：
 
 | 你看到的过程 | 它在说明什么 |
 | --- | --- |
-| `tools/list` 获取清单 → `tools/call` 调用工具 → 收到结果 | **MCP 的发现与调用。** 客户端按协议使用服务端的工具。 |
-| 保存文件 → 重启服务进程 → 读取同一文件 | **工具实现的持久化。** 记录来自磁盘上的 Markdown；MCP 不会自动替工具保存业务数据。 |
+| `tools/list` → `tools/call` → 结果 | MCP 发现与调用 |
+| 保存 → 重启 → 读同一文件 | 工具用 Markdown 持久化；MCP 不自动保存业务数据 |
 
 **约 30 分钟：运行 → 找代码 → 改文字 → 试错误输入。**
 
@@ -71,17 +71,17 @@ pnpm demo:mini-mcp
 
 核对三处：`tools/list` 列出工具，`saved=true` 表示保存成功，重启后的 `found=true` 返回同一文件原文。
 
-**这次运行没有请求 AI 模型，也没有由模型决定的 function calling。** `demo.ts` 固定填写工具名和参数，先保存、再重启服务、最后读取；安装依赖后可离线执行。`next` 的文字来自源码中的 `checkpoint` 对象，修改后输出也会变化。
+`demo.ts` 固定工具名和参数，依次保存、重启、读取；安装后可离线运行。`next` 来自 `checkpoint` 对象，改源码即改输出。
 
-MCP 通信和文件读写都实际发生；客户端的 `console.log()` 负责展示过程。方括号是日志标签；`saved`、`found`、`path` 是本例的业务字段。
+客户端 `console.log()` 展示真实过程；方括号是日志标签，`saved/found/path` 是业务字段。
 
 ## 2. 定位：谁调用，谁真正读写文件
 
 打开三个文件，分别看调用编排、协议通信与工具执行：
 
-1. [demo.ts](../../examples/minimal-mcp/src/demo.ts)：找到 `client.listTools()` 和 `callTool(client, 'save_checkpoint', checkpoint, ...)`。前者查询有哪些工具，后者把工具名和 `checkpoint` 参数交给客户端的调用函数。
-2. [client.ts](../../examples/minimal-mcp/src/client.ts)：找到 `client.callTool({ name, arguments: args })`。这一行通过 MCP 连接发出请求，等待服务端返回结果。
-3. [server.ts](../../examples/minimal-mcp/src/server.ts)：找到 `registerTool('save_checkpoint', ...)` 和 `registerTool('resume', ...)`。它们把工具名对应到执行函数；函数里的 `writeFile()` 和 `readFile()` 真正操作文件。
+1. [demo.ts](../../examples/minimal-mcp/src/demo.ts)：`client.listTools()` 查工具，`callTool(client, 'save_checkpoint', checkpoint, ...)` 传名与参数。
+2. [client.ts](../../examples/minimal-mcp/src/client.ts)：`client.callTool({ name, arguments: args })` 经 MCP 发请求、等结果。
+3. [server.ts](../../examples/minimal-mcp/src/server.ts)：`registerTool()` 绑定执行函数，`writeFile()`、`readFile()` 实际操作文件。
 
 这里的 `demo.ts` 代替 Host 安排调用，与 Client 运行在同一程序中；Server 是另行启动的服务进程。
 
@@ -100,9 +100,9 @@ await rename(temporaryPath, path);
 const note = await readFile(path, 'utf8');
 ```
 
-`demo.ts` 创建临时目录，经 `YUUKI_CONTINUE_DIR` 传给两次启动的服务。目录与项目名相同，新进程就能读回磁盘文件；演示结束后才清理目录。
+`demo.ts` 用 `YUUKI_CONTINUE_DIR` 给两次启动同一目录；同项目可跨进程读取，结束后清理。
 
-`resume` 是本例的读取工具，不是 MCP 内置的会话恢复。**协议负责调用，`server.ts` 负责持久化。**
+`resume` 是业务读取工具；<mark class="key">协议调用，工具持久化</mark>。
 
 ## 3. 修改：让取回的内容变成你写的文字
 
@@ -141,11 +141,11 @@ pnpm demo:mini-mcp --invalid
 
 ## 到这里完成
 
-能指出调用编排、MCP 通信、文件读写和输入校验的位置，就完成本次选修实验。下面按需查阅。
+能定位编排、通信、文件读写与校验，就完成本课。
 
 接下来按目标选择：[MCP 项目实战](../mcp-projects/README.md)做一个工具，[应用通信](../ai-communication/README.md)追踪请求，或 [Agent 入门](03-build-a-harness.md)理解模型怎样选择和执行工具。想研究训练原理，再进入[模型基础](01-understand-models.md)。
 
-想理解这份 TS 工程为什么这样组织，展开 [TypeScript 技术栈与学习顺序](#typescript-stack)，从现有代码认识编译、数据契约、异步执行与进程通信。
+编译、契约、异步与进程通信见 [TypeScript 技术栈与学习顺序](#typescript-stack)。
 
 ## 选读与参考
 
@@ -168,7 +168,7 @@ pnpm demo:mini-mcp --invalid
 <details id="typescript-stack">
 <summary>TypeScript 技术栈与学习顺序：从 MCP 走向 Agent</summary>
 
-**当前的基础组合是 TypeScript + Node.js + pnpm + Zod + MCP SDK + 自动测试。** 先沿着一次调用读懂它们各自负责什么，再根据实际需求增加组件。
+基础组合：TypeScript、Node.js、pnpm、Zod、MCP SDK、自动测试；沿一次调用读分工，按需加组件。
 
 | 层次 | 本例使用什么 | 从哪里观察 |
 | --- | --- | --- |
@@ -182,29 +182,29 @@ pnpm demo:mini-mcp --invalid
 
 ### 1. 源码怎样成为运行中的程序
 
-`pnpm demo:mini-mcp` 会调用示例的演示脚本：先用 `tsc` 编译，再用 Node 执行示例里的 `dist/src/demo.js`。编译检查类型并输出 JavaScript；运行阶段才会建立连接、读写文件。`@types/node` 提供 Node API 的类型声明，实际能力由 Node 运行时提供。
+`pnpm demo:mini-mcp` 先由 `tsc` 检查并编译，再由 Node 执行 `dist/src/demo.js`、连接和读写文件；`@types/node` 只提供类型。
 
 先认识 ESM 的 `import/export`，再看本例的 `NodeNext` 配置。源码中的 `import './server.js'` 对应编译后的运行文件；Node 的 ESM 相对导入要求明确扩展名。[TypeScript 模块说明](https://www.typescriptlang.org/docs/handbook/2/modules.html)、[Node ESM 扩展名规则](https://nodejs.org/api/esm.html#mandatory-file-extensions)
 
 ### 2. 类型与 Zod 怎样分工
 
-优先掌握 `unknown`、可选属性、联合类型、类型收窄和基础泛型。比如 `resume` 返回 `found: false` 或 `found: true` 两种结果，检查 `found` 后，TS 才能确认是否可以读取 `note`。
+先学 `unknown`、可选属性、联合、收窄与泛型；例如检查 `found` 后，TS 才能确认可否读 `note`。
 
-TypeScript 的类型标注不会自动校验运行时收到的数据。`next: ''` 仍是合法的 `string`；本例的 `z.string().trim().min(1)` 会在实际校验时拒绝空字符串和纯空白内容。[类型擦除](https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types)、[Zod 文档](https://zod.dev/)
+TS 不自动校验运行时数据；`next: ''` 虽是 `string`，仍由 `z.string().trim().min(1)` 拒绝空白。[类型擦除](https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types)、[Zod 文档](https://zod.dev/)
 
-Zod 适合本例的输入输出边界。同一份 schema 用于校验，并推导 TS 类型，避免另写一份容易不同步的定义：
+同一 Zod schema 校验输入输出并推导 TS 类型，避免定义不同步：
 
 ```ts
 export type CheckpointInput = z.infer<typeof saveCheckpointInputSchema>;
 ```
 
-客户端收到 `structuredContent` 后，也通过 `outputSchema.parse(...)` 检查结果。已经校验过的数据在内部函数间传递时，通常依靠 TS 类型即可，无需每一层重复解析。
+客户端用 `outputSchema.parse(...)` 检查返回结果；内部已校验数据通常由 TS 类型保证，无需逐层重解析。
 
 MCP 使用 JSON Schema 描述工具，SDK 可以把 Zod schema 转换为对应描述。Zod 是本项目的选择；当前 TypeScript SDK 也接受符合其 Standard Schema 接口要求的其他库。[MCP 工具定义](https://modelcontextprotocol.io/specification/2026-07-28/server/tools#tool)、[SDK 的 schema 接口](https://github.com/modelcontextprotocol/typescript-sdk#packages)
 
 ### 3. 异步操作怎样开始、结束和清理
 
-先理解 `Promise`、`async/await`、串行与并发、`try/catch/finally`，再学习超时与取消。`await` 等待当前操作完成；某一步失败后，仍需释放已经建立的资源。
+先学 Promise、async/await、并发与 try/finally，再学超时取消；失败也须释放资源。
 
 从 [withClient()](../../examples/minimal-mcp/src/client.ts) 读这一小段：
 
@@ -217,7 +217,7 @@ try {
 }
 ```
 
-这里的 `return await` 让 `finally` 在任务完成或失败后执行；如果直接返回尚未完成的 Promise，连接可能提前关闭。后续接网络请求、流式模型输出时，再沿同一条调用路径传递取消信号，并检查资源是否真正释放。
+`return await` 使任务完成后才执行 `finally`，否则可能提前关闭；接网络或流式输出时再贯穿取消信号、核对资源释放。
 
 ### 4. 数据经过进程边界时，哪些层在工作
 
@@ -232,13 +232,13 @@ try {
 
 [stdio.ts](../../examples/minimal-mcp/src/stdio.ts) 由客户端启动，SDK 处理协议消息。客户端 demo 可以用 `console.log()` 展示结果；服务端 stdout 留给协议，日志用 `console.error()` 写到 stderr。[stdio 传输约定](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)
 
-接入模型后，调用链还会增加决策与反馈：用户需求 → 模型给出工具名和参数 → 应用通过 MCP 执行 → 结果回传模型。本例先用固定脚本观察通信，后面的 [Harness 课程](03-build-a-harness.md)负责串起模型与工具循环。
+接模型后变成「需求 → 工具名和参数 → MCP 执行 → 结果回传」；本例先看通信，[Harness 课程](03-build-a-harness.md)再加模型循环。
 
 ### 5. 怎样区分业务结果与真正的失败
 
-“没有记录”“参数非法”“文件读取失败”应有不同处理。本例用 `found: false` 表示正常的未找到；非法参数由 SDK 按输入规则拒绝；文件系统错误返回工具失败，再由客户端传播异常。
+正常未找到用 `found: false`；非法参数由 SDK 拒绝；文件错误返回工具失败，再传播给客户端。
 
-读测试时，观察它怎样确认：坏输入没有写入文件、重启后仍能读回内容、保存一个项目不会覆盖另一个项目。测试验证的是可观察的行为，不能只检查是否打印了成功日志。
+测试须核对坏输入未写入、重启可读、项目互不覆盖，不能只查成功日志。
 
 在仓库根目录运行已有检查：
 
@@ -258,7 +258,7 @@ pnpm check:mini-mcp
 | 数据需要查询、关联和事务 | SQLite；希望用 TS 组织查询时，再考虑 [Drizzle](https://orm.drizzle.team/docs/sqlite/get-started-sqlite) |
 | 接入多家模型，统一模型调用接口 | [AI SDK](https://ai-sdk.dev/docs/introduction)，提供跨模型提供商的集成能力 |
 
-这些是按需求扩展的候选，不是本例的依赖。当前最适合拆开读的是 `withClient()`：把异步执行、子进程、stdio、返回值校验和资源关闭连成一次完整调用。资料核对：2026-10-28；依赖版本以本例 `package.json` 与锁文件为准。
+以上不是本例依赖；先读 `withClient()`，串起异步、子进程、stdio、校验与关闭。核对日期 2026-10-28；版本以清单和锁文件为准。
 
 </details>
 
@@ -289,7 +289,7 @@ claude mcp get yuuki-continue
 用 yuuki-continue 取回 algorithm-box 上次留下的记录，先展示原文。
 ```
 
-需要移除连接时执行 `claude mcp remove yuuki-continue`；记录文件仍然保留。命令与配置范围见 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。本章验证了参考客户端，尚未实际修改或验证你的 Claude Code 配置。
+`claude mcp remove yuuki-continue` 只移除连接，保留记录；范围见 [Claude Code 官方 MCP 文档](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server)。本章仅验证参考客户端，未验你的配置。
 
 服务本身不联网。接到云端模型后，取回的文字会进入该模型的对话上下文；只留下你愿意交给当前客户端的内容。
 
@@ -304,7 +304,7 @@ claude mcp get yuuki-continue
 | [OpenAI 文档查询](https://developers.openai.com/api/docs/guides/tools-connectors-mcp) | `server_url`、工具发现和 `mcp_call` | 连接现有远程服务，需要 API 凭据并产生用量 |
 | [Claude Code GitHub 审查](https://code.claude.com/docs/en/mcp#example-connect-to-github-for-code-reviews) | 服务地址、授权、实际工具调用 | GitHub 远程服务；本课是本地 stdio |
 
-本课使用 SDK v2，跟写时保留各案例自己的依赖与导入。[Claude API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)同样连接远程 HTTP，不能直接填写本地 stdio 入口。
+本课用 SDK v2，其他案例保留自己的依赖与导入。[Claude API MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)同样连接远程 HTTP，不能直接填写本地 stdio 入口。
 
 </details>
 
@@ -367,9 +367,9 @@ pnpm dlx @modelcontextprotocol/inspector --cli \
 
 来源：[旧版生命周期](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)、[旧版会话规则](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management)、[新版架构](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture#statelessness-and-discovery)。旧版 HTTP 会话也并非必选。
 
-本例按 `project` 查磁盘文件，所以新进程能取回记录。聊天历史归 Host，未完成请求由 SDK 按 `id` 配对；它们是不同的状态。
+本例按 `project` 读文件，聊天历史归 Host，请求配对由 SDK 按 `id` 处理。
 
-持续打开 stdio 管道或用 SSE 返回进度，也不等于保存跨请求会话。部署多个实例时，记录仍需共享存储；协议无状态不会替你解决数据一致性。
+stdio 常连接或 SSE 进度不等于跨请求会话；多实例仍需共享存储与一致性管理。
 
 </details>
 
@@ -393,7 +393,7 @@ MCP 使用 Client/Server 架构与 JSON-RPC 消息，规定能力发现和调用
 {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"resume","arguments":{"project":"yuuki-box"}}}
 ```
 
-RPC 可以跨同机进程。HTTP 接口或自定义 JSON-RPC 方法本身不等于 MCP，还要遵守能力、工具与调用约定。Streamable HTTP 可返回 JSON 或 SSE 流。[传输规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+RPC 可跨同机进程；HTTP/JSON-RPC 仍须遵守 MCP 能力与工具约定，Streamable HTTP 可返回 JSON 或 SSE。[传输规范](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
 
 </details>
 
@@ -410,7 +410,7 @@ RPC 可以跨同机进程。HTTP 接口或自定义 JSON-RPC 方法本身不等�
 
 本仓库已经可以交付源码与 stdio 启动命令。后两种发布需另行完成。
 
-**发布 npm 包**：当前包有 `private: true`，没有 `bin`。先设置自己的包名、版本、许可证；移除 `private`，保留运行依赖；给 `src/stdio.ts` 加 `#!/usr/bin/env node`，配置以下字段（合并进原文件）：
+**发布 npm 包**：设置包名、版本、许可证，移除 `private: true`，保留依赖；为 `src/stdio.ts` 加 shebang，再合并字段：
 
 ```json
 {
@@ -433,7 +433,7 @@ npm publish --access public
 
 发布后通过 `npx -y @your-scope/yuuki-continue-mcp@1.0.0` 启动，验收工具清单和实际调用。[npm 配置](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/)、[发布说明](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)
 
-**远程 HTTP**：新增 Streamable HTTP 入口，部署 HTTPS，明确版本、认证和用户数据隔离，再用 Inspector 验证发现、调用及认证失败。本例目前只有 stdio 入口。[远程服务说明](https://modelcontextprotocol.io/registry/remote-servers)
+**远程 HTTP**：新增 Streamable HTTP/HTTPS、认证与数据隔离，用 Inspector 验证发现、调用和认证失败；本例仅有 stdio。[远程服务说明](https://modelcontextprotocol.io/registry/remote-servers)
 
 **Registry**：先准备好包或 URL，再运行：
 
@@ -442,7 +442,7 @@ brew install mcp-publisher
 mcp-publisher init
 ```
 
-编辑 `server.json`：npm 包填 `packages`，远程地址填 `remotes`。GitHub 身份使用 `io.github.<用户名>/<服务名>`；npm 的 `mcpName` 必须与其一致，应在发包前加入。然后：
+`server.json` 中包填 `packages`、URL 填 `remotes`；名称用 `io.github.<用户名>/<服务名>`，发包前设置一致的 npm `mcpName`。再执行：
 
 ```bash
 mcp-publisher login github

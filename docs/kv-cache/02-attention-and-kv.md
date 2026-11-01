@@ -2,7 +2,7 @@
 
 [专题入口](README.md) · [上一篇 前端增量计算](01-from-frontend.md) · [下一篇 前缀缓存与 Yuuki](03-prefix-cache-and-yuuki.md)
 
-从数组认识 Q/K/V，再看因果约束为什么允许复用旧状态。公式与完整实验在折叠区。
+用数组认识 Q/K/V 与因果复用；公式和完整实验按需展开。
 
 ## 先把模型里的数据看成数组
 
@@ -15,21 +15,21 @@
 | 模型权重 `W` | 固定的数值矩阵 | 把输入向量变换到不同表示空间 |
 | K/V 缓存 | 按层、位置保存的向量集合 | 复用已经处理过的位置状态 |
 
-权重是计算规则，KV 是这次输入产生的中间结果。换一段输入，沿用相同权重仍会得到不同的状态。
+权重是规则，KV 是当前输入的中间结果；相同权重处理不同输入，状态仍会不同。
 
 一层就是一个处理阶段；下一层继续变换上一层的数字。
 
 ## Q K V 各自参与哪一步
 
-先看图，暂时只记分工：**Q 是这次怎么读，K 参与决定读取权重，V 是最后被组合的数字内容。**
+先记分工：<mark class="key">Q 发起读取，K 参与配权，V 被加权组合</mark>。
 
 [![当前隐藏向量分别产生 Q/K/V；Q 与可见 K 计算分数，再把分数变成权重，对 V 加权组合](../../site/public/diagrams/kv-cache/06-qkv.svg)](../../site/public/diagrams/kv-cache/06-qkv.svg)
 
-图中的「权重」可以先理解成配比：例如 25% 取第一组 V，75% 取第二组 V。这个配比由当前 Q 和可见的 K 计算得到，会随当前位置变化。
+配比由当前 Q 与可见 K 算出，如第一组 V 占 25%、第二组占 75%，随位置变化。
 
 **模型权重**是训练得到的参数；**注意力权重**是本次算出的配比，会随输入变化。
 
-**这里的 K/V 不能按 JavaScript `Map.get(key)` 来理解。** Attention 会计算与多个可见 K 的分数，再组合对应的 V；它不是找一个完全相同的业务键。
+Attention 对多个可见 K 评分并组合 V，不是 `Map.get(key)` 查同一个业务键。
 
 <details>
 <summary>用 JavaScript 算一次分数</summary>
@@ -43,7 +43,7 @@ const score = q.reduce((sum, value, i) => sum + value * k[i], 0);
 // 1 * 2 + 2 * 1 = 4
 ```
 
-每个可见 K 都会得到一个这样的分数。真实 Attention 还会缩放分数，并用 softmax 把它们变成非负、总和为 1 的权重。例如权重为 `[0.25, 0.75]`，V 为 `[10, 0]` 和 `[0, 20]`，加权结果就是 `[2.5, 15]`。
+各可见 K 得分后，缩放并经 softmax 转为非负、总和为 1 的权重。如 `[0.25, 0.75]` 组合 V `[10, 0]`、`[0, 20]`，得到 `[2.5, 15]`。
 
 这是运算示意，不代表这几个数字拥有固定的语言含义。
 
@@ -52,7 +52,7 @@ const score = q.reduce((sum, value, i) => sum + value * k[i], 0);
 <details>
 <summary>投影、伪代码和单头公式</summary>
 
-在一个 Attention 头里，当前隐藏向量经过三组线性投影，得到 Query、Key 和 Value。新位置用 Q 与可见位置的 K 做点积并缩放，再经 softmax 得到权重，对 V 加权求和。[Attention Is All You Need 第 3.2 节](https://arxiv.org/html/1706.03762v7#S3.SS2)
+单头先将隐藏向量线性投影为 Q/K/V；Q 与可见 K 点积、缩放、softmax 后，加权组合 V。[论文第 3.2 节](https://arxiv.org/html/1706.03762v7#S3.SS2)
 
 可以先按下面这段伪代码读公式：
 
@@ -69,17 +69,17 @@ attentionOutput = weightedSum(weights, visibleValues);
 Attention(q, K, V) = softmax(q Kᵀ / √d) V
 ```
 
-这里 `d` 是 Q/K 的向量维度。因果约束通过只保留允许读取的 K/V，或在 softmax 前屏蔽不可见位置来实现。
+`d` 是 Q/K 维度；因果约束可限制 K/V 范围，或在 softmax 前屏蔽不可见位置。
 
 </details>
 
 ## 因果约束让旧位置保持有效
 
-**因果**在这里表示：计算一个位置时，只能读取自己和前面的位置。**mask** 就是把不允许读取的位置挡住。
+**因果**：只读自身与前面的位置；**mask**：屏蔽不允许读取的位置。
 
 [![因果可见矩阵：A 只看 A，B 看 A/B，C 看 A/B/C，D 看 A/B/C/D；未来位置被遮挡](../../site/public/diagrams/kv-cache/07-causal-mask.svg)](../../site/public/diagrams/kv-cache/07-causal-mask.svg)
 
-先只看 A 那一行：末尾加了 D，A 仍然看不见 D。所以 A 不需要因为新增的未来内容改变旧计算。这个关系在每一层成立，历史 K/V 才能被复用。
+末尾加 D 后，A 仍看不见 D，无需改变旧计算；每层都成立才可复用历史 K/V。
 
 <details>
 <summary>因果可见范围</summary>
@@ -93,9 +93,9 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 
 </details>
 
-追加 D 后，A/B/C 在每一层仍然只能读取原来的前缀。因此在模型、位置和计算配置保持一致的推理中，它们的表示与 K/V 可以继续使用。这个性质逐层成立，是缓存的依据。[Hugging Face 缓存原理](https://huggingface.co/docs/transformers/en/cache_explanation)
+追加 D 不改 A/B/C 各层可见前缀；模型、位置与配置一致时，旧表示和 K/V 仍有效。[缓存原理](https://huggingface.co/docs/transformers/en/cache_explanation)
 
-若把 B 改成 X，C 的 token 和位置虽然相同，但它能读到的前缀改变了，深层表示也可能改变。这与上一节累计和的失效方向一致；模型里的每层状态依赖其可见上下文。
+B 改成 X 时，C 的 token、位置未变，可见前缀却变了，深层状态仍可能失效，方向与累计和相同。
 
 ## Prefill 和 Decode 怎么衔接
 
@@ -116,9 +116,9 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 
 </details>
 
-**选出了 D，和已经计算了 D 的 K/V，是两个时刻。** D 在下一次作为模型输入被处理时，才加入缓存。理解这个顺序，有助于阅读生成循环中的输入长度和缓存长度。
+<mark class="caution">选出 D 不等于已缓存 D 的 K/V</mark>；下一步把 D 作为输入处理后才缓存。
 
-新位置 D 需要自己的 Q/K/V。历史 K/V 被复用，D 的 Q 仍需与当前可见的全部 K 计算注意力，再组合 V。历史 Q 属于此前位置的查询，下一位置读取上下文时使用的是它自己的 Q，因此常规 KV 缓存保留的是 K/V。[Hugging Face 缓存更新过程](https://huggingface.co/docs/transformers/en/cache_explanation#attention-matrices)
+D 新算自己的 Q/K/V，再用 Q 读取全部可见 K、组合 V。历史 Q 属于旧查询，新位置不用它，所以常规缓存只保留 K/V。[缓存更新](https://huggingface.co/docs/transformers/en/cache_explanation#attention-matrices)
 
 **旧 K/V 留下，新位置用自己的 Q 读取它们。**
 
@@ -130,12 +130,12 @@ Attention(q, K, V) = softmax(q Kᵀ / √d) V
 node docs/kv-cache/labs/attention-cache.mjs
 ```
 
-先只看「处理新 token D」一行：新算的 K/V 从 8 组变成 2 组；QK 点积仍有 8 次。**这里省下了历史位置的重复计算，读取历史状态的工作仍然存在。**
+查“新 token D”：新算 K/V 从 8 组降为 2 组，QK 点积仍有 8 次。省重算，不省历史读取。
 
 <details>
 <summary>实验范围、函数入口和完整计数</summary>
 
-实验采用固定的二维向量、两层单头 Attention、残差和简单位置输入。它对给定的 token 流计算隐藏向量；完整模型中的分词、训练、归一化、MLP 和词表采样不在这个小模型里。
+实验使用固定二维向量、两层单头、残差与简单位置输入；不包含分词、训练、归一化、MLP 或词表采样。
 
 读代码时沿这三个函数走：
 
@@ -151,11 +151,11 @@ node docs/kv-cache/labs/attention-cache.mjs
 | 追加 D | 8 | 2 | 20 | 8 |
 | 将 B 改为 X 后重算后缀 | 8 | 6 | 20 | 18 |
 
-脚本逐步断言两条路径误差小于 `1e-12`。首次输入为了便于观察而按 token 执行，真实 Prefill 可以利用并行计算；这里的计数用于说明工作量，不能换算成真实模型的加速倍数。
+两路径误差须小于 `1e-12`。实验首次输入逐 token 执行，真实 Prefill 可并行；计数不等于真实加速倍数。
 
 追加 D：两层各新算一组 K/V，共 2 组；每层 Q 读取 4 个 K，共 8 次点积。
 
-第三行先把每层缓存截到共同前缀 A，再处理 X/C/D。实验还确认，同一位置的 C 在前缀改变后，第二层 K 确实改变了。只按当前 token ID 保存和查找深层 K/V，会丢失这种上下文依赖。
+第三行各层截到共同前缀 A，再处理 X/C/D；C 的第二层 K 随前缀改变。只按 token ID 查深层 K/V 会漏掉此依赖。
 
 </details>
 
@@ -166,7 +166,7 @@ node docs/kv-cache/labs/attention-cache.mjs
 
 ## 估算常规 KV 缓存的内存
 
-对于每层都有完整 K/V、K/V 头维度相同的常规 MHA/GQA，可从张量元素数量估算有效数据大小：
+各层保存完整 K/V、头维度相同的常规 MHA/GQA，可按元素数估算：
 
 ```text
 字节数 = 2 × B × L × T × H_kv × D × s
@@ -180,15 +180,15 @@ D     每个头的向量维度
 s     每个元素的字节数
 ```
 
-这是对常规按层 K/V 张量形状的元素计数；张量通常可按 `[B, H_kv, T, D]` 理解。[Hugging Face 缓存存储结构](https://huggingface.co/docs/transformers/en/cache_explanation#cache-storage-implementation)
+每层通常按 `[B, H_kv, T, D]` 计元素。[存储结构](https://huggingface.co/docs/transformers/en/cache_explanation#cache-storage-implementation)
 
-取一个假设配置：`B=1`、`L=32`、`T=4096`、`H_kv=8`、`D=128`，每个元素 2 字节，得到 `536,870,912` 字节，即 **512 MiB**。相同结构下，长度翻倍或序列数量翻倍，有效 KV 数据也翻倍。
+假设 `B=1`、`L=32`、`T=4096`、`H_kv=8`、`D=128`、每元素 2 字节，得 `536,870,912` 字节，即 **512 MiB**。同结构下长度或序列数翻倍，数据也翻倍。
 
-这个数值只统计 KV 元素。模型权重、临时张量、内存分配和预留容量需要另外计算；JavaScript 实验的对象与 `Number` 也不采用这里的内存布局。
+此数只含 KV 元素；权重、临时张量、分配和预留另计。JS 对象与 `Number` 也不是该布局。
 
 GQA 让一组 Query 头共享 K/V 头，因此估算时使用 `H_kv`，不能直接拿 Query 头数代入。[GQA 原始论文](https://arxiv.org/abs/2305.13245)
 
-采用滑动窗口的层可以限制历史缓存长度；静态预分配和量化缓存也有各自的容量与速度取舍。遇到这些结构时，应按实际缓存布局重算。[Hugging Face 缓存策略](https://huggingface.co/docs/transformers/en/kv_cache)
+滑窗限制历史长度，静态预分配、量化各有容量与速度取舍，须按实际布局重算。[缓存策略](https://huggingface.co/docs/transformers/en/kv_cache)
 
 </details>
 

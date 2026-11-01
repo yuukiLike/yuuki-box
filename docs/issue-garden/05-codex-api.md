@@ -1,8 +1,8 @@
 # 用 OpenAI API 跑通一次 Issue 到 PR
 
-**在 GitHub runner 中用官方 Codex Action 修一个小问题，再由独立 job 验证和发布草稿 PR。** 这条路线使用 OpenAI API，不需要创建 Codex Cloud 环境，也不使用 ChatGPT 登录态额度。
+**官方 Codex Action 修改，<mark class="key">独立 job 验证</mark>并发布草稿 PR。** 使用 OpenAI API，不使用 Cloud 环境或 ChatGPT 登录态额度。
 
-先按[并行实验总览](../codex-cloud/05-issue-to-pr.md)准备 `for-job` 的共同基线、独立 Issue 与允许修改范围。本页示例只处理 codec 和对应单测，不包含定时扫描、独立 AI 审查、跨任务返修或自动合并。官方 Action 负责运行 Codex；任务快照、检查与 PR 发布由下面的工作流连接。[OpenAI Docs](https://learn.chatgpt.com/docs/github-action)
+按[并行实验总览](../codex-cloud/05-issue-to-pr.md)准备 `for-job` 基线、Issue 和范围。只处理 codec 与单测；不含定时、独立 AI review、持续返修或自动合并。 [OpenAI Docs](https://learn.chatgpt.com/docs/github-action)
 
 ## 配置 API 与仓库
 
@@ -13,13 +13,13 @@
 | Secret | `OPENAI_API_KEY` | 你准备给本次实验使用的项目 API key |
 | Variable | `CODEX_MODEL` | 该项目实际可用的 Codex 模型 ID，参照官方模型说明与账号权限 |
 
-密钥只放 Actions Secret。先看[极简费用注意事项](../codex-cloud/05-issue-to-pr.md#openai-api-先确认费用来源)：API 用量与订阅额度分别计算，订阅赠额不适用于通过 API key 使用 Codex。
+密钥只放 Actions Secret；[费用与赠额范围](../codex-cloud/05-issue-to-pr.md#openai-api-先确认费用来源)另行核对。
 
 为试验 Issue 添加 `ai-ready` 和 `ai-route-api`。仓库需允许 Actions 创建 PR；组织策略与分支保护仍然生效。[GitHub Actions 仓库设置](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository)
 
 ## 保存单次任务工作流
 
-在**目标 `for-job` 测试仓库**创建 `.github/workflows/codex-api-issue.yml`，保存以下完整示例。配置通过 `workflow_dispatch` 手动触发；同一 Issue 使用固定分支和 concurrency group，已有本路线 PR 时在调用模型前停止。
+在 **`for-job` 测试仓库**创建 `.github/workflows/codex-api-issue.yml`。手动触发，同 Issue 固定分支和并发组；已有本路线 PR 时在调用模型前停止。
 
 ```yaml
 name: Codex API issue experiment
@@ -226,31 +226,31 @@ jobs:
             --title "[api] Fix issue #$ISSUE_NUMBER" --body-file "$RUNNER_TEMP/pr-body.md"
 ```
 
-示例基于官方“生成补丁 → 单独 job 发布”模式，增加了独立验证和本次实验范围检查。模型运行的 job 没有仓库写权限；验证 job 没有 API key；发布 job 不执行候选代码。[OpenAI Docs 的完整模式](https://learn.chatgpt.com/docs/non-interactive-mode#example-autofix-ci-failures-in-github-actions)
+采用官方“补丁 → 独立 job 发布”模式，增加验证与范围检查。模型 job 无仓库写权限，验证 job 无 API key，发布 job 不执行候选代码。 [OpenAI Docs 的完整模式](https://learn.chatgpt.com/docs/non-interactive-mode#example-autofix-ci-failures-in-github-actions)
 
-`ALLOWED_FILES` 是这轮实验的发布范围，不能替代独立审查。它允许修改测试文件，所以仍要检查新断言是否验证原问题、有没有删减现有断言。示例的 Action、setup 和 artifact 版本是教程选择；正式长期使用时固定并记录经检查的提交版本。
+`ALLOWED_FILES` 只限发布范围；仍要审查测试断言是否有效、是否被删减。长期使用时固定经核对的 Action 提交版本。
 
 ## 运行第一轮
 
-先将配置提交到默认分支，让 Actions 出现手动入口；再让 `experiment/base` 指向包含同一配置、依赖和测试的共同提交，并固定该分支。不要把本机尚未推送的 SHA 填进去。
+配置推到默认分支；固定含同一配置、依赖、测试的 `experiment/base`，使用已推送的完整 SHA。
 
-在 **Actions → Codex API issue experiment → Run workflow** 中填写本路线 Issue 编号与共同基线 SHA。也可在目标仓库执行，先把 `123` 换成实际编号：
+在 **Actions → Codex API issue experiment → Run workflow** 填 Issue 编号与基线 SHA，或替换下列 `123` 后执行：
 
 ```bash
 BASE_SHA=$(git rev-parse experiment/base)
 gh workflow run codex-api-issue.yml -f issue_number=123 -f base_sha="$BASE_SHA"
 ```
 
-依次检查 `generate`、`verify`、`publish`。只有有补丁且独立验证成功，才会发布 PR；没有修改时不创建空 PR，仍可从 `run-report` 查看已保存的任务和模型报告。模型失败、范围越界或验证失败时结合 Actions 日志定位；没有生成报告的步骤保留相应缺口，不把任务标成解决。已有同路线 PR 时，手动检查该 PR，不删除记录后反复重新调用。
+依次查 `generate`、`verify`、`publish`。有补丁且验证成功才建 PR；无修改看 `run-report`。失败查日志，已有 PR 则检查原交付，不删记录反复调用。
 
-PR 的目标是固定的 `experiment/base`。发布前确认它仍指向输入的 SHA；若比较期间移动了基线，停止本轮并重新记录三条路线的共同版本。`Refs` 只关联实验 Issue，比较结束前不自动关闭任务。
+PR 指向固定的 `experiment/base`；发布前 SHA 必须与输入相同，基线变化则停止重记。`Refs` 只关联、不自动关闭 Issue。
 
 ## 核对 PR 和停止任务
 
-从 PR 找到 base/head、补丁摘要和 Actions 链接，检查实际 `verify` 日志。验证的是“基线加该补丁”的代码；合并前仍需核对 PR 最终 head 的必需检查与审查。当前用 `GITHUB_TOKEN` 创建或更新 PR，相关 `pull_request` CI 会处于待批准状态，需要有写权限的人点击 **Approve workflows to run**；单纯由该 token 推送触发的 `push` 工作流不会运行。以后若要自动触发这段 CI，可按官方说明改用合适的 GitHub App token，保留必需检查与分支保护。[GitHub 的工作流触发规则](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)
+核对 PR 的 base/head、补丁和 `verify` 日志；合并前检查最终 head。`GITHUB_TOKEN` 创建的 PR CI 需批准，该 token 的推送不触发 `push` 工作流；无人批准链需合适的 GitHub App token。 [GitHub 的工作流触发规则](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)
 
-相关改动需要浏览器时，按 [for-job 项目教程](../codex-cloud/03-for-job.md)增加所选回归，不把这里的构建和单测写成视觉验收。这个例子也没有独立 AI review；那一项按[持续自动化的步骤](../codex-cloud/05-issue-to-pr.md#从一次交付走到持续自动化)另接。
+浏览器回归按 [for-job 教程](../codex-cloud/03-for-job.md)补做；独立 AI review 按[持续自动化](../codex-cloud/05-issue-to-pr.md#从一次交付走到持续自动化)另接。
 
-每次启动最多一次 Codex Action，job 有时间上限，但没有实现总费用硬上限。停止当前执行用 Actions 的 **Cancel workflow**；取消不会撤销已创建的提交或 PR。比较时先记录失败、返修与费用，再决定下一次调用。
+每次最多一次 Codex Action，无总费用硬上限。**Cancel workflow** 可停止执行，但不撤销提交或 PR；记录结果与用量后再决定重跑。
 
 **另一条 API 路线：[用 Agentic Workflows 编译同类任务 →](06-agentic-workflows.md)**。

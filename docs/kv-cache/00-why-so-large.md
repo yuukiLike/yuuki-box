@@ -2,13 +2,13 @@
 
 [前端基础](../frontend-foundations/README.md) · [KV 专题](README.md) · [浏览器容量实验](../../site/src/pages/labs/kv-memory.astro)
 
-**位置数 × 层数 × K/V 头数，让小向量累积成大缓存。** 不熟悉 K/V 时先读[Attention 图解](02-attention-and-kv.md)。
+<mark class="key">位置数 × 层数 × K/V 头数</mark>，让小向量累积成大缓存。K/V 入门见[Attention 图解](02-attention-and-kv.md)。
 
 ## 先想一份前端的派生数据
 
-原文很短，解析树、布局或解码像素仍可能很大；中间结果有自己的表示。
+原文短，解析树、布局或解码像素仍可能很大。
 
-模型同样把 token 转成数值表示，再逐层处理。K/V 缓存保存了供后续 Attention 使用的中间向量。它通过保留这些状态，避免每次从历史输入重新计算。[Hugging Face 缓存原理](https://huggingface.co/docs/transformers/en/cache_explanation)
+模型逐层处理 token 的数值表示，缓存 K/V 中间向量，避免每步重算历史。[缓存原理](https://huggingface.co/docs/transformers/en/cache_explanation)
 
 ## 从一个位置算到整段上下文
 
@@ -18,7 +18,7 @@
 
 [![假设配置中，一组 K/V 为 512 B，乘 8 个头为 4 KiB，乘 32 层为每位置 128 KiB，再乘 4096 个位置为 512 MiB](../../site/public/diagrams/kv-cache/09-memory-stack.svg)](../../site/public/diagrams/kv-cache/09-memory-stack.svg)
 
-图里使用二进制单位：`1 KiB = 1024 B`，`1 MiB = 1024 KiB`。B 是字节。「每个数 2 字节」是这个假设配置的精度选择，不能直接套到 JavaScript 普通数组上。
+单位为 `1 KiB = 1024 B`、`1 MiB = 1024 KiB`，B 是字节。每数 2 字节是假设精度，不能套到 JavaScript 普通数组。
 
 **其他条件不变，保存的位置翻倍，KV 有效数据就翻倍。**
 
@@ -34,30 +34,30 @@
 | 一条序列的 4096 个位置 | `128 KiB × 4096` | 512 MiB |
 | 四条独立序列，各 4096 个位置 | `512 MiB × 4` | 2 GiB |
 
-这是对假设张量形状的元素计数，排除了共享、分配预留、模型权重与其他工作内存。常规 K/V 可按每层 `[序列数, K/V 头数, 已缓存长度, 每头维度]` 理解。[Hugging Face 缓存存储结构](https://huggingface.co/docs/transformers/en/cache_explanation#cache-storage-implementation)
+以上只数假设张量元素，不含共享、预留、权重及工作内存。常规 K/V 每层形状为 `[序列数, K/V 头数, 已缓存长度, 每头维度]`。[存储结构](https://huggingface.co/docs/transformers/en/cache_explanation#cache-storage-implementation)
 
 </details>
 
-打开[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro)，每次只改一个参数。先把 token 数翻倍，再把 K/V 头数减半，观察两个变化是否抵消。
+打开[内存计算器](../../site/src/pages/labs/kv-memory.astro)，先将 token 翻倍，再将 K/V 头减半，观察能否抵消。
 
 <details class="qa" id="为什么要在每层保存">
 <summary>为什么每层都要保存？</summary>
 
-每层使用自己的计算规则，深层向量还包含前面层的处理结果。第一层 K/V 不能替代其他层；类似原文、解析树和布局属于不同阶段。[Transformer 论文](https://arxiv.org/html/1706.03762v7#S3.SS2)
+各层计算不同，深层还包含前层结果；第一层 K/V 不能替代其他层。[Transformer 论文](https://arxiv.org/html/1706.03762v7#S3.SS2)
 
 </details>
 
 <details class="qa" id="为什么重复出现同一个词还可能需要新的-kv">
 <summary>同一个词，为什么还要新算 KV？</summary>
 
-token 相同，位置和前缀也可能不同，深层表示因此改变。运行[两层实验](labs/attention-cache.mjs)：把 `A B` 改成 `A X`，C 的第二层 K 也会变化。
+token 相同，位置或前缀不同仍会改变深层表示。[两层实验](labs/attention-cache.mjs)把 `A B` 改为 `A X`，C 的第二层 K 也变。
 
 </details>
 
 <details class="qa" id="为什么不只保留原文">
 <summary>为什么不只保留原文？</summary>
 
-只留原文也能重算，但每步都要重复历史计算。KV 用空间换计算；新 Query 仍需读取历史 K/V。[计算过程](02-attention-and-kv.md)
+只留原文就要每步重算历史；KV 用空间换计算，<mark class="caution">新 Query 仍读取历史 K/V</mark>。[计算过程](02-attention-and-kv.md)
 
 </details>
 

@@ -196,6 +196,22 @@ h1#_top { font-weight: 650; line-height: 1.45; letter-spacing: -.025em; }
 .content-panel:first-child { padding-top: 1.25rem; padding-bottom: .5rem; }
 .content-panel + .content-panel { border-top: 0; padding-top: .5rem; }
 .sl-markdown-content { line-height: 1.85; }
+.sl-markdown-content mark {
+  --highlight-color: var(--topic-emerald);
+  color: var(--highlight-color);
+  background: color-mix(in srgb, var(--highlight-color) 9%, transparent);
+  padding: .02em .12em;
+  border-radius: .12em;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--highlight-color) 70%, transparent);
+  text-decoration-thickness: .09em;
+  text-underline-offset: .2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.sl-markdown-content mark.caution { --highlight-color: var(--topic-gold); }
+.sl-markdown-content mark :is(strong, code) { color: inherit; }
 .sl-markdown-content :is(h2, h3, h4) { letter-spacing: -.02em; }
 .sl-markdown-content h2 { font-size: 1.4rem; line-height: 1.6; }
 .sl-markdown-content h3 { font-size: 1.1rem; line-height: 1.7; }

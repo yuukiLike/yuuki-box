@@ -2,17 +2,17 @@
 
 [上一课](01-user-journey.md) · [目录](README.md) · [下一课：Apple WeatherKit](03-apple-weatherkit.md)
 
-**这一课的目标：让 Codex 拿到由 Supabase 签发、专门用于天气服务的 access token。**
+让 Codex 取得<mark class="key">专用于天气服务的 access token</mark>。
 
-先用独立的练习项目。这一课包含数据库与 Auth 配置步骤，复制到已有项目之前，应先核对现有 RLS、OAuth 客户端和 Access Token Hook，不能覆盖它们。
+先用独立项目；迁入已有项目时保留现有 RLS、OAuth 客户端和 Token Hook。
 
 [![用户 token 只发天气服务，Apple token 只发 WeatherKit，私钥留在服务端](../../../site/public/diagrams/weather-mcp/token-boundaries.svg)](../../../site/public/diagrams/weather-mcp/token-boundaries.svg)
 
-本课只准备图中上半条链。后端为 Apple 签名是下一课的事情；不要用“都有 Bearer”判断凭证可以互换。
+本课只做用户授权；Apple 签名留到下一课，两套 Bearer 不能互换。
 
 ## 1. 记下三个地址
 
-这里的值都是占位符，请换成你的项目。Supabase 默认项目域名足够完成第一次练习，不必先配置自定义域名。
+占位符换成实际项目，首次可直接用 Supabase 默认域名。
 
 | 名称 | 示例 |
 | --- | --- |
@@ -20,7 +20,7 @@
 | `WEATHER_MCP_URL` | `https://YOUR_PROJECT_REF.supabase.co/functions/v1/weather-mcp` |
 | 登录同意页 | `https://weather.example.com/oauth/consent` |
 
-`WEATHER_MCP_URL` 在 token 的 `aud`、MCP 资源元数据和 Codex 配置中必须一致，连末尾斜杠也保持一致。授权服务器的 issuer 则是 `SUPABASE_URL + /auth/v1`。
+token `aud`、资源元数据、Codex 的 `WEATHER_MCP_URL` 必须完全一致；issuer 为 `SUPABASE_URL + /auth/v1`。
 
 ## 2. 开启 OAuth Server
 
@@ -32,7 +32,7 @@
 4. 把 Authorization Path 设为 `/oauth/consent`。
 5. 检查 JWT Signing Keys，使用 **ES256 或 RS256 非对称签名**。本教程后端用 JWKS 验证签名，不接受旧 HS256 项目密钥。
 
-动态注册是“给客户端登记身份与回调地址”，不等于给用户批准访问。用户仍然需要登录和同意。发布后要允许用户撤销授权，并检查注册的客户端；已有固定接入方也可改用预注册客户端。[Supabase MCP 认证](https://supabase.com/docs/guides/auth/oauth-server/mcp-authentication)
+动态注册只登记客户端与回调，不批准用户访问。仍需登录、同意、撤销入口和客户端检查；固定接入方可预注册。[Supabase MCP 认证](https://supabase.com/docs/guides/auth/oauth-server/mcp-authentication)
 
 先访问公开的发现文档：
 
@@ -40,19 +40,19 @@
 https://YOUR_PROJECT_REF.supabase.co/.well-known/oauth-authorization-server/auth/v1
 ```
 
-应能看到授权、token、注册等端点，以及 PKCE 支持。这里只读取公开配置，不应出现你的 access token 或私钥。[OAuth Server 设置](https://supabase.com/docs/guides/auth/oauth-server/getting-started)
+应有授权、token、注册端点与 PKCE 支持，不应泄露 token 或私钥。[OAuth Server 设置](https://supabase.com/docs/guides/auth/oauth-server/getting-started)
 
 ## 3. 明确一个 Supabase 的限制
 
-**截至本教程整理日，Supabase OAuth Server 支持 `openid`、`email`、`profile`、`phone`，尚不支持自定义 OAuth scopes。**
+整理时支持 `openid`、`email`、`profile`、`phone`，<mark class="caution">尚不支持自定义 OAuth scopes</mark>。
 
-因此前面讨论中的 `weather:read` 只是概念示例，本教程不把它填进 Codex 的 OAuth scopes。这里申请 `openid`，天气使用资格单独保存在数据库里。
+`weather:read` 只是概念；本课申请 `openid`，天气资格另存数据库。
 
-Supabase OAuth access token 包含 `client_id`，但普通用户 RLS 不会自动变成“仅允许查询天气”。本例的业务表不对 `anon` / `authenticated` 直接开放；Edge Function 验证 token 后，只通过限定的数据库查询与 RPC 使用它们。[Scopes 与数据访问边界](https://supabase.com/docs/guides/auth/oauth-server/oauth-flows#available-scopes)、[OAuth 与 RLS](https://supabase.com/docs/guides/auth/oauth-server/token-security)
+OAuth token 带 `client_id`，RLS 却不会自动限制为天气。业务表不对 `anon` / `authenticated` 开放，只允许验证后的 Edge Function 固定查询/RPC。[Scopes 与数据访问边界](https://supabase.com/docs/guides/auth/oauth-server/oauth-flows#available-scopes)、[OAuth 与 RLS](https://supabase.com/docs/guides/auth/oauth-server/token-security)
 
 ## 4. 建立使用资格与原子额度检查
 
-在你的天气工程里新建 Supabase migration，把下面 SQL 放进去。两个表只存资格与每日调用次数，不存 Apple 天气原始数据。
+在天气工程创建 migration；两表只存资格和日调用次数，不存原始天气。
 
 `supabase/migrations/202610260001_weather_access.sql`：
 
@@ -124,15 +124,15 @@ values ('替换为真实用户UUID', true, 20)
 on conflict (user_id) do update set enabled = true, daily_limit = 20;
 ```
 
-这个 SQL 中的 UUID 是管理员操作；工具调用参数中不允许出现可任意填写的 `user_id`。服务器要从验证后的 token `sub` 取用户 ID。
+UUID 由管理员配置；调用方不能传 `user_id`，身份只取验证后的 token `sub`。
 
-这里的限额按 UTC 日期重置，统计**查询尝试次数**。即使 Apple 请求失败，该次也计入额度，防止失败重试无限消耗上游。它是教学用的用户额度，不是 Apple 全账号月额度，也不能替代网关限流。
+按 UTC 日期计查询尝试，Apple 失败也扣次数；这是用户额度，不等于 Apple 月额度或网关限流。
 
 ## 5. 把 token 限定给天气 MCP
 
-MCP 要求服务端验证 token 是签发给自己使用的。不能因为签名正确，就接受这个 Supabase 项目里的所有登录 token。
+签名正确仍需检查 audience，不能接受项目内所有登录 token。
 
-下面的 Hook 适用于**只有天气 OAuth 用途的独立练习项目**：存在 `client_id` 的 OAuth token 使用天气服务 audience；普通网站登录 token 保持原样。
+Hook 仅用于独立天气项目：有 `client_id` 的 token 改为天气 audience，普通登录 token 不变。
 
 `supabase/migrations/202610260002_weather_token_hook.sql`：
 
@@ -164,15 +164,15 @@ revoke execute on function public.weather_access_token_hook(jsonb)
   from public, anon, authenticated;
 ```
 
-替换项目地址，执行 migration，然后在 **Authentication → Hooks → Custom Access Token Hook** 中选择这个函数。保留原有必需 claims；不要删除 `sub`、`role`、`exp` 等字段。[Access Token Hook 输入输出](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
+替换地址、执行 migration，在 **Authentication → Hooks → Custom Access Token Hook** 选该函数；保留 `sub`、`role`、`exp` 等必需 claims。[Access Token Hook 输入输出](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook)
 
-**已有项目不能直接对所有 `client_id` 改 audience。** 应把条件改成你登记的天气客户端 ID 白名单，并把条件合并到现有 Hook。动态登记但尚未加入白名单的客户端应连接失败，而不是放宽后端 audience 检查。其他业务客户端仍使用各自的 audience。[按客户端定制 token](https://supabase.com/docs/guides/auth/oauth-server/token-security)
+已有项目只为白名单天气客户端改 audience，并合入现有 Hook；新注册但未入白名单的客户端应失败，不能放宽检查。[按客户端定制 token](https://supabase.com/docs/guides/auth/oauth-server/token-security)
 
-本教程后端使用服务器凭证访问上述专用表，不把这个定向 OAuth token 当成一个通用 Supabase 数据库会话转发。后端的 `service_role` 会绕过 RLS，所以身份校验和固定查询路径都必须保留。
+后端用服务器凭证访问专用表，不转发用户 OAuth token 当数据库会话；`service_role` 绕过 RLS，必须保留身份校验与固定查询。
 
 ## 6. 做一个真正的登录同意页
 
-Supabase 提供 OAuth 协议端点，但**同意页面需要你提供**。在你已有的前端路由 `/oauth/consent` 中放置以下元素：
+Supabase 提供协议端点；你在 `/oauth/consent` 提供登录同意页：
 
 ```html
 <main>
@@ -192,7 +192,7 @@ Supabase 提供 OAuth 协议端点，但**同意页面需要你提供**。在你
 </main>
 ```
 
-下面是配套浏览器 TypeScript，使用前端构建工具编译；`@supabase/supabase-js` 应使用包含 OAuth Server API 的 v2 版本。publishable key 可放前端，`service_role` 和 Apple 私钥不能放这里。
+浏览器代码需构建工具和含 OAuth Server API 的 Supabase JS v2；前端只能放 publishable key，不能放 `service_role` 或 Apple 私钥。
 
 `web/consent.ts`：
 
@@ -269,10 +269,10 @@ element('deny').addEventListener('click', () => { void decide(false); });
 await loadConsent();
 ```
 
-在 Auth Redirect URLs 中允许你的 `/oauth/consent` 回跳路径及其授权请求参数。首次练习先用相同浏览器完成邮件登录；生产环境应接入你已有的登录回调处理，并验证跨设备邮件、邮件限流和错误状态。[Supabase 邮件登录](https://supabase.com/docs/guides/auth/auth-email-passwordless)、[同意页 API](https://supabase.com/docs/guides/auth/oauth-server/getting-started#build-your-authorization-ui)
+Auth Redirect URLs 允许 `/oauth/consent` 及授权参数。首轮同浏览器完成邮件登录；生产环境另验现有回调、跨设备邮件、限流与错误。[Supabase 邮件登录](https://supabase.com/docs/guides/auth/auth-email-passwordless)、[同意页 API](https://supabase.com/docs/guides/auth/oauth-server/getting-started#build-your-authorization-ui)
 
-不要把 URL 里任意传入的 `redirect` 当作回调直接跳转。这里仅使用 Supabase 验证授权请求后返回的 `redirect_url`；显示请求方名称和 scope 时用 `textContent`。
+仅跳转 Supabase 验证后返回的 `redirect_url`，不用任意 URL 参数；名称和 scope 用 `textContent` 显示。
 
 ## 到这里就停
 
-核对三个结果：公开发现文档能打开；测试用户在 `weather_access` 里已启用；Hook 只修改你打算修改的 OAuth token。完整登录与 audience 验证留到[第五课](05-connect-and-verify.md)，现在先准备 [Apple 的凭证](03-apple-weatherkit.md)。
+核对发现文档、测试用户资格和 Hook 范围；[第五课](05-connect-and-verify.md) 验证登录与 audience，下一步准备 [Apple 凭证](03-apple-weatherkit.md)。

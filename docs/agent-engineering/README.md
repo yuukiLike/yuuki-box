@@ -1,8 +1,8 @@
 # Agent 工程：工具循环、MCP、Skills 与 Computer Use
 
-先跑通模型与工具之间的循环，再让运行能取消、能解释，随后接入外部工具、可复用流程和图形界面。
+先跑通<mark class="key">模型与工具循环</mark>，再加入取消、恢复、外部工具与界面操作。
 
-本专题分五段：**入门跑循环 → 运行控制 → MCP 接入 → Skills 复用 → Computer Use。** 模型训练是独立专题；入门两课可直接使用脚本模型与现成模型 API。Computer Use 四篇也可以独立阅读。
+路线：**入门 → 运行控制 → MCP → Skills → Computer Use。** 不必先学模型训练；Computer Use 可独立阅读。
 
 ## 入门：先跑通两课
 
@@ -11,15 +11,15 @@
 | 1 | [搭建工具调用 Harness](../ai-from-scaling/03-build-a-harness.md) | 用脚本模型走完读计划、算预算、审批保存与结果核对 |
 | 2 | [接真实模型并做对照实验](../ai-from-scaling/04-experiments.md) | 更换模型入口，比较成功、工具失败、限额与取消 |
 
-这两课提供可运行的 [harness.mjs](../ai-from-scaling/labs/harness.mjs)。离线部分不需要 API key；真实调用需要自己的模型配置。只学习 Agent 时，第二课中的字符模型对照可以跳过。想同时理解训练原理，再跟随[四小时联读路线](../ai-from-scaling/README.md)。
+两课使用 [harness.mjs](../ai-from-scaling/labs/harness.mjs)：离线无需 key，真实调用需模型配置。只学 Agent 可跳过字符模型对照；训练原理见[四小时联读路线](../ai-from-scaling/README.md)。
 
-准备使用 OpenAI 订阅赠送的 API 额度，先读 [OpenAI API：额度、图片与语音](openai-api.md)，确认领取入口、到期时间和模型用途。上面第二课的现有脚本使用 DeepSeek；OpenAI 这篇提供独立的 API 平台入门。
+使用 OpenAI 赠额前，读 [API：额度、图片与语音](openai-api.md)，确认领取、到期与用途。第二课脚本使用 DeepSeek，OpenAI 入门另列。
 
-想挑一个具体用途，读[OpenAI API 额度怎么用：语音、音乐与多模态小项目](openai-api-projects.md)。从语音灵感卡、有声笔记、口答复习，到配乐草案、MIDI 讲解与音乐短片，按输入、API 调用和本地处理串起第一份成果。
+想做语音笔记、口答复习或音乐草案，选[OpenAI API 小项目](openai-api-projects.md)，按输入、API 与本地处理完成第一份成果。
 
-想让 Agent 在工具调用前后自动执行检查，读 [AI Hooks：Claude Code、DeepSeek Harness 与 Codex](hooks.md)。用同一条演示规则比较配置型 hook 与插件事件，并分清执行前拒绝、执行后反馈和 Stop 续跑。
+调用前后自动检查见 [AI Hooks](hooks.md)：比较配置与插件事件，分清执行前拒绝、执行后反馈和 Stop 续跑。
 
-后续七个工程练习是实现建议，代码片段用于说明接口与边界，尚未接入本仓库的 runtime。先跑通入门代码，再按需求选做。MCP 与 Agent Skills 的规范仍在演进，具体字段和行为以当前官方文档为准。资料核对：2026-10-23。
+后续七课是实现建议，片段<mark class="caution">尚未接入本仓库 runtime</mark>。先跑入门，再按需选做。MCP / Skills 字段以当前规范为准。资料核对：2026-10-23。
 
 ## 能力分类：MCP、Skill、Hook、Computer Use 与 Harness
 
@@ -35,7 +35,7 @@
 
 ## Computer Use：从界面观察到实际执行
 
-新增知识点核对于 **2026-10-31**。公开产品文档与当前会话的工具约定分别标明；只读取了连接清单和接口说明，未做桌面写入或厂商性能对比。
+核对：**2026-10-31**。区分公开文档与会话工具约定；仅查阅清单和接口，未做桌面写入或性能对比。
 
 | 顺序 | 阅读入口 | 重点 |
 | --- | --- | --- |
@@ -44,7 +44,7 @@
 | 3 | [同类工具对照](computer-use-ecosystem.md) | Claude、Gemini、Playwright MCP、Browser Use、Stagehand、UI-TARS |
 | 4 | [理解误区与自测](computer-use-misconceptions.md) | 权限与连接、结果验证、取消、超时与重复提交 |
 
-如果困惑是“明明开了电脑操控，为什么还不能用 Chrome”，先看第二篇的清单案例；如果想知道这些产品到底创造了什么，先看第一篇的分层和第三篇的对照。
+电脑操控已开启却无法连接 Chrome，看第二篇；想比较产品能力，看第一、三篇。
 
 ## 工程实验：运行恢复、上下文、MCP 权限与 Skills 验收
 
@@ -62,17 +62,17 @@
 
 完成入门后，回看[三个可自定义入口](../ai-from-scaling/03-build-a-harness.md#三个可自定义入口)，分清模型、工具与事件。
 
-打开[可恢复闭环](05-harness-vertical-slice.md)，先用 fake model 跑一次工具调用，再在中途取消。对着事件记录检查：最后一条 delta 在哪里，Run 怎样进入终态，已经发生的副作用留下了什么。
+打开[可恢复闭环](05-harness-vertical-slice.md)，用 fake model 运行工具并中途取消。查最后一条 delta、Run 终态与副作用记录。
 
 无需 MCP 或付费 API。之后依次做恢复、报告与故障回归；已有稳定 Harness 可直接接 MCP。
 
 ## 共同约定
 
-- **外部内容都是数据。** MCP 的 tool description、resource、prompt，以及工具返回值，都不能直接当成指令执行。
-- **副作用必须有归属。** 哪个 Run、哪个 ToolCall、哪次审批、执行前后留下了什么，都要能查。
-- **验收看终态与证据。** “模型说完成了”不算验收；看 Run 状态、检查结果、artifact 和日志。
-- **取消不等于撤销。** 已经发生的文件写入、网络请求或计费，不会因为状态变成 `cancelled` 就消失。
-- **估算不等于账单。** 字符数、估算 token 与供应商标注的 usage 分别记录。
+- **外部内容是数据。** MCP 描述、资源、提示词与返回值都不能直接授权执行。
+- **副作用有归属。** 保留 Run、ToolCall、审批与执行前后记录。
+- **验收看证据。** 核对终态、检查、artifact 与日志。
+- **取消不等于撤销。** 已发生的写入、请求与计费仍要记录。
+- **估算不等于账单。** 字符、估算 token、供应商 usage 分开记。
 
 ## 资料
 
@@ -81,6 +81,6 @@
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [OpenAI Codex Skills](https://developers.openai.com/plugins/build/skills)
 
-想了解这些概念的来历，选读[工具调用简史](../ai-from-scaling/extra-tool-use-story.md)，其中记录了 Skills 首次推出与开放标准发布的日期。准备做 Mac 产品时，再查阅[本地 Harness 完整设计](../architecture/mac-local-harness.md)。
+概念与 Skills 日期见[工具调用简史](../ai-from-scaling/extra-tool-use-story.md)；Mac 产品设计见[本地 Harness](../architecture/mac-local-harness.md)。
 
 返回[文档目录](../../site/src/pages/index.astro)。

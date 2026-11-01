@@ -21,12 +21,12 @@ const foundByIndex = byId.get(2);
 console.log(foundByScan === foundByIndex); // true
 ```
 
-第一条路径按顺序检查条件；第二条先为整批数据建立索引，再按 ID 查找。是否值得建索引，取决于数据规模、查询次数和后续更新成本。[浏览器实验](../../site/src/pages/labs/lookup.astro)可以直接观察这两条路径。
+前者顺序检查，后者先建索引再按 ID 查找。<mark class="key">规模、查询次数与更新成本</mark>决定是否值得建表。[浏览器实验](../../site/src/pages/labs/lookup.astro)可对照。
 
 <details class="qa">
 <summary>Map 查找一定是 O(1) 吗？</summary>
 
-规范只要求平均访问时间为次线性，没有保证所有引擎、所有操作都是严格常数时间。[MDN Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+规范仅要求平均访问时间为次线性，不保证严格常数时间。[MDN Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
 </details>
 
@@ -38,7 +38,7 @@ console.log(foundByScan === foundByIndex); // true
 | Map | 动态索引、经常增删、需要直接读取 `size` 的键值集合 | 索引构建、键的相等规则、容量与更新同步 |
 | WeakMap | 给已有对象附加跟随其生命周期的元数据 | 不能枚举所有条目，不能把它当作可观测容量的 LRU |
 
-普通对象的属性键使用字符串或 Symbol；Map 可以直接使用任意值作为键。对象类型的键按身份比较，两个字段相同的新对象也不是同一个键。[MDN Map 的对象比较](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#objects_vs._maps)
+Object 键为字符串或 Symbol；Map 可用任意值。对象键按身份比较，同字段的新对象仍是不同键。[对象比较](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#objects_vs._maps)
 
 ```js
 const key = { id: 1 };
@@ -47,9 +47,9 @@ console.log(cache.get(key));       // 已解析
 console.log(cache.get({ id: 1 })); // undefined
 ```
 
-WeakMap 的弱键不会仅因这层关联而阻止对象键被回收；它支持对象以及符合条件的 Symbol 键。对象何时回收由运行时决定，WeakMap 也没有枚举条目和查询 `size` 的接口。[MDN WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)
+WeakMap 支持对象和符合条件的 Symbol 弱键，不因关联阻止对象回收；回收时机由运行时决定。它不能枚举或查询 `size`。[MDN WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)
 
-例如可以给消息对象关联一次解析结果；当应用不再引用这个消息对象时，弱关联允许相关生命周期结束。若需要明确限制“最多保留 128 项”，应使用可管理的缓存结构。
+可为消息对象附加解析结果；对象不再被引用时允许回收。要明确限制 128 项，改用可管理容量的结构。
 
 ## 同样叫 key 作用可能不同
 
@@ -61,13 +61,13 @@ WeakMap 的弱键不会仅因这层关联而阻止对象键被回收；它支持
 | 计算缓存的键 | 判断能否复用一次派生计算 |
 | Attention 的 Key | 与 Query 做数值运算，计算读取 Value 的权重 |
 
-React 列表 key 要在同级列表项间唯一，并保持稳定；用它建立项与组件的对应关系。它不会为你建立业务 Map，也不能代替对计算依赖的检查。[React 列表 key](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key)
+React key 要在同级间唯一、稳定，用于对应列表项与组件；它不建立业务 Map，也不检查计算依赖。[React key](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key)
 
-模型里的 Key 是向量，具体计算见[因果 Attention](../kv-cache/02-attention-and-kv.md)。前端字典查找与 Attention 读取可以分别从身份和依赖来理解。
+Attention 的 Key 是向量，见[因果 Attention](../kv-cache/02-attention-and-kv.md)，不是字典键。
 
 ## 缓存键需要表达哪个版本的结果
 
-`message.id` 能定位同一条消息，但流式消息的文字还在变化。如果缓存的是解析结果，可以明确记录内容版本和解析器版本：
+流式消息 `id` 不变，正文仍在变化；缓存解析结果时记录内容与解析器版本：
 
 ```js
 const cacheKey = JSON.stringify([
@@ -77,11 +77,11 @@ const cacheKey = JSON.stringify([
 ]);
 ```
 
-这里用固定数组表达一组明确依赖。具体项目可以直接保存对象与版本，或者分层索引；重点是让“这是同一条消息”和“这次结果仍然有效”分别可判断。
+数组表达固定依赖；也可保存对象与版本或分层索引。分开判断消息身份与结果有效性。
 
 ## 用 Map 理解一个有容量的缓存
 
-Map 保留插入顺序，可以用删除再插入表达最近一次访问。下面是一份只展示容量与访问顺序的教学片段：
+Map 保留插入顺序，删除再插入可记录最近访问。以下只演示容量与访问顺序：
 
 ```js
 const cache = new Map();
@@ -101,7 +101,7 @@ function read(key) {
 }
 ```
 
-这个片段可以表达最近最少使用的淘汰顺序；内容版本、错误结果是否缓存，以及何时整体清空，仍是调用方需要明确的规则。淘汰解决空间上限，失效解决结果正确性，两者应一起考虑。
+片段表达 LRU 顺序；版本、错误缓存和整体清空仍由调用方规定。<mark class="caution">淘汰管容量，失效管正确性</mark>。
 
 <details class="qa">
 <summary>容量 2，写 A、B，读 A，再写 C，淘汰谁？</summary>
