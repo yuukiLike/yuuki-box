@@ -6,13 +6,22 @@
 
 使用 Node.js 22.22 或更高版本，以及项目声明的 pnpm 11.14。
 
-在仓库根目录执行：
+已经下载仓库时，在 `yuuki-box` 的上一级目录执行；终端已在仓库根目录时，从 `pnpm i` 开始：
 
 ```bash
+cd yuuki-box
 pnpm i
-pnpm --dir site i
 pnpm docs:dev
 ```
+
+<details>
+<summary>命令说明：pnpm i 与 --frozen-lockfile</summary>
+
+`cd yuuki-box` 进入仓库根目录。`pnpm i` 是 `pnpm install` 的简写，会安装当前工作区（包括 `site`）的依赖；`pnpm docs:dev` 启动文档站。
+
+需要严格按照已有锁文件安装时，使用 `pnpm i --frozen-lockfile`。`pnpm-lock.yaml` 记录依赖的具体版本；这个参数要求保持锁文件不变，缺失或与 `package.json` 的依赖声明不一致时会报错停止。[pnpm 官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
+
+</details>
 
 终端会打印实际预览地址，默认是 `http://127.0.0.1:4321/`。生产构建后的全文搜索可以用 preview 查看：
 
@@ -160,7 +169,7 @@ pnpm --dir site exec wrangler pages dev dist
 
 首页保留完整列表目录，MCP 入门仍排第一。顶栏用一个小历史图标“回到上次阅读”，有已选任务且当前位于其他页面时才显示，悬停时显示章节名称。所有专题保持可见。
 
-全部文档与三个交互实验共用 `LearningGuide`，每篇在 `src/lib/learning-guide.mjs` 中分别定义一个起步动作与一个停止点。点击开始后，当前浏览器只保存这一项任务；临时打开其他章节不会替换它，离开时记录最近到达的章节标题，页面提供返回入口。点击“这一步完成了”后显示可停止的提示，不自动接着分配下一章。它与下方的正文浏览进度分开记录，当前任务不参与 Apple 阅读同步；存储不可用时当前页仍能操作，并提示无法跨页接续。前后篇导航也默认收起。
+全部文档与三个交互实验共用 `LearningGuide`，每篇在 `src/lib/learning-guide.mjs` 中分别定义一个起步动作与一个停止点。点击开始后，当前浏览器只保存这一项任务；临时打开其他章节不会替换它，离开时记录最近到达的章节标题，页面提供返回入口。点击“这一步完成了”后显示可停止的提示，不自动接着分配下一章。它与下方的正文浏览进度分开记录，当前任务不参与 Apple 阅读同步；存储不可用时当前页仍能操作，并提示无法跨页接续。前后篇导航始终显示在正文底部，专注阅读模式下也可直接翻页。
 
 首页与侧栏最底部保留“附录”分组。[OpenAI API 模型分类与选型](../docs/appendix/openai-api-models.md)按用途提供速查、模型分析与停用计划，作为课程之后的查阅材料。
 

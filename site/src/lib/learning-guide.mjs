@@ -3,7 +3,7 @@
 export const learningSteps = {
   'guide': ['打开 MCP 第一课，先看它要保存哪一份记录。', '能说出这次要保存什么、怎样取回，就先停。', 'MCP 入门'],
   'ai-from-scaling': ['只看 MCP 练习的两种入口，先选 Codex 接入。', '知道第一课的文件和入口就停，四小时路线留到以后。'],
-  'ai-from-scaling/00-codex-mcp': ['在终端确认 Node、pnpm 和 Codex 可以运行，再做接入命令。', '在 /mcp 中看到 yuuki-continue 已连接，就完成这一小步。'],
+  'ai-from-scaling/00-codex-mcp': ['先看 MCP 全景，对上 Codex、Client 和「接着做」Server 的位置。', '能说清谁连接、谁读写文件，就完成这一小步。', '先看 MCP 全景'],
   'ai-from-scaling/00-minimal-mcp': ['在准备好依赖后，只运行一次本页的 demo。', '找到 tools/list、saved=true 和 found=true 三处输出就停。', '1. 运行：先看到完整结果'],
   'ai-from-scaling/01-understand-models': ['只读第一个例子，找出模型在猜什么。', '能用一句话解释“预测下一个 token”就停。'],
   'ai-from-scaling/02-train-a-model': ['按第一节运行一次训练前的字符模型。', '保存一段训练前的输出就停，先不调整参数。'],

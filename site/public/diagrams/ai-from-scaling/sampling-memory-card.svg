@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="472" viewBox="0 0 480 472" role="img" aria-labelledby="title desc">
-  <title id="title">每日一眼：temperature 与 top_p</title>
-  <desc id="desc">温度调概率，Top-P 划范围。temperature 叫温度，三组柱状图比较同一组候选词“猫、狗、鸟”被抽中的概率：温度 0.2 时约为 92%、7%、1%，温度 0.7 时约为 57%、28%、15%，温度 1.0 时为 50%、30%、20%。低温突出第一名，高温让其他词也更有机会；所有候选词都保留。数值仅为示意，0.2 稳、0.7 日常、1.0 多样是经验起点。top_p 叫核采样阈值，绿色圆框圈住保留的候选；按概率从高到低累加，达到 p 就截住；1.0 不裁剪，0.95 或 0.9 缩小候选范围。一次先调一个，另一个保持默认，并确认模型支持。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="616" viewBox="0 0 480 616" role="img" aria-labelledby="title desc">
+  <title id="title">采样参数：temperature 改概率，top_p 筛候选</title>
+  <desc id="desc">模型每一步按概率抽取下一个 token。假设候选只有猫、狗、鸟，固定同一段输入：温度为 1 时概率为 50%、30%、20%；温度降到 0.7 时约为 57%、28%、15%，降到 0.2 时约为 92%、7%、1%。温度越低，越偏向原本概率最高的候选。top_p 沿用温度为 1 的概率，设为 0.8：从高到低保留猫和狗，累计概率达到 80%，排除鸟；再按原比例重新计算为猫 62.5%、狗 37.5%，从两者中抽一个。本例中 top_p 为 0.5 时只留猫，为 1 时三者都保留。图中温度用于对照，概率按同一基准计算。模型支持时，先只调一个参数，另一个保持默认。</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #21314b; }
     .eyebrow { font-size: 12px; fill: #52627a; }
@@ -17,23 +17,23 @@
     .nucleus { fill: #255b40; }
   </style>
 
-  <rect x="0.5" y="0.5" width="479" height="471" rx="16" fill="#ffffff" stroke="#c9d1df"/>
-  <text class="eyebrow" x="22" y="27">每日一眼 · 采样参数</text>
-  <text class="mnemonic" x="22" y="55">温度调概率，Top-P 划范围</text>
+  <rect x="0.5" y="0.5" width="479" height="615" rx="16" fill="#ffffff" stroke="#c9d1df"/>
+  <text class="eyebrow" x="22" y="27">生成文本 · 每一步抽取下一个 token</text>
+  <text class="mnemonic" x="22" y="55">温度改概率，top_p 筛候选</text>
 
-  <rect x="14" y="72" width="452" height="246" rx="10" fill="#edf2ff"/>
+  <rect x="14" y="72" width="452" height="272" rx="10" fill="#edf2ff"/>
   <text class="name temperature" x="28" y="98">temperature</text>
   <text class="meaning temperature" x="163" y="98">温度</text>
   <text class="caption" x="452" y="98" text-anchor="end">概率示意</text>
-  <text class="body" x="28" y="122">同一组候选词，柱高表示被抽中的概率</text>
+  <text class="body" x="28" y="122">假设下一步只可能输出“猫、狗、鸟”</text>
   <g fill="#ffffff">
     <rect x="28" y="136" width="134" height="150" rx="7"/>
     <rect x="173" y="136" width="134" height="150" rx="7"/>
     <rect x="318" y="136" width="134" height="150" rx="7"/>
   </g>
-  <text class="value temperature" x="43" y="159">0.2 稳</text>
-  <text class="value temperature" x="188" y="159">0.7 日常</text>
-  <text class="value temperature" x="333" y="159">1.0 多样</text>
+  <text class="value temperature" x="43" y="159">温度 0.2</text>
+  <text class="value temperature" x="188" y="159">温度 0.7</text>
+  <text class="value temperature" x="333" y="159">温度 1.0</text>
 
   <!-- 同一基准分布 0.5 / 0.3 / 0.2 按 p^(1/T) 归一化；柱高共用 70px = 100% 的刻度。 -->
   <g aria-hidden="true">
@@ -76,31 +76,21 @@
     <text x="385" y="266" style="fill: #bd682b">狗</text>
     <text x="422" y="266" style="fill: #8464b6">鸟</text>
   </g>
-  <text class="caption" x="28" y="307">低温突出第一名 → 高温让其他词也更有机会</text>
+  <text class="caption" x="28" y="307">温度越低，越偏向概率最高的“猫”</text>
+  <text class="caption" x="28" y="329">三组使用同一段输入，柱高表示抽中概率</text>
 
-  <g transform="translate(0 132)">
-  <rect x="14" y="196" width="452" height="108" rx="10" fill="#e6f4ed"/>
-  <text class="name nucleus" x="28" y="222">top_p</text>
-  <text class="meaning nucleus" x="93" y="222">核采样阈值</text>
-  <g aria-hidden="true">
-    <rect x="330" y="209" width="76" height="18" rx="9" fill="none" stroke="#397857"/>
-    <g fill="#397857">
-      <circle cx="343" cy="218" r="4"/>
-      <circle cx="359" cy="218" r="4"/>
-      <circle cx="375" cy="218" r="4"/>
-      <circle cx="391" cy="218" r="4"/>
-    </g>
-    <circle cx="423" cy="218" r="4" fill="#bac9c0"/>
-    <circle cx="439" cy="218" r="4" fill="#bac9c0"/>
-  </g>
-  <text class="body" x="28" y="247">按概率从高到低累加，达到 p 就截住</text>
-  <g fill="#ffffff">
-    <rect x="28" y="260" width="150" height="30" rx="7"/>
-    <rect x="190" y="260" width="262" height="30" rx="7"/>
-  </g>
-  <text class="value nucleus" x="43" y="281">1.0 不裁剪</text>
-  <text class="value nucleus" x="205" y="281">0.95 / 0.9 收窄候选</text>
-  </g>
+  <rect x="14" y="354" width="452" height="212" rx="10" fill="#e6f4ed"/>
+  <text class="name nucleus" x="28" y="382">top_p</text>
+  <text class="meaning nucleus" x="100" y="382">核采样：先筛选，再抽取</text>
+  <text class="body" x="28" y="408">沿用温度 1：猫 50%、狗 30%、鸟 20%</text>
+  <text class="body" x="28" y="431">设 top_p = 0.8，从高到低累加到 80%</text>
+  <rect x="28" y="444" width="280" height="44" rx="7" fill="#ffffff" stroke="#397857"/>
+  <text class="value nucleus" x="168" y="472" text-anchor="middle">猫 50% + 狗 30% = 80%</text>
+  <rect x="320" y="444" width="132" height="44" rx="7" fill="#ffffff"/>
+  <text class="body" x="386" y="472" text-anchor="middle">鸟 20% 排除</text>
+  <text class="caption" x="28" y="514">只在两者中抽一个：猫 62.5%，狗 37.5%</text>
+  <text class="caption" x="28" y="543">top_p = 0.5 只留猫；top_p = 1 三者都保留</text>
 
-  <text class="note" x="22" y="457">经验起点 · 一次先调一个 · 以模型支持为准</text>
+  <text class="note" x="22" y="586">温度取值用于对照，概率按同一基准计算。</text>
+  <text class="note" x="22" y="606">模型支持时，先只调一个参数，另一个保持默认。</text>
 </svg>

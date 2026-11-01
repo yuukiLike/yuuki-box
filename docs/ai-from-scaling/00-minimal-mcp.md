@@ -17,12 +17,24 @@
 
 ## 1. 运行：先看到完整结果
 
-**你来做：** 使用 Node.js 22.22 或更高版本、pnpm 11.14，在仓库根目录执行：
+**你来做：** 使用 Node.js 22.22 或更高版本、pnpm 11.14，先在仓库根目录进入示例：
 
 ```bash
-pnpm --dir examples/minimal-mcp install --frozen-lockfile
-pnpm --dir examples/minimal-mcp demo
+cd examples/minimal-mcp
+pnpm i --frozen-lockfile
+pnpm demo
 ```
+
+**后续终端命令默认在 `examples/minimal-mcp` 目录执行。** 接入 Claude Code 时会明确说明目录切换。
+
+<details class="qa">
+<summary>这些命令是什么意思？为什么加 --frozen-lockfile？</summary>
+
+`cd` 切换到示例目录；`pnpm i` 是 `pnpm install` 的简写，安装依赖；`pnpm demo` 运行示例定义的演示脚本，会先编译再演示工具调用。
+
+`pnpm-lock.yaml` 记录依赖的具体版本。`--frozen-lockfile` 要求按这份记录安装，保持锁文件不变；锁文件缺失或与 `package.json` 的依赖声明不一致时会报错停止。这样练习使用的是仓库记录的依赖版本。[pnpm 官方说明](https://pnpm.io/cli/install#--frozen-lockfile)
+
+</details>
 
 输出如下（省略启动日志与部分记录）：
 
@@ -91,7 +103,7 @@ next: '我改了这句话，重启后还能读到。',
 保存源码，再运行：
 
 ```bash
-pnpm --dir examples/minimal-mcp demo
+pnpm demo
 ```
 
 **你要看到：** `resume 返回的 Markdown` 中的对应内容变成：
@@ -108,7 +120,7 @@ pnpm --dir examples/minimal-mcp demo
 **你来做：** 运行：
 
 ```bash
-pnpm --dir examples/minimal-mcp demo --invalid
+pnpm demo --invalid
 ```
 
 项目名被改为 `../outside`，应出现参数错误并以非零状态退出。
@@ -216,12 +228,12 @@ try {
 
 读测试时，观察它怎样确认：坏输入没有写入文件、重启后仍能读回内容、保存一个项目不会覆盖另一个项目。测试验证的是可观察的行为，不能只检查是否打印了成功日志。
 
-在仓库根目录运行已有检查：
+在示例目录运行已有检查：
 
 ```bash
-pnpm --dir examples/minimal-mcp typecheck
-pnpm --dir examples/minimal-mcp build
-pnpm --dir examples/minimal-mcp check
+pnpm typecheck
+pnpm build
+pnpm check
 ```
 
 分别检查类型、编译、运行完整检查。`check` 包含类型检查与测试；`demo/test` 自动先编译；`start` 只启动已有产物。
@@ -241,14 +253,16 @@ pnpm --dir examples/minimal-mcp check
 <details>
 <summary>接入 Claude Code</summary>
 
-如果已安装 Claude Code，可以在仓库根目录执行：
+如果已安装 Claude Code，在示例目录执行下面的命令。先记录 Node 和服务入口的绝对路径，再回到仓库根目录注册项目本地配置，最后返回示例目录：
 
 ```bash
-pnpm --dir examples/minimal-mcp build
+pnpm build
 MCP_NODE=$(command -v node)
-MCP_SERVER="$PWD/examples/minimal-mcp/dist/src/stdio.js"
+MCP_SERVER="$PWD/dist/src/stdio.js"
+cd ../..
 claude mcp add --transport stdio yuuki-continue -- "$MCP_NODE" "$MCP_SERVER"
 claude mcp get yuuki-continue
+cd examples/minimal-mcp
 ```
 
 这会注册项目本地配置；服务通过默认目录保存日常记录。随后在 Claude Code 的 `/mcp` 检查连接，试着说：
@@ -291,12 +305,12 @@ claude mcp get yuuki-continue
 <details class="qa" id="1-编写-mcp-时应该怎样调试">
 <summary>怎样调试 MCP？</summary>
 
-先用固定参数检查服务，再接模型。在仓库根目录执行：
+先用固定参数检查服务，再接模型。在示例目录执行：
 
 ```bash
-pnpm --dir examples/minimal-mcp check
-pnpm --dir examples/minimal-mcp demo
-pnpm --dir examples/minimal-mcp demo --invalid
+pnpm check
+pnpm demo
+pnpm demo --invalid
 ```
 
 前两条应通过；最后一条应因 `../outside` 被拒绝而非零退出。
@@ -304,13 +318,13 @@ pnpm --dir examples/minimal-mcp demo --invalid
 需要手动选工具、填参数时，用 [MCP Inspector](https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector)：
 
 ```bash
-pnpm --dir examples/minimal-mcp build
+pnpm build
 pnpm dlx @modelcontextprotocol/inspector --cli \
-  node examples/minimal-mcp/dist/src/stdio.js \
+  node dist/src/stdio.js \
   --method tools/list
 
 pnpm dlx @modelcontextprotocol/inspector --cli \
-  node examples/minimal-mcp/dist/src/stdio.js \
+  node dist/src/stdio.js \
   --method tools/call --tool-name resume \
   --tool-arg project=inspector-demo
 ```
