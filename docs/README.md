@@ -23,7 +23,6 @@
 | 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
 | **MCP 入门** | [最简 demo](ai-from-scaling/00-minimal-mcp.md) → [记录服务](ai-from-scaling/00-codex-mcp.md) → [天气](ai-from-scaling/07-weatherkit-mcp.md) | 工具调用、本地读写与外部查询 |
-| **RAG 入门** | [先找资料，再回答](rag/README.md) → [更新资料](rag/01-freshness.md) | 政策依据、来源与更新后的回答 |
 | **MCP 案例** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 一个兴趣项目及工具产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 凭证、登录、权限与天气查询 |
 | **Issue 自动化与 AI 协作** | [完整方案](issue-garden/README.md) | 任务、审查、通知与多 AI 演进 |
@@ -49,10 +48,6 @@
 最简演示后的[客户端深入实验](ai-from-scaling/00-minimal-mcp.md)与 [TypeScript](ai-from-scaling/00-minimal-mcp.md#typescript-stack)均为选读。
 
 [工具调用简史](ai-from-scaling/extra-tool-use-story.md)串联 ReAct、Plugins、Code Interpreter、函数调用、MCP、Skills，仅选读。
-
-### RAG
-
-[RAG（检索增强生成）](rag/README.md)：查询一条政策并核对引用 → [更新政策、检查时效](rag/01-freshness.md) → 换成实际资料。两节沿用同一案例。
 
 <div class="heading-alias" id="mcp-项目实战" aria-hidden="true"></div>
 
@@ -216,3 +211,7 @@ Memory 仅选读，不列课程或前置。
 ## 附录
 
 [模型附录](appendix/openai-api-models.md)按用途列价格、用法、来源，旧型、弃用和停用分列；核对于 2026-11-01。
+
+<div class="heading-alias" id="rag" aria-hidden="true"></div>
+
+[RAG：检索、引用与资料更新](rag/README.md)为选读，以一条政策完成查询与更新练习。

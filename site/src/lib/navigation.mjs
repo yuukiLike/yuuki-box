@@ -46,16 +46,6 @@ export const navigation = [
     ],
   },
   {
-    label: 'RAG 入门',
-    color: 'sky',
-    description: '检索增强生成：用同一条政策练习查询、引用与资料更新，再换成实际资料。',
-    tags: [topic('最简 RAG', 'rag'), topic('资料更新', 'rag/01-freshness'), '引用来源'],
-    items: [
-      page('rag', 'RAG：先找资料，再回答', ['RAG', '本地文本', '来源核对']),
-      page('rag/01-freshness', 'RAG：更新资料与核对时效', ['资料更新', '生效日期', '版本核对']),
-    ],
-  },
-  {
     label: 'MCP 案例',
     color: 'emerald',
     description: '天气主线之后的扩展案例：Blender 建模、GitHub 修复验证与选修音乐工作台。',
@@ -409,6 +399,7 @@ export const navigation = [
     tags: [topic('模型分类', 'appendix/openai-api-models#类型速查'), topic('语音与图片', 'appendix/openai-api-models'), topic('停用计划', 'appendix/openai-api-models#已弃用但尚未停用')],
     items: [
       page('appendix/openai-api-models', '附录 OpenAI API 模型分类与选型', ['OpenAI API', '模型选型', '分类查阅']),
+      page('rag', 'RAG：检索、引用与资料更新', ['选读']),
     ],
   },
 ];
