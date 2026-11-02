@@ -48,10 +48,11 @@ export const navigation = [
   {
     label: 'RAG 入门',
     color: 'sky',
-    description: '检索本地资料，把相关片段与问题交给现有模型，核对带来源的回答。关键词检索起步。',
-    tags: [topic('最简 RAG', 'rag'), '资料检索', '引用来源'],
+    description: '先检索资料并核对引用，再更新一条政策，检查版本与生效日期。关键词检索起步。',
+    tags: [topic('最简 RAG', 'rag'), topic('资料更新', 'rag/01-freshness'), '引用来源'],
     items: [
       page('rag', 'RAG：检索资料后再回答', ['RAG', '本地文本', '来源核对']),
+      page('rag/01-freshness', 'RAG：更新资料与核对时效', ['资料更新', '生效日期', '版本核对']),
     ],
   },
   {

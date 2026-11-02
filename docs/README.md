@@ -52,7 +52,7 @@
 
 ### RAG
 
-[RAG 最简教程](rag/README.md)：本地检索 → 资料交给现有模型 → 核对引用。检索与模型回答分两步完成。
+[RAG 最简教程](rag/README.md)：本地检索 → 模型回答 → 核对引用；再做[资料更新与时效核对](rag/01-freshness.md)，应对新政策、规则变化与内部资料。
 
 <div class="heading-alias" id="mcp-项目实战" aria-hidden="true"></div>
 
