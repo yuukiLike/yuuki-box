@@ -17,7 +17,7 @@ next: false
 
 ```text
 人工定义 Issue 与验收条件
-  → 手动或事件触发 → 领取 ai-ready 任务
+  → 手动或授权事件触发 → 领取已批准内容的 ai-ready 任务
   → 独立分支编码 → 同一提交的测试与独立审查
   → 不通过：原任务返修，最多两轮
   → 草稿 PR → 人工验收与合并 → 邮件通知
@@ -26,6 +26,10 @@ next: false
 GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提交改动，独立审查者只报告问题。合并决定由维护者作出。
 
 [![Issue 领取与去重、修改与独立验证、草稿 PR 交付](../../site/public/diagrams/issue-garden/handoff.svg)](../../site/public/diagrams/issue-garden/handoff.svg)
+
+“扫描所有 Issue”与“执行哪些 Issue”分别决定。可以每天扫描指定仓库的全部未关闭问题，再从 `ai-ready` 中选择已批准内容的小问题；已经有待验收 PR 的任务跳过。批准者、任务内容和代码基线都需要明确，详见[接单规则与安全检查](03-night-shift.md#什么样的-issue-可以接单)。
+
+这是一种建议的首版规则。API 示例仍为手动实验，任务摘要和独立检查解决部分已复现的问题；尚未完成面向不可信代码的远端隔离验收。
 
 <div class="heading-alias" id="task" aria-hidden="true"></div>
 <div class="heading-alias" id="写-issue-可以很短" aria-hidden="true"></div>
@@ -40,7 +44,7 @@ GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提�
 验收：目标页正确，附近链接仍可用。
 ```
 
-- **领取：** 维护者添加 `ai-ready`；已有运行任务或待验 PR 时跳过。同一任务只有一个编码者。
+- **领取：** 维护者批准任务内容与代码基线，`ai-ready` 只作筛选；已有运行任务或待验 PR 时跳过。同一任务只有一个编码者。
 - **隔离：** 每个任务独立目录、分支，记录 Issue、base/head SHA 与检查命令。
 - **交付：** 保留 diff、复现前后结果、审查结论与待验项；新提交重新检查。
 - **停止：** 无法复现、缺少条件、超时、额度不足或返修超限时，记录缺口并转人工。
@@ -56,7 +60,7 @@ GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提�
 | 阶段 | 完成条件 |
 | --- | --- |
 | 1 · 扫描 | Actions 生成 Issue 清单；无需 AI key |
-| 2 · 单次交付 | 手动选择一个 `ai-ready` Issue，修复、验证并交草稿 PR |
+| 2 · 单次交付 | 手动批准一个 `ai-ready` Issue 的具体内容，修复、验证并交草稿 PR |
 | 3 · 审查返修 | 独立会话核对最终 head；确认的问题最多返修两轮 |
 | 4 · 事件与通知 | 接标签或定时触发；新 Issue、新 PR、合并均收到 Outlook 邮件 |
 | 5 · 多 AI | 先用两个假 Worker 演练，再接真实 Agent |
@@ -100,7 +104,7 @@ B 只读提意见，区分已确认问题与证据不足的猜测；没有发现
 | GitHub 机制 | 用途 |
 | --- | --- |
 | `workflow_dispatch` | 首轮手动运行 |
-| `issues: labeled` | 添加 `ai-ready` 后领取 |
+| `issues: labeled` | 添加标签后核对授权者、批准内容与基线，再领取 |
 | `issue_comment` | 授权人的命令评论触发返修 |
 | `schedule` | 定时扫描；实际启动时仍检查截止时间 |
 | `repository_dispatch` | 聊天或监控等外部系统触发 Actions |
@@ -199,16 +203,14 @@ Webhook 接入口，EventBus 发通知，数据库保存任务事实。<mark cla
 <details>
 <summary>执行时查阅具体配置</summary>
 
-| 需要实现 | 教程 |
-| --- | --- |
-| 只读扫描 | [扫描工作流与分页](01-first-scan.md) |
-| 手动修复 | [任务指令与交付模板](02-first-repair.md) |
-| 持续处理 | [调度、截止时间、权限与发布](03-night-shift.md) |
-| Dot / Cloud | [连接、环境与任务指令](04-dot-shift.md) |
-| Codex Action | [API、独立验证与草稿 PR](05-codex-api.md) |
-| Agentic Workflows | [编译、safe outputs 与后续 CI](06-agentic-workflows.md) |
-| 同基线比较 | [三路线并行实验](../codex-cloud/05-issue-to-pr.md) |
-| 本地运行控制 | [Harness 状态与恢复](../architecture/mac-local-harness.md) |
+- **只读扫描**：[扫描工作流与分页](01-first-scan.md)。
+- **手动修复**：[任务指令与交付模板](02-first-repair.md)。
+- **持续处理**：[调度、截止时间、权限与发布](03-night-shift.md)。
+- **Dot / Cloud**：[连接、环境与任务指令](04-dot-shift.md)。
+- **Codex Action**：[API、独立验证与草稿 PR](05-codex-api.md)。
+- **Agentic Workflows**：[编译、safe outputs 与后续 CI](06-agentic-workflows.md)。
+- **同基线比较**：[三路线并行实验](../codex-cloud/05-issue-to-pr.md)。
+- **本地运行控制**：[Harness 状态与恢复](../architecture/mac-local-harness.md)。
 
 </details>
 

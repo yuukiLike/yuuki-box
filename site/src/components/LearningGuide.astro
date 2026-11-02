@@ -59,7 +59,7 @@ const step = learningStep(id);
     const done = panel.querySelector<HTMLButtonElement>('[data-learning-done]')!;
     const summary = panel.querySelector<HTMLElement>('[data-learning-summary]')!;
     start.href = learningUrl(panel.dataset.lessonId!, active ? focus?.anchor : undefined);
-    start.textContent = finished ? '回看' : active ? '继续' : '开始';
+    start.textContent = finished ? '回看' : '开始';
     summary.textContent = finished ? '本章已完成' : active ? '当前任务' : '本章目标';
     done.hidden = !active || Boolean(finished);
   }
@@ -119,6 +119,7 @@ const step = learningStep(id);
   .learning-resume:hover, .learning-resume:focus-visible { color: var(--sl-color-accent-high); background: var(--yuuki-hover); }
   .learning-guide { margin-top: .75rem; padding: .55rem .8rem; border: 1px solid var(--yuuki-border); border-radius: .5rem; background: transparent; }
   .learning-guide > summary { color: var(--sl-color-gray-3); font-size: .8rem; cursor: pointer; }
+  .learning-guide > summary:focus-visible { outline: 2px solid var(--sl-color-text-accent); outline-offset: .25rem; }
   .learning-guide[open] > summary { color: var(--sl-color-accent-high); }
   .learning-guide [hidden] { display: none !important; }
   .learning-guide p { margin: 0; }
