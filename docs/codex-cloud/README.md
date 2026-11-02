@@ -27,7 +27,7 @@
 | [2 · 社区怎么用](02-community.md) | 三种有公开来源的做法，两张真实历史界面截图 |
 | [3 · for-job](03-for-job.md) | 准备已有 Web 项目，验证备份恢复与实际导出 |
 | [4 · agent-symphony](04-agent-symphony.md) | 验证事件处理、观察服务与浏览器回归，区分模拟和真实接入 |
-| [5 · Issue 到 PR 的并行实验](05-issue-to-pr.md) | 并行试 Dot / Cloud、Codex Action / API 与 Agentic Workflows / API |
+| [选读 · Issue 到 PR 的并行实验](05-issue-to-pr.md) | 并行试 Dot / Cloud、Codex Action / API 与 Agentic Workflows / API |
 
 产品规则核对：**2026-10-29**，新增项目见各页。正文为新版 Cloud；旧截图标为 Legacy，不混用缓存、联网或密钥规则。 [新版与 Legacy 的入口](https://learn.chatgpt.com/docs/environments/cloud-environments)
 
@@ -41,7 +41,7 @@
 
 首次按 `for-safe` 创建环境；其他项目各准备环境、先跑基线再改代码。
 
-自动交付看[并行实验](05-issue-to-pr.md)：固定验收条件，分别记录返修与用量。
+自动交付先读[Issue 完整方案](../issue-garden/README.md)；需要比较路线时，再做[并行实验](05-issue-to-pr.md)。
 
 <div class="heading-alias" id="先记三个词" aria-hidden="true"></div>
 

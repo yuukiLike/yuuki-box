@@ -25,7 +25,7 @@
 | **MCP 入门** | [最简 demo](ai-from-scaling/00-minimal-mcp.md) → [本地天气](ai-from-scaling/07-weatherkit-mcp.md) | 工具发现、调用与天气查询 |
 | **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 一个兴趣项目及工具产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 凭证、登录、权限与天气查询 |
-| **AI 协作** | [Side by Side · 任务协作](side-by-side/README.md) | Issue 自动化与已验证草稿 PR |
+| **Issue 自动化与 AI 协作** | [完整方案](issue-garden/README.md) | 任务、审查、通知与多 AI 演进 |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 字符模型、预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | KV 容量与前缀复用 |
 | **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | Harness、工具与界面自动化 |
@@ -63,15 +63,9 @@
 
 ### AI 协作
 
-[AI 协作](side-by-side/README.md)以 Side by Side 为主题，覆盖任务执行、独立审查、返修与持续交付。
-
 <span id="issue-工作流"></span>
 
-**优先 Issue 自动化。** [Issue 定时处理](issue-garden/README.md)依次做清单、手动修复，再连接选择、去重、验证与 PR；本仓库未启用。
-
-已有产品额度，按 [Dot 路线](issue-garden/04-dot-shift.md)连接 GitHub、准备 Cloud 环境，试一个 Issue。
-
-API 选 [Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issue-garden/06-agentic-workflows.md)；按[并行实验](codex-cloud/05-issue-to-pr.md)隔离任务、比较证据和用量，再接持续流程。
+[Issue 自动化完整方案](issue-garden/README.md)集中说明任务、路线与费用、独立审查、Outlook 通知和多 AI 演进；配置教程在文末选读。当前仍为方案，尚未启用自动化。
 
 <span id="模型基础与推理缓存"></span>
 
@@ -121,7 +115,7 @@ API 选 [Codex Action](issue-garden/05-codex-api.md)或 [Agentic Workflows](issu
 
 ### AI 探索（选读）
 
-[协作构想](ai-ideas/01-ideas-map.md)与[五个实验方向](ai-ideas/02-five-new-directions.md)保留脑暴、迁移建议，公开记录与本项目验证分列。
+[五个实验方向](ai-ideas/02-five-new-directions.md)保留故障驱动、自动实验、模拟验收、规格驱动与知识整理；公开记录与本项目验证分列。Issue 协作集中在前述完整方案。
 
 Memory 仅选读，不列课程或前置。
 

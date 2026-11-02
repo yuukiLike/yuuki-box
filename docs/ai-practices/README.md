@@ -34,7 +34,7 @@
 
 ## 把 Issue、修复、测试与审查串成工作流
 
-[构想地图](../ai-ideas/01-ideas-map.md)记录组合方式，本专题补充已有案例。
+[Issue 自动化完整方案](../issue-garden/README.md#workflow)集中说明组合流程，本专题保留公开案例。
 
 可以把几项实践接成一条流程：
 

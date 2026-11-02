@@ -135,4 +135,4 @@ AI 先用上下文补齐；只追问会改变复现或预期的缺失条件，�
 
 先做好复现和交付证据，后续按需接 CodeRabbit、[Issue 到 PR](02-issue-to-pr.md)或[故障诊断](03-error-to-fix.md)。
 
-返回[已有实践目录](README.md)或[构想地图](../ai-ideas/01-ideas-map.md)。
+返回[已有实践目录](README.md)或[Issue 完整方案](../issue-garden/README.md#review)。

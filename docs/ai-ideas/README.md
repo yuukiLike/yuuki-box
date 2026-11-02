@@ -2,12 +2,9 @@
 
 基于错误记录、评估指标或已验证经验，<mark class="key">先选一个做小实验</mark>。
 
-本组方案有公开来源，<mark class="caution">本项目接法仍是构想</mark>。实践入口：[Issue 定时处理](../issue-garden/README.md)，公开案例见[六种开发实践](../ai-practices/README.md)。
+本组方案有公开来源，<mark class="caution">本项目接法仍是构想</mark>。Issue 协作统一见[完整方案](../issue-garden/README.md)，公开案例见[六种开发实践](../ai-practices/README.md)。
 
-| 想做什么 | 入口 | 读完得到什么 |
-| --- | --- | --- |
-| 理解 Issue 定时处理与独立 AI 审查 | [协作构想与配套流程](01-ideas-map.md) | 任务交付、独立审查、验收与经验复用的关系 |
-| 按具体工作方式选择实验 | [故障驱动、自动实验、模拟验收、规格驱动与知识整理](02-five-new-directions.md) | Seer、autoresearch、StrongDM、Spec Kit 与 Letta 的来源、接法和小实验 |
+[五个实验方向](02-five-new-directions.md)说明 Seer、autoresearch、StrongDM、Spec Kit 与 Letta 的来源、接法和小实验。
 
 资料核对：2026-10-21；公开时间见正文，收益以实际任务验证。
 
@@ -27,7 +24,7 @@
 
 | 章节 | 内容状态 |
 | --- | --- |
-| [Issue 定时处理](../issue-garden/README.md) | 可以跟着做的教学与首版方案；尚未在本仓库启用定时工作流 |
+| [Issue 自动化完整方案](../issue-garden/README.md) | 集中说明流程与实施路线；尚未在本仓库启用自动化 |
 | [已落地的 AI 开发实践](../ai-practices/README.md) | 有公开 PR、团队记录或部署论文的六项实践 |
 | 本组 | 待验证的构想与探索方向 |
 

@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-Astro 与 Starlight 文档站，正文读取 `docs/`。MCP 主线为最简 demo → 本地天气 → 远程天气工程，其他案例后置，音乐为选修。模型、Agent 工程、通信、性能与语音按专题组织；AI 协作保留 Side by Side 名称，阅读同步独立说明开发与使用流程。
+Astro 与 Starlight 文档站，正文读取 `docs/`。MCP 主线为最简 demo → 本地天气 → 远程天气工程，其他案例后置，音乐为选修。模型、Agent 工程、通信、性能与语音按专题组织；Issue 与 AI 协作集中为单页完整方案，阅读同步独立说明开发与使用流程。
 
 ## 本地运行
 
@@ -161,7 +161,7 @@ pnpm --dir site exec wrangler pages dev dist
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。
 - `src/lib/navigation.mjs` 统一维护阅读顺序、具体标题、主题标签、专题颜色与总览描述；`astro.config.ts` 将其接入 Starlight，并监听导航文件触发配置重载。使用 TypeScript 配置让 Astro 经 Vite 重新加载导航依赖，避免开发服务只刷新正文标签却保留旧分组。首页、阅读页标题与页内大纲展示主题标签；侧栏使用同一阅读顺序，显示标题和阅读进度。浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
-- 导航先列最简 MCP demo 与本地天气，再列远程天气工程、其他案例。AI 协作保留 `docs/issue-garden/` 路由；音乐分组明确标为选修。模型、KV Cache、Harness、通信与性能各自组织，交互实验归入对应专题。
+- 导航先列最简 MCP demo 与本地天气，再列远程天气工程、其他案例。Issue 自动化以 `docs/issue-garden/README.md` 为唯一主文，配置与并行实验放在收起的选读分组；音乐明确标为选修。模型、KV Cache、Harness、通信与性能各自组织，交互实验归入对应专题。
 - 跨专题导读在首页介绍和侧栏顶部提供入口，专题卡片只列本专题内容。调整分组不移动已有 Markdown 文件和路由；正文中的前置要求、选读说明与下一步建议同步维护。
 - `README.md` 对应 `/guide/`，子目录的 `README.md` 对应该目录；其他 Markdown 文件名保留在路由中。
 
@@ -183,4 +183,4 @@ pnpm --dir site exec wrangler pages dev dist
 
 桌面左上角、站点名称旁有无边框的课程目录图标，独立控制原有左侧栏，展开后正文为其让出空间。目录默认收起，切换「专注阅读」或点击正文不会改变目录状态；再次点击图标或在目录内按 Esc 可收起。展开时聚焦当前章节，Esc 收起后焦点回到图标。目录状态不写入存储，页面跳转或跨过桌面断点时重置。专题分组默认收起，Starlight 自动展开当前页所在的分支；首页卡片仍可分别展开。侧栏链接和分组标题保持单行，过长时省略，悬停显示完整名称；部分课程使用单独的短导航名，首页及文章仍保留完整标题。
 
-不运行 JavaScript 时，章节仍可通过原生折叠控件展开。导航分类与源码路径分别维护：Issue 夜班教程位于 `docs/issue-garden/`，有公开使用记录的案例位于 `docs/ai-practices/`，Agent 工程实验位于 `docs/agent-engineering/`，头脑风暴构想位于 `docs/ai-ideas/`。正文保留各自的证据与验证状态；工作流示例保留在文档中，站点不会自动启用 GitHub 自动化。
+不运行 JavaScript 时，章节仍可通过原生折叠控件展开。Issue 流程、审查、通知与多 AI 设计集中在 `docs/issue-garden/README.md`；旧入口保留 URL，指向主文对应章节。具体配置与并行实验为选读，公开案例位于 `docs/ai-practices/`，五个探索方向位于 `docs/ai-ideas/`。文档示例不会自动启用 GitHub 工作流。

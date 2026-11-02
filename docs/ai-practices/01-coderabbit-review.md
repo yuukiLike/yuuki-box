@@ -25,7 +25,7 @@
              → 摘要与审查意见 → 作者核实、修正 → 检查与人工验收
 ```
 
-这对应[独立 AI 审查方案](../ai-ideas/01-ideas-map.md)：先评估现有服务的能力，再决定是否自建。
+这对应[独立 AI 审查方案](../issue-garden/README.md#review)：先评估现有服务的能力，再决定是否自建。
 
 [![先提取审查意见的触发条件，再复现或反证，最后决定是否采纳](../../site/public/diagrams/ai-practices/review-triage.svg)](../../site/public/diagrams/ai-practices/review-triage.svg)
 
@@ -43,4 +43,4 @@
 
 **<mark class="key">判断一条意见是否成立</mark>。** 无意见或两个 AI 同意，都不能替代原有检查。
 
-返回[实践目录](README.md)或[构想地图](../ai-ideas/01-ideas-map.md)。
+返回[实践目录](README.md)或[Issue 完整方案](../issue-garden/README.md#review)。
