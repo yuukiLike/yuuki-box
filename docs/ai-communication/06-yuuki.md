@@ -1,8 +1,8 @@
 # 第六章：AI 工作台的请求与工具执行
 
-[上一课](05-failure.md) · [目录](README.md)
+[HTTP 重连（选读）](03-sse-http.md) · [目录](README.md)
 
-只读代码，找到<mark class="key">请求、流式接收和工具执行</mark>；无需模型 Key。
+本篇为进阶源码阅读；先完成请求、SSE 与[取消、超时](05-failure.md)。只定位<mark class="key">请求、流式接收和工具执行</mark>，无需模型 Key。
 
 ## 看图
 

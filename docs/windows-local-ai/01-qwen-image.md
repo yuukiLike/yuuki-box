@@ -90,6 +90,14 @@ ComfyUI\models\
 | `UNETLoader`／Load Diffusion Model | `qwen_image_2.1_turbo_int8_convrot.safetensors`，`weight_dtype = default` |
 | `CLIPLoader`／Load CLIP | `qwen3vl_8b_w4a8.safetensors`，`type = qwen_image`，`device = default` |
 | `VAELoader`／Load VAE | `qwen_image_2.1_vae_bf16.safetensors` |
+
+其余参数沿用本课工作流，直接进入首次出图。
+
+<details>
+<summary>选读：模板参数与采样时间表</summary>
+
+| 节点 | 模板默认值 |
+| --- | --- |
 | `EmptyLatentImage`／Empty Latent Image | `width = 512`，`height = 512`，`batch_size = 1` |
 | `RandomNoise` | `noise_seed = 42`，生成后保持 `fixed` |
 | `CFGGuider` | `cfg = 1` |
@@ -103,6 +111,8 @@ ComfyUI\models\
 ```
 
 官方 Turbo 模型采用 8 步、CFG 1；本课保留其模板的采样设置。[Turbo 模型与采样说明](https://huggingface.co/Qwen/Qwen-Image-2.1-Turbo#sampling)
+
+</details>
 
 ## 5 · 生成第一张图片
 

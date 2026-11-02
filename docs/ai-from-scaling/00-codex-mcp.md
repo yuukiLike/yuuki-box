@@ -1,7 +1,7 @@
 ---
 next:
-  link: /ai-communication/weather-mcp/
-  label: 远程天气工程
+  link: /mcp-projects/
+  label: MCP 工具案例
 ---
 
 # Codex MCP：服务接入与记录保存
@@ -9,26 +9,6 @@ next:
 用「接着做」MCP <mark class="key">保存记录，换会话取回</mark>。
 
 按「接入 → 保存与取回 → 对照源码」完成，延伸资料在文末。
-
-<div class="heading-alias" id="先看-mcp-全景" aria-hidden="true"></div>
-
-## MCP 架构
-
-MCP 定义外部能力的连接方式：Codex 内置 Client，连接「接着做」Server。
-
-[![MCP 全景：Host 内置 Client，连接外部 Server；Codex、Zed、Warp、Raycast 均可接入 MCP](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
-
-点击图可放大；先对应三个角色：
-
-| 图里的角色 | 本课具体是谁 | 负责什么 |
-| --- | --- | --- |
-| Host：宿主应用 | Codex | 管理对话、模型、权限与工具调用 |
-| Client：连接组件 | Codex 内置的 MCP Client | 连接 Server、发现工具、发送调用并接收结果 |
-| Server：能力提供程序 | 示例「接着做」 | 提供保存与取回工具，实际读写 Markdown 文件 |
-
-模型提出调用，Codex 检查，Client 发送工具名和参数，Server 读写文件并返回结果。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
-
-**Codex 提供 Client，Server 实现工具并读写文件。** 其他 Host 的接入方式见[角色与平台说明](../ai-communication/04-mcp.md#先分清你hostclientserver)。
 
 ## 接入 Codex
 
@@ -85,6 +65,26 @@ codex mcp get yuuki-continue
 看到 `resume` 返回原文，这一步完成。
 
 同项目再次保存会替换整份记录；`resume` 只读取，不执行下一步。
+
+<div class="heading-alias" id="先看-mcp-全景" aria-hidden="true"></div>
+
+## MCP 架构
+
+MCP 定义外部能力的连接方式：Codex 内置 Client，连接「接着做」Server。
+
+[![MCP 全景：Host 内置 Client，连接外部 Server；Codex、Zed、Warp、Raycast 均可接入 MCP](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
+
+点击图可放大；先对应三个角色：
+
+| 图里的角色 | 本课具体是谁 | 负责什么 |
+| --- | --- | --- |
+| Host：宿主应用 | Codex | 管理对话、模型、权限与工具调用 |
+| Client：连接组件 | Codex 内置的 MCP Client | 连接 Server、发现工具、发送调用并接收结果 |
+| Server：能力提供程序 | 示例「接着做」 | 提供保存与取回工具，实际读写 Markdown 文件 |
+
+模型提出调用，Codex 检查，Client 发送工具名和参数，Server 读写文件并返回结果。[MCP 官方架构说明](https://modelcontextprotocol.io/docs/learn/architecture)
+
+**Codex 提供 Client，Server 实现工具并读写文件。** 其他 Host 的接入方式见[角色与平台说明](../ai-communication/04-mcp.md#先分清你hostclientserver)。
 
 ## 对照源码
 

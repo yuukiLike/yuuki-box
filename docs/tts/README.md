@@ -1,8 +1,8 @@
 # 语音交互：edge-tts 合成、Whisper 转写与 VAD 人声检测
 
-依次练习文字发声、录音转写与人声检测。
+先完成[TTS 最简练习](让-Yuuki-开口说第一句话.md)，再按需增加录音转写与人声检测。
 
-每项工具提供安装命令与两个用例；先用 edge-tts <mark class="key">听见第一句话</mark>。
+本页按文字 → 声音 → 录音转写 → 人声检测递进；<mark class="key">完成第一站即可停止</mark>。
 
 | 工具 / 源码 | 做什么 | 费用与联网 |
 |---|---|---|
@@ -58,6 +58,11 @@ edge-tts --voice zh-CN-XiaoxiaoNeural --file article.txt --write-media article.m
 ```
 
 得到 `article.mp3` 和 `article.srt`。[官方用法](https://github.com/rany2/edge-tts#usage)
+
+听到 `hello.mp3`，再按需生成字幕；录音输入部分为选读。
+
+<details>
+<summary>选读：录音转写、人声检测与组合验证</summary>
 
 ## 第二站 · whisper.cpp：把声音接回文字
 
@@ -137,5 +142,7 @@ PY
 ## 组合验证
 
 把 `hello.mp3` 转回文字，再打印人声时间；对照声音、转写和区间。接入工作台见[模型与语音基础](../architecture/ai-and-speech-foundation.md)。
+
+</details>
 
 资料核对：2026-10-14。已检查本机 Python/pip 和示例语法；安装、模型下载及实际语音效果尚未执行验证。

@@ -4,7 +4,7 @@
 
 **实现练习，尚未接入 runtime。** [shared/runtime](../../examples/shared/runtime/README.md) 已有 `list_files`、`read_file`、`write_note`；下文 MCP `ToolSource`、状态和图均待实现。
 
-**定位入口 → 接只读工具源 → 读取 → 中途断连。** 先学[运行状态与恢复](05-harness-vertical-slice.md)；连接过程不熟时，选修[客户端实验](../ai-from-scaling/00-minimal-mcp.md)。
+**定位入口 → 接只读工具源 → 读取 → 中途断连。** 前置为[Harness 入门](../ai-from-scaling/03-build-a-harness.md)中的工具校验、审批与取消；先接只读调用，再按[运行状态与恢复](05-harness-vertical-slice.md)补持久化与故障恢复。连接过程不熟时，选读[客户端实验](../ai-from-scaling/00-minimal-mcp.md)。
 
 <div class="heading-alias" id="先看正常返回与中途断连" aria-hidden="true"></div>
 

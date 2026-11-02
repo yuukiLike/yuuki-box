@@ -2,17 +2,7 @@
 
 使用 Mac <mark class="key">合成并播放中文</mark>，再替换输入文本。
 
-完整安装见[语音工具安装与用法](README.md)。
-
-本课使用 edge-tts 将文字合成为声音。
-
-| 顺序 | 仓库 | 能解决的真实问题 | 免费方式 |
-|---|---|---|---|
-| **本课** | [edge-tts](https://github.com/rany2/edge-tts) | 把文章、AI 回复读出来 | 在线使用，无需 API Key |
-| 下一步 | [whisper.cpp](https://github.com/ggml-org/whisper.cpp) | 把录音变成文字，做语音输入 | 下载模型后本地运行，适合 Mac |
-| 以后 | [silero-vad](https://github.com/snakers4/silero-vad) | 检测人声与静音，辅助切分录音 | 本地运行，免费开源 |
-
-后两项为扩展练习。
+本课使用 edge-tts，直接执行下方命令；需 Mac、Python 3 与网络；<mark class="caution">文字会上传微软在线服务</mark>。
 
 **打开 Mac 终端，依次执行：**
 
@@ -32,10 +22,25 @@ afplay /tmp/hello.mp3
 
 **验收：音频可正常播放。** 修改 `--text`，重生成并比较长短句听感。参数见 [edge-tts 官方说明](https://github.com/rany2/edge-tts#usage)。
 
-<mark class="caution">文字会上传微软在线服务</mark>，需联网。
+<mark class="key">首次只需听到音频并替换一句文本</mark>；后续工具按需增加。
+
+<details>
+<summary>选读：录音转写、人声检测与应用接入</summary>
+
+| 顺序 | 仓库 | 能解决的真实问题 | 免费方式 |
+|---|---|---|---|
+| **本课** | [edge-tts](https://github.com/rany2/edge-tts) | 把文章、AI 回复读出来 | 在线使用，无需 API Key |
+| 下一步 | [whisper.cpp](https://github.com/ggml-org/whisper.cpp) | 把录音变成文字，做语音输入 | 下载模型后本地运行，适合 Mac |
+| 以后 | [silero-vad](https://github.com/snakers4/silero-vad) | 检测人声与静音，辅助切分录音 | 本地运行，免费开源 |
+
+后两项为扩展练习。
 
 Yuuki 语音接入路径：
 
 `语音输入 → Whisper 转写 → AI 回复 → edge-tts 合成`
+
+更多安装和用例见[语音工具安装与用法](README.md)。
+
+</details>
 
 资料核对日期：2026-10-14。本文是上手练习，命令尚未在本机执行验证。

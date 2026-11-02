@@ -1,7 +1,7 @@
 ---
 prev:
-  link: /ai-communication/weather-mcp/05-connect-and-verify/
-  label: 天气 MCP 联调验收
+  link: /ai-from-scaling/07-weatherkit-mcp/
+  label: 本地 Apple 天气 MCP
 ---
 
 # MCP 项目实战：工具案例

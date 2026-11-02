@@ -2,6 +2,24 @@
 
 先调用 Wasm 加法、试整数边界，再学 Worker、内存与模型运行时。
 
+## 先调用一个真实的小模块
+
+打开[JavaScript 调用 Wasm](../../site/src/pages/labs/wasm-bridge.astro)，点击「调用 Wasm add」，核对默认输入 `21 + 21` 得到 `42`；再修改两个整数。
+
+下面的小模块只导出整数加法，首次可跳过源码：
+
+```wasm
+(module
+  (func (export "add") (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add))
+```
+
+[模块字节与 JavaScript 封装](labs/wasm-add.mjs)随仓库提供。修改输入后测试 `2147483647 + 1`：<mark class="key">核对 i32 整数范围</mark>。
+
+JS 调用并显示，Wasm 执行导出函数；换模型还需文件、张量、后端与任务状态。
+
 ## 先分清三件事
 
 | 工具 | 主要解决什么问题 | 一个前端例子 |
@@ -15,22 +33,6 @@ Wasm 通过模块、实例、导入导出和线性内存与 JS 协作，可复�
 <mark class="caution">Wasm 仍可阻塞主线程</mark>；转移计算要另用 Worker。
 
 [![主线程运行 Wasm 仍可能阻塞界面，Worker 用来转移工作并处理通信成本](../../site/public/diagrams/wasm/thread-boundary.svg)](../../site/public/diagrams/wasm/thread-boundary.svg)
-
-## 先调用一个真实的小模块
-
-打开[JavaScript 调用 Wasm](../../site/src/pages/labs/wasm-bridge.astro)。实验编译并实例化一个只导出整数加法的小模块：
-
-```wasm
-(module
-  (func (export "add") (param i32 i32) (result i32)
-    local.get 0
-    local.get 1
-    i32.add))
-```
-
-[模块字节与 JavaScript 封装](labs/wasm-add.mjs)随仓库提供。修改输入后测试 `2147483647 + 1`：<mark class="key">核对 i32 整数范围</mark>。
-
-JS 调用并显示，Wasm 执行导出函数；换模型还需文件、张量、后端与任务状态。
 
 ## Wasm 的价值从哪里来
 

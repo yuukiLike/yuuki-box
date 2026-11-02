@@ -1,6 +1,6 @@
 # 第五章：取消、超时与重试
 
-[上一课](04-mcp.md) · [目录](README.md) · [下一课](06-yuuki.md)
+[上一课](04-mcp.md) · [目录](README.md) · [进阶选读：HTTP 重连](03-sse-http.md)
 
 <mark class="caution">停止等待，不等于执行方停止。</mark>
 

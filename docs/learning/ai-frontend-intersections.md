@@ -2,6 +2,8 @@
 
 从前端经验进入 AI：流式更新、缓存、Worker 和乱序结果。<mark class="key">一次只改一个因素</mark>，比较输出、工作量和成本；各专题可独立学习。
 
+入门先做数组查找或 Wasm 加法，再进入通信与 Worker；模型缓存和跨框架测量按需进阶。
+
 <span id="实验分类应用通信查找缓存kv浏览器计算与界面响应"></span>
 
 ## 先选一个实验
@@ -10,11 +12,11 @@
 
 | 所属专题 | 实验对象 | 起步操作 | 入口 |
 | --- | --- | --- | --- |
-| 应用通信 | 请求与响应 | 请另一个程序读笔记，追踪结果怎样回来 | [RPC、SSE 与 Agent 小课](../ai-communication/README.md) |
 | 前端性能 | 查找与缓存 | 把目标从第一项换到最后一项，比较工作量与额外空间 | [前端缓存](../frontend-foundations/README.md)、[数组与 Map 实验](../../site/src/pages/labs/lookup.astro) |
-| 模型推理 | KV Cache | 修改中间输入，再把上下文长度翻倍，观察复用与容量 | [KV 专题](../kv-cache/README.md)、[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro) |
 | 前端性能 | 浏览器计算 | 调一次 Wasm，再把固定计算安排到 Worker | [Wasm](../wasm/README.md)、[Wasm 实验](../../site/src/pages/labs/wasm-bridge.astro)、[已有 Worker](../../examples/react-webview/src/lab-worker.js) |
+| 应用通信 | 请求与响应 | 请另一个程序读笔记，追踪结果怎样回来 | [RPC、SSE 与 Agent 小课](../ai-communication/README.md) |
 | 前端性能 | 界面响应 | 用相同文本和负载切换更新方式，观察解析、输入与滚动 | [渲染与流式输出](rendering-performance.md)、[十五个场景](harness-scenario-lab.md) |
+| 模型推理 | KV Cache | 修改中间输入，再把上下文长度翻倍，观察复用与容量 | [KV 专题](../kv-cache/README.md)、[KV 内存计算器](../../site/src/pages/labs/kv-memory.astro) |
 
 </div>
 

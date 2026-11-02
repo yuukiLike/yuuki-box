@@ -1,10 +1,10 @@
 # SSE 实战：真实 HTTP、断线重连与结束状态
 
-[上一课：SSE 入门](03-sse.md) · [目录](README.md) · [下一课：MCP](04-mcp.md)
+[SSE 入门](03-sse.md) · [目录](README.md) · [选读：运行时源码](06-yuuki.md)
 
 断流后续接；<mark class="key">收到完成事件才标记完成</mark>。
 
-本课用真实 HTTP 和浏览器 `EventSource`，发送五条固定事件；无需模型或 API Key。
+本课为进阶选读：先完成 SSE 入门与[取消、超时](05-failure.md)，再验证重连。使用真实 HTTP 和浏览器 `EventSource`，发送五条固定事件；无需模型或 API Key。
 
 <div class="heading-alias" id="先运行再断一次" aria-hidden="true"></div>
 

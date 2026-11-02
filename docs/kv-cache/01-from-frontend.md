@@ -35,6 +35,23 @@ const nextTotal = totals.at(-1) + 4; // 10 + 4 = 14
 
 若位置只依赖自身与前缀，末尾追加就不改变旧位置；模型的条件见[下一站](02-attention-and-kv.md)。
 
+<div class="heading-alias" id="只跑一个小实验" aria-hidden="true"></div>
+
+## 前缀复用实验
+
+在仓库根目录执行：
+
+```bash
+node docs/kv-cache/labs/prefix-cache.mjs
+```
+
+查“末尾追加”：复用 3、新算 1；再查“修改第 2 项”：仅复用第一项。
+
+<mark class="caution">输入不变，依赖变了也会失效</mark>。下一步：[Q/K/V](02-attention-and-kv.md)。
+
+<details>
+<summary>选读：React useMemo 的复用粒度</summary>
+
 <div class="heading-alias" id="第三步再回头看-usememo" aria-hidden="true"></div>
 
 ## 第三步：useMemo 的复用粒度
@@ -54,19 +71,7 @@ const formatted = useMemo(
 
 上图缓存整个返回值，下图自行复用前缀。React 比较 `Object.is`；模型缓存检查输入与配置，条件不同。
 
-<div class="heading-alias" id="只跑一个小实验" aria-hidden="true"></div>
-
-## 前缀复用实验
-
-在仓库根目录执行：
-
-```bash
-node docs/kv-cache/labs/prefix-cache.mjs
-```
-
-查“末尾追加”：复用 3、新算 1；再查“修改第 2 项”：仅复用第一项。
-
-<mark class="caution">输入不变，依赖变了也会失效</mark>。下一步：[Q/K/V](02-attention-and-kv.md)。
+</details>
 
 <details>
 <summary>并非所有数组计算都适合前缀复用</summary>

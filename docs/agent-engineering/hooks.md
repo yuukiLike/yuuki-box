@@ -31,45 +31,11 @@ Hook 有三个要素：
 
 <mark class="caution">Matcher 匹配工具名，不检查命令内容</mark>。`Bash` 选中终端工具，handler 再查参数；各宿主的输入和输出格式不同。
 
-<div class="heading-alias" id="hookskillmcp-怎么一起用" aria-hidden="true"></div>
-
-### Hook、Skill、MCP 的职责
-
-| 机制 | 职责 | 文档项目示例 |
-| --- | --- | --- |
-| Prompt / 项目指令 | 这次任务与长期约定是什么 | “修改文档后检查链接” |
-| Skill | 一类任务按什么步骤做 | 整理资料、写教程、验证、提交的流程 |
-| MCP | 通过什么接口提供外部工具与资源 | 给 Agent 提供 GitHub 仓库读取工具 |
-| Hook | 到哪个运行节点自动执行什么 | 工具调用前检查参数，调用后记录结果 |
-
-它们可组合，但提示词里的“请检查”不会注册 hook。背景：[Skills](03-skills-structure.md)、[MCP 工具源](01-mcp-tool-source.md)、[Harness](../ai-from-scaling/03-build-a-harness.md)。
-
-<div class="heading-alias" id="三家的机制先对齐" aria-hidden="true"></div>
-
-## 宿主机制对照
-
-| 比较项 | Claude Code | DeepSeek Harness | Codex |
-| --- | --- | --- | --- |
-| 谁提供机制 | Claude Code 客户端 | `dsh` 的 Cordis 插件框架 | 支持 hooks 的 Codex 客户端 |
-| 常用入口 | `.claude/settings.json`；个人项目配置可用 `.claude/settings.local.json` | TypeScript 插件，通过 profile 的 patch 挂载 | `.codex/hooks.json` 或 `config.toml` 内的 `[hooks]` |
-| 工具执行前 | `PreToolUse` | `tools/pre-execute` | `PreToolUse` |
-| 工具执行后 | 成功：`PostToolUse`；失败：`PostToolUseFailure` | `tools/post-execute`；最终结果观察用 `tools/result` | `PostToolUse`，也覆盖已完成但退出码非零的 Bash 调用 |
-| 准备结束一轮 | `Stop` | `agent/turn-stopping` | `Stop` |
-| 扩展写法 | 配置 handler | `ctx.on(事件名, 函数)` | 配置 handler |
-
-职责相近不代表事件等价；配置和字段见 [Claude reference](https://code.claude.com/docs/en/hooks)、[DeepSeek 架构](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/docs/architecture.md)、[Codex Hooks](https://learn.chatgpt.com/docs/hooks)。
-
-Claude Code 支持 `command`、`http`、`mcp_tool`、`prompt`、实验性 `agent`。Codex 执行 `command`、`mcp_tool`，解析到 `prompt`、`agent` 仍会跳过；同名配置不能直接迁移。[Claude 类型](https://code.claude.com/docs/en/hooks#hook-handler-fields) · [Codex 配置](https://learn.chatgpt.com/docs/hooks#config-shape)
-
-宿主控制触发；handler 若调用模型，结果仍受模型影响。入门先用明确的程序条件。
-
-`tools/*` 由 Harness 运行时派发，仅调用 DeepSeek 模型 API 不会运行本地插件。参见[请求装配课](../kv-cache/04-deepseek-harness.md)。
-
 <div class="heading-alias" id="第一个实验先读懂输入与输出" aria-hidden="true"></div>
 
 ## 实验一：输入与输出
 
-两家的 command hook 均从 stdin 读取 JSON。最小样本如下，真实事件还含会话、目录等字段：
+Claude Code 与 Codex 的 command hook 均从 stdin 读取 JSON。最小样本如下，真实事件还含会话、目录等字段：
 
 ```json
 {
@@ -163,6 +129,45 @@ printf '%s\n' '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{
 发送同样请求，核对结果与日志。Codex 将终端调用规范化为 `Bash`；多来源 hooks 合并，项目配置不覆盖用户级配置。日志重复时检查是否重复注册。[加载](https://learn.chatgpt.com/docs/hooks#where-codex-looks-for-hooks) · [覆盖范围](https://learn.chatgpt.com/docs/hooks#tool-coverage)
 
 迁移到编辑工具时重查参数：Claude `Edit` / `Write` 用 `tool_input.file_path`；Codex 即使匹配该别名仍报告 `apply_patch`，补丁在 `tool_input.command`，不能照搬 `.file_path`。[Claude 输入](https://code.claude.com/docs/en/hooks#pretooluse) · [Codex 输入](https://learn.chatgpt.com/docs/hooks#pretooluse)
+
+<details>
+<summary>选读：职责与宿主机制对照</summary>
+
+<div class="heading-alias" id="hookskillmcp-怎么一起用" aria-hidden="true"></div>
+
+### Hook、Skill、MCP 的职责
+
+| 机制 | 职责 | 文档项目示例 |
+| --- | --- | --- |
+| Prompt / 项目指令 | 这次任务与长期约定是什么 | “修改文档后检查链接” |
+| Skill | 一类任务按什么步骤做 | 整理资料、写教程、验证、提交的流程 |
+| MCP | 通过什么接口提供外部工具与资源 | 给 Agent 提供 GitHub 仓库读取工具 |
+| Hook | 到哪个运行节点自动执行什么 | 工具调用前检查参数，调用后记录结果 |
+
+它们可组合，但提示词里的“请检查”不会注册 hook。背景：[Skills](03-skills-structure.md)、[MCP 工具源](01-mcp-tool-source.md)、[Harness](../ai-from-scaling/03-build-a-harness.md)。
+
+<div class="heading-alias" id="三家的机制先对齐" aria-hidden="true"></div>
+
+## 宿主机制对照
+
+| 比较项 | Claude Code | DeepSeek Harness | Codex |
+| --- | --- | --- | --- |
+| 谁提供机制 | Claude Code 客户端 | `dsh` 的 Cordis 插件框架 | 支持 hooks 的 Codex 客户端 |
+| 常用入口 | `.claude/settings.json`；个人项目配置可用 `.claude/settings.local.json` | TypeScript 插件，通过 profile 的 patch 挂载 | `.codex/hooks.json` 或 `config.toml` 内的 `[hooks]` |
+| 工具执行前 | `PreToolUse` | `tools/pre-execute` | `PreToolUse` |
+| 工具执行后 | 成功：`PostToolUse`；失败：`PostToolUseFailure` | `tools/post-execute`；最终结果观察用 `tools/result` | `PostToolUse`，也覆盖已完成但退出码非零的 Bash 调用 |
+| 准备结束一轮 | `Stop` | `agent/turn-stopping` | `Stop` |
+| 扩展写法 | 配置 handler | `ctx.on(事件名, 函数)` | 配置 handler |
+
+职责相近不代表事件等价；配置和字段见 [Claude reference](https://code.claude.com/docs/en/hooks)、[DeepSeek 架构](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/docs/architecture.md)、[Codex Hooks](https://learn.chatgpt.com/docs/hooks)。
+
+Claude Code 支持 `command`、`http`、`mcp_tool`、`prompt`、实验性 `agent`。Codex 执行 `command`、`mcp_tool`，解析到 `prompt`、`agent` 仍会跳过；同名配置不能直接迁移。[Claude 类型](https://code.claude.com/docs/en/hooks#hook-handler-fields) · [Codex 配置](https://learn.chatgpt.com/docs/hooks#config-shape)
+
+宿主控制触发；handler 若调用模型，结果仍受模型影响。入门先用明确的程序条件。
+
+`tools/*` 由 Harness 运行时派发，仅调用 DeepSeek 模型 API 不会运行本地插件。参见[请求装配课](../kv-cache/04-deepseek-harness.md)。
+
+</details>
 
 ## DeepSeek Harness：同一条规则，写成插件
 

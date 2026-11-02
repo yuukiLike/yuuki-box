@@ -2,7 +2,7 @@
 
 通过中途取消、审批期崩溃和重启对账，验证运行终态与恢复行为。
 
-加 MCP 与 Skills 前，先做<mark class="key">能取消、能恢复、可解释的 Run</mark>。
+基础调用稳定后，逐步补齐<mark class="key">取消、审批、去重与恢复</mark>；先验证内存中的成功路径，最后引入持久化与重启。
 
 实现建议，状态名沿用 [Mac 本地 Harness](../architecture/mac-local-harness.md)。runtime 已有部分工具与审批，尚未通过全部恢复验收。核对：2026-10-23。
 
@@ -75,11 +75,11 @@ fake model: "调用 list_files"
 ## 六类状态实验
 
 1. 用 fake model 和内存 Store 跑通成功路径，确认事件顺序。
-2. 在流式输出中触发取消，检查是否还有 delta。
-3. 在审批等待中让审批超时，检查 ToolCall 与 Run 的终态。
-4. Store 改用临时目录持久化：intent 落盘后退出子进程，新进程重读并确认 Run 为 `interrupted`；内存 Store 无法验证。
+2. 让工具返回一个错误，确认模型能收到结构化结果并继续。
+3. 在流式输出中触发取消，检查是否还有 delta。
+4. 在审批等待中让审批超时，检查 ToolCall 与 Run 的终态。
 5. 重复提交同一个 `commandId`，分别测试相同与不同输入。
-6. 让工具返回一个错误，确认模型能收到结构化结果并继续。
+6. Store 改用临时目录持久化：intent 落盘后退出子进程，新进程重读并确认 Run 为 `interrupted`；内存 Store 无法验证。
 
 ## 验收
 

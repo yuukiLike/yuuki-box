@@ -1,3 +1,12 @@
+---
+prev:
+  link: /ai-from-scaling/00-minimal-mcp/
+  label: MCP 最简 demo
+next:
+  link: /mcp-projects/
+  label: MCP 工具案例
+---
+
 # Apple 天气 MCP：从查询天气到安排出门
 
 接入 WeatherKit，按条件筛出门时段，保留时间、单位与依据。

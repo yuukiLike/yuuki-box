@@ -4,9 +4,20 @@
 
 研究日期：2026-09-26。五份样例已在本机构建，<mark class="caution">运行性能仍未测量</mark>。可从 GPUI、Swift、React 原生桥、WKWebView 或 Electron 任一入口开始。
 
+<details>
+<summary>选读：研究与架构入口</summary>
+
 相关入口：[文档导航](../README.md) · [产品实现调研](../research/zed-raycast-warp.md) · [Mac 本地 Harness 架构](../architecture/mac-local-harness.md) · [第一个 Mac 闭环](../plan/first-mac-loop.md) · [直接开始 GPUI](../../examples/rust-gpui/README.md) · [五条路线的收益与代价](../../examples/COMPARISON.md)。
 
-第一轮选[场景 W2 或 G2](harness-scenario-lab.md)：同一历史与最终文本，比较解析次数，同时输入中文。先确认输出一致，再解释减少了哪些工作。
+</details>
+
+第一轮只做一个[场景 W2 或 G2](harness-scenario-lab.md)：
+
+1. 沿对应示例启动一个应用，用小负载运行朴素路径。
+2. 切换优化路径，保持历史与最终文本相同，比较解析次数，同时输入中文。
+3. 确认输出一致、输入可用，再解释减少了哪些工作。
+
+首次只需理解下文的界面指标与更新路径；产品架构、专项优化和完整测量按需展开。
 
 <div class="heading-alias" id="当前可以动手的五份样例" aria-hidden="true"></div>
 
@@ -57,6 +68,9 @@ GPUI 当前是 dev/debug。公平比较需统一 Release、负载和呈现能力
 GPU 不会加速业务遍历；文本解析、shaping、栅格化与绘制是不同工作。自定义渲染仍需窗口、输入法、可访问性与系统显示链路。
 
 60 Hz 约 16.67 ms，120 Hz 约 8.33 ms，但不是应用独享预算。<mark class="key">帧预算不等于按键到像素延迟</mark>：还存在流水线、提交截止、排队与合成。ProMotion、电源和显示设置也影响结果，指导值不是所有交互的保证。[改善响应性](https://developer.apple.com/documentation/xcode/improving-app-responsiveness)
+
+<details>
+<summary>选读：术语、产品架构与专项优化</summary>
 
 ## 3. 四组容易混淆的技术词
 
@@ -131,6 +145,8 @@ List/Table 的 identity、行内容影响工作量。[Demystify SwiftUI performa
 
 Energy Impact 只提供比较线索，不能直接换算瓦特或续航。[Activity Monitor 能源栏](https://support.apple.com/en-ca/guide/activity-monitor/actmntr43697/mac)
 
+</details>
+
 ## 8. 统一记录环境和指标
 
 工具链见[第一个 Mac 闭环](../plan/first-mac-loop.md)；本文未启动 Instruments 或基准。填写实值，不猜测。
@@ -161,6 +177,9 @@ Energy Impact 只提供比较线索，不能直接换算瓦特或续航。[Activ
 | 空闲 | CPU、唤醒与能耗，无周期性业务重算 | 未测 |
 
 刷新率、提交、呈现、卡顿分别记录；120 Hz 屏幕不等于应用 120 FPS。没有证据时不承诺固定内存、零卡顿或统一帧率。
+
+<details>
+<summary>进阶：Instruments 与扩展实验</summary>
 
 ## 9. 如何使用 Instruments 得到可解释的证据
 
@@ -214,6 +233,8 @@ trace 再决定是否比 List、LazyVStack、AppKit，不同时更换多项。�
 `runtime_shaders` 绕过本机构建时缺 Metal 编译工具的问题，但把编译移到运行时，启动成本未测。记录版本、feature、构建及可访问性/中文输入差距。[路线对照](../../examples/COMPARISON.md)
 
 正式对照需统一机器、fixture、窗口、字体、行高、历史、流速与操作；增加 Markdown、输入框、高亮时保持相同工作量。先对齐行为再比性能，分别记录能力差距、收益和维护责任。当前 MVP 已实现并构建，交互、性能、等负载报告未完成。
+
+</details>
 
 <div class="heading-alias" id="14-学完之后什么算有收获" aria-hidden="true"></div>
 

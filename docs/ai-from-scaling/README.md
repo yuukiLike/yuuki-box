@@ -1,6 +1,6 @@
 # 四小时路线：模型基础与 Agent 入门
 
-前两课学模型与训练，后两课搭 Harness、接真实模型。可分四次完成，需要基础 JavaScript、终端和文件编辑。
+模型路线先看预测，再看上下文与训练；Agent 路线先跑离线工具循环，再接真实模型。两条路线可独立学习，需要基础 JavaScript、终端和文件编辑。
 
 工具开发从[最简 demo](00-minimal-mcp.md)开始；[Codex 接入](00-codex-mcp.md)按需选读，执行循环见 [Agent 入门](03-build-a-harness.md)。<mark class="key">无需先训练模型</mark>。
 
@@ -19,7 +19,7 @@
 
 最简 demo 用脚本编排真实 MCP 调用与文件读写；第一节即可完成运行验证，客户端实现细节按需阅读。
 
-本地天气之后可进入[远程 MCP 与授权](../ai-communication/weather-mcp/README.md)；消息机制见[应用通信](../ai-communication/README.md)。
+本地调用稳定后，按需做其他案例；需要网站登录、多用户与部署时，再进入[远程 MCP 与授权](../ai-communication/weather-mcp/README.md)。消息机制见[应用通信](../ai-communication/README.md)。
 
 各演示统一在仓库根目录运行，例如 `pnpm demo:mini-mcp`、`pnpm demo:tiny-model`、`pnpm demo:harness`；运行 `pnpm run` 查看全部脚本。
 
@@ -31,9 +31,9 @@ TS 工程基础见 [TypeScript 技术栈与学习顺序](00-minimal-mcp.md#types
 
 | 时间 | 内容 | 这一段要完成什么 |
 | --- | --- | --- |
-| 00—50 分钟 | [从缩放定律理解模型](01-understand-models.md) | 连起规模、预测、训练、Transformer、后训练与推理 |
+| 00—50 分钟 | [预测、上下文与训练](01-understand-models.md) | 从字符预测理解参数更新，再看上下文、训练规模与助手 |
 | 50—60 分钟 | 休息与提问 | 说明参数、上下文和工具的区别 |
-| 60—110 分钟 | [训练一个小语言模型](02-train-a-model.md) | 实现概率、loss 和参数更新，比较训练前后的输出 |
+| 60—110 分钟 | [训练一个小语言模型](02-train-a-model.md) | 先比较训练前后与上下文长度，再选读概率、loss 和参数更新实现 |
 | 110—120 分钟 | 休息与整理 | 保存一份模型，记下一个它仍然会犯的错 |
 | 120—170 分钟 | [搭建工具调用 Harness](03-build-a-harness.md) | 跑通工具循环，找到可加统计、策略和审计的三个入口 |
 | 170—180 分钟 | 休息与提问 | 找出模型提出动作与程序执行动作的交界处 |
@@ -72,8 +72,8 @@ node --version
 
 ## 验收标准
 
-- 能让 Codex 调用自建 MCP Server，并解释工具结果来自哪里。
-- 能指出预测概率、loss 和参数更新分别发生在哪一行，并解释验证集的用途。
+- 选读验收：Codex 可调用自建 MCP Server，工具结果来源清楚。
+- 基础验收：能比较训练前后输出，解释上下文与参数更新的区别；实现选读后再定位概率、loss 与更新代码。
 - 能说明为什么“多训练一些”和“让模型多看一个字”改变的是不同因素。
 - 能沿着 `assistant.tool_calls → 本地执行 → tool 结果 → 下一轮模型请求` 追踪一次任务。
 - 能让保存请求被拒绝，也能经审批后创建文件，并核对文件内容。

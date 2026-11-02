@@ -1,6 +1,6 @@
 # KV Cache 专题：从前端数组走到 DeepSeek、Harness 与 Pi
 
-从消息数组理解模型缓存；公式、实验数据与源码按需展开。
+先看消息数组，再运行前缀复用实验；理解 K/V 后，按需读容量、API 与工程源码。
 
 本专题研究模型推理状态，借前端数组解释依赖与复用。先分清参数、上下文与生成，必要时回补[模型基础](../ai-from-scaling/01-understand-models.md)；可独立阅读，不是 Agent 入门前置。
 
@@ -16,7 +16,7 @@
 
 [![从消息数组、前缀依赖和 Q/K/V，逐步走到 DeepSeek、Harness 与 Pi；共五站](../../site/public/diagrams/kv-cache/01-study-path.svg)](../../site/public/diagrams/kv-cache/01-study-path.svg)
 
-图中的顺序就是正文顺序。容量计算留到理解 K/V 之后再看。
+按消息 → 数组复用 → K/V 阅读即可完成基础路线。容量为选读，DeepSeek、Harness 与 Pi 属于应用进阶。
 
 <div class="heading-alias" id="走丢了就回来看这一句" aria-hidden="true"></div>
 

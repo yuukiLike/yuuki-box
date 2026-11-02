@@ -1,6 +1,6 @@
 # Windows 本地 AI：图片与音乐生成
 
-用本机 ComfyUI，先以 Qwen Image 出竹林图，再以 ACE-Step 配乐；<mark class="key">保存 PNG、音频与工作流</mark>。
+先用本机 ComfyUI 和 Qwen Image <mark class="key">保存首张 PNG 与工作流</mark>；ACE-Step 配乐为选修。
 
 参考硬件：**RTX 5060 Ti 16GB、i5-10400F、16GB DDR4-3200、1TB 硬盘、500W 电源**。
 

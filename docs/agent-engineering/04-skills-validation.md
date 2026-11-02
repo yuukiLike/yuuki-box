@@ -1,6 +1,6 @@
 # Skills：确定性验收与渐进加载
 
-使用坏链接 fixture，验证 Skill 能否准确报告错误。
+使用坏链接 fixture，验证 Skill 能否准确报告错误。先让好坏样例得到不同结果，再做跨会话复用；自建 Harness 的加载与审批为进阶。
 
 <mark class="key">模型解释，脚本判定</mark>；自然语言步骤不能证明输出正确。
 
@@ -77,6 +77,25 @@ tests/fixtures/docs-restructure/
 
 <mark class="caution">坏输入也通过，检查器就无效</mark>。
 
+<div class="heading-alias" id="小挑战把坏样本藏进新会话" aria-hidden="true"></div>
+
+## 跨会话负例实验
+
+1. 给一个真实 skill 加上 `scripts/validate` 和一个坏 fixture。
+2. 在新会话里只凭 `SKILL.md` 完成任务。
+3. 故意让输出缺少一个必需章节，确认脚本失败并指出位置。
+4. 保存脚本退出码与报告，确认好坏样例的结果可重复。
+
+## 验收
+
+- 新会话可以端到端执行，不依赖上一条对话。
+- 坏 fixture 稳定失败，好 fixture 稳定通过。
+- 脚本无网络依赖、可重复执行、不修改源文件。
+- 本轮脚本退出码与输出有记录。
+
+<details>
+<summary>进阶：自建 Harness 接入</summary>
+
 <div class="heading-alias" id="接进自己的-harness" aria-hidden="true"></div>
 
 ## 接入 Harness
@@ -92,22 +111,9 @@ runtime 按需加载 Skill：
 
 `load_skill` 只提供上下文；删除仍须经过工具策略与审批。
 
-<div class="heading-alias" id="小挑战把坏样本藏进新会话" aria-hidden="true"></div>
+接入后再验证：启动只加载元数据，`load_skill` 后才出现正文；目录外文件被拒绝，脚本执行有审批或策略记录，结果进入 `run.report`。
 
-## 跨会话负例实验
-
-1. 给一个真实 skill 加上 `scripts/validate` 和一个坏 fixture。
-2. 在新会话里只凭 `SKILL.md` 完成任务。
-3. 故意让输出缺少一个必需章节，确认脚本失败并指出位置。
-4. 在 Harness 中确认：启动时只加载元数据；`load_skill` 之后正文才出现；`run.report` 有记录。
-
-## 验收
-
-- 新会话可以端到端执行，不依赖上一条对话。
-- 坏 fixture 稳定失败，好 fixture 稳定通过。
-- 脚本无网络依赖、可重复执行、不修改源文件。
-- skill 目录外的文件无法通过 `read_skill_file` 读取。
-- 脚本执行有审批或策略记录，输出进入 artifact 或日志。
+</details>
 
 ## 边界
 

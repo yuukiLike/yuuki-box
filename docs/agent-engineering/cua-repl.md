@@ -19,6 +19,53 @@
 
 公开 API 的 computer tool、自建执行环境与桌面 `cua_repl` 是不同接法。[OpenAI Computer Use API](https://developers.openai.com/api/docs/guides/tools-computer-use)
 
+<div class="heading-alias" id="首次调用怎样选入口" aria-hidden="true"></div>
+
+## 首次调用与入口选择
+
+以下为所核对契约的示意用法，由 Agent 在 `cua_repl` 执行；分支互为替代，不连续运行。
+
+### 没有指定浏览器或标签页
+
+首次只执行一句，读取说明和清单：
+
+```javascript
+await cua.getState();
+```
+
+下一次再选应用。例如用户指定且清单已确认 TextEdit：
+
+```javascript
+let app = await cua.getApp("com.apple.TextEdit");
+```
+
+`getApp()` 返回初始状态，也可能启动应用，不只是列清单。
+
+### 用户已经明确指定目标
+
+明确指定目标时，直接按对应规则进入：
+
+| 已知目标 | 对应接口 |
+| --- | --- |
+| 标签页 @-mention | `cua.getTab({ mention: tabMentionUrl })`，使用完整引用 |
+| 已知 URL 和浏览器 | `cua.getTab({ url }, { browser: browserId })` |
+| 已知标签页 ID 和浏览器 | `cua.getTab(tabId, { browser: browserId })` |
+| 在指定浏览器新开页面 | `cua.createBrowserTab(browserName, url, options)` |
+| 用户指定桌面应用 | `cua.getApp(appNameOrId)` |
+
+`getBrowser()` 选浏览器，`getTab()` 绑定现有页，`createBrowserTab()` 新建页；实际支持范围看提供方返回的文档。
+
+<details class="qa">
+<summary>浏览器作为桌面应用，和浏览器专用连接有什么区别？</summary>
+
+`getApp("com.google.Chrome")` 选择原生应用；浏览器连接还可指定 profile、标签页及页面操作，两者范围不同。
+
+内置浏览器使用独立 profile，不自动共享日常标签页和登录态。Browser Use 与开发者 CDP 访问也分开，打开网页不代表能任意读取内部数据。[OpenAI Browser](https://learn.chatgpt.com/docs/browser)
+
+</details>
+
+<div class="heading-alias" id="观察与操作要形成一小段闭环" aria-hidden="true"></div>
+
 <div class="heading-alias" id="javascript-到底在哪里运行" aria-hidden="true"></div>
 
 ## JavaScript 执行位置
@@ -66,53 +113,6 @@ cua API 访问被选中的桌面或浏览器入口
 结论是<mark class="caution">浏览器清单读取失败，连接状态未知</mark>，不能据此断言扩展未安装或 Chrome 未运行。桌面发现与应用授权另行检查。
 
 无读取错误且 `browsers` 为空，才是“当前未发现连接”。未指定目标的已授权桌面任务按清单选原生入口，不猜浏览器 ID。
-
-<div class="heading-alias" id="首次调用怎样选入口" aria-hidden="true"></div>
-
-## 首次调用与入口选择
-
-以下为所核对契约的示意用法，由 Agent 在 `cua_repl` 执行；分支互为替代，不连续运行。
-
-### 没有指定浏览器或标签页
-
-首次只执行一句，读取说明和清单：
-
-```javascript
-await cua.getState();
-```
-
-下一次再选应用。例如用户指定且清单已确认 TextEdit：
-
-```javascript
-let app = await cua.getApp("com.apple.TextEdit");
-```
-
-`getApp()` 返回初始状态，也可能启动应用，不只是列清单。
-
-### 用户已经明确指定目标
-
-明确指定目标时，直接按对应规则进入：
-
-| 已知目标 | 对应接口 |
-| --- | --- |
-| 标签页 @-mention | `cua.getTab({ mention: tabMentionUrl })`，使用完整引用 |
-| 已知 URL 和浏览器 | `cua.getTab({ url }, { browser: browserId })` |
-| 已知标签页 ID 和浏览器 | `cua.getTab(tabId, { browser: browserId })` |
-| 在指定浏览器新开页面 | `cua.createBrowserTab(browserName, url, options)` |
-| 用户指定桌面应用 | `cua.getApp(appNameOrId)` |
-
-`getBrowser()` 选浏览器，`getTab()` 绑定现有页，`createBrowserTab()` 新建页；实际支持范围看提供方返回的文档。
-
-<details class="qa">
-<summary>浏览器作为桌面应用，和浏览器专用连接有什么区别？</summary>
-
-`getApp("com.google.Chrome")` 选择原生应用；浏览器连接还可指定 profile、标签页及页面操作，两者范围不同。
-
-内置浏览器使用独立 profile，不自动共享日常标签页和登录态。Browser Use 与开发者 CDP 访问也分开，打开网页不代表能任意读取内部数据。[OpenAI Browser](https://learn.chatgpt.com/docs/browser)
-
-</details>
-
-<div class="heading-alias" id="观察与操作要形成一小段闭环" aria-hidden="true"></div>
 
 ## 观察与操作闭环
 

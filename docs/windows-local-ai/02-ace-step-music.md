@@ -48,6 +48,11 @@ C:\AI\ComfyUI_windows_portable\ComfyUI\models\checkpoints\
 
 基于[官方 AIO 模板](https://github.com/Comfy-Org/workflow_templates/blob/e7cd011d4ded3411c2f481200544f0be6fdc962e/templates/audio_ace_step_1_5_checkpoint.json)，保留采样连接与设置，改为 30 秒、单首、seed 42 和纯音乐提示。
 
+核对加载模型为 `ace_step_1.5_turbo_aio.safetensors`，首次保留 30 秒、单首与 seed 42，直接生成音频。
+
+<details>
+<summary>选读：工作流参数与采样设置</summary>
+
 | 位置 | 初始值 | 用途 |
 | --- | --- | --- |
 | `CheckpointLoaderSimple`／Load Checkpoint | `ace_step_1.5_turbo_aio.safetensors` | 加载整合模型 |
@@ -63,6 +68,8 @@ C:\AI\ComfyUI_windows_portable\ComfyUI\models\checkpoints\
 时长与 seed 由左侧节点统一传入；**只改 `Duration (seconds)`，不要拆线**。BPM 和调性需试听或分析核对。
 
 高级选项 `generate_audio_codes` 启用语言模型规划，可能增加等待；文本 `cfg_scale = 2` 与采样 `cfg = 1` 属不同阶段，保留默认。[ComfyUI ACE-Step 节点定义](https://github.com/Comfy-Org/ComfyUI/blob/v0.43.0/comfy_extras/nodes_ace.py)
+
+</details>
 
 ## 4 · 为竹林画面生成第一段音乐
 

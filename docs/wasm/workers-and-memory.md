@@ -19,6 +19,18 @@ worker.postMessage({ type: 'run', jobId: 7, input: values });
 
 接入前先确定任务身份，以及何时拒收结果。
 
+## TypedArray 可以只是同一块内存的视图
+
+```js
+const buffer = new ArrayBuffer(16);
+const first = new Float32Array(buffer);
+const second = new Float32Array(buffer);
+first[0] = 3;
+console.log(second[0]); // 3
+```
+
+两个视图共用 buffer；接运行时先查返回副本还是视图、底层存储何时变化。
+
 ## 复制 转移 共享分别意味着什么
 
 | 方式 | 数据怎样到另一侧 | 调用方要考虑什么 |
@@ -38,18 +50,6 @@ worker.postMessage({ samples }, [samples.buffer]);
 SharedArrayBuffer 需安全上下文、跨源隔离及明确的并发读写协议。[MDN SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
 
 [![转移 ArrayBuffer 会分离发送方缓冲区，迟到的旧任务结果需要按 jobId 丢弃](../../site/public/diagrams/wasm/worker-transfer.svg)](../../site/public/diagrams/wasm/worker-transfer.svg)
-
-## TypedArray 可以只是同一块内存的视图
-
-```js
-const buffer = new ArrayBuffer(16);
-const first = new Float32Array(buffer);
-const second = new Float32Array(buffer);
-first[0] = 3;
-console.log(second[0]); // 3
-```
-
-两个视图共用 buffer；接运行时先查返回副本还是视图、底层存储何时变化。
 
 <details class="qa" id="取消也需要安排执行机会">
 <summary>发了取消消息，Worker 为什么还在算？</summary>

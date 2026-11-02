@@ -2,7 +2,7 @@
 
 以笔记读取为例，追踪请求、响应、流式事件与失败状态。
 
-每课包含<mark class="key">一张流程图、一项实验</mark>。
+每课包含<mark class="key">一张流程图、一项实验</mark>。先完成五课主线，再按需验证 HTTP 重连与阅读运行时源码；无需先掌握远程部署与授权。
 
 <div class="heading-alias" id="今天只学第一课" aria-hidden="true"></div>
 
@@ -19,17 +19,17 @@ node docs/ai-communication/labs/01-rpc.ts
 验收：按相同 `id` 关联请求与响应。
 
 <details>
-<summary>六课与 SSE 实战目录</summary>
+<summary>入门主线与进阶选读</summary>
 
 | 课 | 学什么 |
 | --- | --- |
 | [1 · RPC](01-rpc.md) | 请另一个程序做事 |
 | [2 · JSON-RPC](02-json-rpc.md) | 用编号找到对应结果 |
 | [3 · SSE](03-sse.md) | 一边接收，一边显示 |
-| [SSE 实战](03-sse-http.md) | 用真实 HTTP 观察断流、续接与完成 |
 | [4 · MCP](04-mcp.md) | 让应用调用外部工具 |
 | [5 · 取消与超时](05-failure.md) | 区分停止等待与停止执行 |
-| [6 · Yuuki 运行时](06-yuuki.md) | 定位请求、流式接收与工具执行 |
+| [选读 · SSE 实战](03-sse-http.md) | 入门后用真实 HTTP 验证断流、续接与完成 |
+| [选读 · Yuuki 运行时](06-yuuki.md) | 沿源码定位请求、流式接收与工具执行 |
 
 </details>
 
@@ -37,7 +37,7 @@ node docs/ai-communication/labs/01-rpc.ts
 
 ## 远程天气 MCP
 
-[远程 MCP 与授权](weather-mcp/README.md)使用 Supabase 登录并调用 Apple WeatherKit，可独立开展。
+完成本地工具调用后，再选读[远程 MCP 与授权](weather-mcp/README.md)，增加 Supabase 登录、WeatherKit 凭据与部署。
 
 <details>
 <summary>运行环境与检查</summary>

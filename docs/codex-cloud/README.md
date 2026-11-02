@@ -21,13 +21,13 @@
 
 | 阅读顺序 | 内容 |
 | --- | --- |
-| 本页 · 三个概念 | 分清环境、任务、PR，以及额度与硬件边界 |
-| [云端电脑实测](cloud-machine.md) | 读取 CPU、内存与磁盘，分清 Shell 入口、独立任务与资源占用 |
-| [1 · 用 for-safe 开始](01-for-safe.md) | 创建环境、发布、发出第一条任务、检查交付 |
-| [2 · 社区怎么用](02-community.md) | 三种有公开来源的做法，两张真实历史界面截图 |
-| [3 · for-job](03-for-job.md) | 准备已有 Web 项目，验证备份恢复与实际导出 |
-| [4 · agent-symphony](04-agent-symphony.md) | 验证事件处理、观察服务与浏览器回归，区分模拟和真实接入 |
-| [选读 · Issue 到 PR 的并行实验](05-issue-to-pr.md) | 并行试 Dot / Cloud、Codex Action / API 与 Agentic Workflows / API |
+| [1 · 用 for-safe 开始](01-for-safe.md) | 创建环境、发布、取得首份只读小结 |
+| [云端电脑实测](cloud-machine.md) | 在已有任务里复查资源，理解 Shell 与多对话 |
+| [for-job：检查与导出](03-for-job.md) | 已有 Web 项目先跑检查基线，再做备份恢复与导出回归 |
+| [agent-symphony：事件回放](04-agent-symphony.md) | 再扩展到事件、存储与浏览器回放，最后接真实宿主 |
+| 选读 · 本页概念与边界 | 分清环境、任务、PR，以及额度与硬件 |
+| [选读 · 社区做法](02-community.md) | 三种公开案例与 Legacy 历史截图 |
+| [选读 · Issue 到 PR 的并行实验](05-issue-to-pr.md) | 单次交付完成后，再比较三条独立执行路线 |
 
 产品规则核对：**2026-10-29**，新增项目见各页。正文为新版 Cloud；旧截图标为 Legacy，不混用缓存、联网或密钥规则。 [新版与 Legacy 的入口](https://learn.chatgpt.com/docs/environments/cloud-environments)
 

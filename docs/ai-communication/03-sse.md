@@ -1,6 +1,6 @@
 # 第三章：从完整响应走到 SSE
 
-[上一课](02-json-rpc.md) · [目录](README.md) · [下一课：SSE 实战](03-sse-http.md)
+[上一课](02-json-rpc.md) · [目录](README.md) · [下一课：MCP](04-mcp.md)
 
 <mark class="key">边接收事件，边显示文字。</mark>
 
@@ -44,7 +44,7 @@ data: {"text":"你好"}
 
 缺少完成标记时，即使保留文字也不标记完成。
 
-浏览器断线重连见 [SSE 实战：真实 HTTP、断线重连与结束状态](03-sse-http.md)。
+完成主线后，选读 [SSE 实战：真实 HTTP、断线重连与结束状态](03-sse-http.md)。
 
 <details>
 <summary>代码与分片细节</summary>

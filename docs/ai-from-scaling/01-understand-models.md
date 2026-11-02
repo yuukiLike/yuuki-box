@@ -1,10 +1,74 @@
-# 模型基础 1：从缩放定律理解模型
+# 模型基础 1：预测、上下文与训练
 
-从预测下一字符，分清训练、上下文与工具。
+从下一字符预测开始，再理解上下文、训练规模与工具调用。
 
 [四小时联读路线](README.md)的起点，也可独立读：学习 50 分钟，休息 10 分钟。
 
-## 前十分钟 缩放定律里的误差是什么
+<div class="heading-alias" id="第十到二十五分钟-模型怎样学会预测" aria-hidden="true"></div>
+
+## 1. 下一字符预测与参数更新
+
+参数是训练能够调整的数字；本实验用它给候选字符打分。先观察一句话：
+
+```text
+小猫吃鱼。
+```
+
+实验中一字符是一个 token；真实模型也可用词片段。
+
+如果模型只看前一个字，训练样本里就包括：
+
+```text
+输入 小 → 目标 猫
+输入 猫 → 目标 吃
+输入 吃 → 目标 鱼
+```
+
+模型为候选字符打分；softmax 转成总和为 1 的概率，训练检查正确字符的概率。
+
+正确字符的概率越高，损失越小；损失用于衡量预测误差。
+
+<details>
+<summary>选读：概率与损失的数值对照</summary>
+
+“鱼”的概率从 0.1 升至 0.8，损失 `-ln(p)` 从约 2.30 降至 0.22：正确答案概率越高，损失越小。
+
+</details>
+
+训练根据预测误差调整参数，反复执行：
+
+```text
+输入片段 → 预测分数 → 概率 → 和目标比较 → 更新参数
+```
+
+<mark class="key">参数更新就是训练</mark>。核对训练样本、未参与更新的验证样本及生成文本；训练集只反映样本拟合。
+
+[![训练更新参数，生成读取参数并追加上下文，两种循环分开理解](../../site/public/diagrams/ai-from-scaling/training-generation.svg)](../../site/public/diagrams/ai-from-scaling/training-generation.svg)
+
+下一课从代码核对真实目标与参数更新的位置。
+
+<div class="heading-alias" id="第二十五到三十五分钟-上下文与-transformer" aria-hidden="true"></div>
+
+## 2. 上下文与 Attention
+
+现在给模型两段输入：
+
+```text
+小猫吃____
+小鸟吃____
+```
+
+只看“吃”，模型无法区分两段输入；看见“猫吃”和“鸟吃”，才可能给出不同概率。
+
+组合建表会迅速膨胀；Transformer 共享参数学习表示，用 Attention 组合各位置的信息。[Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+
+因果限制要求每个位置只看前文；训练虽能并行处理各位置，也不能泄漏后文答案。
+
+Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)。
+
+<div class="heading-alias" id="前十分钟-缩放定律里的误差是什么" aria-hidden="true"></div>
+
+## 3. 训练规模与误差
 
 训练语言模型时，可以调整参数规模、数据量和计算量。
 
@@ -28,58 +92,9 @@ Chinchilla 进一步指出：固定计算预算下，应搭配参数规模与数
 
 </details>
 
-## 第十到二十五分钟 模型怎样学会预测
+<div class="heading-alias" id="第三十五到四十五分钟-从预测能力到可用的助手" aria-hidden="true"></div>
 
-从一句话开始：
-
-```text
-小猫吃鱼。
-```
-
-实验中一字符是一个 token；真实模型也可用词片段。
-
-如果模型只看前一个字，训练样本里就包括：
-
-```text
-输入 小 → 目标 猫
-输入 猫 → 目标 吃
-输入 吃 → 目标 鱼
-```
-
-模型为候选字符打分；softmax 转成总和为 1 的概率，训练检查正确字符的概率。
-
-“鱼”的概率从 0.1 升至 0.8，损失 `-ln(p)` 从约 2.30 降至 0.22：正确答案概率越高，损失越小。
-
-梯度给出参数调整方向，训练反复执行：
-
-```text
-输入片段 → 预测分数 → 概率 → 和目标比较 → 更新参数
-```
-
-<mark class="key">参数更新就是训练</mark>。同时核对训练 loss、验证 loss 和生成文本；训练集只反映样本拟合。
-
-[![训练更新参数，生成读取参数并追加上下文，两种循环分开理解](../../site/public/diagrams/ai-from-scaling/training-generation.svg)](../../site/public/diagrams/ai-from-scaling/training-generation.svg)
-
-下一课从代码核对真实目标与参数更新的位置。
-
-## 第二十五到三十五分钟 上下文与 Transformer
-
-现在给模型两段输入：
-
-```text
-小猫吃____
-小鸟吃____
-```
-
-只看“吃”，模型无法区分两段输入；看见“猫吃”和“鸟吃”，才可能给出不同概率。
-
-组合建表会迅速膨胀；Transformer 共享参数学习表示，用 Attention 组合各位置的信息。[Attention Is All You Need](https://arxiv.org/abs/1706.03762)
-
-因果限制要求每个位置只看前文；训练虽能并行处理各位置，也不能泄漏后文答案。
-
-Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)。
-
-## 第三十五到四十五分钟 从预测能力到可用的助手
+## 4. 从预测到助手
 
 预测知识、代码与解题文本可学到多任务规律。GPT-3 展示了按指令与少量示例完成任务，无需现场更新参数。[Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
 
@@ -98,7 +113,9 @@ Q/K/V 的数值过程见[Attention 图解](../kv-cache/02-attention-and-kv.md)�
 
 普通的一次对话请求不更新模型参数。若产品另外保存记忆或把反馈用于后续训练，那是额外机制。
 
-## 最后五分钟 从模型走到 Harness
+<div class="heading-alias" id="最后五分钟-从模型走到-harness" aria-hidden="true"></div>
+
+## 5. 工具调用与 Harness
 
 工具调用把动作表达为结构化请求，例如：
 

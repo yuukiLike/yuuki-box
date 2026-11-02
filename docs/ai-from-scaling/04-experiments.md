@@ -2,7 +2,7 @@
 
 接着[搭建 Harness](03-build-a-harness.md)，换成真实模型，再改变工具条件：<mark class="key">先预测，再用结果核对</mark>。
 
-实验 50 分钟，结果复核 10 分钟；无 API key 先做离线部分，字符模型对照供[四小时联读路线](README.md)选做。
+实验 50 分钟，结果复核 10 分钟。真实调用需 DeepSeek API key 并产生用量；无 key 可先做[离线故障实验](#offline-experiments)。字符模型对照在文末选读。
 
 ## 前十分钟 接入真实模型
 
@@ -30,25 +30,9 @@ pnpm demo:harness --live --max-rounds 6
 
 两种模型返回相同格式；工具、审批与验证沿用同一 Harness。
 
-<details>
-<summary>四小时路线选做：对照训练计算与上下文</summary>
 
-先完成[字符模型训练](02-train-a-model.md)，再做下面的对照。
 
-固定上下文 2，只改训练轮数：
-
-```bash
-pnpm demo:tiny-model --context 2 --epochs 30
-pnpm demo:tiny-model --context 2 --epochs 120
-```
-
-比较训练/验证 loss 和“鱼”的概率；结论限于本例。
-
-1 字与 2 字上下文对照则同时改变输入、参数和工作量，解释结果时要列出这些变量。
-
-继续训练原有短句不会提供实时天气信息；这还需要相应数据或工具。
-
-</details>
+<span id="offline-experiments"></span>
 
 ## 第二十到三十五分钟 故意让工具失败
 
@@ -116,5 +100,25 @@ pnpm demo:harness --write-to "$AI_CANCEL_DIR/summary.md"
 实际看到的证据：
 下一次要弄清的问题：
 ```
+
+<details>
+<summary>四小时路线选做：对照训练计算与上下文</summary>
+
+先完成[字符模型训练](02-train-a-model.md)，再做下面的对照。
+
+固定上下文 2，只改训练轮数：
+
+```bash
+pnpm demo:tiny-model --context 2 --epochs 30
+pnpm demo:tiny-model --context 2 --epochs 120
+```
+
+比较训练/验证 loss 和“鱼”的概率；结论限于本例。
+
+1 字与 2 字上下文对照则同时改变输入、参数和工作量，解释结果时要列出这些变量。
+
+继续训练原有短句不会提供实时天气信息；这还需要相应数据或工具。
+
+</details>
 
 回到[四小时路线](README.md)。继续做产品时，从[共享运行时](../../examples/shared/runtime/README.md)对照真实模型适配与执行状态，再沿[Harness 工程实验](../agent-engineering/README.md)补持久化、恢复和故障回归。

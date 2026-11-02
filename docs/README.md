@@ -18,7 +18,7 @@
 
 首页提供目录与继续阅读，章节目标默认折叠。点击“开始”选择任务，浏览其他章节不替换任务，点击“完成”结束。
 
-**MCP 主线：最简 demo → 本地天气 → 其他案例；音乐选修。** 云端入门可选 for-safe 只读练习。
+各专题可独立选学：先完成最小实验，再读机制和工程选读。**MCP：最简 demo → 本地天气 → 其他案例 → 远程授权；音乐选修。** 云端从 for-safe 只读任务开始。
 
 | 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
@@ -32,7 +32,7 @@
 | **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 有效审查意见或可验修复 diff |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 正确输出与工作量对照 |
-| **语音交互** | [edge-tts、Whisper 与 Silero VAD](tts/README.md) | 一句能播放的中文，再接转写与人声检测 |
+| **语音交互** | [合成并播放中文](tts/让-Yuuki-开口说第一句话.md) | 一句能播放的中文，再接转写与人声检测 |
 | **AI 探索（选读）** | [故障驱动、自动实验与知识整理](ai-ideas/README.md) | 输入、输出、标准明确的实验 |
 | **架构研究** | [产品研究](research/zed-raycast-warp.md)、[五路线实现对照](../examples/COMPARISON.md) | 技术取舍与重评证据 |
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
@@ -57,7 +57,7 @@
 
 ### 远程 MCP 与授权
 
-[Supabase × WeatherKit](ai-communication/weather-mcp/README.md)含体验、OAuth、天气 API、MCP 与验收；需账号、数据库、部署，先分清用户与 Apple token。
+本地工具调用稳定后，选读 [Supabase × WeatherKit](ai-communication/weather-mcp/README.md)：增加网站登录、多用户与部署，区分用户和 Apple token。
 
 <div class="heading-alias" id="ai-搭子同行者" aria-hidden="true"></div>
 
@@ -71,15 +71,15 @@
 
 ### 模型基础
 
-先读[参数与概率](ai-from-scaling/01-understand-models.md)，再[训练字符模型](ai-from-scaling/02-train-a-model.md)；训练不是 MCP／Agent 前置。
+先看[字符预测与上下文](ai-from-scaling/01-understand-models.md)，再[运行训练前后对照](ai-from-scaling/02-train-a-model.md)；训练不是 MCP／Agent 前置。
 
 ### 模型推理与 KV Cache
 
-从[请求](kv-cache/00-first-request.md)学 Attention、容量和前缀，再看 [Harness](kv-cache/04-deepseek-harness.md)、[Pi](kv-cache/05-pi.md)与[计算器](../site/src/pages/labs/kv-memory.astro)；概率、向量按需回补。
+从[请求](kv-cache/00-first-request.md)、前缀实验学到 Attention 与复用。容量[计算器](../site/src/pages/labs/kv-memory.astro)、[Harness](kv-cache/04-deepseek-harness.md)与 [Pi](kv-cache/05-pi.md)实现按需选读。
 
 ### Agent 工程
 
-先做[Harness](ai-from-scaling/03-build-a-harness.md)、[接模型](ai-from-scaling/04-experiments.md)的可运行实验，再按需选[运行控制](agent-engineering/05-harness-vertical-slice.md)、[MCP](agent-engineering/01-mcp-tool-source.md)、[Skills](agent-engineering/03-skills-structure.md)。后续七项为未接入 runtime 的建议。
+先做离线 [Harness](ai-from-scaling/03-build-a-harness.md)，再[接真实模型](ai-from-scaling/04-experiments.md)；用单文件 [Skill](agent-engineering/03-skills-structure.md)复用流程，随后按需接 [MCP](agent-engineering/01-mcp-tool-source.md)、补[运行恢复](agent-engineering/05-harness-vertical-slice.md)。工程七项为未接入 runtime 的建议。
 
 [API 指南](agent-engineering/openai-api.md)列领取、到期、模型入口；[社区实验](agent-engineering/openai-api.md#community-ideas)提供截图记忆、口答卡、漫画与语音冒险。
 
@@ -93,7 +93,7 @@
 
 ### AI 开发实践
 
-按需选[Issue 修复](ai-practices/02-issue-to-pr.md)、[故障诊断](ai-practices/03-error-to-fix.md)、[迁移](ai-practices/06-code-migration.md)、[审查](ai-practices/01-coderabbit-review.md)、[测试](ai-practices/05-test-generation.md)、[安全修复](ai-practices/04-security-autofix.md)。
+先选小型 [Issue 修复](ai-practices/02-issue-to-pr.md)、[审查核实](ai-practices/01-coderabbit-review.md)或[回归测试](ai-practices/05-test-generation.md)；[故障诊断](ai-practices/03-error-to-fix.md)、[安全修复](ai-practices/04-security-autofix.md)与[迁移](ai-practices/06-code-migration.md)作为进阶。
 
 减少验收看[工作流](ai-practices/your-workflow.md)；六项案例各自标明证据边界，无需逐个安装。
 
@@ -101,7 +101,7 @@
 
 [应用通信](ai-communication/README.md)每课一图一动作，先让程序读笔记。
 
-六课追请求、响应、事件、发现与失败；[HTTP 实战](ai-communication/03-sse-http.md)补断线、游标与完成状态，再按需接远程授权。
+五课主线追请求、响应、事件、工具发现与失败；[HTTP 重连](ai-communication/03-sse-http.md)和运行时源码选读，远程授权在本地调用稳定后再接。
 
 ### 前端性能
 
@@ -135,11 +135,11 @@ Memory 仅选读，不列课程或前置。
 
 ### Windows 本地 AI
 
-按 RTX 5060 Ti 16GB、i5-10400F、16GB 内存，从[本地基础](windows-local-ai/README.md)到 [Qwen Image](windows-local-ai/01-qwen-image.md)安装 ComfyUI、量化出图，再用 [ACE-Step](windows-local-ai/02-ace-step-music.md)做 30 秒配乐；小图短曲后再观察资源关系。
+按 RTX 5060 Ti 16GB、i5-10400F、16GB 内存，从[本地基础](windows-local-ai/README.md)到 [Qwen Image](windows-local-ai/01-qwen-image.md)安装 ComfyUI 并完成出图；[ACE-Step 配乐](windows-local-ai/02-ace-step-music.md)为选修，先用短曲观察资源关系。
 
 ### 阅读同步
 
-[Apple 阅读同步](learning/apple-reading-sync.md)用两图分开发者与使用者：实现、部署，以及登录、跨设备、离线恢复；登录可选，代码、线上与真账号验证分列。
+[Apple 阅读同步](learning/apple-reading-sync.md)先讲登录、跨设备与离线恢复，再选读实现和部署；登录可选，代码、线上与真账号验证分列。
 
 ## 已确认的产品方向
 

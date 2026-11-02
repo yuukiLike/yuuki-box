@@ -1,6 +1,6 @@
 # 附录 OpenAI API 模型分类与选型
 
-按用途比较模型、成本与用法。**先试 GPT-Transcribe + GPT-6.1 Sol：<mark class="key">口述想法</mark>，生成 Issue 草稿和下一步。**
+先按目标产物查类型速查，再比较模型、成本与用法；语音生成 Issue 的组合方案为文末选读。
 
 核对：**2026-11-01**。日期快照合并，现役、弃用、停用分别列出。可用性按组织权限查 [List models](https://developers.openai.com/api/reference/resources/models/methods/list)；能力与价格依官方资料，本项目用法为建议。 [官方模型目录](https://developers.openai.com/api/docs/models/all)
 
@@ -170,6 +170,9 @@ Embedding 找相关内容；应用仍须保存记忆、任务状态，并将检�
 
 Sora 2／Videos API 于 2026-09-24、GPT-Image-1 于 2026-10-23 停用；旧 Deep Research、computer-use-preview 及部分 Codex／Chat／音频快照亦已停用。 [完整停用记录](https://developers.openai.com/api/docs/deprecations)
 
+<details>
+<summary>选读：语音生成 Issue 草稿</summary>
+
 <div class="heading-alias" id="试做方案-开工搭子" aria-hidden="true"></div>
 
 ## 试做方案：语音生成 Issue 草稿
@@ -184,3 +187,5 @@ Sora 2／Videos API 于 2026-09-24、GPT-Image-1 于 2026-10-23 停用；旧 Dee
 **交付：可修改的 Issue 草稿与明确动作。** 方案待实现；需要自然交谈时再接 Live，复杂任务交后端 Sol。
 
 准备实际接入时，按需查阅[API 额度与调用入口](../agent-engineering/openai-api.md)、[语音与多模态小项目](../agent-engineering/openai-api-projects.md)和[Issue 自动化](../issue-garden/README.md)。
+
+</details>

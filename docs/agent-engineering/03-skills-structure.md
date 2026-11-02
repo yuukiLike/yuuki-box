@@ -8,6 +8,8 @@ Skill 保存<mark class="key">触发条件、步骤与验收</mark>，可版本�
 
 ## Skill 由什么组成
 
+首轮只创建 `SKILL.md`，用显式调用完成一次任务；脚本、引用资料与自建加载器按需增加。
+
 ```text
 .claude/skills/docs-restructure/
 ├── SKILL.md              # 必需：触发条件与步骤
@@ -28,29 +30,6 @@ description: 重构 docs 目录、拆分章节并同步站点导航。当用户�
 规范建议 `name` 使用小写字母和连字符，长度不超过 64 个字符；`description` 不超过 1024 个字符，不要包含 XML 标签。正文建议控制在 500 行以内。[Agent Skills specification](https://agentskills.io/specification)
 
 Claude Code 使用 `.claude/skills/<name>/SKILL.md`，Codex 使用 `.agents/skills/<name>/SKILL.md`，结构可共用。显式调用分别为 `/skill-name`、`$skill-name`；也可由 description 触发。
-
-[![Skill 按名称描述、正文、引用资料三层加载；工具权限另行检查](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)
-
-读图只看：这一步为什么需要新增上下文。
-
-## 加载是渐进的
-
-1. 启动时只把 `name` 和 `description` 放进上下文。
-2. 任务匹配后，才加载 `SKILL.md` 正文。
-3. 只有正文明确要求时，才读取 `references/` 或运行 `scripts/`。
-
-按需加载正文，避免所有规则同时占用上下文。
-
-## description 才是触发器
-
-description 要写清<mark class="key">做什么、何时用、何时不用</mark>；“帮助处理文档”太宽。
-
-| 写法 | 问题 |
-| --- | --- |
-| `帮助处理文档` | 太宽，几乎所有文档任务都会命中 |
-| `重构 docs 目录、拆分章节并同步站点导航。当用户要求调整文档结构、侧栏顺序或拆分章节时使用；只改错别字或单篇内容时不要触发。` | 有动作、有触发条件、有负例 |
-
-把负例保留为触发测试。
 
 ## 正文模板
 
@@ -87,6 +66,34 @@ description 要写清<mark class="key">做什么、何时用、何时不用</mar
 
 正文只写任务步骤；通用规则引用项目已有说明。
 
+<details>
+<summary>选读：自动触发与渐进加载</summary>
+
+[![Skill 按名称描述、正文、引用资料三层加载；工具权限另行检查](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)](../../site/public/diagrams/agent-engineering/03-skill-loading.svg)
+
+读图只看：这一步为什么需要新增上下文。
+
+## 加载是渐进的
+
+1. 启动时只把 `name` 和 `description` 放进上下文。
+2. 任务匹配后，才加载 `SKILL.md` 正文。
+3. 只有正文明确要求时，才读取 `references/` 或运行 `scripts/`。
+
+按需加载正文，避免所有规则同时占用上下文。
+
+## description 才是触发器
+
+description 要写清<mark class="key">做什么、何时用、何时不用</mark>；“帮助处理文档”太宽。
+
+| 写法 | 问题 |
+| --- | --- |
+| `帮助处理文档` | 太宽，几乎所有文档任务都会命中 |
+| `重构 docs 目录、拆分章节并同步站点导航。当用户要求调整文档结构、侧栏顺序或拆分章节时使用；只改错别字或单篇内容时不要触发。` | 有动作、有触发条件、有负例 |
+
+把负例保留为触发测试。
+
+</details>
+
 <div class="heading-alias" id="小挑战把最近重复过的任务教一遍" aria-hidden="true"></div>
 
 ## 复用对照实验
@@ -119,4 +126,4 @@ description 要写清<mark class="key">做什么、何时用、何时不用</mar
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [OpenAI Codex Skills](https://developers.openai.com/plugins/build/skills)
 
-返回[上一篇](02-mcp-policy.md) · [总览](README.md) · 下一篇[Skills：校验与渐进加载](04-skills-validation.md)。
+返回[总览](README.md) · 下一篇[Skills：校验与渐进加载](04-skills-validation.md)；[MCP 工具策略](02-mcp-policy.md)按需选读。

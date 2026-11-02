@@ -2,7 +2,7 @@
 
 [专题入口](README.md) · [下一站 前端数组与前缀](01-from-frontend.md)
 
-本篇区分<mark class="key">客户端消息与服务端 KV</mark>。
+本篇只区分<mark class="key">客户端消息与服务端 KV</mark>的位置；先读两组消息数组，数值表示按需展开。
 
 <div class="heading-alias" id="第一步先看你认识的消息数组" aria-hidden="true"></div>
 
@@ -45,6 +45,9 @@ const nextMessages = [
 
 Yuuki 的 Chat Completions 路径发送完整 `system + history`；服务端缓存减计算，不能补回未发送的历史。[请求入口](../../examples/shared/runtime/Sources/main.swift:351)
 
+<details>
+<summary>选读：文字进入模型后的数值表示</summary>
+
 <div class="heading-alias" id="第三步文字进入模型后会变成数字" aria-hidden="true"></div>
 
 ## 3. 文本到数值表示
@@ -59,6 +62,8 @@ Yuuki 的 Chat Completions 路径发送完整 `system + history`；服务端缓�
 ID 与数组仅示意；实际角色边界和控制标记随模型而变。[聊天模板](https://huggingface.co/docs/transformers/en/chat_templating)
 
 模型各层产生数值状态，KV Cache 保存其中可复用的 K/V；后续以累计和说明复用条件。
+
+</details>
 
 <div class="heading-alias" id="这一站完成了" aria-hidden="true"></div>
 

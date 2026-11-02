@@ -46,20 +46,6 @@ export const navigation = [
     ],
   },
   {
-    label: '远程 MCP 与授权',
-    color: 'emerald',
-    description: '以天气服务为完整工程，分清用户登录与上游鉴权，再实现业务权限、工具接入和端到端验收。',
-    tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
-    items: [
-      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
-      page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
-      page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
-      page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
-      page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
-      page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
-    ],
-  },
-  {
     label: 'MCP 项目实战',
     color: 'emerald',
     description: '天气主线之后的扩展案例：Blender 建模、GitHub 修复验证与选修音乐工作台。',
@@ -76,6 +62,20 @@ export const navigation = [
           page('ai-from-scaling/08-music-photo-mcp', '选修 2：舞台预演台', ['选修', '舞台布局', '视频导出']),
         ],
       },
+    ],
+  },
+  {
+    label: '进阶：远程 MCP 与授权',
+    color: 'emerald',
+    description: '本地工具与客户端调用稳定后，再增加网站登录、OAuth、多用户权限与远程部署。',
+    tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
+    items: [
+      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
+      page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
+      page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
+      page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
+      page('ai-communication/weather-mcp/04-mcp-server', '4 · MCP 服务：封装天气工具', ['MCP Server']),
+      page('ai-communication/weather-mcp/05-connect-and-verify', '5 · 连接 Codex 并验收天气工具', ['Codex', '验收']),
     ],
   },
   {
@@ -107,35 +107,35 @@ export const navigation = [
     description: '理解参数、预测与训练，运行字符模型并比较训练前后的输出。',
     tags: [topic('模型原理', 'ai-from-scaling/01-understand-models'), topic('字符模型训练', 'ai-from-scaling/02-train-a-model')],
     items: [
-      page('ai-from-scaling/01-understand-models', '模型基础 1：参数、概率与缩放定律', ['模型原理'], '1 · 模型学习'),
+      page('ai-from-scaling/01-understand-models', '模型基础 1：预测、上下文与训练', ['模型原理'], '1 · 预测与上下文'),
       page('ai-from-scaling/02-train-a-model', '模型基础 2：数据、损失与字符生成', ['模型训练'], '2 · 训练字符语言模型'),
     ],
   },
   {
     label: '模型推理与 KV Cache',
     color: 'gold',
-    description: '从消息和 token 走到 Attention、缓存容量与前缀复用，再对照 Harness 和 Pi 的请求及用量。',
+    description: '先追踪请求、观察前缀复用，再理解 Attention；容量计算、Harness 与 Pi 实现按需选读。',
     tags: [topic('生成过程', 'kv-cache/00-first-request'), topic('Attention', 'kv-cache/02-attention-and-kv'), topic('内存容量', 'kv-cache/00-why-so-large'), topic('前缀复用', 'kv-cache/03-prefix-cache-and-yuuki')],
     items: [
       page('kv-cache', 'KV Cache 总览：原理、容量与 Agent 应用', ['模型缓存'], 'KV Cache · 原理与应用'),
       {
-        label: '原理与容量',
-        tags: ['KV Cache', '模型缓存', '进阶'],
+        label: '理解与复用：请求、前缀与 Attention',
+        tags: ['KV Cache', '前缀复用'],
         items: [
           page('kv-cache/00-first-request', '1 · 模型请求：消息、token 与生成过程', ['请求路径', 'Token']),
           page('kv-cache/01-from-frontend', '2 · 增量计算：追加输入与复用结果', ['增量计算']),
           page('kv-cache/02-attention-and-kv', '3 · 注意力：Q、K、V 与因果遮罩', ['Attention', 'Q/K/V']),
-          page('kv-cache/00-why-so-large', 'KV 容量：层数、token 与数据精度', ['内存计算']),
-          { label: '交互实验：计算 KV Cache 内存容量', link: '/labs/kv-memory/', tags: ['交互实验', '内存计算'] },
+          page('kv-cache/03-prefix-cache-and-yuuki', '4 · 前缀缓存：DeepSeek 命中与失效', ['DeepSeek', '前缀缓存']),
         ],
       },
       {
-        label: '应用：前缀复用与用量',
-        tags: ['前缀缓存', '用量统计'],
+        label: '选读：容量与工程实现',
+        tags: ['选读', '内存计算', '工程实现'],
         items: [
-          page('kv-cache/03-prefix-cache-and-yuuki', '4 · 前缀缓存：DeepSeek 命中与失效', ['DeepSeek', '前缀缓存']),
-          page('kv-cache/04-deepseek-harness', '5 · Harness：请求装配与缓存复用', ['Harness', '请求装配']),
-          page('kv-cache/05-pi', '6 · Pi：用量映射、缓存计费与预热', ['Pi', '用量统计']),
+          page('kv-cache/00-why-so-large', '选读 · KV 容量：层数、token 与数据精度', ['选读', '内存计算']),
+          { label: '交互实验：计算 KV Cache 内存容量', link: '/labs/kv-memory/', tags: ['交互实验', '内存计算'] },
+          page('kv-cache/04-deepseek-harness', '进阶 · Harness：请求装配与缓存复用', ['Harness', '请求装配']),
+          page('kv-cache/05-pi', '进阶 · Pi：用量映射、缓存计费与预热', ['Pi', '用量统计']),
           page('kv-cache/06-study-map', '知识地图：KV 术语、关联概念与实验', ['知识地图']),
         ],
       },
@@ -144,8 +144,8 @@ export const navigation = [
   {
     label: 'Agent 工程',
     color: 'pink',
-    description: '先跑通工具循环，再学习 Hooks、运行控制、MCP 与 Skills；用 Computer Use 理解 AI 怎样操作界面。',
-    tags: [topic('工具循环入门', 'ai-from-scaling/03-build-a-harness'), topic('接真实模型', 'ai-from-scaling/04-experiments'), topic('OpenAI API 额度', 'agent-engineering/openai-api'), topic('语音与音乐项目', 'agent-engineering/openai-api-projects'), topic('Hooks', 'agent-engineering/hooks'), topic('取消与恢复', 'agent-engineering/05-harness-vertical-slice'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('Computer Use', 'agent-engineering/computer-use'), topic('cua_repl', 'agent-engineering/cua-repl')],
+    description: '离线工具循环 → 真实模型 → 单文件 Skill → 外部工具；运行恢复与界面操作随后按需增加。',
+    tags: [topic('离线入门', 'ai-from-scaling/03-build-a-harness'), topic('真实模型', 'ai-from-scaling/04-experiments'), topic('Skills', 'agent-engineering/03-skills-structure'), topic('MCP 接入', 'agent-engineering/01-mcp-tool-source'), topic('运行恢复', 'agent-engineering/05-harness-vertical-slice'), topic('Computer Use', 'agent-engineering/computer-use')],
     items: [
       page('agent-engineering', 'Agent 工程总览：工具循环与执行能力', ['入门', '工程练习', 'Computer Use']),
       {
@@ -154,8 +154,22 @@ export const navigation = [
         items: [
           page('ai-from-scaling/03-build-a-harness', 'Agent 入门 1：搭建工具调用 Harness', ['Harness', '工具调用'], '1 · 搭建 Harness'),
           page('ai-from-scaling/04-experiments', 'Agent 入门 2：接真实模型并对照结果', ['模型 API', '对照实验'], '2 · 接真实模型'),
-          page('agent-engineering/openai-api', 'OpenAI API：额度、图片与语音', ['API 额度', '图片生成', 'TTS', topic('社区妙用', 'agent-engineering/openai-api#community-ideas')], 'OpenAI API · 额度与妙用'),
-          page('agent-engineering/openai-api-projects', '选修：OpenAI 语音、音乐与多模态项目', ['选修', '语音项目', '音乐制作', '多模态', 'API 用量'], '选修 · OpenAI 多模态项目'),
+        ],
+      },
+      {
+        label: 'Skills：流程复用、结构与验收规则',
+        tags: ['Skills', '验收'],
+        items: [
+          page('agent-engineering/03-skills-structure', 'Skill 结构：保存可复用的任务流程', ['SKILL.md', '流程复用']),
+          page('agent-engineering/04-skills-validation', 'Skill 验证：为完成条件设计验收', ['完成条件', '验证']),
+        ],
+      },
+      {
+        label: 'MCP：工具发现、接入与执行权限',
+        tags: ['MCP', '工具权限'],
+        items: [
+          page('agent-engineering/01-mcp-tool-source', 'MCP 工具源：把外部工具接进 Harness', ['工具发现', 'MCP']),
+          page('agent-engineering/02-mcp-policy', '工具策略：允许、拒绝与确认执行', ['权限策略']),
         ],
       },
       {
@@ -169,22 +183,6 @@ export const navigation = [
         ],
       },
       {
-        label: 'MCP：工具发现、接入与执行权限',
-        tags: ['MCP', '工具权限'],
-        items: [
-          page('agent-engineering/01-mcp-tool-source', 'MCP 工具源：把外部工具接进 Harness', ['工具发现', 'MCP']),
-          page('agent-engineering/02-mcp-policy', '工具策略：允许、拒绝与确认执行', ['权限策略']),
-        ],
-      },
-      {
-        label: 'Skills：流程复用、结构与验收规则',
-        tags: ['Skills', '验收'],
-        items: [
-          page('agent-engineering/03-skills-structure', 'Skill 结构：保存可复用的任务流程', ['SKILL.md', '流程复用']),
-          page('agent-engineering/04-skills-validation', 'Skill 验证：为完成条件设计验收', ['完成条件', '验证']),
-        ],
-      },
-      {
         label: 'Computer Use：原理、接口与误区',
         tags: ['Computer Use', 'cua_repl'],
         items: [
@@ -194,35 +192,40 @@ export const navigation = [
           page('agent-engineering/computer-use-misconceptions', 'Computer Use：理解误区与自测', ['理解误区', '状态', '验证'], '4 · 误区与自测'),
         ],
       },
+      {
+        label: '选读：API 额度与多模态',
+        tags: ['选读', 'API', '语音与图片'],
+        items: [
+          page('agent-engineering/openai-api', 'OpenAI API：额度、图片与语音', ['API 额度', '图片生成', 'TTS', topic('社区妙用', 'agent-engineering/openai-api#community-ideas')], 'OpenAI API · 额度与妙用'),
+          page('agent-engineering/openai-api-projects', '选修：OpenAI 语音、音乐与多模态项目', ['选修', '语音项目', '音乐制作', '多模态', 'API 用量'], '选修 · OpenAI 多模态项目'),
+        ],
+      },
     ],
   },
   {
     label: 'AI 开发实践',
     color: 'emerald',
-    description: '按手头任务选案例：从 Issue 交付 PR、从报错追根因，再做代码审查、有效测试、安全修复与版本迁移。',
-    tags: [topic('Issue → PR', 'ai-practices/02-issue-to-pr'), topic('故障修复', 'ai-practices/03-error-to-fix'), topic('PR 审查', 'ai-practices/01-coderabbit-review'), topic('测试生成', 'ai-practices/05-test-generation'), topic('安全修复', 'ai-practices/04-security-autofix'), topic('代码迁移', 'ai-practices/06-code-migration')],
+    description: '从小 Issue、核实审查意见和回归测试开始，再选故障调查、安全修复与版本迁移。各案例可独立阅读。',
+    tags: [topic('Issue → PR', 'ai-practices/02-issue-to-pr'), topic('PR 审查', 'ai-practices/01-coderabbit-review'), topic('回归测试', 'ai-practices/05-test-generation'), topic('故障调查', 'ai-practices/03-error-to-fix')],
     items: [
+      page('ai-practices', '开发实践总览：任务修复、质量检查与代码迁移', ['Issue 修复', 'PR 审查', '回归测试']),
       {
-        ...page('ai-practices', '开发实践总览：任务修复、质量检查与代码迁移', ['Issue 修复', '故障定位', 'PR 审查', '测试生成', '安全修复', '代码迁移']),
-        description: '六项实践：Issue 转 PR、故障定位、CodeRabbit 审查、测试生成、安全告警修复、版本迁移。',
-      },
-      page('ai-practices/your-workflow', '开发工作流：复现、修复、验收与返工分析', ['工作流', '验收']),
-      {
-        label: '任务交付：Issue 修复、故障定位与迁移',
-        tags: ['Issue → PR', '故障定位', '版本迁移'],
+        label: '起步：交付、审查与回归',
+        tags: ['单任务', '验收'],
         items: [
           page('ai-practices/02-issue-to-pr', 'Issue → PR：明确复现、生成补丁与人工验收', ['GitHub', '任务交付']),
-          page('ai-practices/03-error-to-fix', '故障修复：Sentry Seer 定位根因与生成补丁', ['Sentry Seer', '调试']),
-          page('ai-practices/06-code-migration', '代码迁移：限定升级范围与核对关联改动', ['版本升级', '迁移']),
+          page('ai-practices/01-coderabbit-review', 'CodeRabbit：核实 PR 审查意见与误报', ['CodeRabbit', '代码审查']),
+          page('ai-practices/05-test-generation', '测试生成：验证测试能否抓住真实 bug', ['回归测试', '测试有效性']),
         ],
       },
       {
-        label: '质量检查：PR 审查、有效测试与安全修复',
-        tags: ['PR 审查', '测试生成', '安全修复'],
+        label: '进阶选读：故障、安全与迁移',
+        tags: ['选读', '复杂任务'],
         items: [
-          page('ai-practices/01-coderabbit-review', 'CodeRabbit：核实 PR 审查意见与误报', ['CodeRabbit', '代码审查']),
-          page('ai-practices/05-test-generation', '测试生成：验证测试能否抓住真实 bug', ['回归测试', '测试有效性']),
+          page('ai-practices/03-error-to-fix', '故障修复：Sentry Seer 定位根因与生成补丁', ['Sentry Seer', '调试']),
           page('ai-practices/04-security-autofix', '安全修复：从扫描告警追到修复验证', ['CodeQL', '漏洞修复']),
+          page('ai-practices/06-code-migration', '代码迁移：限定升级范围与核对关联改动', ['版本升级', '迁移']),
+          page('ai-practices/your-workflow', '工作流选读：复现、修复、验收与返工分析', ['工作流', '验收', '选读']),
         ],
       },
     ],
@@ -230,17 +233,23 @@ export const navigation = [
   {
     label: '应用通信',
     color: 'sky',
-    description: '用六课与 SSE 实战追踪请求、响应与流式事件：从跨进程读笔记，到断流重连、MCP，再处理超时与取消。',
+    description: 'RPC → JSON-RPC → SSE → MCP → 超时与取消；真实 HTTP 重连和项目源码在基础调用后选读。',
     tags: [topic('RPC', 'ai-communication/01-rpc'), topic('JSON-RPC', 'ai-communication/02-json-rpc'), topic('SSE', 'ai-communication/03-sse'), topic('MCP', 'ai-communication/04-mcp'), topic('超时与取消', 'ai-communication/05-failure')],
     items: [
       page('ai-communication', '通信课程总览：请求、流式响应与工具调用', ['协议课程']),
       page('ai-communication/01-rpc', '1 · RPC：跨进程读取笔记', ['RPC']),
       page('ai-communication/02-json-rpc', '2 · JSON-RPC：用 ID 匹配请求与响应', ['JSON-RPC']),
       page('ai-communication/03-sse', '3 · SSE：接收事件并逐步显示结果', ['SSE', '流式响应']),
-      page('ai-communication/03-sse-http', 'SSE 实战：HTTP、重连与结束状态', ['SSE', '断线重连']),
       page('ai-communication/04-mcp', '4 · MCP：发现工具与执行调用', ['MCP']),
       page('ai-communication/05-failure', '5 · 通信失败：超时、取消与远端执行', ['超时', '取消']),
-      page('ai-communication/06-yuuki', '6 · Yuuki：在项目中追踪通信路径', ['代码追踪']),
+      {
+        label: '进阶选读：真实连接与源码追踪',
+        tags: ['选读', '断线重连', '项目源码'],
+        items: [
+          page('ai-communication/03-sse-http', 'SSE 实战：HTTP、重连与结束状态', ['选读', 'SSE', '断线重连']),
+          page('ai-communication/06-yuuki', '6 · Yuuki：在项目中追踪通信路径', ['选读', '代码追踪']),
+        ],
+      },
     ],
   },
   {
@@ -254,9 +263,9 @@ export const navigation = [
         tags: ['数据结构', '缓存失效'],
         items: [
           page('frontend-foundations', '查找与缓存总览：消息索引与重复计算', ['索引', '缓存']),
+          { label: '交互实验：数组与 Map 的查找工作量', link: '/labs/lookup/', tags: ['交互实验', 'Map'] },
           page('frontend-foundations/keys-and-maps', 'key、Object、Map 与 WeakMap 的选择', ['对象身份', 'Map']),
           page('frontend-foundations/cache-cost', '缓存成本：命中、失效、淘汰与内存', ['缓存失效', '内存']),
-          { label: '交互实验：数组与 Map 的查找工作量', link: '/labs/lookup/', tags: ['交互实验', 'Map'] },
         ],
       },
       {
@@ -264,9 +273,9 @@ export const navigation = [
         tags: ['Wasm', 'Worker', 'WebGPU'],
         items: [
           page('wasm', 'Wasm 入门：JavaScript 与模块调用边界', ['WebAssembly']),
-          page('wasm/workers-and-memory', 'Worker：内存、数据搬运与任务取消', ['Worker', '内存']),
-          page('wasm/browser-ai', '浏览器 AI：Wasm、WebGPU 与模型运行时', ['WebGPU', '推理运行时']),
           { label: '交互实验：JavaScript 调用 Wasm 整数加法', link: '/labs/wasm-bridge/', tags: ['交互实验', 'Wasm'] },
+          page('wasm/workers-and-memory', 'Worker：内存、数据搬运与任务取消', ['Worker', '内存']),
+          page('wasm/browser-ai', '进阶选读：浏览器 AI 与模型运行时', ['选读', 'WebGPU', '推理运行时']),
         ],
       },
       {
@@ -282,12 +291,12 @@ export const navigation = [
   {
     label: '语音交互',
     color: 'orange',
-    description: '用 edge-tts 合成中文，用 whisper.cpp 转写录音，用 Silero VAD 找出人声，再接入 Yuuki 的模型与工具流程。',
+    description: '先合成并播放一句中文，再按需增加转写与人声检测；完整模型与工具集成选读。',
     tags: [topic('语音合成 / TTS', 'tts/让-Yuuki-开口说第一句话'), topic('Whisper 转写', 'tts#第二站--whispercpp把声音接回文字'), topic('VAD 人声检测', 'tts#第三站--silero-vad在录音里找出人声'), topic('模型与语音集成', 'architecture/ai-and-speech-foundation')],
     items: [
-      page('tts', '语音工具总览：edge-tts、Whisper 与 Silero VAD', ['TTS', 'ASR', 'VAD']),
       page('tts/让-Yuuki-开口说第一句话', 'edge-tts 实践：合成并播放第一句中文', ['语音合成']),
-      page('architecture/ai-and-speech-foundation', '语音集成：DeepSeek、Whisper 与运行时', ['DeepSeek', 'Whisper']),
+      page('tts', '语音工具总览：edge-tts、Whisper 与 Silero VAD', ['TTS', 'ASR', 'VAD']),
+      page('architecture/ai-and-speech-foundation', '进阶选读：语音、模型与运行时集成', ['选读', 'DeepSeek', 'Whisper']),
     ],
   },
   {
@@ -346,22 +355,28 @@ export const navigation = [
   {
     label: '云端 Codex',
     color: 'sky',
-    description: '用三个项目练习云端任务，核对检查、交付和本地待验项；Issue 协作统一查阅完整方案。',
+    description: '首条只读任务 → 资源复查 → 项目检查 → 事件回放；社区案例选读，Issue 协作查阅完整方案。',
     tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('Issue 完整方案', 'issue-garden#routes')],
     items: [
       page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
-      page('codex-cloud/cloud-machine', '云端电脑实测：CPU、内存、Shell 与多对话', ['资源实测', 'Shell', '多任务'], '云端电脑实测'),
-      page('codex-cloud/01-for-safe', '1 · 用 for-safe 发出第一条云端任务', ['for-safe', '动手练习']),
-      page('codex-cloud/02-community', '2 · 社区怎么用：公开案例与界面截图', ['社区案例', '截图']),
-      page('codex-cloud/03-for-job', '3 · for-job 的云端检查与导出回归', ['for-job', '备份与导出']),
-      page('codex-cloud/04-agent-symphony', '4 · agent-symphony 的云端事件与回放验证', ['Agent Symphony', '事件与回放']),
+      page('codex-cloud/01-for-safe', 'for-safe：首条只读云端任务', ['for-safe', '动手练习']),
+      page('codex-cloud/cloud-machine', '云端电脑实测：CPU、内存、Shell 与多对话', ['资源实测', 'Shell', '多任务'], '云端资源与多任务'),
+      page('codex-cloud/03-for-job', 'for-job：云端检查与导出回归', ['for-job', '备份与导出']),
+      page('codex-cloud/04-agent-symphony', 'agent-symphony：云端事件与回放验证', ['Agent Symphony', '事件与回放']),
+      {
+        label: '选读：社区案例',
+        tags: ['选读', '社区实践'],
+        items: [
+          page('codex-cloud/02-community', '社区做法：公开案例与界面截图', ['选读', '社区案例', '截图']),
+        ],
+      },
     ],
   },
   {
     label: 'Windows 本地 AI',
     color: 'emerald',
-    description: '用 RTX 5060 Ti 16GB 运行 Qwen Image 与 ACE-Step：共用 ComfyUI，保存第一张图片，再生成一段本地配乐。',
-    tags: [topic('本地运行基础', 'windows-local-ai'), topic('Qwen Image 出图', 'windows-local-ai/01-qwen-image'), topic('ACE-Step 配乐', 'windows-local-ai/02-ace-step-music')],
+    description: '先用 RTX 5060 Ti 16GB 与 ComfyUI 完成 Qwen Image 出图，ACE-Step 配乐为选修。',
+    tags: [topic('本地运行基础', 'windows-local-ai'), topic('Qwen Image 出图', 'windows-local-ai/01-qwen-image'), topic('配乐选修', 'windows-local-ai/02-ace-step-music')],
     items: [
       page('windows-local-ai', 'Windows 本地 AI：图片与音乐生成', ['Windows', '本地模型'], 'Windows 本地 AI · 从这里开始'),
       page('windows-local-ai/01-qwen-image', '1 · Windows 第一次运行 Qwen Image', ['Qwen Image', 'ComfyUI', 'RTX 5060 Ti'], '1 · Qwen Image 首次出图'),
@@ -369,12 +384,12 @@ export const navigation = [
     ],
   },
   {
-    label: '阅读同步',
+    label: '阅读同步（选读）',
     color: 'emerald',
-    description: '用两张 SVG 看懂本站阅读同步：开发者如何串起本地进度、Apple 登录与云端接口，使用者如何在手机和电脑之间同步。',
-    tags: [topic('开发者视角', 'learning/apple-reading-sync#developer-view'), topic('使用者视角', 'learning/apple-reading-sync#user-view'), topic('Apple 登录', 'learning/apple-reading-sync#apple-setup')],
+    description: '先看跨设备使用流程，再按需阅读 Apple 登录、同步接口与数据库实现。',
+    tags: [topic('使用流程', 'learning/apple-reading-sync#user-view'), topic('实现与部署', 'learning/apple-reading-sync#developer-view'), topic('Apple 登录', 'learning/apple-reading-sync#apple-setup')],
     items: [
-      page('learning/apple-reading-sync', '最后一课：Apple 登录与阅读同步', ['开发者视角', '使用者视角', 'Apple 登录'], '最后一课 · Apple 登录与阅读同步'),
+      page('learning/apple-reading-sync', '阅读同步：使用流程与实现', ['使用流程', '开发选读', 'Apple 登录'], '阅读同步 · 使用与实现'),
     ],
   },
   {

@@ -1,14 +1,22 @@
 # 第四章：MCP 工具发现与调用
 
-[![MCP 全景：用户操作 Host，Host 内的 Client 连接 Server；Codex、Zed、Warp、Raycast 都可以作为 Host，外接 GitHub、Context7、Playwright 等服务](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
+[上一课：SSE 入门](03-sse.md) · [目录](README.md) · [下一课](05-failure.md)
 
-点击 SVG 放大，卡片可跳转官方资料。
-
-[上一课：SSE 实战](03-sse-http.md) · [目录](README.md) · [下一课](05-failure.md)
-
-复用[客户端与调用链实验](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
+复用[最简 demo](../ai-from-scaling/00-minimal-mcp.md)：`tools/list` 查已连接服务的工具，`tools/call` 按名称和参数调用。服务启动命令已在 `client.ts` 指定。[工具规范](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
 
 <mark class="key">看输出 → 找代码 → 对照结果。</mark>
+
+## 1. 运行：观察两种不同的请求
+
+依赖安装见[最简 demo](../ai-from-scaling/00-minimal-mcp.md)，随后运行：
+
+```bash
+pnpm demo:mini-mcp
+```
+
+输出应有 `tools/list` 和保存、读取两次 `tools/call`。离线脚本填参数，重启后读取同一文件。
+
+完成：分清发现与执行。
 
 <div class="heading-alias" id="先分清你hostclientserver" aria-hidden="true"></div>
 
@@ -28,6 +36,10 @@ Host 可有多个 Client，每个 Client 连一个 Server；远程 Server 可服
 
 <details class="qa">
 <summary>Codex、Zed、Warp、Raycast 怎样接入？</summary>
+
+[![MCP 全景：用户操作 Host，Host 内的 Client 连接 Server；Codex、Zed、Warp、Raycast 都可以作为 Host，外接 GitHub、Context7、Playwright 等服务](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)](../../site/public/diagrams/ai-communication/mcp-roles-platforms.svg)
+
+点击 SVG 放大，卡片可跳转官方资料。
 
 2026-10-26 核对：以下指平台内置 AI / Agent 接入外部 Server。
 
@@ -63,18 +75,6 @@ Warp 终端里的 Codex CLI 使用 Codex 配置，Warp Agent 使用 Warp 配置�
 </details>
 
 总览图说明角色与连接关系；下面的实验和消息顺序按本课明确引用的 **2026-07-28** 规范阅读。
-
-## 1. 运行：观察两种不同的请求
-
-依赖安装见[最简 demo](../ai-from-scaling/00-minimal-mcp.md)，随后运行：
-
-```bash
-pnpm demo:mini-mcp
-```
-
-输出应有 `tools/list` 和保存、读取两次 `tools/call`。离线脚本填参数，重启后读取同一文件。
-
-完成：分清发现与执行。
 
 ## 2. 看图：文件操作发生在服务端
 

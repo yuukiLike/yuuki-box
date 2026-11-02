@@ -5,7 +5,7 @@ next: false
 
 # Issue 自动化与 AI 协作：完整方案
 
-围绕一个 Issue，串起修复、独立审查、通知与多 AI 演进。<mark class="key">先完成一次可验收交付，再接持续流程</mark>。
+围绕一个 Issue，串起修复、独立审查、通知与多 AI 演进。起步只做一次手动交付，定时、转发器与多 AI 在单次流程稳定后选读。<mark class="key">先完成一次可验收交付，再接持续流程</mark>。
 
 <div class="heading-alias" id="workflow" aria-hidden="true"></div>
 <div class="heading-alias" id="先认识今晚的搭档" aria-hidden="true"></div>
@@ -46,6 +46,20 @@ GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提�
 - **停止：** 无法复现、缺少条件、超时、额度不足或返修超限时，记录缺口并转人工。
 
 任务状态由程序保存；提示词不能替代去重、截止时间与权限控制。
+
+<div class="heading-alias" id="roadmap" aria-hidden="true"></div>
+<div class="heading-alias" id="三班练习一班比一班多接一点活" aria-hidden="true"></div>
+<div class="heading-alias" id="分阶段实践" aria-hidden="true"></div>
+
+## 实施顺序与验收
+
+| 阶段 | 完成条件 |
+| --- | --- |
+| 1 · 扫描 | Actions 生成 Issue 清单；无需 AI key |
+| 2 · 单次交付 | 手动选择一个 `ai-ready` Issue，修复、验证并交草稿 PR |
+| 3 · 审查返修 | 独立会话核对最终 head；确认的问题最多返修两轮 |
+| 4 · 事件与通知 | 接标签或定时触发；新 Issue、新 PR、合并均收到 Outlook 邮件 |
+| 5 · 多 AI | 先用两个假 Worker 演练，再接真实 Agent |
 
 <div class="heading-alias" id="routes" aria-hidden="true"></div>
 
@@ -166,24 +180,6 @@ Webhook 接入口，EventBus 发通知，数据库保存任务事实。<mark cla
 
 `id` 去重，`causeId` 串因果，`workId` 定子任务，`artifact` 指补丁；B/H2 保存完整 SHA。数据库事务不能保证远端副作用只发生一次。
 
-</details>
-
-演进从失败样本开始：回归用例 → 候选规则 → 回归通过 → 人工确认后版本化。保留来源、适用范围与结果，任务记录所用规则版本。
-
-<div class="heading-alias" id="roadmap" aria-hidden="true"></div>
-<div class="heading-alias" id="三班练习一班比一班多接一点活" aria-hidden="true"></div>
-<div class="heading-alias" id="分阶段实践" aria-hidden="true"></div>
-
-## 实施顺序与验收
-
-| 阶段 | 完成条件 |
-| --- | --- |
-| 1 · 扫描 | Actions 生成 Issue 清单；无需 AI key |
-| 2 · 单次交付 | 手动选择一个 `ai-ready` Issue，修复、验证并交草稿 PR |
-| 3 · 审查返修 | 独立会话核对最终 head；确认的问题最多返修两轮 |
-| 4 · 事件与通知 | 接标签或定时触发；新 Issue、新 PR、合并均收到 Outlook 邮件 |
-| 5 · 多 AI | 先用两个假 Worker 演练，再接真实 Agent |
-
 多 AI 首轮验证三种故障：
 
 1. **重投与重启：** 同一 Webhook 投两次，落库后重启，仍只有一个逻辑任务。
@@ -191,6 +187,10 @@ Webhook 接入口，EventBus 发通知，数据库保存任务事实。<mark cla
 3. **版本变化：** H1 通过后出现 H2，H1 结论不能批准 H2；返修超限转人工。
 
 比较不同路线时，固定同一基线与验收条件，分别记录正确性、用量、人工验收时间和合并后返工；单一样本不代表普遍优劣。
+
+</details>
+
+演进从失败样本开始：回归用例 → 候选规则 → 回归通过 → 人工确认后版本化。保留来源、适用范围与结果，任务记录所用规则版本。
 
 <div class="heading-alias" id="implementation" aria-hidden="true"></div>
 

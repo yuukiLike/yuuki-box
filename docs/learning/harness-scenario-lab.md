@@ -20,7 +20,10 @@
 
 [![相同最终文本下，比较全历史重算与历史缓存加活动消息的工作范围](../../site/public/diagrams/learning/history-active.svg)](../../site/public/diagrams/learning/history-active.svg)
 
-先选 W2/G2，记录历史解析数，再编辑一条旧消息，检查缓存确实失效。
+先选 [W2](../../examples/react-webview/README.md)；已有 GPUI 环境可选 [G2](../../examples/rust-gpui/README.md)。记录历史解析数，再编辑一条旧消息，检查缓存确实失效。一次只读所选路线的实现。
+
+<details>
+<summary>选读：十五个场景与各路线实现</summary>
 
 ## 十五个具体问题
 
@@ -99,6 +102,8 @@ W1 减少挂载，W2 减少解析，两者不能替代。W3 仍需计 Worker 启
 E2 每 150 ms 发控制探针，最多一个未完成请求。main 同步忙时，renderer 尚能响应也不代表取消能生效；Node Worker 可独立终止。长 CPU 工作应移出 main，但 Worker 有启动与通信成本。[Electron 性能](https://www.electronjs.org/docs/latest/tutorial/performance)、[Node Worker](https://nodejs.org/api/worker_threads.html)
 
 维护练习：E1 加审批终态、E2 加大回传、E3 改可变高度，分别检查背压、传输与测量。
+
+</details>
 
 <div class="heading-alias" id="指标要回答哪个问题" aria-hidden="true"></div>
 

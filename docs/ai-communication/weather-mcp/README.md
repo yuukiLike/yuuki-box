@@ -6,7 +6,7 @@
 
 Supabase Auth、Postgres、Edge Functions 承载后端，Apple WeatherKit 提供天气；业务代码实现 Server，Codex 提供 Host 和 Client。
 
-需理解 `tools/call`、HTTP 和基础 TypeScript，无需先学模型训练或本地天气示例。先分清凭证，再搭云端工程。
+本专题为进阶工程。建议先完成[最简调用](../../ai-from-scaling/00-minimal-mcp.md)与[本地天气](../../ai-from-scaling/07-weatherkit-mcp.md)，再增加远程服务、OAuth 与多用户权限。需理解 `tools/call`、HTTP 和基础 TypeScript；无需模型训练。
 
 [![Codex 风格的天气服务连接界面，右侧说明用户只需连接账号](../../../site/public/diagrams/weather-mcp/01-connect.svg)](../../../site/public/diagrams/weather-mcp/01-connect.svg)
 
