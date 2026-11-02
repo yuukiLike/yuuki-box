@@ -1,8 +1,9 @@
 // 每次只启动一个小目标；完成它不等于读完或掌握整章。
 /** @type {Record<string, [string, string, string?]>} */
 export const learningSteps = {
+  'rag': ['运行本地检索，把资料与问题交给模型。', '回答内容可与来源片段逐一核对。', '1. 检索本地资料'],
   'guide': ['运行 MCP 最简 demo，核对保存与取回流程。', '工具清单、保存结果与重启读取结果均可核对。', 'MCP 入门'],
-  'ai-from-scaling': ['按最简 demo、本地天气、其他案例定位 MCP 学习入口。', '已确认天气主线与其他案例的阅读顺序。'],
+  'ai-from-scaling': ['按最简 demo、记录服务、天气定位 MCP 学习入口。', '本地记录服务位于天气查询之前。'],
   'ai-from-scaling/00-codex-mcp': ['在仓库中安装并注册 MCP 服务。', 'Codex 可发现服务并完成保存、取回记录。', '接入 Codex'],
   'ai-from-scaling/00-minimal-mcp': ['在仓库根目录运行 `pnpm install:mini-mcp` 与 `pnpm demo:mini-mcp`。', '输出包含工具清单、保存成功及重启后取回的原文。', '1. 运行与结果'],
   'ai-from-scaling/01-understand-models': ['阅读预测示例，定位输入与预测目标。', '可解释下一 token 预测的输入与输出。'],
@@ -102,7 +103,7 @@ export const learningSteps = {
   'learning/apple-reading-sync': ['检查登录与跨设备同步流程。', '匿名阅读能力与登录后的同步范围明确。', '使用者视角 · 如何跨设备同步'],
   'learning/harness-scenario-lab': ['选择 W2 或 G2 场景，只改变一个因素。', '已记录可复现现象和同一指标的前后结果。', '实验步骤'],
   'learning/rendering-performance': ['区分模型回复等待与界面卡顿。', '待测的响应行为与问题对应。', '1. 界面响应指标'],
-  'mcp-projects': ['按最简 demo、天气主线与其他案例定位入口。', '天气实现路径明确，音乐案例标为选修。'],
+  'mcp-projects': ['按记录服务、天气与其他工具定位入口。', '本地文件服务与外部 API 的前置条件可区分。'],
   'plan/first-mac-loop': ['核对首轮开发的交付范围。', '输入、工具执行与结果的闭环明确。'],
   'research/zed-raycast-warp': ['核对当前结论与决策边界。', '判断依据及其失效条件明确。'],
   'side-by-side': ['打开 Issue 自动化完整方案。', '任务流程与实现路线可在同一页查阅。'],

@@ -1,4 +1,4 @@
-# SSE 实战：真实 HTTP、断线重连与结束状态
+# HTTP SSE：断线重连与结束状态
 
 [SSE 入门](03-sse.md) · [目录](README.md) · [选读：运行时源码](06-yuuki.md)
 

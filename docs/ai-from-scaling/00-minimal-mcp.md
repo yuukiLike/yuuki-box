@@ -1,14 +1,14 @@
 ---
 next:
-  link: /ai-from-scaling/07-weatherkit-mcp/
-  label: Apple 天气 MCP
+  link: /ai-from-scaling/00-codex-mcp/
+  label: MCP 记录服务
 ---
 
 # MCP 最简 demo：工具调用与文件读写
 
 脚本安排调用、Client 发请求、Server 执行工具；MCP 通信与文件读写真实发生，<mark class="caution">未接入模型</mark>。
 
-主线：最简 demo → 本地天气 MCP → 其他案例。后续可用[Codex 接入](00-codex-mcp.md)连接服务，案例总览见[MCP 项目实战](../mcp-projects/README.md)。
+主线：最简 demo → [MCP 记录服务](00-codex-mcp.md) → 本地天气 → 其他案例。先保存、取回本地记录，再增加外部 API；工具总览见[MCP 案例](../mcp-projects/README.md)。
 
 先运行本页 demo；客户端实现与错误校验按需选读。
 
@@ -73,7 +73,7 @@ pnpm demo:mini-mcp
 [清理] 演示临时目录已删除。
 ```
 
-核对 `tools/list`、`saved=true` 与重启后的 `found=true`，确认返回同一文件原文。最简 demo 验证完成后，继续[本地 Apple 天气 MCP](07-weatherkit-mcp.md)；以下实现细节为选读。
+核对 `tools/list`、`saved=true` 与重启后的 `found=true`，确认返回同一文件原文。最简 demo 验证完成后，继续[MCP 记录服务](00-codex-mcp.md)，再接[本地天气](07-weatherkit-mcp.md)；以下实现细节为选读。
 
 `demo.ts` 固定工具名和参数，依次保存、重启、读取；安装后可离线运行。`next` 来自 `checkpoint` 对象，改源码即改输出。
 
@@ -154,7 +154,7 @@ pnpm demo:mini-mcp --invalid
 
 能够定位编排、通信、文件读写与校验，即完成选读实验。
 
-应用案例见[MCP 项目实战](../mcp-projects/README.md)；消息流见[应用通信](../ai-communication/README.md)，工具决策见 [Agent 入门](03-build-a-harness.md)，训练原理见[模型基础](01-understand-models.md)。
+应用案例见[MCP 案例](../mcp-projects/README.md)；消息流见[应用通信](../ai-communication/README.md)，工具决策见 [Agent 入门](03-build-a-harness.md)，训练原理见[模型基础](01-understand-models.md)。
 
 编译、契约、异步与进程通信见 [TypeScript 技术栈与学习顺序](#typescript-stack)。
 

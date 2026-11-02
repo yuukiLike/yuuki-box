@@ -1,6 +1,6 @@
 # Yuuki Astro 文档站
 
-Astro 与 Starlight 文档站，正文读取 `docs/`。MCP 主线为最简 demo → 本地天气 → 其他案例 → 远程天气工程，音乐为选修。模型、Agent 工程、通信、性能与语音按专题组织；Issue 与 AI 协作集中为单页完整方案，阅读同步独立说明开发与使用流程。
+Astro 与 Starlight 文档站，正文读取 `docs/`。MCP 主线为最简 demo → 记录服务 → 本地天气 → 其他案例 → 远程天气工程，音乐为选修。RAG 用本地关键词检索与现有模型会话组成最小流程。模型、Agent 工程、通信、性能与语音按专题组织；Issue 与 AI 协作集中为单页完整方案，阅读同步独立说明开发与使用流程。
 
 ## 本地运行
 
@@ -161,7 +161,7 @@ pnpm --dir site exec wrangler pages dev dist
 - `src/lib/docs-paths.mjs` 将 Markdown 相对链接转换为站内路由；源码链接指向仓库，教学脚本由静态 source 路由提供。其他本机 checkout 的绝对路径显示为文字。
 - 导图等静态资源放在 `public/`；Markdown 使用指向 `site/public/` 的仓库相对路径，站点会将图片与原图链接一起转换为公开资源路径。
 - `src/lib/navigation.mjs` 统一维护阅读顺序、具体标题、主题标签、专题颜色与总览描述；`astro.config.ts` 将其接入 Starlight，并监听导航文件触发配置重载。使用 TypeScript 配置让 Astro 经 Vite 重新加载导航依赖，避免开发服务只刷新正文标签却保留旧分组。首页、阅读页标题与页内大纲展示主题标签；侧栏使用同一阅读顺序，显示标题和阅读进度。浏览器实验在 `src/pages/labs`，小型交互组件在 `src/components`。
-- 导航按前置递进：最简 MCP demo、本地天气、其他案例，再到远程授权。Agent 先工具循环与单文件 Skill；通信先基础协议，重连与源码后置；语音先合成播放。Issue 自动化以 `docs/issue-garden/README.md` 为唯一主文，配置与并行实验放在收起的选读分组；音乐明确标为选修。模型、KV Cache、Harness、通信与性能各自组织，交互实验归入对应专题。
+- 导航按前置递进：最简 MCP demo、记录服务、本地天气、其他案例，再到远程授权。Agent 先工具循环与单文件 Skill；通信先基础协议，重连与源码后置；语音先合成播放。Issue 自动化以 `docs/issue-garden/README.md` 为唯一主文，配置与并行实验放在收起的选读分组；音乐明确标为选修。模型、KV Cache、Harness、通信与性能各自组织，交互实验归入对应专题。
 - 跨专题导读在首页介绍和侧栏顶部提供入口，专题卡片只列本专题内容。调整分组不移动已有 Markdown 文件和路由；正文中的前置要求、选读说明与下一步建议同步维护。
 - `README.md` 对应 `/guide/`，子目录的 `README.md` 对应该目录；其他 Markdown 文件名保留在路由中。
 

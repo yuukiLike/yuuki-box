@@ -1,6 +1,6 @@
 # 选修 · 音乐 1：用 MCP 控制钢琴排练台
 
-[MCP 项目实战](../mcp-projects/README.md)的音乐选修，可独立开始；初次接入先看[Codex MCP 入门](00-codex-mcp.md)。
+[MCP 案例](../mcp-projects/README.md)的音乐选修，可独立开始；初次接入先看[Codex MCP 入门](00-codex-mcp.md)。
 
 操作目标：<mark class="key">定位第八小节，独听第二声部</mark>，把音名对应到亮起的琴键，再对照实际 MCP 请求与结果。
 
@@ -83,4 +83,4 @@ pnpm demo:music-space-mcp:preview
 
 普通 MP3/WAV 不提供准确音符与声部，`create_score_scene` 会拒绝；可用于[音乐 2](08-music-photo-mcp.md)。渲染使用 [Three.js WebGPURenderer](https://threejs.org/docs/pages/WebGPURenderer.html)，WebGPU 不可用时回落 WebGL2；确定性捕获固定走 WebGL2。
 
-连接外部宿主见[客户端配置](../../examples/music-space-mcp/README.md#接入-ai-客户端)，自然语言选工具由宿主承担。返回[MCP 项目实战](../mcp-projects/README.md)。
+连接外部宿主见[客户端配置](../../examples/music-space-mcp/README.md#接入-ai-客户端)，自然语言选工具由宿主承担。返回[MCP 案例](../mcp-projects/README.md)。

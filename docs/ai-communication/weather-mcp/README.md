@@ -1,6 +1,6 @@
 # 天气 MCP：从 Codex 里的连接按钮，到 Apple WeatherKit
 
-[本地工具实战](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
+[本地工具案例](../../mcp-projects/README.md) · [回补通信基础](../README.md) · [开始：用户会经历什么](01-user-journey.md)
 
 完整流程包含<mark class="key">连接、登录、授权与天气查询</mark>。
 

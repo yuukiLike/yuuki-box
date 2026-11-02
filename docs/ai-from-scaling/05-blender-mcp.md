@@ -173,4 +173,4 @@ STL 无单位，本例按毫米解释；闭合检查仅查非流形边、零面�
 
 </details>
 
-返回[MCP 项目实战](../mcp-projects/README.md) · [最简 demo 与客户端选读](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。
+返回[MCP 案例](../mcp-projects/README.md) · [最简 demo 与客户端选读](00-minimal-mcp.md) · 选做[GitHub 修复实验](06-github-lab-mcp.md)。

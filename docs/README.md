@@ -1,4 +1,4 @@
-# Yuuki Box：Agent 工程与实践
+# Yuuki Box：Agent 工程与案例
 
 覆盖 AI 任务执行、模型缓存与语音交互，以可验证产物为交付。
 
@@ -18,18 +18,19 @@
 
 首页提供目录与继续阅读，章节目标默认折叠。点击“开始”选择任务，浏览其他章节不替换任务，点击“完成”结束。
 
-各专题可独立选学：先完成最小实验，再读机制和工程选读。**MCP：最简 demo → 本地天气 → 其他案例 → 远程授权；音乐选修。** 云端从 for-safe 只读任务开始。
+各专题可独立选学：先完成最小实验，再读机制和工程选读。**MCP：最简 demo → 记录服务 → 本地天气 → 其他案例 → 远程授权；音乐选修。** 云端从 for-safe 只读任务开始。
 
 | 需要时查阅的专题 | 从哪里出发 | 第一份成果 |
 | --- | --- | --- |
-| **MCP 入门** | [最简 demo](ai-from-scaling/00-minimal-mcp.md) → [本地天气](ai-from-scaling/07-weatherkit-mcp.md) | 工具发现、调用与天气查询 |
-| **MCP 项目实战** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 一个兴趣项目及工具产物 |
+| **MCP 入门** | [最简 demo](ai-from-scaling/00-minimal-mcp.md) → [记录服务](ai-from-scaling/00-codex-mcp.md) → [天气](ai-from-scaling/07-weatherkit-mcp.md) | 工具调用、本地读写与外部查询 |
+| **RAG 入门** | [检索资料后再回答](rag/README.md) | 相关片段、来源与模型回答 |
+| **MCP 案例** | [天气、Blender、GitHub 与音乐项目](mcp-projects/README.md) | 一个兴趣项目及工具产物 |
 | **远程 MCP 与授权** | [Supabase × WeatherKit](ai-communication/weather-mcp/README.md) | 凭证、登录、权限与天气查询 |
 | **Issue 自动化与 AI 协作** | [完整方案](issue-garden/README.md) | 任务、审查、通知与多 AI 演进 |
 | **模型基础** | [参数、概率与训练](ai-from-scaling/01-understand-models.md) | 字符模型、预测与参数更新 |
 | **模型推理与 KV Cache** | [从请求到缓存](kv-cache/README.md) | KV 容量与前缀复用 |
 | **Agent 工程** | [工具循环、运行控制与 Computer Use](agent-engineering/README.md) | Harness、工具与界面自动化 |
-| **AI 开发实践** | [修复、审查、测试与迁移](ai-practices/README.md) | 有效审查意见或可验修复 diff |
+| **AI 开发案例** | [修复、审查、测试与迁移](ai-practices/README.md) | 有效审查意见或可验修复 diff |
 | **应用通信** | [RPC、JSON-RPC、SSE 与 MCP](ai-communication/README.md) | 追踪一次请求、响应与取消 |
 | **前端性能** | [查找与缓存](frontend-foundations/README.md)、[浏览器计算](wasm/README.md)、[渲染](learning/rendering-performance.md) | 正确输出与工作量对照 |
 | **语音交互** | [合成并播放中文](tts/让-Yuuki-开口说第一句话.md) | 一句能播放的中文，再接转写与人声检测 |
@@ -43,15 +44,21 @@
 
 ### MCP 入门
 
-先运行[最简 demo](ai-from-scaling/00-minimal-mcp.md)，再实现[本地天气 MCP](ai-from-scaling/07-weatherkit-mcp.md)；[Codex 接入](ai-from-scaling/00-codex-mcp.md)与 [MCP 实战](mcp-projects/README.md)随后按需选择。
+先运行[最简 demo](ai-from-scaling/00-minimal-mcp.md)，用[MCP 记录服务](ai-from-scaling/00-codex-mcp.md)接入 Codex 并保存、取回记录，再增加[天气 API](ai-from-scaling/07-weatherkit-mcp.md)。
 
 最简演示后的[客户端深入实验](ai-from-scaling/00-minimal-mcp.md)与 [TypeScript](ai-from-scaling/00-minimal-mcp.md#typescript-stack)均为选读。
 
 [工具调用简史](ai-from-scaling/extra-tool-use-story.md)串联 ReAct、Plugins、Code Interpreter、函数调用、MCP、Skills，仅选读。
 
-### MCP 项目实战
+### RAG
 
-从[实战总览](mcp-projects/README.md)选择案例，核对前置与验证边界；天气优先，Blender、GitHub 与音乐按需选修。
+[RAG 最简教程](rag/README.md)：本地检索 → 资料交给现有模型 → 核对引用。检索与模型回答分两步完成。
+
+<div class="heading-alias" id="mcp-项目实战" aria-hidden="true"></div>
+
+### MCP 案例
+
+从[案例总览](mcp-projects/README.md)选择案例，核对前置与验证边界；记录服务在天气之前；Blender、GitHub 与音乐按需选读。
 
 天气先验证离线样本；音乐为选修，可用[钢琴排练台](ai-from-scaling/07-music-space-mcp.md)定位小节与独听，或在[舞台预演台](ai-from-scaling/08-music-photo-mcp.md)调整部件、机位并导出 PNG／MP4／GLB；均不以模型／Harness 为前置。
 
@@ -91,7 +98,9 @@
 
 需要 Mac 产品的完整方案时，回查项目设计与计划中的[本地 Harness 设计](architecture/mac-local-harness.md)。
 
-### AI 开发实践
+<div class="heading-alias" id="ai-开发实践" aria-hidden="true"></div>
+
+### AI 开发案例
 
 先选小型 [Issue 修复](ai-practices/02-issue-to-pr.md)、[审查核实](ai-practices/01-coderabbit-review.md)或[回归测试](ai-practices/05-test-generation.md)；[故障诊断](ai-practices/03-error-to-fix.md)、[安全修复](ai-practices/04-security-autofix.md)与[迁移](ai-practices/06-code-migration.md)作为进阶。
 
@@ -121,7 +130,7 @@ Memory 仅选读，不列课程或前置。
 
 ### 架构研究
 
-按需读[产品研究](research/zed-raycast-warp.md)、[Zed／Rust](deep/2026-09-26-zed-pi-rust/README.md)、[简单与组合](deep/2026-09-26-simplicity-composition-complexity/README.md)；动手看[示例](../examples/README.md)与[取舍对照](../examples/COMPARISON.md)。
+按需读[产品研究](research/zed-raycast-warp.md)、[Zed／Rust](deep/2026-09-26-zed-pi-rust/README.md)、[简单与组合](deep/2026-09-26-simplicity-composition-complexity/README.md)；实现参考[示例](../examples/README.md)与[取舍对照](../examples/COMPARISON.md)。
 
 [统一评估提案](architecture/technology-assessment.md)供系统比较，可从 GPUI、Swift 或 Web 开始。
 

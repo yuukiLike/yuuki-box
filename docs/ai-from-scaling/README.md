@@ -2,20 +2,20 @@
 
 模型路线先看预测，再看上下文与训练；Agent 路线先跑离线工具循环，再接真实模型。两条路线可独立学习，需要基础 JavaScript、终端和文件编辑。
 
-工具开发从[最简 demo](00-minimal-mcp.md)开始；[Codex 接入](00-codex-mcp.md)按需选读，执行循环见 [Agent 入门](03-build-a-harness.md)。<mark class="key">无需先训练模型</mark>。
+工具开发从[最简 demo](00-minimal-mcp.md)开始，再接入[记录服务](00-codex-mcp.md)；执行循环见 [Agent 入门](03-build-a-harness.md)。<mark class="key">无需先训练模型</mark>。
 
 <div class="heading-alias" id="mcp-练习怎么选" aria-hidden="true"></div>
 
 ## MCP 练习路线
 
-主线为 **[最简 demo](00-minimal-mcp.md) → [本地天气 MCP](07-weatherkit-mcp.md) → 其他案例**。服务实现 Server，应用提供 Host 与 Client；[Codex 接入](00-codex-mcp.md)为选读。
+主线为 **[最简 demo](00-minimal-mcp.md) → [MCP 记录服务](00-codex-mcp.md) → [本地天气](07-weatherkit-mcp.md) → 其他案例**。先做本地文件读写与客户端接入，再增加天气 API。
 
 | 路线 | 内容 | 第一份成果 |
 | --- | --- | --- |
 | 1 · 最简 demo | [工具调用与文件读写](00-minimal-mcp.md) | 保存记录，重启服务后取回 |
-| 2 · 天气实战 | [本地 Apple 天气 MCP](07-weatherkit-mcp.md) | 离线样本、真实天气查询与客户端接入 |
-| 其他案例 | [MCP 项目实战](../mcp-projects/README.md) | 建模与修复验证；音乐案例为选修 |
-| 选读 · Codex 接入 | [服务接入与记录保存](00-codex-mcp.md) | 在真实会话调用自建服务 |
+| 2 · 记录服务 | [MCP 服务：保存与取回](00-codex-mcp.md) | 在 Codex 会话中保存、取回本地记录 |
+| 3 · 天气查询 | [本地 Apple 天气 MCP](07-weatherkit-mcp.md) | 离线样本、WeatherKit 配置与天气查询 |
+| 其他案例 | [MCP 案例](../mcp-projects/README.md) | 建模与修复验证；音乐案例为选修 |
 
 最简 demo 用脚本编排真实 MCP 调用与文件读写；第一节即可完成运行验证，客户端实现细节按需阅读。
 
@@ -72,7 +72,7 @@ node --version
 
 ## 验收标准
 
-- 选读验收：Codex 可调用自建 MCP Server，工具结果来源清楚。
+- MCP 验收：Codex 可调用自建 Server，工具结果来源清楚。
 - 基础验收：能比较训练前后输出，解释上下文与参数更新的区别；实现选读后再定位概率、loss 与更新代码。
 - 能说明为什么“多训练一些”和“让模型多看一个字”改变的是不同因素。
 - 能沿着 `assistant.tool_calls → 本地执行 → tool 结果 → 下一轮模型请求` 追踪一次任务。
@@ -93,6 +93,6 @@ Transformer 实现可先复习 [Attention 与 KV Cache](../kv-cache/02-attention
 
 ## 番外：工具调用怎样长成 Agent
 
-[工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills，区分 Skills 首次推出与开放标准发布的日期，无需跟做。
+[工具调用简史](extra-tool-use-story.md)串起 ReAct、Plugins、Code Interpreter、function calling、MCP 与 Skills，区分 Skills 首次推出与开放标准发布的日期，作为背景阅读。
 
-返回[文档目录](../../site/src/pages/index.astro)，或选择 [MCP 实战项目](../mcp-projects/README.md)。
+返回[文档目录](../../site/src/pages/index.astro)，或选择 [MCP 案例](../mcp-projects/README.md)。

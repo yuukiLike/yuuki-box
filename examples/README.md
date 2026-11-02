@@ -6,13 +6,13 @@
 
 固定事件回放保留在独立 Lab/回放区域，便于观察界面负载；它与真实 Agent 任务分开。详细基础见 [AI 与语音架构](../docs/architecture/ai-and-speech-foundation.md) 和 [Agent runtime](shared/runtime/README.md)。
 
-TypeScript MCP 主线：[最简 demo](../docs/ai-from-scaling/00-minimal-mcp.md) → [Apple 天气 MCP](weatherkit-mcp/README.md)。后续案例：[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
+TypeScript MCP 主线：[最简 demo](../docs/ai-from-scaling/00-minimal-mcp.md) → [MCP 记录服务](../docs/ai-from-scaling/00-codex-mcp.md) → [Apple 天气 MCP](weatherkit-mcp/README.md)。后续案例：[Blender 建模](blender-mcp/README.md)、[GitHub 实验员](github-lab-mcp/README.md)。GitHub 实验把公开修复拆成复现、候选修改与官方对照，并保存运行证据。
 
 学习示例的安装、演示和检查统一从仓库根目录运行，例如 `pnpm install:mini-mcp`、`pnpm demo:mini-mcp`、`pnpm check:mini-mcp`。运行 `pnpm run` 查看全部脚本。
 
 [Apple 天气 MCP](weatherkit-mcp/README.md) 使用已授权的 WeatherKit 配置查询常用地点、整理当前与未来天气、按阈值筛选连续出门时段；配套课程包含离线练习、Apple 后台配置与真实接入验收。
 
-[音乐 MCP 工作台](music-space-mcp/README.md) 对应 [MCP 项目实战](../docs/mcp-projects/README.md)的两项选修：88 键钢琴排练台与实体舞台预演台；调整部件和机位，对照真实调用记录，保存配置并导出 PNG／MP4／GLB。
+[音乐 MCP 工作台](music-space-mcp/README.md) 对应 [MCP 案例](../docs/mcp-projects/README.md)的两项选修：88 键钢琴排练台与实体舞台预演台；调整部件和机位，对照真实调用记录，保存配置并导出 PNG／MP4／GLB。
 
 新增「场景实验」：**每条路线三个 Harness 场景，共十五个，每个都能切换朴素 / 优化实际实现。** 覆盖历史重复解析、长列表、主线程计算、桥接流量、原生控件身份、取消和控制响应。它们使用有界的本地数据，不需要 key 或模型；指标由实际运行产生。操作与源码阅读见[完整场景手册](../docs/learning/harness-scenario-lab.md)，具体负载和计量边界见各路线 README。场景实现针对不同架构边界，不能直接用跨路线的毫秒排框架名次。
 

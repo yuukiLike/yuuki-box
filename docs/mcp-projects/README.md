@@ -4,9 +4,9 @@ prev:
   label: 本地 Apple 天气 MCP
 ---
 
-# MCP 项目实战：工具案例
+# MCP 案例
 
-先完成[最简 demo](../ai-from-scaling/00-minimal-mcp.md)与本地天气，再选择其他案例。<mark class="key">Server 实现工具，应用提供 Client</mark>；真实客户端接入见[Codex 接入](../ai-from-scaling/00-codex-mcp.md)。
+先用[最简 demo](../ai-from-scaling/00-minimal-mcp.md)观察调用，再用[MCP 记录服务](../ai-from-scaling/00-codex-mcp.md)接入 Codex；之后按需选择天气与其他工具。<mark class="key">Server 实现工具，应用提供 Client</mark>。
 
 各案例独立运行，无需模型训练或 Harness 前置；环境见各篇。
 

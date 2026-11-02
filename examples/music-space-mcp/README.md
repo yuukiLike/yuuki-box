@@ -1,6 +1,6 @@
 # 音乐 MCP 工作台
 
-[MCP 项目实战](../../docs/mcp-projects/README.md)的音乐选修；[客户端实验](../../docs/ai-from-scaling/00-minimal-mcp.md)按需阅读。两个案例都围绕<mark class="key">可核对的工具调用</mark>：
+[MCP 案例](../../docs/mcp-projects/README.md)的音乐选修；[客户端实验](../../docs/ai-from-scaling/00-minimal-mcp.md)按需阅读。两个案例都围绕<mark class="key">可核对的工具调用</mark>：
 
 1. **MIDI 钢琴排练台**：定位小节、独听声部、核对 88 键与音名，调整琴盖、练习提示和机位。
 2. **演出舞台预演台**：读取对象，调整音箱、主屏和灯光，切换整体／近景／俯视，交付 PNG／MP4／GLB。

@@ -30,12 +30,12 @@ export const navigation = [
   {
     label: 'MCP 入门',
     color: 'sky',
-    description: '最简 demo → 本地天气 MCP。Codex 接入与客户端实现按需阅读。',
-    tags: [topic('最简 demo', 'ai-from-scaling/00-minimal-mcp'), topic('天气 MCP', 'ai-from-scaling/07-weatherkit-mcp'), topic('Codex 接入', 'ai-from-scaling/00-codex-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack')],
+    description: '最简 demo → 保存与取回记录的 MCP 服务 → 本地天气。客户端实现细节按需阅读。',
+    tags: [topic('最简 demo', 'ai-from-scaling/00-minimal-mcp'), topic('记录服务', 'ai-from-scaling/00-codex-mcp'), topic('天气 MCP', 'ai-from-scaling/07-weatherkit-mcp'), topic('TypeScript 技术栈', 'ai-from-scaling/00-minimal-mcp#typescript-stack')],
     items: [
       page('ai-from-scaling/00-minimal-mcp', 'MCP 最简 demo：工具调用与文件读写', ['MCP', 'Client', 'stdio'], '1 · MCP 最简 demo'),
-      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], '2 · Apple 天气 MCP'),
-      page('ai-from-scaling/00-codex-mcp', 'Codex MCP：服务接入与记录保存', ['Codex', 'MCP', '选读'], '选读 · Codex 接入'),
+      page('ai-from-scaling/00-codex-mcp', 'MCP 服务：保存与取回记录', ['Codex', 'MCP', '文件读写'], '2 · MCP 记录服务'),
+      page('ai-from-scaling/07-weatherkit-mcp', 'Apple 天气 MCP：天气查询与出门时段', ['WeatherKit', 'MCP'], '3 · Apple 天气 MCP'),
       {
         label: '选读：工具调用简史',
         tags: ['Agent 历史'],
@@ -46,12 +46,21 @@ export const navigation = [
     ],
   },
   {
-    label: 'MCP 项目实战',
+    label: 'RAG 入门',
+    color: 'sky',
+    description: '检索本地资料，把相关片段与问题交给现有模型，核对带来源的回答。关键词检索起步。',
+    tags: [topic('最简 RAG', 'rag'), '资料检索', '引用来源'],
+    items: [
+      page('rag', 'RAG：检索资料后再回答', ['RAG', '本地文本', '来源核对']),
+    ],
+  },
+  {
+    label: 'MCP 案例',
     color: 'emerald',
     description: '天气主线之后的扩展案例：Blender 建模、GitHub 修复验证与选修音乐工作台。',
     tags: [topic('项目选择', 'mcp-projects'), topic('天气工具', 'ai-from-scaling/07-weatherkit-mcp'), topic('Blender', 'ai-from-scaling/05-blender-mcp'), topic('GitHub', 'ai-from-scaling/06-github-lab-mcp'), topic('音乐选修', 'ai-from-scaling/07-music-space-mcp')],
     items: [
-      page('mcp-projects', 'MCP 实战总览：工具项目与验证目标', ['选做', '项目入口']),
+      page('mcp-projects', 'MCP 案例：工具与验证目标', ['选做', '项目入口']),
       page('ai-from-scaling/05-blender-mcp', 'Blender MCP：参数建模、预览与 STL 导出', ['Blender', '3D 建模'], 'Blender MCP · 参数建模'),
       page('ai-from-scaling/06-github-lab-mcp', 'GitHub MCP：复现 bug、验证修复与补丁对照', ['GitHub', '修复验证'], 'GitHub MCP · 修复验证'),
       {
@@ -70,7 +79,7 @@ export const navigation = [
     description: '本地工具与客户端调用稳定后，再增加网站登录、OAuth、多用户权限与远程部署。',
     tags: [topic('连接流程', 'ai-communication/weather-mcp/01-user-journey'), topic('Supabase', 'ai-communication/weather-mcp/02-supabase-auth'), topic('WeatherKit', 'ai-communication/weather-mcp/03-apple-weatherkit'), topic('MCP 服务', 'ai-communication/weather-mcp/04-mcp-server')],
     items: [
-      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['工程跟做', '授权']),
+      page('ai-communication/weather-mcp', '远程天气 MCP 总览：登录、查询与客户端连接', ['远程服务', '授权']),
       page('ai-communication/weather-mcp/01-user-journey', '1 · 连接流程：用户授权到工具查询', ['用户流程']),
       page('ai-communication/weather-mcp/02-supabase-auth', '2 · Supabase：登录、身份与权限', ['身份认证']),
       page('ai-communication/weather-mcp/03-apple-weatherkit', '3 · WeatherKit：鉴权与天气查询', ['WeatherKit']),
@@ -176,7 +185,7 @@ export const navigation = [
         label: '运行控制：Hooks、取消与报告',
         tags: ['Hooks', 'Harness', '运行控制'],
         items: [
-          page('agent-engineering/hooks', 'AI Hooks：Claude Code、DeepSeek Harness 与 Codex', ['Hooks', 'Claude Code', 'DeepSeek', 'Codex'], 'Hooks · 三家机制与动手实验'),
+          page('agent-engineering/hooks', 'AI Hooks：Claude Code、DeepSeek Harness 与 Codex', ['Hooks', 'Claude Code', 'DeepSeek', 'Codex'], 'Hooks · 机制与输入输出'),
           page('agent-engineering/05-harness-vertical-slice', '运行控制：取消、崩溃恢复与终态', ['取消', '恢复']),
           page('agent-engineering/06-context-and-report', '运行报告：上下文装配、耗时与费用', ['Context', '用量统计']),
           page('agent-engineering/07-scenario-regression', '场景回归：重放故障并检查运行结果', ['故障演练', '回归']),
@@ -203,12 +212,12 @@ export const navigation = [
     ],
   },
   {
-    label: 'AI 开发实践',
+    label: 'AI 开发案例',
     color: 'emerald',
     description: '从小 Issue、核实审查意见和回归测试开始，再选故障调查、安全修复与版本迁移。各案例可独立阅读。',
     tags: [topic('Issue → PR', 'ai-practices/02-issue-to-pr'), topic('PR 审查', 'ai-practices/01-coderabbit-review'), topic('回归测试', 'ai-practices/05-test-generation'), topic('故障调查', 'ai-practices/03-error-to-fix')],
     items: [
-      page('ai-practices', '开发实践总览：任务修复、质量检查与代码迁移', ['Issue 修复', 'PR 审查', '回归测试']),
+      page('ai-practices', '开发案例：任务修复、质量检查与代码迁移', ['Issue 修复', 'PR 审查', '回归测试']),
       {
         label: '起步：交付、审查与回归',
         tags: ['单任务', '验收'],
@@ -246,7 +255,7 @@ export const navigation = [
         label: '进阶选读：真实连接与源码追踪',
         tags: ['选读', '断线重连', '项目源码'],
         items: [
-          page('ai-communication/03-sse-http', 'SSE 实战：HTTP、重连与结束状态', ['选读', 'SSE', '断线重连']),
+          page('ai-communication/03-sse-http', 'HTTP SSE：断线重连与结束状态', ['选读', 'SSE', '断线重连']),
           page('ai-communication/06-yuuki', '6 · Yuuki：在项目中追踪通信路径', ['选读', '代码追踪']),
         ],
       },
@@ -294,7 +303,7 @@ export const navigation = [
     description: '先合成并播放一句中文，再按需增加转写与人声检测；完整模型与工具集成选读。',
     tags: [topic('语音合成 / TTS', 'tts/让-Yuuki-开口说第一句话'), topic('Whisper 转写', 'tts#第二站--whispercpp把声音接回文字'), topic('VAD 人声检测', 'tts#第三站--silero-vad在录音里找出人声'), topic('模型与语音集成', 'architecture/ai-and-speech-foundation')],
     items: [
-      page('tts/让-Yuuki-开口说第一句话', 'edge-tts 实践：合成并播放第一句中文', ['语音合成']),
+      page('tts/让-Yuuki-开口说第一句话', 'TTS：合成并播放中文', ['语音合成']),
       page('tts', '语音工具总览：edge-tts、Whisper 与 Silero VAD', ['TTS', 'ASR', 'VAD']),
       page('architecture/ai-and-speech-foundation', '进阶选读：语音、模型与运行时集成', ['选读', 'DeepSeek', 'Whisper']),
     ],
@@ -359,13 +368,13 @@ export const navigation = [
     tags: [topic('基础与额度', 'codex-cloud'), topic('for-safe', 'codex-cloud/01-for-safe'), topic('for-job', 'codex-cloud/03-for-job'), topic('Agent Symphony', 'codex-cloud/04-agent-symphony'), topic('Issue 完整方案', 'issue-garden#routes')],
     items: [
       page('codex-cloud', '云端 Codex：环境、任务与验证边界', ['Cloud', '基础与额度'], '云端 Codex · 从这里开始'),
-      page('codex-cloud/01-for-safe', 'for-safe：首条只读云端任务', ['for-safe', '动手练习']),
+      page('codex-cloud/01-for-safe', 'for-safe：首条只读云端任务', ['for-safe', '只读任务']),
       page('codex-cloud/cloud-machine', '云端电脑实测：CPU、内存、Shell 与多对话', ['资源实测', 'Shell', '多任务'], '云端资源与多任务'),
       page('codex-cloud/03-for-job', 'for-job：云端检查与导出回归', ['for-job', '备份与导出']),
       page('codex-cloud/04-agent-symphony', 'agent-symphony：云端事件与回放验证', ['Agent Symphony', '事件与回放']),
       {
         label: '选读：社区案例',
-        tags: ['选读', '社区实践'],
+        tags: ['选读', '社区案例'],
         items: [
           page('codex-cloud/02-community', '社区做法：公开案例与界面截图', ['选读', '社区案例', '截图']),
         ],

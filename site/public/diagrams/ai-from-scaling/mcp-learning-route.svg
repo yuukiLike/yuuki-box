@@ -1,26 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="770" viewBox="0 0 800 770" role="img" aria-labelledby="title desc">
-<title id="title">MCP 学习路线：演示后优先天气</title>
-<desc id="desc">最简 MCP 演示后优先实现天气查询。Blender、GitHub 和音乐为选修案例；通信课程复用演示，ToolSource 与权限练习需另行实现。</desc>
+<title id="title">MCP 学习顺序：调用、记录、天气</title>
+<desc id="desc">从最简调用进入本地记录服务，再增加天气 API。其他案例选读；通信课程复用演示，ToolSource 与权限练习需另行实现。</desc>
 <rect width="800" height="770" rx="18" fill="#ffffff"/>
-<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP 学习路线：演示后优先天气</text>
-<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">最简演示 → 天气查询；其他案例按需选择。</text>
+<text x="32" y="49" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="650" fill="#20324d" text-anchor="start">MCP 学习顺序：调用、记录、天气</text>
+<text x="32" y="86" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">最简调用 → 本地记录服务 → 天气 API。</text>
 <rect x="210" y="124" width="380" height="104" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="230" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">起点：最简 MCP 演示</text>
+<text x="230" y="159" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#2e5185" text-anchor="start">1 · 最简 MCP 调用</text>
 <text x="230" y="191" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">发现与调用 / 文件持久化</text>
 <polyline points="400,228 400,258 208,258 208,294" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="212.55,287.0 208,294 203.45,287.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="400,258 592,258 592,294" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="596.55,287.0 592,294 587.45,287.0" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="384,386 410,386" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="402,381 410,386 402,391" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="32" y="300" width="352" height="172" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="52" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">优先：天气查询</text>
-<text x="52" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">离线样本 → WeatherKit → 客户端</text>
+<text x="52" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">2 · MCP 记录服务</text>
+<text x="52" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">本地文件 → Codex 接入</text>
 <rect x="48" y="401" width="320" height="54" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="64" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">练习：查询天气与筛选时段</text>
+<text x="64" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">保存记录，换会话取回</text>
 <rect x="416" y="300" width="352" height="172" rx="12" fill="#edf3ff" stroke="#9fb7dd" stroke-width="1.5"/>
-<text x="436" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">选修：Blender / GitHub</text>
-<text x="436" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">参数建模 / 修复结果验证</text>
+<text x="436" y="335" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="600" fill="#2e5185" text-anchor="start">3 · 天气查询</text>
+<text x="436" y="367" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#2e5185" text-anchor="start">离线样本 → WeatherKit 配置</text>
 <rect x="432" y="401" width="320" height="54" rx="8" fill="#e9f6ef" stroke="#91bda4" stroke-width="1.5"/>
-<text x="448" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">按需选择一个案例</text>
+<text x="448" y="435" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="400" fill="#275b40" text-anchor="start">查询天气与筛选出门时段</text>
 <polyline points="32,514 768,514" fill="none" stroke="#d2dce8" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="32" y="550" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="23" font-weight="600" fill="#20324d" text-anchor="start">扩展 Agent 工具能力</text>
 <text x="32" y="580" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="400" fill="#52657c" text-anchor="start">先看通信，再实现工具源与调用策略。</text>
@@ -37,5 +37,5 @@
 <polyline points="275.0,656.45 282,661 275.0,665.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="518,661 538,661" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="531.0,656.45 538,661 531.0,665.55" fill="none" stroke="#8193ac" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="32" y="747" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">天气优先；其他案例与音乐选修，工程练习尚未接入 runtime。</text>
+<text x="32" y="747" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="400" fill="#52657c" text-anchor="start">记录服务在天气前；其他案例选读，工程练习尚未接入 runtime。</text>
 </svg>

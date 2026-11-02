@@ -4,7 +4,7 @@
 
 相关文档：[文档入口](../README.md) · [Mac 本地 Harness 架构](../architecture/mac-local-harness.md) · [渲染与性能](../learning/rendering-performance.md) · [第一个 Mac 闭环](../plan/first-mac-loop.md)。
 
-动手入口：[五路线 MVP](../../examples/README.md) 已实现并完成本机构建，含 Rust/GPUI；优劣见[实现对照](../../examples/COMPARISON.md)。界面与性能未测，不代表复刻或排名。
+示例入口：[五路线 MVP](../../examples/README.md) 已实现并完成本机构建，含 Rust/GPUI；优劣见[实现对照](../../examples/COMPARISON.md)。界面与性能未测，不代表复刻或排名。
 
 深入阅读：[简单、组合、复杂性](../deep/2026-09-26-simplicity-composition-complexity/README.md)比较操作单位与组合契约，加入 Grok Build、固定 Warp 源码及 Yuuki 变化链。
 

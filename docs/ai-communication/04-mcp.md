@@ -45,7 +45,7 @@ Host 可有多个 Client，每个 Client 连一个 Server；远程 Server 可服
 
 | 平台 | 接入入口与配置 | 连接方式与边界 |
 | --- | --- | --- |
-| [Codex](https://learn.chatgpt.com/docs/extend/mcp) | `codex mcp`、MCP 设置；配置保存在 `config.toml` | 本机 stdio、远程 Streamable HTTP；支持相应的 token / OAuth 认证。本仓库的[Codex 实操篇](../ai-from-scaling/00-codex-mcp.md)只需编写 Server |
+| [Codex](https://learn.chatgpt.com/docs/extend/mcp) | `codex mcp`、MCP 设置；配置保存在 `config.toml` | 本机 stdio、远程 Streamable HTTP；支持相应的 token / OAuth 认证。本仓库的[Codex 接入篇](../ai-from-scaling/00-codex-mcp.md)只需编写 Server |
 | [Zed](https://zed.dev/docs/ai/mcp) | Settings → AI → MCP Servers；配置字段是 `context_servers`，也可通过扩展安装 | 支持本地命令和远程 URL；Zed Agent 直接使用这些服务，外部 Agent 的配置传递还涉及 ACP |
 | [Warp](https://docs.warp.dev/agents/capabilities/mcp/) | Settings → Agents → MCP servers；添加启动命令或 URL | 本地命令、Streamable HTTP，也兼容 SSE 连接；此处指 Warp 应用内的本地 Agent |
 | [Raycast](https://manual.raycast.com/ai/model-context-protocol) | `Install MCP Server` / `Manage MCP Servers`；在 AI Chat、Quick AI 等入口使用 | 桌面支持 stdio 和 HTTP，HTTP 支持 OAuth；iOS 只支持 HTTP |

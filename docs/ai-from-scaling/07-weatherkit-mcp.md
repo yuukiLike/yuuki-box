@@ -1,7 +1,7 @@
 ---
 prev:
-  link: /ai-from-scaling/00-minimal-mcp/
-  label: MCP 最简 demo
+  link: /ai-from-scaling/00-codex-mcp/
+  label: MCP 记录服务
 next:
   link: /mcp-projects/
   label: MCP 工具案例
@@ -13,7 +13,7 @@ next:
 
 实现：[examples/weatherkit-mcp](../../examples/weatherkit-mcp/README.md)。需 Node.js ≥22.22、pnpm 11.14；离线无需密钥，真实查询需 Apple 开发者会员与网络。
 
-学习顺序：[最简 demo](00-minimal-mcp.md) → 本篇天气实现 → 其他案例。样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端；离线部分无需密钥。
+学习顺序：[最简 demo](00-minimal-mcp.md) → [MCP 记录服务](00-codex-mcp.md) → 本篇天气实现 → 其他案例。样本与规则约 20 分钟，Apple 配置约 20–30 分钟，最后接入客户端；离线部分无需密钥。
 
 <div class="heading-alias" id="先确定它能帮你做什么" aria-hidden="true"></div>
 
@@ -274,4 +274,4 @@ pnpm check:weatherkit-mcp
 
 后续按需增加城市搜索、分钟级降雨或预警，先确认地区支持与缺失时的回答。
 
-返回[MCP 项目实战](../mcp-projects/README.md) · 选修[客户端与调用链实验](00-minimal-mcp.md) · 对照[MCP 官方天气教程](https://modelcontextprotocol.io/docs/develop/build-server)。
+返回[MCP 案例](../mcp-projects/README.md) · 选修[客户端与调用链实验](00-minimal-mcp.md) · 对照[MCP 官方天气教程](https://modelcontextprotocol.io/docs/develop/build-server)。

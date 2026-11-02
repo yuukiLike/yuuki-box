@@ -1,6 +1,6 @@
 # 选修 · 音乐 2：用 MCP 调整舞台布局与机位
 
-[MCP 项目实战](../mcp-projects/README.md)的音乐选修，先读[钢琴排练台](07-music-space-mcp.md)，熟悉共用服务与时间轴。
+[MCP 案例](../mcp-projects/README.md)的音乐选修，先读[钢琴排练台](07-music-space-mcp.md)，熟悉共用服务与时间轴。
 
 操作目标：<mark class="key">拉开音箱，切到俯视图，再导出预演图</mark>。主屏、音箱、阶梯、话筒与灯架是三维部件；音乐、屏幕贴图来自导入文件，布局和灯光由显式参数控制。
 
@@ -90,4 +90,4 @@ pnpm demo:music-space-mcp:preview
 
 入口：[工具注册](../../examples/music-space-mcp/src/tools.ts)、[场景保存](../../examples/music-space-mcp/src/store.ts)、[舞台部件](../../examples/music-space-mcp/web/stage.ts)、[时间轴](../../examples/music-space-mcp/src/timeline.ts)、[逐帧导出](../../examples/music-space-mcp/src/render.ts)。再只改一次屏幕高度，固定时刻渲染比较；技术检查通过后，画面与听感仍由人验收。
 
-返回[音乐 1](07-music-space-mcp.md)或[MCP 项目实战](../mcp-projects/README.md)。
+返回[音乐 1](07-music-space-mcp.md)或[MCP 案例](../mcp-projects/README.md)。

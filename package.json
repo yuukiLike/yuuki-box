@@ -17,6 +17,7 @@
     "demo:blender-mcp": "pnpm --dir examples/blender-mcp demo",
     "demo:github-lab-mcp": "pnpm --dir examples/github-lab-mcp demo",
     "demo:harness": "node docs/ai-from-scaling/labs/harness.mjs",
+    "demo:rag": "node docs/rag/labs/rag.mjs",
     "demo:mini-mcp": "pnpm --dir examples/minimal-mcp demo",
     "demo:music-space-mcp": "pnpm --dir examples/music-space-mcp demo",
     "demo:music-space-mcp:preview": "pnpm --dir examples/music-space-mcp preview",
@@ -33,6 +34,7 @@
 
     "check:blender-mcp": "pnpm --dir examples/blender-mcp check",
     "check:codex-continue-mcp": "pnpm --dir examples/codex-continue-mcp check",
+    "check:rag": "node --test docs/rag/labs/rag.test.mjs",
     "check:github-lab-mcp": "pnpm --dir examples/github-lab-mcp check",
     "check:mini-mcp": "pnpm --dir examples/minimal-mcp check",
     "check:mini-mcp:types": "pnpm --dir examples/minimal-mcp typecheck",

@@ -140,4 +140,4 @@ MIDI → 解析后的音符与小节 → 文字讲解 → 人工核对 → 旁�
 
 先做 **3 张语音灵感卡**，完成后加语音回答；音乐方向走“配乐草案 → 本地试听 → 封面与 4 秒短片”。
 
-返回[Agent 工程总览](README.md)，或查看[语音交互](../tts/README.md)与[音乐 MCP 实战](../ai-from-scaling/07-music-space-mcp.md)。
+返回[Agent 工程总览](README.md)，或查看[语音交互](../tts/README.md)与[音乐 MCP](../ai-from-scaling/07-music-space-mcp.md)。

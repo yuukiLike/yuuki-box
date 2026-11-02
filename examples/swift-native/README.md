@@ -72,7 +72,9 @@ YUUKI_UPDATE_URL=https://your-domain.example/update.json \
 
 fixture 值固定映射，不接受任意路径，未知值报错。非空 `YUUKI_UPDATE_URL` 优先于 fixture，只接受 HTTPS；超时 10 秒，清单接收后限制 64 KiB，数字版本比较与发布地址校验仍在界面代码中。下载、签名校验、替换、重启和失败恢复没有实现；独立分发后续可实际接入 [Sparkle](https://sparkle-project.org/documentation/)。
 
-## 三个 Harness 场景：亲手对照实现
+<div class="heading-alias" id="三个-harness-场景亲手对照实现" aria-hidden="true"></div>
+
+## 三个 Harness 场景：对照实现
 
 打开“场景实验”，选择一个场景、负载和实现模式，点击“运行 / 重跑”。上方**响应探针**始终可以输入；运行中持续打字、移动光标，再去阅读对应内容，能观察真实调度与界面更新对输入的影响。探针和搜索查询在切换、停止、重置时保留。这里没有假延时、空转循环、模型请求、麦克风或真实工作区读写；日志路径是确定生成的内存数据。
 

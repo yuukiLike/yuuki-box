@@ -28,7 +28,7 @@ node docs/ai-communication/labs/01-rpc.ts
 | [3 · SSE](03-sse.md) | 一边接收，一边显示 |
 | [4 · MCP](04-mcp.md) | 让应用调用外部工具 |
 | [5 · 取消与超时](05-failure.md) | 区分停止等待与停止执行 |
-| [选读 · SSE 实战](03-sse-http.md) | 入门后用真实 HTTP 验证断流、续接与完成 |
+| [选读 · HTTP SSE](03-sse-http.md) | 入门后用真实 HTTP 验证断流、续接与完成 |
 | [选读 · Yuuki 运行时](06-yuuki.md) | 沿源码定位请求、流式接收与工具执行 |
 
 </details>
@@ -53,7 +53,7 @@ node --test docs/ai-communication/labs/verify.test.mjs
 node --experimental-eventsource --test docs/ai-communication/labs/sse-http.test.mjs
 ```
 
-整理于 2026-10-25，SSE 实战补于 2026-10-30。本地实验已运行：入门模拟分片，实战验证真实 HTTP、重连与提前关闭；真实模型、界面性能未测。第六课为源码阅读。
+整理于 2026-10-25，HTTP SSE 补于 2026-10-30。本地实验已运行：入门模拟分片，HTTP 示例验证真实 HTTP、重连与提前关闭；真实模型、界面性能未测。第六课为源码阅读。
 
 </details>
 

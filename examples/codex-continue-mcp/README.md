@@ -2,7 +2,7 @@
 
 这个版本只提供 MCP 服务端。你在 Codex 里说话，Codex 用内置的 MCP 客户端调用工具。记录存取和工具注册在 [`src/server.ts`](src/server.ts)，调用统计在 [`src/usage.ts`](src/usage.ts)，不需要编写客户端或演示脚本。
 
-完整跟做教程：[在 Codex 里用自己的 MCP](../../docs/ai-from-scaling/00-codex-mcp.md)。
+教程：[在 Codex 里用自己的 MCP](../../docs/ai-from-scaling/00-codex-mcp.md)。
 
 ```text
 你在 Codex 里说话

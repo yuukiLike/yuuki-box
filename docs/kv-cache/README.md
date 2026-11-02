@@ -41,7 +41,7 @@ key、Map 和内存基础见[前端基础](../frontend-foundations/README.md)。
 | [Pi 怎样使用和观测缓存](05-pi.md) | 统一模型 API 怎样解释不同供应商的缓存 | 用量归一化、保留偏好、失效诊断和预热成本 |
 | [关联知识与研究路线](06-study-map.md) | 学到哪里该继续，哪里可以先停 | 原理、工程与实验之间的关系，以及分阶段成果 |
 
-容量单独在[为什么 KV 会这么大](00-why-so-large.md)解释。需要动手时，再打开[浏览器容量实验](../../site/src/pages/labs/kv-memory.astro)。
+容量单独在[为什么 KV 会这么大](00-why-so-large.md)解释。计算容量时，再打开[浏览器容量实验](../../site/src/pages/labs/kv-memory.astro)。
 
 </details>
 

@@ -2,7 +2,7 @@
 
 按任务来源、实验方法或知识整理选择方向；<mark class="key">选一个方向，做一次小实验</mark>。
 
-实际案例见[已落地的 AI 开发实践](../ai-practices/README.md)，含 CodeRabbit 和故障驱动记录。
+实际案例见[AI 开发案例](../ai-practices/README.md)，含 CodeRabbit 和故障驱动记录。
 
 五方向补充 Issue 修复与审查，分别改变任务来源、解法、验收环境、意图表达和经验复用。
 

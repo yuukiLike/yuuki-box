@@ -4,7 +4,7 @@
 
 **同一任务比较三条路线的交付、返修与费用。** 首轮各交草稿 PR，比较后只整合一份。
 
-| 路线 | 谁协调与执行 | 使用哪种额度 | 跟做入口 |
+| 路线 | 谁协调与执行 | 使用哪种额度 | 配置入口 |
 | --- | --- | --- | --- |
 | A · Dot 与 Cloud | Dot 跟进 Issue，委派到已发布的 Codex Cloud 环境 | Dot / Codex 产品权限与用量 | [Dot 配置与任务指令](../issue-garden/04-dot-shift.md) |
 | B · Codex Action 与 API | GitHub Actions 执行固定步骤，官方 Action 运行 Codex | OpenAI API 配额，另计 Actions 用量 | [一次 Issue 到草稿 PR](../issue-garden/05-codex-api.md) |

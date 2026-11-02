@@ -1,10 +1,13 @@
 ---
+prev:
+  link: /ai-from-scaling/00-minimal-mcp/
+  label: MCP 最简 demo
 next:
-  link: /mcp-projects/
-  label: MCP 工具案例
+  link: /ai-from-scaling/07-weatherkit-mcp/
+  label: Apple 天气 MCP
 ---
 
-# Codex MCP：服务接入与记录保存
+# MCP 服务：保存与取回记录
 
 用「接着做」MCP <mark class="key">保存记录，换会话取回</mark>。
 
@@ -105,7 +108,7 @@ MCP 定义外部能力的连接方式：Codex 内置 Client，连接「接着做
 
 后文为选读资料。
 
-后续案例见 [MCP 项目实战](../mcp-projects/README.md)。
+下一步增加外部 API，查询[本地天气](07-weatherkit-mcp.md)；其他工具见 [MCP 案例](../mcp-projects/README.md)。
 
 <details>
 <summary>选读：参考资料与延伸练习</summary>
