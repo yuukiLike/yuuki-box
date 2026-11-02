@@ -81,7 +81,7 @@ export const learningSteps = {
   'frontend-foundations': ['分析数组查找示例。', '重复执行的查找工作明确。'],
   'frontend-foundations/keys-and-maps': ['比较一次数组查找与 Map 查询。', '索引建立的时机明确。'],
   'frontend-foundations/cache-cost': ['比较引用保留与内容复制。', '两类操作各有明确示例。'],
-  'issue-garden': ['沿完整流程选定本轮路线与交付条件。', 'Issue、执行路线、验收条件与停止规则明确。', '完整流程'],
+  'issue-garden': ['确定一个 Issue 的主负责人、验收条件与执行路线。', '任务由谁批准、遇阻塞找谁、由谁验收与合并均明确。', '完整流程'],
   'issue-garden/01-first-scan': ['核对扫描工作流的触发与读取范围。', '手动触发和只读权限配置可定位。'],
   'issue-garden/02-first-repair': ['为小型问题定义完成条件。', '独立操作者可按相同步骤判断修复结果。'],
   'issue-garden/03-night-shift': ['核对单任务领取与已有 PR 跳过规则。', '已有关联 PR 的任务不会重复领取。'],

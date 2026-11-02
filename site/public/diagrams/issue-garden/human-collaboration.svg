@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
+  <title id="title">人参与 Issue 自动化：批准、澄清、验收与合并</title>
+  <desc id="desc">人的决定位于上排，AI 的工作位于下排。负责人明确目标，由有权限的维护者批准后，编码 Agent 开始执行。需要判断时暂停并请负责人澄清，决定写回任务后继续。测试与独立审查后提交草稿 PR，由审查者核对当前提交的证据，维护者决定返修、拒绝或合并。多人维护同一仓库时，每项任务分别负责，主分支依次合入并重新验证。这是待实现的协作设计。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#64748b"/></marker>
+    <style>
+      text { font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #172033; }
+      .heading { font-size: 22px; font-weight: 700; }
+      .body { font-size: 17px; fill: #475569; }
+      .label { font-size: 15px; fill: #475569; }
+      .line { fill: none; stroke: #64748b; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect width="1120" height="620" rx="20" fill="#fbfcfe"/>
+  <text x="40" y="48" font-size="30" font-weight="700">人定目标、处理分歧、验收；AI 执行与交付</text>
+  <text x="40" y="82" class="body">同一 Issue：主负责人汇总决定 · 审查者核对证据 · 维护者决定合并</text>
+
+  <text x="40" y="124" class="label">人的决定</text>
+  <rect x="40" y="140" width="320" height="138" rx="16" fill="#f0fdf4" stroke="#86cba4"/>
+  <text x="60" y="180" class="heading">1 · 确定任务</text>
+  <text x="60" y="216" class="body">负责人：复现、范围、验收</text>
+  <text x="60" y="246" class="body">有权限的维护者批准启动</text>
+
+  <rect x="400" y="140" width="320" height="138" rx="16" fill="#fff8eb" stroke="#dcc28b"/>
+  <text x="420" y="180" class="heading">2 · 回答与接管</text>
+  <text x="420" y="216" class="body">负责人：澄清问题、收敛分歧</text>
+  <text x="420" y="246" class="body">变更范围重批；可暂停或取消</text>
+
+  <rect x="760" y="140" width="320" height="138" rx="16" fill="#f5f1ff" stroke="#b9a5df"/>
+  <text x="780" y="180" class="heading">3 · 验收与合并</text>
+  <text x="780" y="216" class="body">审查者：按当前提交核对证据</text>
+  <text x="780" y="246" class="body">维护者：返修 / 拒绝 / 合并</text>
+
+  <path d="M200 278V358" class="line" marker-end="url(#arrow)"/>
+  <text x="214" y="320" class="label">批准后执行</text>
+  <path d="M492 366V286" class="line" marker-end="url(#arrow)"/>
+  <text x="410" y="320" class="label">需要判断</text>
+  <path d="M626 278V358" class="line" marker-end="url(#arrow)"/>
+  <text x="640" y="320" class="label">确认后继续</text>
+  <path d="M920 366V286" class="line" marker-end="url(#arrow)"/>
+  <text x="934" y="320" class="label">证据齐备</text>
+
+  <text x="40" y="350" class="label">AI 的工作</text>
+  <rect x="40" y="366" width="320" height="106" rx="16" fill="#fff1f7" stroke="#df9cbd"/>
+  <text x="60" y="406" class="heading">编码 Agent</text>
+  <text x="60" y="441" class="body">独立分支修改，遇阻塞提问</text>
+  <path d="M360 418H392" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="400" y="366" width="320" height="106" rx="16" fill="#eef6ff" stroke="#93bee8"/>
+  <text x="420" y="406" class="heading">继续执行或等待</text>
+  <text x="420" y="441" class="body">决定写回任务记录后再推进</text>
+  <path d="M720 418H752" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="760" y="366" width="320" height="106" rx="16" fill="#edf7ff" stroke="#75acd9"/>
+  <text x="780" y="406" class="heading">测试 + 审查 → 草稿 PR</text>
+  <text x="780" y="441" class="body">交付 diff、结果与待判断项</text>
+
+  <rect x="40" y="508" width="1040" height="80" rx="14" fill="#eff3f8"/>
+  <text x="60" y="540" font-size="19" font-weight="600">多人维护同一仓库：任务分别负责，主分支依次合入。</text>
+  <text x="60" y="570" class="body">每项保留负责人、批准内容、当前提交和决定；下一项按最新主分支重验。　｜　待实现设计</text>
+</svg>

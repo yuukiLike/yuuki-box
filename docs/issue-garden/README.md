@@ -5,7 +5,7 @@ next: false
 
 # Issue 自动化与 AI 协作：完整方案
 
-围绕一个 Issue，串起修复、独立审查、通知与多 AI 演进。起步只做一次手动交付，定时、转发器与多 AI 在单次流程稳定后选读。<mark class="key">先完成一次可验收交付，再接持续流程</mark>。
+围绕一个 Issue，串起人的决策、AI 修复、独立审查与交付。先看[人如何参与](#human)与[多人如何维护同一仓库](#team)，再选择执行路线；定时、转发器与多 AI 在单次流程稳定后选读。<mark class="key">先完成一次可验收交付，再接持续流程</mark>。
 
 <div class="heading-alias" id="workflow" aria-hidden="true"></div>
 <div class="heading-alias" id="先认识今晚的搭档" aria-hidden="true"></div>
@@ -31,6 +31,63 @@ GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提�
 
 这是一种建议的首版规则。API 示例仍为手动实验，任务摘要和独立检查解决部分已复现的问题；尚未完成面向不可信代码的远端隔离验收。
 
+<div class="heading-alias" id="human" aria-hidden="true"></div>
+
+## 人如何参与
+
+人负责确定目标、处理需要判断的问题、验收并决定合并。AI 在已经批准的范围内连续执行；需要人的决定时，任务进入等待状态，并通知具体负责人。
+
+[![人批准任务，执行中回答问题或接管，最后按证据验收并决定合并](../../site/public/diagrams/issue-garden/human-collaboration.svg)](../../site/public/diagrams/issue-garden/human-collaboration.svg)
+
+以“目录中的 TTS 链接打开了错误页面”为例：
+
+1. **开始前，确定做什么。** 主负责人记录复现步骤，约定“打开中文语音合成教程，附近链接仍可用”。有权限的维护者批准这份任务内容、代码基线和执行限额，AI 才领取任务。
+2. **执行中，回答需要判断的问题。** 如果有两个可能的目标页面，AI 列出差异，向负责人询问。负责人确认原定目标后继续；若决定顺便重做整个目录，则修改任务约定并重新批准。范围内的编码、测试与有限返修可连续完成。
+3. **交付时，按证据验收。** 审查者查看草稿 PR 的改动、复现前后结果和待判断项，实际点击目标及附近链接。接受、要求返修或拒绝，都对应当前提交；返修沿用原任务与 PR，新提交重新检查。
+4. **合入时，确认最终结果。** 有合并权限的维护者确认验收意见与必需检查齐备，再合入主分支。合并后发现问题，记录复现与回退决定；修改 AI 工作规则也需要人工确认。
+
+日常入口可以直接使用 **Issue、PR 和 Actions 运行页**：Issue 记录约定与澄清，PR 集中改动、证据与评审，运行页查看执行状态。邮件提醒对应的人处理，并链接回原记录。聊天中的决定也需写回任务，其他维护者才能接续工作。
+
+负责人可随时要求暂停、取消或改由人修复。当前手动示例需取消对应 Actions run，再接管原任务；完整协调器还需先撤销执行资格，停止 Worker，并阻止迟到结果继续交付。取消不会自动撤回已有 PR 或已合并代码，详见[授权与撤销](03-night-shift.md#什么样的-issue-可以接单)。
+
+<div class="heading-alias" id="team" aria-hidden="true"></div>
+
+## 多人如何维护同一仓库
+
+<mark class="key">每个 Issue 指定一位主负责人；其他人可以共同讨论、审查和验收</mark>。这里的“主负责人”是团队约定，可在 Issue 正文写明；提出 Issue 的人、负责人、批准执行的人可以不同。
+
+- **主负责人**收敛需求、回答阻塞问题、安排交接。权限不足时，由有权限的维护者批准执行。
+- **审查者**核对验收条件与当前提交，提出具体返修意见。多人意见冲突时先由负责人协调，未达成决定就等待。
+- **有合并权限的维护者**按仓库规则决定合入顺序与是否合并。两人团队可互相审查；单人维护时同一人兼任这些职责。
+
+### 同一个 Issue：多人讨论，一份执行约定
+
+所有人围绕同一份 Issue 与 PR 协作；负责人把已采纳的意见整理成当前约定，维护者批准后交给一个编码者执行。评论里的建议不会自动成为新指令。确需多人同时编码时，先拆成边界清楚的子任务，各自使用独立目录、分支和 PR，父 Issue 负责人负责整体验收。
+
+负责人休假时，记录新负责人、当前提交、已完成检查和待决定事项，已经批准的任务范围保持不变。更换编码者或改由人修复时，先撤销旧执行资格，再接续同一任务，避免另起一次重复修复。
+
+### 不同 Issue：独立执行，依次合入
+
+假设小林负责 Issue 12“修正 TTS 链接”，小周负责 Issue 24“调整目录分组”，两项都影响导航：
+
+1. 两人先确认改动范围和依赖。彼此独立的部分可交给各自的 AI，在独立目录与分支执行；同一段逻辑需要不同修改时，先约定顺序或拆分任务。
+2. Issue 12 通过检查，由小周审查，维护者先合入。
+3. Issue 24 由维护者确认更新后的代码基线，再更新分支、处理冲突并重新验证；即使 Git 没报冲突，也要确认目录分组没有覆盖刚修好的链接。更新后的提交重新审查。
+4. Issue 24 的当前结果通过后再合入，在关联 Issue 中记录组合后的验收结果。
+
+因此，每个任务都需要记录主负责人、批准者、批准内容与基线、当前提交、关联 PR 和待决定事项。多人分别使用 AI 时，也通过这份共享记录领取与交接；接入协调器后，由程序检查任务是否已被领取。
+
+<details>
+<summary>选读：用 GitHub 规则落实协作</summary>
+
+- **保护主分支：** 按仓库可用功能设置必需 PR 评审、状态检查和分支更新要求；启用改动后撤销过期批准，避免旧意见放行新内容。[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+- **按目录分配审查：** 用 `CODEOWNERS` 指定相应维护者，并按需要求代码所有者批准。草稿 PR 不会自动请求代码所有者审查；负责人确认材料齐备后，转为可审查状态。[代码所有者](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)
+- **合并量大时再接队列：** 可用时，GitHub merge queue 会检查最新主分支与队列中前序 PR 的组合结果；使用 Actions 承担这些检查时需接入 `merge_group`。小团队可先人工依次合并、更新和重验。[合并队列与适用范围](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue)
+
+这些规则需要实际配置；上面的角色分工与协调器流程仍是建议方案。
+
+</details>
+
 <div class="heading-alias" id="task" aria-hidden="true"></div>
 <div class="heading-alias" id="写-issue-可以很短" aria-hidden="true"></div>
 <div class="heading-alias" id="issue-最小描述" aria-hidden="true"></div>
@@ -44,7 +101,7 @@ GitHub 保存任务与交付，Actions 或 Dot 安排执行，编码 Agent 提�
 验收：目标页正确，附近链接仍可用。
 ```
 
-- **领取：** 维护者批准任务内容与代码基线，`ai-ready` 只作筛选；已有运行任务或待验 PR 时跳过。同一任务只有一个编码者。
+- **领取：** 指定主负责人，由有权限的维护者批准任务内容与代码基线，`ai-ready` 只作筛选；已有运行任务或待验 PR 时跳过。同一任务只有一个编码者。
 - **隔离：** 每个任务独立目录、分支，记录 Issue、base/head SHA 与检查命令。
 - **交付：** 保留 diff、复现前后结果、审查结论与待验项；新提交重新检查。
 - **停止：** 无法复现、缺少条件、超时、额度不足或返修超限时，记录缺口并转人工。
@@ -163,12 +220,15 @@ Webhook 接入口，EventBus 发通知，数据库保存任务事实。<mark cla
 
 首版采用 **Node 协调器 + SQLite + 独立 Worker 进程**，本地 HTTP 或 IPC 通信。不同任务可并发；同任务只有一个编码者，测试与审查读取同一候选提交。
 
+人的批准、澄清、暂停与验收也通过事件入口进入同一任务记录。协调器核对操作者权限与决定对应的任务版本，再推进状态；需要人处理时，通知[该任务的负责人或审查者](#team)。
+
 <details>
 <summary>选读：架构图与状态约束</summary>
 
 [![Webhook 接收事件，协调器持久化并调度多个 AI，核对任务版本后交付](../../site/public/diagrams/issue-garden/multi-agent-event-bus.svg)](../../site/public/diagrams/issue-garden/multi-agent-event-bus.svg)
 
 - 协调器唯一写库；事件、任务与 outbox 同事务落库，提交后再通知，定期补发未完成记录。
+- 人的决定记录操作者、任务版本、批准内容及相关代码版本；按预期状态原子更新。两人同时提交冲突决定时，后到的操作返回冲突，由负责人收敛后重提。
 - Worker 领取带租约的子任务；租约过期重领时递增 `leaseEpoch`。
 - 编码结果核对轮次、租约与领取时的 base，再登记新 head；测试与审查只认该 head。
 - 旧租约、旧 head 的结果只留档；发布前按任务与固定分支查已有 PR，重试更新原交付。
@@ -216,7 +276,7 @@ Webhook 接入口，EventBus 发通知，数据库保存任务事实。<mark cla
 
 ## 验证状态与来源
 
-本页与 SVG 是教学及待实现方案；本仓库尚未启用持续领取、自动审查、邮件发信或多 AI 调度。记录核对日期：2026-10-21—11-01。
+本页与 SVG 是教学及待实现方案；本仓库尚未启用持续领取、自动审查、邮件发信或多 AI 调度。记录核对日期：2026-10-21—11-02；本次补充人的参与、多人协作与 GitHub 评审、合并规则。
 
 <details>
 <summary>公开依据与案例</summary>

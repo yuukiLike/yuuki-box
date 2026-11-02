@@ -81,10 +81,10 @@ export const navigation = [
   {
     label: 'Issue 自动化与 AI 协作',
     color: 'emerald',
-    description: '一页串起 Issue、执行路线、独立审查、邮件通知与多 AI 演进；配置细节按需选读。',
-    tags: [topic('完整流程', 'issue-garden#workflow'), topic('路线与费用', 'issue-garden#routes'), topic('独立审查', 'issue-garden#review'), topic('Outlook 通知', 'issue-garden#notifications'), topic('多 AI 演进', 'issue-garden#multi-agent')],
+    description: '一页串起人的决策、多人维护、Issue 修复与多 AI 协作；执行路线和配置细节按需查阅。',
+    tags: [topic('完整流程', 'issue-garden#workflow'), topic('人的参与', 'issue-garden#human'), topic('多人维护', 'issue-garden#team'), topic('路线与费用', 'issue-garden#routes'), topic('独立审查', 'issue-garden#review'), topic('Outlook 通知', 'issue-garden#notifications'), topic('多 AI 演进', 'issue-garden#multi-agent')],
     items: [
-      page('issue-garden', 'Issue 自动化完整方案：任务、审查与交付', ['完整方案', 'Issue → PR', 'AI 协作'], 'Issue 自动化 · 完整方案'),
+      page('issue-garden', 'Issue 自动化完整方案：人的决策、协作与交付', ['完整方案', '人的参与', '多人维护'], 'Issue 自动化 · 完整方案'),
       {
         label: '选读：配置与实验',
         collapsed: true,
