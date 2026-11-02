@@ -42,4 +42,4 @@
 先查环境状态，再运行 `pwd`；命令成功后继续项目检查。
 </details>
 
-下一步：[Issue 到 PR](05-issue-to-pr.md)。
+下一步：[for-job：云端检查与导出回归](03-for-job.md)。

@@ -123,4 +123,4 @@ runtime 按需加载 Skill：
 - **同步版本化：** 命令、路径或依赖变化后重查负例。
 - **fixture 不含凭据：** 使用占位符与临时目录。
 
-返回[上一篇](03-skills-structure.md) · [总览](README.md) · 深入[Mac 本地 Harness 完整设计](../architecture/mac-local-harness.md)。
+返回[上一篇](03-skills-structure.md) · [总览](README.md) · 下一篇[MCP：外部工具接入 Harness](01-mcp-tool-source.md)。

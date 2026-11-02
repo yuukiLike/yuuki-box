@@ -95,7 +95,7 @@ pnpm demo:harness --write-to "$AI_CANCEL_DIR/summary.md"
 记录结果与待解决项：
 
 ```text
-我亲手改动的地方：
+本次改动：
 我事先预测的结果：
 实际看到的证据：
 下一次要弄清的问题：

@@ -156,6 +156,6 @@ tools/call                  调用工具
 
 Streamable HTTP 替代了早期 HTTP+SSE 的传输布局。看旧教程时，要确认版本。
 
-现有 Swift runtime 还在调用内建工具。把 MCP 接进去是[下一步练习](../agent-engineering/01-mcp-tool-source.md)。
+现有 Swift runtime 还在调用内建工具。接入 MCP 的实现选读见[外部工具接入 Harness](../agent-engineering/01-mcp-tool-source.md)。
 
 </details>

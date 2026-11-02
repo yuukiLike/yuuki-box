@@ -88,4 +88,4 @@ Fake 只生成确定输入，不复制生产策略。
 - 当前协议：[PROTOCOL.md](../../examples/shared/runtime/PROTOCOL.md)
 - UI 场景实验的计量与维护练习：[十五个 Harness 场景](../learning/harness-scenario-lab.md)
 
-返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[MCP：外部工具接入 Harness](01-mcp-tool-source.md)。
+返回[上一篇](06-context-and-report.md) · [总览](README.md) · 下一篇[Computer Use：观察、执行与结果验证](computer-use.md)。

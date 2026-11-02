@@ -127,4 +127,4 @@ status / approval
 
 </details>
 
-返回[上一篇](01-mcp-tool-source.md) · [总览](README.md) · 下一篇[Skills：结构与触发](03-skills-structure.md)。
+返回[上一篇](01-mcp-tool-source.md) · [总览](README.md) · 下一篇[Hooks：工具执行前后的检查](hooks.md)。

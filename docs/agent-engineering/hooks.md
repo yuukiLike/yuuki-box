@@ -315,4 +315,4 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml
 
 </details>
 
-练习后仅移除自己添加的配置；`dsh` 下次不带该 patch。继续读[权限策略](02-mcp-policy.md)或 [Agent 总览](README.md)。
+练习后移除本次添加的配置；`dsh` 下次不带该 patch。下一篇[运行控制：取消、崩溃与恢复](05-harness-vertical-slice.md)。
