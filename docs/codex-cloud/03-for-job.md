@@ -63,7 +63,7 @@ pnpm build
 先跑已有回归，再选真实失败。配置为生产服务 `localhost:3001`、单 worker；新任务需构建当前提交，由 Playwright 启动服务。
 
 ```bash
-pnpm exec playwright install chromium
+pnpm exec playwright install chrome
 pnpm build
 pnpm exec playwright test tests/e2e/editing/storage-recovery.spec.ts tests/e2e/export/ats-artifacts.spec.ts
 ```

@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright';
@@ -11,7 +10,8 @@ import { audibleTracks } from './timeline.js';
 export async function launchBrowser(): Promise<Browser> {
   const executable = process.env.YUUKI_MUSIC_CHROME_BIN;
   return await chromium.launch({
-    ...(executable ? { executablePath: executable } : existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome') ? { channel: 'chrome' } : {}),
+    ...(executable ? { executablePath: executable } : { channel: 'chrome' }),
+    chromiumSandbox: true,
     headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader'],
   });
 }

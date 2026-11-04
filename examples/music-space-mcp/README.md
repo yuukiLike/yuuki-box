@@ -22,7 +22,7 @@ pnpm demo:music-space-mcp:preview
 
 `demo` 经真实 stdio MCP 创建三声部 MIDI、钢琴与舞台，保存实际调用截图、三机位 PNG、两个 GLB 和两段六秒 H.264/AAC 短片；清单在 `.artifacts/practical/demo.json`。演示和独立 preview 默认使用 `.artifacts/practical/`，普通客户端数据另存。
 
-默认用 macOS Chrome；其他环境执行 `pnpm --dir examples/music-space-mcp exec playwright install chromium`，或以绝对路径 `YUUKI_MUSIC_CHROME_BIN` 指定浏览器。FFmpeg/ffprobe 从 PATH 查找，也可设 `FFMPEG_BIN`、`FFPROBE_BIN`。
+默认使用已安装并保持更新的 Google Chrome，并开启 Chromium 沙箱；缺少 Chrome 时直接报错，不回退到固定版本 Chromium。可用绝对路径 `YUUKI_MUSIC_CHROME_BIN` 指定另一个已更新的 Chrome。FFmpeg/ffprobe 从 PATH 查找，也可设 `FFMPEG_BIN`、`FFPROBE_BIN`。
 
 ## 教程
 
