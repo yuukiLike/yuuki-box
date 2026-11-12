@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 830" role="img" aria-labelledby="title desc">
+  <title id="title">工作流文件、任务与步骤</title>
+  <desc id="desc">一个 YAML 文件定义工作流。工作流用 on 声明触发事件，用 jobs 定义任务。每个 job 指定 runner 和超时，并用 steps 按顺序执行 run 命令或 uses 组件。env 传入环境变量，with 为组件传参。不同 job 通过 needs 声明依赖。</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .panel { fill: #ffffff; stroke: #cbd5e1; }
+    .workflow { fill: #eff6ff; stroke: #93c5fd; }
+    .job { fill: #ecfdf5; stroke: #6ee7b7; }
+    .step { fill: #fff7ed; stroke: #fdba74; }
+    .text { fill: #1e293b; }
+    .muted { fill: #475569; }
+    .line { stroke: #64748b; fill: none; }
+    .arrow { fill: #64748b; }
+    text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .code { font-family: 'SFMono-Regular', Consolas, monospace; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #18181b; }
+      .panel { fill: #202023; stroke: #52525b; }
+      .workflow { fill: #12283f; stroke: #60a5fa; }
+      .job { fill: #12352c; stroke: #34d399; }
+      .step { fill: #382719; stroke: #fb923c; }
+      .text { fill: #f1f5f9; }
+      .muted { fill: #cbd5e1; }
+      .line { stroke: #94a3b8; }
+      .arrow { fill: #94a3b8; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path class="arrow" d="M0 0 10 5 0 10z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="600" height="830" rx="20"/>
+  <g class="text">
+    <text x="28" y="48" font-size="28" font-weight="700">工作流文件、任务与步骤</text>
+    <text class="muted" x="28" y="83" font-size="22">缩进表达层级，列表表达多个步骤。</text>
+
+    <rect class="panel" x="28" y="108" width="544" height="62" rx="12" stroke-width="1.5"/>
+    <text class="code" x="300" y="147" text-anchor="middle" font-size="23">.github/workflows/report.yml</text>
+    <path class="line" d="M300 171V198" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="workflow" x="28" y="208" width="544" height="498" rx="16" stroke-width="1.5"/>
+    <text x="50" y="249" font-size="25" font-weight="650">Workflow · 工作流</text>
+    <text class="code" x="50" y="286" font-size="22">name · on · permissions · jobs</text>
+
+    <rect class="job" x="48" y="310" width="504" height="372" rx="14" stroke-width="1.5"/>
+    <text x="70" y="352" font-size="25" font-weight="650">Job · 一个任务</text>
+    <text class="muted" x="70" y="390" font-size="22">runs-on：选择执行机器</text>
+    <text class="muted" x="70" y="424" font-size="22">timeout-minutes：限制执行时间</text>
+
+    <rect class="step" x="68" y="449" width="464" height="209" rx="12" stroke-width="1.5"/>
+    <text x="90" y="490" font-size="24" font-weight="650">steps · 按顺序执行</text>
+    <text x="90" y="532" font-size="22">① run：执行命令</text>
+    <text x="90" y="568" font-size="22">② uses：调用 Action</text>
+    <text class="muted" x="90" y="611" font-size="22">env 传入环境变量</text>
+    <text class="muted" x="90" y="641" font-size="22">with 为 Action 传参</text>
+
+    <text x="28" y="752" font-size="23" font-weight="650">同一 job：步骤共享执行环境</text>
+    <text class="muted" x="28" y="791" font-size="22">不同 job：用 needs 声明先后依赖</text>
+  </g>
+</svg>

@@ -38,7 +38,8 @@
 | **项目设计与计划** | [本地 Harness 提案](architecture/mac-local-harness.md)、[实施计划](plan/first-mac-loop.md) | 明确一个切片的范围、状态和验收条件 |
 | **云端 Codex** | [环境与三个项目练习](codex-cloud/README.md) | 三个项目的任务、检查与本地验收 |
 | **Windows 本地 AI** | [图片与音乐生成](windows-local-ai/README.md) | RTX 5060 Ti 16GB 上的图片与配乐 |
-| **阅读同步** | [最后一课：Apple 登录与阅读同步](learning/apple-reading-sync.md) | 开发与跨设备同步的两张图 |
+| **阅读同步** | [Apple 登录与阅读同步](learning/apple-reading-sync.md) | 开发与跨设备同步的两张图 |
+| **GitHub Actions** | [从一次运行到自动化系统](github-actions/README.md) | YAML 与命令、任务编排图解及费用估算 |
 | **附录** | [OpenAI API 模型分类与选型](appendix/openai-api-models.md) | 按用途查阅模型、价格、适用场景与停用计划 |
 
 ### MCP 入门
@@ -144,6 +145,10 @@ Memory 仅选读，不列课程或前置。
 ### 阅读同步
 
 [Apple 阅读同步](learning/apple-reading-sync.md)先讲登录、跨设备与离线恢复，再选读实现和部署；登录可选，代码、线上与真账号验证分列。
+
+### GitHub Actions
+
+作为主线末尾的独立专题，从[一次手动运行](github-actions/README.md)到[工作流文件与常用命令](github-actions/00-files-and-commands.md)、[事件与仓库任务](github-actions/01-repository-tasks.md)、[多任务编排](github-actions/02-orchestration.md)，再选读[跨系统自动化](github-actions/03-systems.md)，最后看[额度与费用](github-actions/04-costs.md)。SVG 图解对应文件层级、任务交付与并行分钟。内容基于已有知识，未运行示例；历史额度与假设单价不作当前报价。
 
 ## 已确认的产品方向
 

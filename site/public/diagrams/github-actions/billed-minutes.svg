@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 704" role="img" aria-labelledby="title desc">
+  <title id="title">并行等待时间与累计执行分钟</title>
+  <desc id="desc">三个 job 同时开始，各执行五分钟。忽略排队和额外开销，整个工作流约五分钟结束，但累计使用十五个 runner 分钟。执行费还要按适用额度、系统折算、实际 runner 单价与取整规则计算，存储和外部 API 另计。图中数字仅用于用量示意，不是报价。</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .panel { fill: #ffffff; stroke: #cbd5e1; }
+    .sky { fill: #eff6ff; stroke: #93c5fd; }
+    .green { fill: #ecfdf5; stroke: #6ee7b7; }
+    .orange { fill: #fff7ed; stroke: #fdba74; }
+    .text { fill: #1e293b; }
+    .muted { fill: #475569; }
+    .axis { stroke: #94a3b8; fill: none; }
+    text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #18181b; }
+      .panel { fill: #202023; stroke: #52525b; }
+      .sky { fill: #12283f; stroke: #60a5fa; }
+      .green { fill: #12352c; stroke: #34d399; }
+      .orange { fill: #382719; stroke: #fb923c; }
+      .text { fill: #f1f5f9; }
+      .muted { fill: #cbd5e1; }
+      .axis { stroke: #94a3b8; }
+    }
+  </style>
+  <rect class="bg" width="600" height="704" rx="20"/>
+  <g class="text">
+    <text x="28" y="48" font-size="28" font-weight="700">并行更快结束，分钟仍会相加</text>
+    <text class="muted" x="28" y="83" font-size="22">用量示意：3 个 job 同时开始，各跑 5 分钟。</text>
+
+    <path class="axis" d="M140 130V335M540 130V335" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <text class="muted" x="140" y="119" text-anchor="middle" font-size="22">0 分钟</text>
+    <text class="muted" x="540" y="119" text-anchor="middle" font-size="22">5 分钟</text>
+
+    <text x="28" y="175" font-size="23">Job A</text>
+    <rect class="sky" x="140" y="143" width="400" height="48" rx="10" stroke-width="1.5"/>
+    <text x="340" y="175" text-anchor="middle" font-size="23">5 分钟</text>
+    <text x="28" y="241" font-size="23">Job B</text>
+    <rect class="green" x="140" y="209" width="400" height="48" rx="10" stroke-width="1.5"/>
+    <text x="340" y="241" text-anchor="middle" font-size="23">5 分钟</text>
+    <text x="28" y="307" font-size="23">Job C</text>
+    <rect class="orange" x="140" y="275" width="400" height="48" rx="10" stroke-width="1.5"/>
+    <text x="340" y="307" text-anchor="middle" font-size="23">5 分钟</text>
+
+    <rect class="panel" x="28" y="357" width="544" height="134" rx="14" stroke-width="1.5"/>
+    <text x="50" y="399" font-size="24">整次运行经过：约 5 分钟</text>
+    <text x="50" y="441" font-size="25" font-weight="700">累计 runner：5 + 5 + 5 = 15 分钟</text>
+    <text class="muted" x="50" y="474" font-size="22">累计用量 = 各个 job 的执行时间之和</text>
+
+    <text x="28" y="537" font-size="24" font-weight="650">用量之后，再算费用</text>
+    <text class="muted" x="28" y="576" font-size="22">适用额度 → 剩余付费用量 → runner 单价</text>
+    <text class="muted" x="28" y="613" font-size="22">系统折算与取整另查；存储、API 另算。</text>
+    <text class="muted" x="28" y="665" font-size="22">忽略排队与额外开销，图中数字不是报价。</text>
+  </g>
+</svg>

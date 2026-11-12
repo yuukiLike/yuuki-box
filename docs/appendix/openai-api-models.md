@@ -1,3 +1,12 @@
+---
+prev:
+  link: /github-actions/04-costs/
+  label: GitHub Actions 额度与费用
+next:
+  link: /rag/
+  label: RAG：检索、引用与资料更新
+---
+
 # 附录 OpenAI API 模型分类与选型
 
 先按目标产物查类型速查，再比较模型、成本与用法；语音生成 Issue 的组合方案为文末选读。

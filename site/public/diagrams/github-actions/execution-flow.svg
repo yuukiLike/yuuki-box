@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 958" role="img" aria-labelledby="title desc">
+  <title id="title">从触发事件到部署同一产物</title>
+  <desc id="desc">手动、PR 或定时事件触发工作流。两个检查 job 在独立的 GitHub 托管 runner 中并行运行。汇总任务通过 needs 等待检查并核对结果，随后构建并保存 artifact。发布环境获得批准后，部署阶段下载并发布同一份产物。needs 传递依赖关系，artifact 传递文件。</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .panel { fill: #ffffff; stroke: #cbd5e1; }
+    .sky { fill: #eff6ff; stroke: #93c5fd; }
+    .green { fill: #ecfdf5; stroke: #6ee7b7; }
+    .orange { fill: #fff7ed; stroke: #fdba74; }
+    .text { fill: #1e293b; }
+    .muted { fill: #475569; }
+    .line { stroke: #64748b; fill: none; }
+    .arrow { fill: #64748b; }
+    text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #18181b; }
+      .panel { fill: #202023; stroke: #52525b; }
+      .sky { fill: #12283f; stroke: #60a5fa; }
+      .green { fill: #12352c; stroke: #34d399; }
+      .orange { fill: #382719; stroke: #fb923c; }
+      .text { fill: #f1f5f9; }
+      .muted { fill: #cbd5e1; }
+      .line { stroke: #94a3b8; }
+      .arrow { fill: #94a3b8; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path class="arrow" d="M0 0 10 5 0 10z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="600" height="958" rx="20"/>
+  <g class="text" text-anchor="middle">
+    <text x="300" y="48" font-size="28" font-weight="700">从事件到部署</text>
+    <text class="muted" x="300" y="83" font-size="22">依赖关系与文件交付分别定义。</text>
+
+    <rect class="panel" x="70" y="106" width="460" height="60" rx="12" stroke-width="1.5"/>
+    <text x="300" y="145" font-size="24">手动 / PR / 定时事件</text>
+    <path class="line" d="M300 167V192" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="sky" x="70" y="202" width="460" height="60" rx="12" stroke-width="1.5"/>
+    <text x="300" y="241" font-size="24" font-weight="650">开始一次 workflow run</text>
+    <path class="line" d="M300 263V282H156V304" stroke-width="2" marker-end="url(#arrow)"/>
+    <path class="line" d="M300 282H444V304" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="green" x="28" y="314" width="256" height="94" rx="12" stroke-width="1.5"/>
+    <text x="156" y="351" font-size="24" font-weight="650">检查文档</text>
+    <text class="muted" x="156" y="386" font-size="22">独立 runner A</text>
+    <rect class="green" x="316" y="314" width="256" height="94" rx="12" stroke-width="1.5"/>
+    <text x="444" y="351" font-size="24" font-weight="650">检查配置</text>
+    <text class="muted" x="444" y="386" font-size="22">独立 runner B</text>
+    <path class="line" d="M156 409V428H300V448" stroke-width="2" marker-end="url(#arrow)"/>
+    <path class="line" d="M444 409V428H300" stroke-width="2"/>
+
+    <rect class="sky" x="70" y="458" width="460" height="70" rx="12" stroke-width="1.5"/>
+    <text x="300" y="487" font-size="23" font-weight="650">汇总结论</text>
+    <text class="muted" x="300" y="514" font-size="22">needs 等待依赖，再核对结果</text>
+    <path class="line" d="M300 529V558" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="green" x="70" y="568" width="460" height="80" rx="12" stroke-width="1.5"/>
+    <text x="300" y="600" font-size="23" font-weight="650">构建并保存 artifact</text>
+    <text class="muted" x="300" y="632" font-size="22">记录提交与产物身份</text>
+    <path class="line" d="M300 649V684" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="orange" x="70" y="694" width="460" height="60" rx="12" stroke-width="1.5"/>
+    <text x="300" y="733" font-size="24" font-weight="650">发布环境获得批准</text>
+    <path class="line" d="M300 755V792" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect class="green" x="70" y="802" width="460" height="80" rx="12" stroke-width="1.5"/>
+    <text x="300" y="834" font-size="24" font-weight="650">部署同一份产物</text>
+    <text class="muted" x="300" y="866" font-size="22">下载 artifact，再交给托管平台</text>
+
+    <text class="muted" x="300" y="925" font-size="22">示意：GitHub 托管 runner，发布条件另配</text>
+  </g>
+</svg>

@@ -1,3 +1,9 @@
+---
+next:
+  link: /github-actions/
+  label: GitHub Actions：从一次运行到自动化系统
+---
+
 # 阅读同步：使用流程与实现
 
 同一 Apple 账号在手机和电脑共享进度；先了解使用流程，再按需阅读开发与部署。

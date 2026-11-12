@@ -393,6 +393,20 @@ export const navigation = [
     ],
   },
   {
+    label: 'GitHub Actions',
+    color: 'orange',
+    description: '从手动报告、YAML 写法与常用命令，到多任务编排和跨系统自动化，用图解说明执行关系与费用。',
+    tags: [topic('首次运行', 'github-actions'), topic('文件与命令', 'github-actions/00-files-and-commands'), topic('事件与任务', 'github-actions/01-repository-tasks'), topic('矩阵与发布', 'github-actions/02-orchestration'), topic('跨系统协作', 'github-actions/03-systems'), topic('额度与费用', 'github-actions/04-costs')],
+    items: [
+      page('github-actions', 'GitHub Actions：从一次运行到自动化系统', ['Actions', '用途', '首次运行'], 'GitHub Actions · 从这里开始'),
+      page('github-actions/00-files-and-commands', '工作流文件与常用命令', ['YAML', 'gh CLI', '配置写法'], '文件结构与常用命令'),
+      page('github-actions/01-repository-tasks', '1 · 事件触发与仓库任务', ['事件', '构建', '定时任务'], '1 · 事件与仓库任务'),
+      page('github-actions/02-orchestration', '2 · 多任务编排与交付', ['矩阵', '产物', '部署审批'], '2 · 多任务编排与交付'),
+      page('github-actions/03-systems', '3 · 跨系统自动化', ['外部 API', '自托管', 'AI 协作'], '3 · 跨系统自动化'),
+      page('github-actions/04-costs', '4 · GitHub Actions 额度与费用', ['分钟', '存储', '费用估算'], '4 · 额度与费用'),
+    ],
+  },
+  {
     label: '附录',
     color: 'sky',
     description: '按用途查阅 OpenAI API 模型、价格与适用场景，区分现役型号、旧型号和停用计划。',
